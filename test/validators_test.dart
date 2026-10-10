@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/core/countries.dart';
-import 'package:tonits/features/auth/validators.dart';
+import 'package:tonits/features/auth/ui/validators.dart';
 
 void main() {
   group('username', () {

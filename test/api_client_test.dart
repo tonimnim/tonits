@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:tonits/core/api/api_client.dart';
 
-import 'fakes.dart';
+import 'support/fakes.dart';
 
 void main() {
   test('parses the error body, request id and Retry-After', () async {

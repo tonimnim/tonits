@@ -1,27 +1,66 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:tonits/core/api/api_client.dart';
-import 'package:tonits/features/auth/auth_controller.dart';
-import 'package:tonits/features/auth/auth_repository.dart';
+import 'package:tonits/core/providers.dart';
+import 'package:tonits/features/auth/application/auth_controller.dart';
+import 'package:tonits/features/auth/data/auth_repository.dart';
+import 'package:tonits/features/auth/data/models.dart';
 
-import 'fakes.dart';
+import 'support/fakes.dart';
 
 typedef Handler = Future<http.Response> Function(http.Request request);
 
-AuthController controller(Handler handler, MemoryTokenStore store) {
-  final api = ApiClient(
-    baseUrl: 'http://api.test',
-    httpClient: MockClient(handler),
-  );
-  return AuthController(
-    api: api,
-    repository: AuthRepository(api),
-    tokenStore: store,
+/// The auth controller in its own provider container, with a fake API.
+class Auth {
+  Auth(Handler handler, MemoryTokenStore store)
+    : container = ProviderContainer(
+        overrides: [
+          apiClientProvider.overrideWithValue(
+            ApiClient(
+              baseUrl: 'http://api.test',
+              httpClient: MockClient(handler),
+            ),
+          ),
+          tokenStoreProvider.overrideWithValue(store),
+        ],
+      ) {
+    addTearDown(container.dispose);
+  }
+
+  final ProviderContainer container;
+
+  AuthController get _notifier =>
+      container.read(authControllerProvider.notifier);
+  AuthState get _state => container.read(authControllerProvider);
+
+  AuthStatus get status => _state.status;
+  Player? get player => _state.player;
+  String? get pendingCountryCode => _state.pendingCountryCode;
+  AuthRepository get repository => container.read(authRepositoryProvider);
+
+  Future<void> restore() => _notifier.restore();
+  Future<void> signOut() => _notifier.signOut();
+  Future<void> signIn({required String konamiId, required String password}) =>
+      _notifier.signIn(konamiId: konamiId, password: password);
+  Future<void> register({
+    required String username,
+    required String konamiId,
+    required String password,
+    required String countryCode,
+  }) => _notifier.register(
+    username: username,
+    konamiId: konamiId,
+    password: password,
+    countryCode: countryCode,
   );
 }
+
+Auth controller(Handler handler, MemoryTokenStore store) =>
+    Auth(handler, store);
 
 void main() {
   test('restore without a stored token signs out', () async {
