@@ -37,9 +37,10 @@ dependencies:
   http: ^1.6.0
   flutter_secure_storage: ^11.2.0
   url_launcher: ^6.3.3
-  # 9.x moved to the standalone material_ui package, whose TextTheme is not
-  # flutter/material's. Stay on 8.x until the app migrates.
-  google_fonts: ^8.2.1
+  flutter_svg: ^2.3.0
+  flutter_riverpod: ^3.4.3
+  go_router: ^17.5.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +52,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,6 +64,40 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/brand/mark.svg
+
+  # Bundled so every weight is the real face and nothing downloads at launch.
+  # Geist and Geist Mono: Vercel, from the `geist` npm package 1.7.2.
+  # Alexandria (the wordmark): google/fonts, variable, used at weight 800.
+  # All SIL Open Font License; see assets/fonts/*-OFL.txt.
+  fonts:
+    - family: Geist
+      fonts:
+        - asset: assets/fonts/Geist-Regular.ttf
+        - asset: assets/fonts/Geist-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Geist-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Geist-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Geist-Black.ttf
+          weight: 900
+    - family: Alexandria
+      fonts:
+        - asset: assets/fonts/Alexandria-Variable.ttf
+    - family: GeistMono
+      fonts:
+        - asset: assets/fonts/GeistMono-Regular.ttf
+        - asset: assets/fonts/GeistMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/GeistMono-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/GeistMono-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/GeistMono-Black.ttf
+          weight: 900
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -93,3 +129,17 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Icon sources come from `python3 tool/generate_icons.py`; then run
+# `dart run flutter_launcher_icons`, and revert its edit to
+# ios/Runner.xcodeproj/project.pbxproj (it sets a YES/NO setting to AppIcon).
+flutter_launcher_icons:
+  image_path: "assets/brand/app-icon-1024.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "#5B5BD6"
+  adaptive_icon_foreground: "assets/brand/android-adaptive-foreground-1024.png"
+  adaptive_icon_monochrome: "assets/brand/android-adaptive-monochrome-1024.png"
+  # The kit's foreground already sits inside the adaptive safe zone.
+  adaptive_icon_foreground_inset: 0
