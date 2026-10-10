@@ -1,7 +1,7 @@
-import '../../core/api/api_client.dart';
+import 'api_client.dart';
 
-/// Turns an auth failure into a sentence for the player.
-String authErrorText(Object error) {
+/// Turns an API failure into a sentence for the player.
+String describeError(Object error) {
   if (error is NetworkException) {
     return "Can't reach Tonits. Check your connection and try again.";
   }
