@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#5B5BD6</color>
+    <!-- The app canvas, shown before Flutter draws. -->
+    <color name="canvas">#F4F5FA</color>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The dark-mode canvas, shown before Flutter draws. -->
+    <color name="canvas">#0F1022</color>
+</resources>
