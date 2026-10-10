@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import 'auth_scope.dart';
-import 'error_text.dart';
-import 'forgot_password_screen.dart';
-import 'register_screen.dart';
+import '../../../core/routes.dart';
+import '../../../core/theme.dart';
+import '../application/auth_controller.dart';
+import '../../../core/api/error_text.dart';
 import 'validators.dart';
-import 'widgets.dart';
+import 'widgets/auth_fields.dart';
+import 'widgets/auth_layout.dart';
+import 'widgets/form_error.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _form = GlobalKey<FormState>();
   final _konamiId = TextEditingController();
   final _password = TextEditingController();
@@ -35,10 +39,11 @@ class _SignInScreenState extends State<SignInScreen> {
       _error = null;
     });
     try {
-      await AuthScope.read(context)
+      await ref
+          .read(authControllerProvider.notifier)
           .signIn(konamiId: _konamiId.text.trim(), password: _password.text);
     } catch (e) {
-      if (mounted) setState(() => _error = authErrorText(e));
+      if (mounted) setState(() => _error = describeError(e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -47,9 +52,13 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthLayout(
-      eyebrow: 'eFootball competitions',
-      title: 'Tonits',
+      title: 'Welcome back',
       subtitle: 'Sign in with the Konami ID you play eFootball with.',
+      footer: AuthFooterLink(
+        prompt: 'New to Tonits?',
+        action: 'Create an account',
+        onPressed: () => context.push(Routes.register),
+      ),
       children: [
         Form(
           key: _form,
@@ -57,15 +66,11 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextFormField(
+                KonamiIdField(
                   controller: _konamiId,
-                  autocorrect: false,
-                  autofillHints: const [AutofillHints.username],
-                  textInputAction: TextInputAction.next,
                   validator: AuthValidators.konamiId,
-                  decoration: const InputDecoration(labelText: 'Konami ID'),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: TonitsSpace.md),
                 PasswordField(
                   controller: _password,
                   validator: AuthValidators.password,
@@ -74,37 +79,16 @@ class _SignInScreenState extends State<SignInScreen> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ForgotPasswordScreen(
-                          initialKonamiId: _konamiId.text.trim(),
-                        ),
-                      ),
+                    onPressed: () => context.push(
+                      Routes.forgotPassword,
+                      extra: _konamiId.text.trim(),
                     ),
                     child: const Text('Forgot password?'),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: TonitsSpace.md),
                 FormError(_error),
                 SubmitButton(label: 'Sign in', busy: _busy, onPressed: _submit),
-                const SizedBox(height: 24),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text('New to Tonits?'),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
-                        ),
-                      ),
-                      child: const Text('Create an account'),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

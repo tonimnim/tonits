@@ -1,9 +1,27 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/api/api_client.dart';
-import 'auth_repository.dart';
-import 'models.dart';
-import 'token_store.dart';
+import '../../../core/api/api_client.dart';
+import '../../../core/providers.dart';
+import '../data/auth_repository.dart';
+import '../data/models.dart';
+import '../data/token_store.dart';
+
+final tokenStoreProvider = Provider<TokenStore>((ref) => SecureTokenStore());
+
+final authRepositoryProvider = Provider<AuthRepository>(
+  (ref) => AuthRepository(ref.watch(apiClientProvider)),
+);
+
+final authControllerProvider = NotifierProvider<AuthController, AuthState>(
+  AuthController.new,
+);
+
+/// The signed-in player, or null for a moment while signing out (before the
+/// router leaves the signed-in screens).
+final currentPlayerProvider = Provider<Player?>(
+  (ref) => ref.watch(authControllerProvider).player,
+);
 
 enum AuthStatus {
   /// Checking for a stored session at launch.
@@ -15,46 +33,64 @@ enum AuthStatus {
   signedIn,
 }
 
+@immutable
+class AuthState {
+  const AuthState({required this.status, this.player, this.pendingCountryCode});
+
+  const AuthState.restoring() : this(status: AuthStatus.restoring);
+
+  final AuthStatus status;
+  final Player? player;
+
+  /// The country picked at registration, when saving it failed.
+  final String? pendingCountryCode;
+
+  AuthState copyWith({
+    Player? player,
+    String? Function()? pendingCountryCode,
+  }) => AuthState(
+    status: status,
+    player: player ?? this.player,
+    pendingCountryCode: pendingCountryCode == null
+        ? this.pendingCountryCode
+        : pendingCountryCode(),
+  );
+}
+
 /// Owns the session: resumes it at launch, signs in and out, and rotates the
 /// refresh token whenever the API answers `401`.
-class AuthController extends ChangeNotifier {
-  AuthController({
-    required this._api,
-    required this._repository,
-    required TokenStore tokenStore,
-    this.deviceName,
-  }) : _tokens = tokenStore {
+class AuthController extends Notifier<AuthState> {
+  late ApiClient _api;
+  late AuthRepository _repository;
+  late TokenStore _tokens;
+
+  @override
+  AuthState build() {
+    _api = ref.watch(apiClientProvider);
+    _repository = ref.watch(authRepositoryProvider);
+    _tokens = ref.watch(tokenStoreProvider);
     _api.onUnauthorized = _rotate;
+    return const AuthState.restoring();
   }
-
-  final ApiClient _api;
-  final AuthRepository _repository;
-  final TokenStore _tokens;
-  final String? deviceName;
-
-  AuthStatus _status = AuthStatus.restoring;
-  AuthStatus get status => _status;
-
-  Player? _player;
-  Player? get player => _player;
-
-  AuthRepository get repository => _repository;
 
   /// Resumes the stored session, if any.
   Future<void> restore() async {
-    _set(AuthStatus.restoring);
+    state = const AuthState.restoring();
     final refreshToken = await _tokens.readRefreshToken();
-    if (refreshToken == null) return _set(AuthStatus.signedOut);
+    if (refreshToken == null) {
+      state = const AuthState(status: AuthStatus.signedOut);
+      return;
+    }
     try {
       await _adopt(await _repository.refresh(refreshToken));
     } on ApiException catch (e) {
       if (e.status == 401) {
         await _end();
       } else {
-        _set(AuthStatus.unreachable);
+        state = const AuthState(status: AuthStatus.unreachable);
       }
     } on NetworkException {
-      _set(AuthStatus.unreachable);
+      state = const AuthState(status: AuthStatus.unreachable);
     }
   }
 
@@ -66,15 +102,10 @@ class AuthController extends ChangeNotifier {
       await _repository.signIn(
         konamiId: konamiId,
         password: password,
-        deviceName: deviceName,
+        deviceName: ref.read(deviceNameProvider),
       ),
     );
   }
-
-  /// The country picked at registration, when saving it failed. Retry with
-  /// [savePendingCountry].
-  String? _pendingCountryCode;
-  String? get pendingCountryCode => _pendingCountryCode;
 
   /// Registration takes no country, so it is saved with `PATCH /v1/me` right
   /// after. The player is signed in even if that second call fails.
@@ -88,26 +119,24 @@ class AuthController extends ChangeNotifier {
       username: username,
       konamiId: konamiId,
       password: password,
-      deviceName: deviceName,
+      deviceName: ref.read(deviceNameProvider),
     );
     await _adopt(session);
     if (session.player.countryCode == countryCode) return;
-    _pendingCountryCode = countryCode;
+    state = state.copyWith(pendingCountryCode: () => countryCode);
     await savePendingCountry();
   }
 
   /// Returns whether the country is saved.
   Future<bool> savePendingCountry() async {
-    final code = _pendingCountryCode;
+    final code = state.pendingCountryCode;
     if (code == null) return true;
     try {
-      _player = await _repository.updateCountry(code);
-      _pendingCountryCode = null;
+      final player = await _repository.updateCountry(code);
+      state = state.copyWith(player: player, pendingCountryCode: () => null);
       return true;
     } on Exception {
       return false;
-    } finally {
-      notifyListeners();
     }
   }
 
@@ -123,16 +152,17 @@ class AuthController extends ChangeNotifier {
   Future<void> _adopt(AuthSession session) async {
     await _tokens.writeRefreshToken(session.refreshToken);
     _api.accessToken = session.accessToken;
-    _player = session.player;
-    _set(AuthStatus.signedIn);
+    state = AuthState(
+      status: AuthStatus.signedIn,
+      player: session.player,
+      pendingCountryCode: state.pendingCountryCode,
+    );
   }
 
   Future<void> _end() async {
     await _tokens.clear();
     _api.accessToken = null;
-    _player = null;
-    _pendingCountryCode = null;
-    _set(AuthStatus.signedOut);
+    state = const AuthState(status: AuthStatus.signedOut);
   }
 
   /// The API client's `401` hook. Network errors propagate to the caller.
@@ -151,10 +181,5 @@ class AuthController extends ChangeNotifier {
       await _end();
       return null;
     }
-  }
-
-  void _set(AuthStatus status) {
-    _status = status;
-    notifyListeners();
   }
 }
