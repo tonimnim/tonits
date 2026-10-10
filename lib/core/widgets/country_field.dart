@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../countries.dart';
 import '../theme.dart';
+import 'labeled_field.dart';
+import 'section_header.dart';
 
-/// A form field that opens a searchable country list showing each flag,
-/// name and calling code.
+/// A labelled form field that opens a searchable country list showing each
+/// flag, name and calling code.
 class CountryField extends FormField<Country> {
   CountryField({
     super.key,
@@ -15,26 +17,53 @@ class CountryField extends FormField<Country> {
   }) : super(
          builder: (state) {
            final country = state.value;
-           return InkWell(
-             borderRadius: BorderRadius.circular(13),
-             onTap: () async {
-               final picked = await showCountryPicker(state.context);
-               if (picked == null) return;
-               state.didChange(picked);
-               onChanged?.call(picked);
-             },
-             child: InputDecorator(
-               decoration: InputDecoration(
-                 labelText: label,
-                 errorText: state.errorText,
-                 suffixIcon: const Icon(Icons.expand_more),
+           final palette = state.context.palette;
+           return LabeledField(
+             label: label,
+             child: InkWell(
+               borderRadius: BorderRadius.circular(TonitsRadius.control),
+               onTap: () async {
+                 final picked = await showCountryPicker(state.context);
+                 if (picked == null) return;
+                 state.didChange(picked);
+                 onChanged?.call(picked);
+               },
+               child: InputDecorator(
+                 decoration: InputDecoration(
+                   hintText: 'Choose your country',
+                   errorText: state.errorText,
+                   prefixIcon: country == null
+                       ? null
+                       : Padding(
+                           padding: const EdgeInsets.only(left: 16, right: 10),
+                           child: Text(
+                             country.flag,
+                             style: const TextStyle(fontSize: 20),
+                           ),
+                         ),
+                   prefixIconConstraints: const BoxConstraints(minWidth: 40),
+                   suffixIcon: const Icon(Icons.expand_more),
+                 ),
+                 isEmpty: country == null,
+                 child: country == null
+                     ? null
+                     : Row(
+                         children: [
+                           Expanded(
+                             child: Text(
+                               country.name,
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                           ),
+                           Text(
+                             '+${country.dialCode}',
+                             style: monoFont.copyWith(
+                               color: palette.mutedForeground,
+                             ),
+                           ),
+                         ],
+                       ),
                ),
-               isEmpty: country == null,
-               child: country == null
-                   ? null
-                   : Text(
-                       '${country.flag}  ${country.name}  +${country.dialCode}',
-                     ),
              ),
            );
          },
@@ -45,7 +74,6 @@ Future<Country?> showCountryPicker(BuildContext context) {
   return showModalBottomSheet<Country>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: TonitsColors.panel,
     builder: (_) => const _CountryPickerSheet(),
   );
 }
@@ -60,14 +88,14 @@ class _CountryPickerSheet extends StatefulWidget {
 class _CountryPickerSheetState extends State<_CountryPickerSheet> {
   String _query = '';
 
-  List<Country> get _visible {
+  /// Rows to show: section headings as strings, countries as [Country].
+  List<Object> get _rows {
     final q = _query.trim().toLowerCase().replaceFirst('+', '');
     if (q.isEmpty) {
-      final featured = Country.featuredCodes
-          .map(Country.byCode)
-          .whereType<Country>();
       return [
-        ...featured,
+        'Suggested',
+        ...Country.featuredCodes.map(Country.byCode).whereType<Country>(),
+        'All countries',
         ...Country.all.where((c) => !Country.featuredCodes.contains(c.code)),
       ];
     }
@@ -83,39 +111,72 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final countries = _visible;
+    final rows = _rows;
+    final palette = context.palette;
     return SafeArea(
       child: SizedBox(
         height: MediaQuery.sizeOf(context).height * 0.8,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: const EdgeInsets.symmetric(horizontal: TonitsSpace.lg),
+              child: Text(
+                'Choose your country',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                TonitsSpace.lg,
+                TonitsSpace.md,
+                TonitsSpace.lg,
+                TonitsSpace.sm,
+              ),
               child: TextField(
                 autofocus: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Search country or code',
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search, size: 20),
+                  fillColor: palette.muted,
                 ),
                 onChanged: (value) => setState(() => _query = value),
               ),
             ),
             Expanded(
-              child: countries.isEmpty
-                  ? const Center(child: Text('No country matches that search'))
+              child: rows.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No country matches that search',
+                        style: TextStyle(color: palette.subtleForeground),
+                      ),
+                    )
                   : ListView.builder(
-                      itemCount: countries.length,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: TonitsSpace.sm,
+                      ),
+                      itemCount: rows.length,
                       itemBuilder: (context, i) {
-                        final c = countries[i];
+                        final row = rows[i];
+                        if (row is String) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+                            child: SectionLabel(row),
+                          );
+                        }
+                        final c = row as Country;
                         return ListTile(
                           leading: Text(
                             c.flag,
-                            style: const TextStyle(fontSize: 24),
+                            style: const TextStyle(fontSize: 22),
                           ),
                           title: Text(c.name),
                           trailing: Text(
                             '+${c.dialCode}',
-                            style: const TextStyle(color: TonitsColors.muted),
+                            style: monoFont.copyWith(
+                              fontSize: 13,
+                              color: palette.mutedForeground,
+                            ),
                           ),
                           onTap: () => Navigator.pop(context, c),
                         );
