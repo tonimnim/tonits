@@ -196,6 +196,45 @@ void main() {
       await _shoot(tester, 'competition-paid-india-$suffix');
     });
 
+    // Each outcome the server can settle a payment with.
+    for (final (name, status, registration, message) in [
+      ('registered', 'succeeded', 'registered', null),
+      ('declined', 'failed', 'not_registered', 'Request cancelled by user'),
+      ('review', 'review', 'pending', null),
+      ('refund', 'succeeded', 'refund_pending', null),
+    ]) {
+      testWidgets('payment $name ($suffix)', skip: skip, (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          refreshToken: 'stored',
+          api: FakeApi(
+            routes: {
+              '/v1/payments/mpesa/stk-push': (_) => jsonResponse(
+                paymentJson(
+                  status: status,
+                  registrationStatus: registration,
+                  providerMessage: message,
+                ),
+                202,
+              ),
+            },
+          ),
+        );
+        await _openTab(tester, 'Compete');
+        await tester.tap(find.text('Mombasa Masters'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Pay Ksh 100 with M-Pesa'));
+        await tester.pumpAndSettle();
+        await tester.enterText(
+          find.widgetWithText(TextFormField, '0712 345 678'),
+          '0712345678',
+        );
+        await tester.tap(find.text('Send payment request'));
+        await _shoot(tester, 'payment-$name-$suffix');
+      });
+    }
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,
