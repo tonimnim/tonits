@@ -8,6 +8,9 @@ abstract final class Routes {
   static const register = '/sign-in/register';
   static const forgotPassword = '/sign-in/forgot-password';
 
+  /// Shows a just-issued recovery code until the player confirms saving it.
+  static const recoveryCode = '/recovery-code';
+
   // Bottom navigation tabs.
   static const home = '/home';
   static const competitions = '/competitions';

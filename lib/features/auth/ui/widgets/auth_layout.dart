@@ -14,6 +14,7 @@ class AuthLayout extends StatelessWidget {
     this.subtitle,
     required this.children,
     this.footer,
+    this.showBack,
   });
 
   final String title;
@@ -21,10 +22,14 @@ class AuthLayout extends StatelessWidget {
   final List<Widget> children;
   final Widget? footer;
 
+  /// Whether to show a back arrow; by default, when there's a screen to go
+  /// back to.
+  final bool? showBack;
+
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    final canPop = Navigator.canPop(context);
+    final canPop = showBack ?? Navigator.canPop(context);
     return Scaffold(
       appBar: canPop ? AppBar() : null,
       body: SafeArea(

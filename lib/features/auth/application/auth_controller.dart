@@ -35,7 +35,13 @@ enum AuthStatus {
 
 @immutable
 class AuthState {
-  const AuthState({required this.status, this.player, this.pendingCountryCode});
+  const AuthState({
+    required this.status,
+    this.player,
+    this.pendingCountryCode,
+    this.pendingRecoveryCode,
+    this.recoveryCodeReplacesOld = false,
+  });
 
   const AuthState.restoring() : this(status: AuthStatus.restoring);
 
@@ -45,15 +51,28 @@ class AuthState {
   /// The country picked at registration, when saving it failed.
   final String? pendingCountryCode;
 
+  /// A recovery code the player hasn't confirmed saving yet. While set, the
+  /// router keeps them on the screen that shows it. Held in memory only.
+  final String? pendingRecoveryCode;
+
+  /// Whether [pendingRecoveryCode] replaces a code that was just spent (a
+  /// reset), rather than being the player's first.
+  final bool recoveryCodeReplacesOld;
+
   AuthState copyWith({
     Player? player,
     String? Function()? pendingCountryCode,
+    String? Function()? pendingRecoveryCode,
   }) => AuthState(
     status: status,
     player: player ?? this.player,
     pendingCountryCode: pendingCountryCode == null
         ? this.pendingCountryCode
         : pendingCountryCode(),
+    pendingRecoveryCode: pendingRecoveryCode == null
+        ? this.pendingRecoveryCode
+        : pendingRecoveryCode(),
+    recoveryCodeReplacesOld: recoveryCodeReplacesOld,
   );
 }
 
@@ -140,6 +159,40 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
+  /// Resets a forgotten password with the recovery code and signs in. The
+  /// new code that replaces the spent one must then be shown.
+  Future<void> resetWithRecoveryCode({
+    required String konamiId,
+    required String recoveryCode,
+    required String newPassword,
+  }) async {
+    await _adopt(
+      await _repository.resetWithRecoveryCode(
+        konamiId: konamiId,
+        recoveryCode: recoveryCode,
+        newPassword: newPassword,
+        deviceName: ref.read(deviceNameProvider),
+      ),
+      replacesRecoveryCode: true,
+    );
+  }
+
+  /// The player has saved the code they were shown.
+  void acknowledgeRecoveryCode() {
+    state = state.copyWith(pendingRecoveryCode: () => null);
+  }
+
+  /// Issues a new recovery code (the old one stops working) and returns it
+  /// for the caller to show.
+  Future<String> createRecoveryCode({required String password}) async {
+    final issued = await _repository.newRecoveryCode(password);
+    final player = state.player;
+    if (player != null) {
+      state = state.copyWith(player: player.withRecoveryCode(issued.createdAt));
+    }
+    return issued.code;
+  }
+
   Future<void> signOut() async {
     try {
       await _repository.logout();
@@ -149,13 +202,21 @@ class AuthController extends Notifier<AuthState> {
     await _end();
   }
 
-  Future<void> _adopt(AuthSession session) async {
+  Future<void> _adopt(
+    AuthSession session, {
+    bool replacesRecoveryCode = false,
+  }) async {
     await _tokens.writeRefreshToken(session.refreshToken);
     _api.accessToken = session.accessToken;
+    final newCode = session.recoveryCode;
     state = AuthState(
       status: AuthStatus.signedIn,
       player: session.player,
       pendingCountryCode: state.pendingCountryCode,
+      pendingRecoveryCode: newCode ?? state.pendingRecoveryCode,
+      recoveryCodeReplacesOld: newCode == null
+          ? state.recoveryCodeReplacesOld
+          : replacesRecoveryCode,
     );
   }
 
