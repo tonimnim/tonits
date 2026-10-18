@@ -44,6 +44,20 @@ class Auth {
 
   Future<void> restore() => _notifier.restore();
   Future<void> signOut() => _notifier.signOut();
+  String? get pendingRecoveryCode => _state.pendingRecoveryCode;
+  bool get recoveryCodeReplacesOld => _state.recoveryCodeReplacesOld;
+  void acknowledgeRecoveryCode() => _notifier.acknowledgeRecoveryCode();
+  Future<void> resetWithRecoveryCode({
+    required String konamiId,
+    required String recoveryCode,
+    required String newPassword,
+  }) => _notifier.resetWithRecoveryCode(
+    konamiId: konamiId,
+    recoveryCode: recoveryCode,
+    newPassword: newPassword,
+  );
+  Future<String> createRecoveryCode(String password) =>
+      _notifier.createRecoveryCode(password: password);
   Future<void> signIn({required String konamiId, required String password}) =>
       _notifier.signIn(konamiId: konamiId, password: password);
   Future<void> register({
@@ -208,5 +222,107 @@ void main() {
 
     expect(auth.status, AuthStatus.signedOut);
     expect(store.token, isNull);
+  });
+
+  test('registering holds the first recovery code until it is saved', () async {
+    final auth = controller((request) async {
+      if (request.url.path == '/v1/auth/register') {
+        return jsonResponse(sessionJson(recoveryCode: firstRecoveryCode), 201);
+      }
+      return jsonResponse(playerJson(countryCode: 'IN'), 200);
+    }, MemoryTokenStore());
+
+    await auth.register(
+      username: 'striker.9',
+      konamiId: 'ABCD-1234-EFGH',
+      password: 'correct horse',
+      countryCode: 'IN',
+    );
+
+    expect(auth.status, AuthStatus.signedIn);
+    expect(auth.pendingRecoveryCode, firstRecoveryCode);
+    expect(auth.recoveryCodeReplacesOld, isFalse);
+    // Saving the country afterwards keeps the code pending.
+    expect(auth.player!.countryCode, 'IN');
+
+    auth.acknowledgeRecoveryCode();
+    expect(auth.pendingRecoveryCode, isNull);
+    expect(auth.status, AuthStatus.signedIn);
+  });
+
+  test(
+    'a recovery-code reset signs in and holds the replacement code',
+    () async {
+      final store = MemoryTokenStore();
+      final auth = controller((request) async {
+        expect(request.url.path, '/v1/auth/password-reset/recovery-code');
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['konamiId'], 'ABCD-1234-EFGH');
+        expect(body['recoveryCode'], firstRecoveryCode);
+        expect(body['newPassword'], 'brand new pass');
+        return jsonResponse(
+          sessionJson(refresh: 'r9', recoveryCode: nextRecoveryCode),
+          200,
+        );
+      }, store);
+
+      await auth.resetWithRecoveryCode(
+        konamiId: 'ABCD-1234-EFGH',
+        recoveryCode: firstRecoveryCode,
+        newPassword: 'brand new pass',
+      );
+
+      expect(auth.status, AuthStatus.signedIn);
+      expect(store.token, 'r9');
+      expect(auth.pendingRecoveryCode, nextRecoveryCode);
+      expect(auth.recoveryCodeReplacesOld, isTrue);
+    },
+  );
+
+  test('a wrong recovery code stays signed out with the API error', () async {
+    final auth = controller(
+      (_) async => errorResponse(401, 'invalid_recovery_code'),
+      MemoryTokenStore(),
+    );
+
+    await expectLater(
+      auth.resetWithRecoveryCode(
+        konamiId: 'ABCD-1234-EFGH',
+        recoveryCode: firstRecoveryCode,
+        newPassword: 'brand new pass',
+      ),
+      throwsA(
+        isA<ApiException>().having(
+          (e) => e.code,
+          'code',
+          'invalid_recovery_code',
+        ),
+      ),
+    );
+    expect(auth.status, isNot(AuthStatus.signedIn));
+  });
+
+  test('a new code from the account marks the player as having one', () async {
+    final auth = controller((request) async {
+      if (request.url.path == '/v1/auth/login') {
+        return jsonResponse(sessionJson(recoveryCodeSet: false), 200);
+      }
+      expect(request.url.path, '/v1/me/recovery-code');
+      expect(jsonDecode(request.body), {'password': 'correct horse'});
+      return jsonResponse({
+        'recoveryCode': nextRecoveryCode,
+        'createdAt': '2026-10-18T09:00:00Z',
+      }, 200);
+    }, MemoryTokenStore());
+    await auth.signIn(konamiId: 'ABCD-1234-EFGH', password: 'correct horse');
+    expect(auth.player!.canRecoverAccount, isFalse);
+
+    final code = await auth.createRecoveryCode('correct horse');
+
+    expect(code, nextRecoveryCode);
+    expect(auth.player!.recoveryCodeSet, isTrue);
+    expect(auth.player!.canRecoverAccount, isTrue);
+    // Shown by the caller, not held as pending.
+    expect(auth.pendingRecoveryCode, isNull);
   });
 }

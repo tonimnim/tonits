@@ -105,6 +105,23 @@ void main() {
       await _shoot(tester, 'forgot-password-$suffix');
     });
 
+    testWidgets('recovery code after sign-up ($suffix)', skip: skip, (
+      tester,
+    ) async {
+      await _pump(tester, brightness: brightness, height: 1000);
+      await tester.tap(find.text('Create an account'));
+      await tester.pumpAndSettle();
+      Future<void> enter(String hint, String text) =>
+          tester.enterText(find.widgetWithText(TextFormField, hint), text);
+      await enter('striker.9', 'striker.9');
+      await enter('ABCD-1234-EFGH', 'ABCD-1234-EFGH');
+      await enter('Choose a password', 'correct horse');
+      await tester.ensureVisible(find.text('Create account'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Create account'));
+      await _shoot(tester, 'recovery-code-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,

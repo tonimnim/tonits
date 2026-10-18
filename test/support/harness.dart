@@ -31,7 +31,14 @@ class FakeApi {
   static final _defaults = <String, http.Response Function(http.Request)>{
     '/v1/auth/login': (_) => jsonResponse(sessionJson(), 200),
     '/v1/auth/refresh': (_) => jsonResponse(sessionJson(), 200),
-    '/v1/auth/register': (_) => jsonResponse(sessionJson(), 201),
+    '/v1/auth/register': (_) =>
+        jsonResponse(sessionJson(recoveryCode: firstRecoveryCode), 201),
+    '/v1/auth/password-reset/recovery-code': (_) =>
+        jsonResponse(sessionJson(recoveryCode: nextRecoveryCode), 200),
+    '/v1/me/recovery-code': (_) => jsonResponse({
+      'recoveryCode': nextRecoveryCode,
+      'createdAt': '2026-10-18T09:00:00Z',
+    }, 200),
     '/v1/auth/logout': (_) => http.Response('', 204),
     '/v1/me': (_) => jsonResponse(playerJson(), 200),
     '/v1/legal/documents/current': (_) => jsonResponse({

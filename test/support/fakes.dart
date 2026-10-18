@@ -38,8 +38,13 @@ http.Response errorResponse(
   headers: headers,
 );
 
-Map<String, dynamic> playerJson({String countryCode = 'KE'}) => {
+Map<String, dynamic> playerJson({
+  String countryCode = 'KE',
+  bool recoveryCodeSet = true,
+}) => {
   'id': '6f1c2c55-0d3e-4b9b-9a55-0c0b8a3e1d11',
+  'recoveryCodeSet': recoveryCodeSet,
+  'recoveryCodeCreatedAt': recoveryCodeSet ? '2026-10-01T09:00:00Z' : null,
   'username': 'striker.9',
   'konamiId': 'ABCD-1234-EFGH',
   'displayName': 'striker.9',
@@ -52,15 +57,21 @@ Map<String, dynamic> playerJson({String countryCode = 'KE'}) => {
   'profile': null,
 };
 
+const firstRecoveryCode = '7KQ0-1XRP-9TVD-4HNW-C3JA';
+const nextRecoveryCode = 'M2PB-8QWE-5RTZ-0YUA-6DFG';
+
 Map<String, dynamic> sessionJson({
   String access = 'access-1',
   String refresh = 'refresh-1',
+  String? recoveryCode,
+  bool recoveryCodeSet = true,
 }) => {
   'accessToken': access,
   'refreshToken': refresh,
   'tokenType': 'Bearer',
   'expiresInSeconds': 900,
-  'player': playerJson(),
+  'player': playerJson(recoveryCodeSet: recoveryCodeSet),
+  'recoveryCode': ?recoveryCode,
 };
 
 Map<String, dynamic> competitionJson({
