@@ -56,6 +56,18 @@ abstract final class AuthValidators {
       ? null
       : 'Enter the 6-digit code';
 
+  /// A recovery code is 20 letters and digits; case, spaces and dashes
+  /// don't count, as on the server.
+  static String? recoveryCode(String? value) {
+    final n = normalizeRecoveryCode(value ?? '').length;
+    if (n == 0) return 'Enter your recovery code';
+    if (n != 20) return 'Enter all 20 characters of your recovery code';
+    return null;
+  }
+
+  static String normalizeRecoveryCode(String value) =>
+      value.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
+
   /// Case, spaces, dots, dashes and underscores don't count.
   static String normalizeKonamiId(String value) =>
       value.toLowerCase().replaceAll(RegExp(r'[\s._\-]'), '');
