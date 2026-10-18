@@ -11,6 +11,7 @@ class AuthRepository {
     required String username,
     required String konamiId,
     required String password,
+    String? countryCode,
     String? deviceName,
   }) async {
     final json = await _api.post(
@@ -19,6 +20,7 @@ class AuthRepository {
         'username': username,
         'konamiId': konamiId,
         'password': password,
+        'countryCode': ?countryCode,
         'deviceName': ?deviceName,
       },
     );

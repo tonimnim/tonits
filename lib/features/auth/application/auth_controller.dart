@@ -126,8 +126,11 @@ class AuthController extends Notifier<AuthState> {
     );
   }
 
-  /// Registration takes no country, so it is saved with `PATCH /v1/me` right
-  /// after. The player is signed in even if that second call fails.
+  /// The country is sent with registration, which records it as chosen
+  /// (the API accepts `countryCode` from the backend change of 2026-10-18;
+  /// earlier APIs reject the field). If the account somehow comes back with
+  /// another country, it is saved with `PATCH /v1/me` right after; the
+  /// player is signed in either way.
   Future<void> register({
     required String username,
     required String konamiId,
@@ -138,6 +141,7 @@ class AuthController extends Notifier<AuthState> {
       username: username,
       konamiId: konamiId,
       password: password,
+      countryCode: countryCode,
       deviceName: ref.read(deviceNameProvider),
     );
     await _adopt(session);

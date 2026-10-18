@@ -61,15 +61,13 @@ Add to `PublicGameRating` (and `PublicRecord`):
 **Until then:** the app averages goals over the last 20 confirmed matches and
 labels the tile with the sample size ("Last 20 matches").
 
-## 4. Country default for new players
+## 4. Country at sign-up (done)
 
-New players default to `countryCode: "KE"` until they save a phone number or
-choose a country (`PATCH /v1/me`). Tonits launches in Kenya, India and the US,
-so:
-
-- `POST /v1/auth/register` should accept an optional `countryCode`, making
-  sign-up a single atomic call. The app currently registers and then calls
-  `PATCH /v1/me`, and shows a "retry" notice if the second call fails.
+`POST /v1/auth/register` accepts an optional `countryCode`, recorded as the
+player's chosen country in the same transaction. The app sends the country
+from the sign-up picker, so it needs an API with this change: earlier APIs
+reject unknown fields with `400 invalid_request`. If the account comes back
+with another country anyway, the app falls back to `PATCH /v1/me`.
 
 ## Also noted
 
