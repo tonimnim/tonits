@@ -9,9 +9,11 @@ import '../features/auth/ui/recovery_code_screen.dart';
 import '../features/auth/ui/register_screen.dart';
 import '../features/auth/ui/session_screens.dart';
 import '../features/auth/ui/sign_in_screen.dart';
+import '../features/competitions/ui/competition_screen.dart';
 import '../features/competitions/ui/competitions_screen.dart';
 import '../features/home/ui/home_screen.dart';
 import '../features/matches/ui/matches_screen.dart';
+import '../features/payments/ui/checkout_screen.dart';
 import '../features/profile/ui/profile_screen.dart';
 import '../features/rankings/ui/rankings_screen.dart';
 import 'shell/app_shell.dart';
@@ -62,7 +64,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           for (final tab in AppTab.values)
             StatefulShellBranch(
               routes: [
-                GoRoute(path: tab.path, builder: (_, _) => _tabRoot(tab)),
+                GoRoute(
+                  path: tab.path,
+                  builder: (_, _) => _tabRoot(tab),
+                  routes: _tabRoutes(tab),
+                ),
               ],
             ),
         ],
@@ -72,6 +78,25 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.onDispose(router.dispose);
   return router;
 });
+
+/// Screens pushed within a tab, so the bottom bar stays.
+List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
+  AppTab.competitions => [
+    GoRoute(
+      path: ':id',
+      builder: (_, state) =>
+          CompetitionScreen(competitionId: state.pathParameters['id']!),
+      routes: [
+        GoRoute(
+          path: 'pay',
+          builder: (_, state) =>
+              CheckoutScreen(competitionId: state.pathParameters['id']!),
+        ),
+      ],
+    ),
+  ],
+  _ => const [],
+};
 
 Widget _tabRoot(AppTab tab) => switch (tab) {
   AppTab.home => const HomeScreen(),
