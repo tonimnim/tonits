@@ -15,9 +15,16 @@ class AccountRepository {
       _patch({'countryCode': countryCode});
 
   /// Emails a 6-digit code to [email]; it becomes the account's address
-  /// once verified.
-  Future<void> requestEmailCode(String email) =>
-      _api.post('/v1/me/email', body: {'email': email}, auth: true);
+  /// once verified. Returns how long the code lasts, when the API says.
+  Future<Duration?> requestEmailCode(String email) async {
+    final json = await _api.post(
+      '/v1/me/email',
+      body: {'email': email},
+      auth: true,
+    );
+    final seconds = json?['expiresInSeconds'];
+    return seconds is int ? Duration(seconds: seconds) : null;
+  }
 
   Future<Player> verifyEmail(String code) async {
     final json = await _api.post(

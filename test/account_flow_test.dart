@@ -115,7 +115,13 @@ void main() {
 
     await enter(tester, 'you@example.com', 'amina@example.com');
     await tapText(tester, 'Send code');
-    expect(find.textContaining('amina@example.com'), findsOneWidget);
+    expect(
+      find.text(
+        'We sent a 6-digit code to amina@example.com. It expires in 10 '
+        'minutes.',
+      ),
+      findsOneWidget,
+    );
 
     await enter(tester, '000000', '654321');
     await tapText(tester, 'Verify');

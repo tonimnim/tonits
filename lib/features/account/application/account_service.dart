@@ -30,7 +30,7 @@ class AccountService {
     _ref.invalidate(myRankNeighbourhoodProvider);
   }
 
-  Future<void> requestEmailCode(String email) =>
+  Future<Duration?> requestEmailCode(String email) =>
       _repository.requestEmailCode(email);
 
   Future<void> verifyEmail(String code) async =>

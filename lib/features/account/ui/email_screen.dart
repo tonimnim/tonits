@@ -28,6 +28,9 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
 
   /// The address a code was sent to; null while on the first step.
   String? _sentTo;
+
+  /// How long the last code lasts, when the API says.
+  Duration? _expiresIn;
   bool _busy = false;
   String? _error;
 
@@ -65,14 +68,24 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
     if (!_emailForm.currentState!.validate()) return;
     final email = _email.text.trim();
     _run(() async {
-      await ref.read(accountServiceProvider).requestEmailCode(email);
-      if (mounted) setState(() => _sentTo = email);
+      final expiresIn = await ref
+          .read(accountServiceProvider)
+          .requestEmailCode(email);
+      if (mounted) {
+        setState(() {
+          _sentTo = email;
+          _expiresIn = expiresIn;
+        });
+      }
     });
   }
 
   void _resend() => _run(() async {
-    await ref.read(accountServiceProvider).requestEmailCode(_sentTo!);
+    final expiresIn = await ref
+        .read(accountServiceProvider)
+        .requestEmailCode(_sentTo!);
     if (!mounted) return;
+    setState(() => _expiresIn = expiresIn);
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('New code sent to $_sentTo')));
   });
@@ -128,10 +141,16 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
     );
   }
 
+  static String _expiry(Duration? lasts) {
+    if (lasts == null) return 'It expires soon.';
+    final minutes = (lasts.inSeconds / 60).ceil();
+    return 'It expires in $minutes minute${minutes == 1 ? '' : 's'}.';
+  }
+
   Widget _codeStep(String sentTo) {
     return AccountFormPage(
       title: 'Check your email',
-      intro: 'We sent a 6-digit code to $sentTo. It expires soon.',
+      intro: 'We sent a 6-digit code to $sentTo. ${_expiry(_expiresIn)}',
       children: [
         Form(
           key: _codeForm,
