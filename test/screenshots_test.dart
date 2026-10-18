@@ -235,12 +235,23 @@ void main() {
       });
     }
 
-    testWidgets('profile, no recovery ($suffix)', skip: skip, (tester) async {
+    testWidgets('profile ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,
         brightness: brightness,
         refreshToken: 'stored',
-        height: 1100,
+        height: 1560,
+      );
+      await _openTab(tester, 'Profile');
+      await _shoot(tester, 'profile-$suffix');
+    });
+
+    testWidgets('profile, new account ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        height: 844,
         api: FakeApi(
           routes: {
             '/v1/auth/refresh': (_) =>
@@ -249,7 +260,67 @@ void main() {
         ),
       );
       await _openTab(tester, 'Profile');
-      await _shoot(tester, 'profile-no-recovery-$suffix');
+      await _shoot(tester, 'profile-new-$suffix');
+    });
+
+    testWidgets('profile, all set ($suffix)', skip: skip, (tester) async {
+      final player = playerJson(
+        displayName: 'Amina Otieno',
+        email: 'amina@example.com',
+        phoneNumber: '+254712345678',
+      );
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        height: 1240,
+        api: FakeApi(
+          routes: {
+            '/v1/auth/refresh': (_) =>
+                jsonResponse(sessionJson(player: player), 200),
+            '/v1/me': (_) => jsonResponse(player, 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Profile');
+      await _shoot(tester, 'profile-complete-$suffix');
+
+      // The edit screens, opened from their rows.
+      Future<void> open(String row, String name) async {
+        await tester.ensureVisible(find.text(row).last);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(row).last);
+        await _shoot(tester, name);
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+      }
+
+      await open('Display name', 'account-name-$suffix');
+      await open('amina@example.com', 'account-email-$suffix');
+      await open('+254712345678', 'account-phone-$suffix');
+      await open('Password', 'account-password-$suffix');
+    });
+
+    testWidgets('email code ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/email': (_) => jsonResponse({'expiresInSeconds': 600}, 202),
+          },
+        ),
+      );
+      await _openTab(tester, 'Profile');
+      await tester.tap(find.text('Verify your email'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'you@example.com'),
+        'amina@example.com',
+      );
+      await tester.tap(find.text('Send code'));
+      await _shoot(tester, 'account-email-code-$suffix');
     });
 
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
