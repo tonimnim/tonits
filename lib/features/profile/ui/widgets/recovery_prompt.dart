@@ -13,13 +13,14 @@ class RecoveryPrompt extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
-    final (text, fill) = p.warn;
+    final (text, _) = p.warn;
+    // A plain card: the warning colour is on the icon and title only.
     return Container(
       padding: const EdgeInsets.all(TonitsSpace.md),
       decoration: BoxDecoration(
-        color: fill,
+        color: p.card,
         borderRadius: BorderRadius.circular(TonitsRadius.card),
-        border: Border.all(color: text.withValues(alpha: 0.35)),
+        border: Border.all(color: p.input),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,7 +41,7 @@ class RecoveryPrompt extends ConsumerWidget {
           Text(
             'If you forget your password, a recovery code is your way back '
             'in. It takes a moment to create.',
-            style: TextStyle(fontSize: 13, color: p.foreground),
+            style: TextStyle(fontSize: 13, color: p.subtleForeground),
           ),
           const SizedBox(height: TonitsSpace.md),
           PrimaryButton(

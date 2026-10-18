@@ -235,6 +235,23 @@ void main() {
       });
     }
 
+    testWidgets('profile, no recovery ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        height: 1100,
+        api: FakeApi(
+          routes: {
+            '/v1/auth/refresh': (_) =>
+                jsonResponse(sessionJson(recoveryCodeSet: false), 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Profile');
+      await _shoot(tester, 'profile-no-recovery-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,
