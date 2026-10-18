@@ -1,0 +1,208 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/api/error_text.dart';
+import '../../../core/countries.dart';
+import '../../../core/theme.dart';
+import '../../../core/widgets/widgets.dart';
+import '../../auth/application/auth_controller.dart';
+import '../../auth/ui/widgets/form_error.dart';
+import '../application/account_service.dart';
+import 'phone_number.dart';
+import 'widgets/account_form_page.dart';
+
+/// Adds, changes or removes the phone number used for payments.
+class PhoneScreen extends ConsumerStatefulWidget {
+  const PhoneScreen({super.key});
+
+  @override
+  ConsumerState<PhoneScreen> createState() => _PhoneScreenState();
+}
+
+class _PhoneScreenState extends ConsumerState<PhoneScreen> {
+  final _form = GlobalKey<FormState>();
+  late final String? _saved = ref.read(currentPlayerProvider)?.phoneNumber;
+
+  /// Whose calling code the number uses; starts as the account's country.
+  late Country _country = _savedCountry ?? _accountCountry;
+  late final _phone = TextEditingController(
+    text: _saved == null ? '' : PhoneNumber.local(_saved, _country),
+  );
+  bool _busy = false;
+  String? _error;
+
+  Country get _accountCountry =>
+      Country.byCode(ref.read(currentPlayerProvider)?.countryCode) ??
+      Country.byCode('KE')!;
+
+  /// The country whose calling code starts the saved number, longest match
+  /// first, preferring the account's own country for shared codes like +1.
+  Country? get _savedCountry {
+    final saved = _saved;
+    if (saved == null) return null;
+    if (saved.startsWith('+${_accountCountry.dialCode}')) {
+      return _accountCountry;
+    }
+    final matches =
+        Country.all.where((c) => saved.startsWith('+${c.dialCode}')).toList()
+          ..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+    return matches.firstOrNull;
+  }
+
+  @override
+  void dispose() {
+    _phone.dispose();
+    super.dispose();
+  }
+
+  Future<void> _run(Future<void> Function() action) async {
+    if (_busy) return;
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await action();
+    } catch (e) {
+      if (mounted) setState(() => _error = describeError(e));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _save() {
+    if (!_form.currentState!.validate()) return;
+    final number = PhoneNumber.normalize(_phone.text, _country)!;
+    if (number == _saved) {
+      Navigator.of(context).pop();
+      return;
+    }
+    _run(() async {
+      await ref.read(accountServiceProvider).savePhone(number);
+      if (mounted) popWithMessage(context, 'Phone number saved');
+    });
+  }
+
+  Future<void> _remove() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove your phone number?'),
+        content: const Text(
+          "You'll enter a number each time you pay an entry fee.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    await _run(() async {
+      await ref.read(accountServiceProvider).removePhone();
+      if (mounted) popWithMessage(context, 'Phone number removed');
+    });
+  }
+
+  Future<void> _pickCountry() async {
+    final picked = await showCountryPicker(context);
+    if (picked != null) setState(() => _country = picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final kenya = _country.code == 'KE';
+    return AccountFormPage(
+      title: 'Phone number',
+      intro: kenya
+          ? 'Your M-Pesa number. Entry fees are requested from it, so you '
+                "don't type it each time."
+          : 'Saved for paying entry fees. Other players never see it.',
+      children: [
+        Form(
+          key: _form,
+          child: LabeledField(
+            label: kenya ? 'M-Pesa number' : 'Phone number',
+            child: TextFormField(
+              controller: _phone,
+              autofocus: _saved == null,
+              keyboardType: TextInputType.phone,
+              autofillHints: const [AutofillHints.telephoneNumberNational],
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) => _save(),
+              validator: (value) => PhoneNumber.validate(value, _country),
+              decoration: InputDecoration(
+                hintText: kenya ? '0712 345 678' : 'Phone number',
+                prefixIcon: _CallingCode(
+                  country: _country,
+                  onTap: _busy ? null : _pickCountry,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: TonitsSpace.lg),
+        FormError(_error),
+        PrimaryButton(label: 'Save', busy: _busy, onPressed: _save),
+        if (_saved != null) ...[
+          const SizedBox(height: TonitsSpace.md),
+          Center(
+            child: TextButton(
+              onPressed: _busy ? null : _remove,
+              style: TextButton.styleFrom(foregroundColor: p.destructive),
+              child: const Text('Remove phone number'),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// The flag and calling code inside the field; tapping changes country.
+class _CallingCode extends StatelessWidget {
+  const _CallingCode({required this.country, required this.onTap});
+
+  final Country country;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Semantics(
+      button: true,
+      label: 'Calling code +${country.dialCode}, ${country.name}. Change',
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: const BorderRadius.horizontal(
+          left: Radius.circular(TonitsRadius.control),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 0, 10, 0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(country.flag, style: const TextStyle(fontSize: 18)),
+              const SizedBox(width: 6),
+              Text(
+                '+${country.dialCode}',
+                style: monoFont.copyWith(color: p.foreground),
+              ),
+              Icon(Icons.expand_more, size: 18, color: p.mutedForeground),
+              const SizedBox(width: 6),
+              Container(width: 1, height: 22, color: p.border),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

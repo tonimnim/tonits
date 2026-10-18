@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/routes.dart';
+import '../features/account/ui/change_password_screen.dart';
+import '../features/account/ui/edit_name_screen.dart';
+import '../features/account/ui/email_screen.dart';
+import '../features/account/ui/phone_screen.dart';
 import '../features/auth/application/auth_controller.dart';
 import '../features/auth/ui/forgot_password_screen.dart';
 import '../features/auth/ui/recovery_code_screen.dart';
@@ -94,6 +98,12 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
         ),
       ],
     ),
+  ],
+  AppTab.profile => [
+    GoRoute(path: 'name', builder: (_, _) => const EditNameScreen()),
+    GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
+    GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
+    GoRoute(path: 'password', builder: (_, _) => const ChangePasswordScreen()),
   ],
   _ => const [],
 };

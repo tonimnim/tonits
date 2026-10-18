@@ -24,6 +24,12 @@ abstract final class Routes {
   /// Paying a competition's entry fee with M-Pesa.
   static String checkout(String id) => '$competitions/$id/pay';
 
+  // Account settings, under the Profile tab.
+  static const editName = '$profile/name';
+  static const email = '$profile/email';
+  static const phone = '$profile/phone';
+  static const password = '$profile/password';
+
   /// Paths reachable while signed out.
   static bool isSignedOut(String path) => path.startsWith(signIn);
 }
