@@ -52,4 +52,15 @@ class PlayersRepository {
       rethrow;
     }
   }
+
+  /// The signed-in player's eFootball game account ID, which entries are
+  /// made with. Sign-up creates it from the Konami ID, so there is one.
+  Future<String?> myGameAccountId() async {
+    final json = await _api.get('/v1/me/game-accounts', auth: true);
+    final accounts = (json!['data'] as List).cast<Map<String, dynamic>>();
+    return accounts
+        .where((a) => a['gameId'] == PlayerProfile.gameId)
+        .map((a) => a['id'] as String)
+        .firstOrNull;
+  }
 }

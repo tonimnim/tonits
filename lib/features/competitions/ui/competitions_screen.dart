@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/api/error_text.dart';
+import '../../../core/routes.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/competitions_providers.dart';
@@ -36,8 +38,10 @@ class _CompetitionsScreenState extends ConsumerState<CompetitionsScreen> {
             onChanged: (f) => setState(() => _filter = f),
           ),
         ),
-        itemBuilder: (context, competition) =>
-            CompetitionCard(competition: competition),
+        itemBuilder: (context, competition) => CompetitionCard(
+          competition: competition,
+          onTap: () => context.push(Routes.competition(competition.id)),
+        ),
         empty: EmptyState(
           icon: Icons.emoji_events_outlined,
           title: switch (_filter) {

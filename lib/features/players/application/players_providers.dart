@@ -19,6 +19,11 @@ String _myId(Ref ref) {
   return player.id;
 }
 
+/// The game account the player enters competitions with.
+final myGameAccountIdProvider = FutureProvider.autoDispose<String?>(
+  (ref) => ref.watch(playersRepositoryProvider).myGameAccountId(),
+);
+
 /// The signed-in player's public profile: rating, ranks and record.
 final myProfileProvider = FutureProvider.autoDispose<PlayerProfile>(
   (ref) => ref.watch(playersRepositoryProvider).profile(_myId(ref)),
@@ -55,12 +60,16 @@ final myRankNeighbourhoodProvider =
     FutureProvider.autoDispose<RankNeighbourhood>((ref) async {
       final player = ref.watch(currentPlayerProvider);
       if (player == null) return const RankNeighbourhood([], ranked: false);
+      // Dependencies first: the ref can't be used after an await once
+      // nothing listens.
+      final rankings = ref.watch(rankingsRepositoryProvider);
       final profile = await ref.watch(myProfileProvider.future);
       // A dedicated "around me" query is requested in docs/backend-requests.md;
       // until then, look within the first 50 places.
-      final page = await ref
-          .watch(rankingsRepositoryProvider)
-          .list(countryCode: player.countryCode, limit: 50);
+      final page = await rankings.list(
+        countryCode: player.countryCode,
+        limit: 50,
+      );
       final ranked = profile.rating?.countryRank != null;
       return RankNeighbourhood(
         ranked

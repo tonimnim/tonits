@@ -18,6 +18,12 @@ abstract final class Routes {
   static const rankings = '/rankings';
   static const profile = '/profile';
 
+  /// A competition's detail and entry, under the Compete tab.
+  static String competition(String id) => '$competitions/$id';
+
+  /// Paying a competition's entry fee with M-Pesa.
+  static String checkout(String id) => '$competitions/$id/pay';
+
   /// Paths reachable while signed out.
   static bool isSignedOut(String path) => path.startsWith(signIn);
 }

@@ -43,8 +43,11 @@ class CompeteSection extends ConsumerWidget {
                 clipBehavior: Clip.none,
                 itemCount: list.length,
                 separatorBuilder: (_, _) => const SizedBox(width: 12),
-                itemBuilder: (context, i) =>
-                    CompetitionTile(competition: list[i], width: 220),
+                itemBuilder: (context, i) => CompetitionTile(
+                  competition: list[i],
+                  width: 220,
+                  onTap: () => context.go(Routes.competition(list[i].id)),
+                ),
               ),
             ),
             AsyncError(:final error) => SectionMessageCard.error(

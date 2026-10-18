@@ -4,13 +4,24 @@ import '../../../../core/widgets/widgets.dart';
 import '../../data/competition.dart';
 
 class CompetitionStatusBadge extends StatelessWidget {
-  const CompetitionStatusBadge(this.status, {super.key});
+  const CompetitionStatusBadge(
+    this.status, {
+    super.key,
+    this.registrationEnded = false,
+  });
 
   final CompetitionStatus status;
+
+  /// Shows "Closed" for an open competition whose deadline has passed.
+  final bool registrationEnded;
 
   @override
   Widget build(BuildContext context) {
     final (label, tone) = switch (status) {
+      CompetitionStatus.registrationOpen when registrationEnded => (
+        'Closed',
+        StatusTone.muted,
+      ),
       CompetitionStatus.registrationOpen => ('Open', StatusTone.good),
       CompetitionStatus.published => ('Upcoming', StatusTone.info),
       CompetitionStatus.checkIn => ('Check-in', StatusTone.warn),

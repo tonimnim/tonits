@@ -16,6 +16,7 @@ class Competition {
     required this.prizeAmountMinor,
     required this.startsAt,
     this.registrationClosesAt,
+    this.description = '',
   });
 
   factory Competition.fromJson(Map<String, dynamic> json) => Competition(
@@ -33,6 +34,7 @@ class Competition {
     prizeAmountMinor: json['prizeAmountMinor'] as int? ?? 0,
     startsAt: DateTime.parse(json['startsAt'] as String),
     registrationClosesAt: _date(json['registrationClosesAt']),
+    description: json['description'] as String? ?? '',
   );
 
   final String id;
@@ -53,8 +55,18 @@ class Competition {
   final int prizeAmountMinor;
   final DateTime startsAt;
   final DateTime? registrationClosesAt;
+  final String description;
+
+  bool get isPaid => entryType == EntryType.paid && entryFeeMinor > 0;
 
   bool get isFull => entryCount >= maxEntries;
+
+  /// The status can say "registration open" a while after the deadline has
+  /// passed; the deadline is what the player can act on.
+  bool get registrationEnded {
+    final closes = registrationClosesAt;
+    return closes != null && !closes.isAfter(DateTime.now());
+  }
 
   static DateTime? _date(Object? value) =>
       value is String ? DateTime.parse(value) : null;
