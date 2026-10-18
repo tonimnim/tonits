@@ -6,6 +6,8 @@ import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_controller.dart';
 import 'widgets/account_details_card.dart';
 import 'widgets/profile_header.dart';
+import 'widgets/recovery_prompt.dart';
+import 'widgets/security_card.dart';
 import 'widgets/sign_out_button.dart';
 
 /// Tab 5: who the player is, their account details and sign-out.
@@ -44,9 +46,17 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: TonitsSpace.md),
           ],
+          if (!player.canRecoverAccount) ...[
+            const RecoveryPrompt(),
+            const SizedBox(height: TonitsSpace.xl),
+          ],
           const SectionLabel('Account'),
           const SizedBox(height: TonitsSpace.sm),
           AccountDetailsCard(player: player),
+          const SizedBox(height: TonitsSpace.xl),
+          const SectionLabel('Security'),
+          const SizedBox(height: TonitsSpace.sm),
+          SecurityCard(player: player),
           const SizedBox(height: TonitsSpace.xl),
           const SignOutButton(),
         ],
