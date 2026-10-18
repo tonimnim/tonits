@@ -34,6 +34,10 @@ class PrimaryButton extends StatelessWidget {
         foregroundColor: palette.onPrimary,
         disabledBackgroundColor: palette.primary.withValues(alpha: 0.45),
         disabledForegroundColor: palette.onPrimary,
+        // Flat: no elevation, shadow or tint, in any state.
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(TonitsRadius.control),
         ),
@@ -55,7 +59,7 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// A secondary action: card fill with a hairline border.
+/// A secondary action: a hairline outline on a transparent background.
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,
@@ -77,7 +81,11 @@ class SecondaryButton extends StatelessWidget {
     final palette = context.palette;
     final style = OutlinedButton.styleFrom(
       minimumSize: const Size.fromHeight(52),
-      backgroundColor: palette.card,
+      // A plain outline on the page, flat in every state.
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
       foregroundColor: destructive ? palette.destructive : palette.foreground,
       side: BorderSide(color: palette.input),
       shape: RoundedRectangleBorder(

@@ -31,18 +31,7 @@ class PaymentWaiting extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: TonitsSpace.lg),
-          Center(
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
-              child: Icon(
-                Icons.phone_android_rounded,
-                size: 34,
-                color: p.onSoft,
-              ),
-            ),
-          ),
+          Icon(Icons.phone_android_rounded, size: 52, color: p.primary),
           const SizedBox(height: TonitsSpace.lg),
           Text(
             'Check your phone',

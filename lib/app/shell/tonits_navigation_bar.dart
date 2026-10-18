@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../core/theme.dart';
 import 'app_tab.dart';
 
-/// The bottom bar: card surface, a hairline on top, and a lavender pill
-/// behind the selected tab's icon.
+/// The bottom bar: card surface with a hairline on top. The selected tab is
+/// shown by colour alone, a solid indigo icon and label, with no pill or
+/// shade behind it.
 class TonitsNavigationBar extends StatelessWidget {
   const TonitsNavigationBar({
     super.key,
@@ -29,13 +30,15 @@ class TonitsNavigationBar extends StatelessWidget {
           elevation: 0,
           backgroundColor: p.card,
           surfaceTintColor: Colors.transparent,
-          indicatorColor: p.soft,
+          indicatorColor: Colors.transparent,
+          // No splash or hover wash behind the icons either.
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           iconTheme: WidgetStateProperty.resolveWith(
             (states) => IconThemeData(
               size: 24,
               color: states.contains(WidgetState.selected)
-                  ? p.onSoft
+                  ? p.primary
                   : p.mutedForeground,
             ),
           ),
@@ -47,7 +50,7 @@ class TonitsNavigationBar extends StatelessWidget {
                   ? FontWeight.w600
                   : FontWeight.w500,
               color: states.contains(WidgetState.selected)
-                  ? p.foreground
+                  ? p.primary
                   : p.mutedForeground,
             ),
           ),

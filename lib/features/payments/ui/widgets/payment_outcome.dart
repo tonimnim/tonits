@@ -83,14 +83,7 @@ class PaymentOutcome extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: TonitsSpace.lg),
-          Center(
-            child: Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(color: tone.$2, shape: BoxShape.circle),
-              child: Icon(icon, size: 36, color: tone.$1),
-            ),
-          ),
+          Icon(icon, size: 52, color: tone.$1),
           const SizedBox(height: TonitsSpace.lg),
           Text(
             title,

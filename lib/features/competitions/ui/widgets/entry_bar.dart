@@ -180,13 +180,14 @@ class _Registered extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (text, fill) = context.palette.good;
+    final p = context.palette;
+    final (text, _) = p.good;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
       constraints: const BoxConstraints(minHeight: 52),
       decoration: BoxDecoration(
-        color: fill,
         borderRadius: BorderRadius.circular(TonitsRadius.control),
+        border: Border.all(color: p.input),
       ),
       child: Row(
         children: [
@@ -222,8 +223,8 @@ class _Message extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: p.muted,
         borderRadius: BorderRadius.circular(TonitsRadius.control),
+        border: Border.all(color: p.input),
       ),
       child: Row(
         children: [

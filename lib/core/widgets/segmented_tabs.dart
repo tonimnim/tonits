@@ -18,7 +18,7 @@ class SegmentedTabs<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    // The selected segment is the raised, lighter surface in both themes.
+    // The selected segment is the lighter surface in both themes.
     final dark = Theme.of(context).brightness == Brightness.dark;
     final track = dark ? p.card : p.muted;
     final thumb = dark ? p.soft : p.card;
@@ -45,15 +45,10 @@ class SegmentedTabs<T> extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: value == selected ? thumb : Colors.transparent,
                       borderRadius: BorderRadius.circular(9),
-                      boxShadow: value == selected
-                          ? [
-                              BoxShadow(
-                                color: p.foreground.withValues(alpha: 0.06),
-                                blurRadius: 4,
-                                offset: const Offset(0, 1),
-                              ),
-                            ]
-                          : null,
+                      // A hairline, not a shadow, marks the selection.
+                      border: Border.all(
+                        color: value == selected ? p.input : Colors.transparent,
+                      ),
                     ),
                     child: Text(
                       label,
