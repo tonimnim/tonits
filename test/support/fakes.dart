@@ -84,7 +84,7 @@ Map<String, dynamic> competitionJson({
   int entryCount = 23,
   int maxEntries = 32,
   int prizeAmountMinor = 500000,
-  String startsAt = '2026-10-14T16:00:00Z',
+  String startsAt = '2027-01-14T16:00:00Z',
 }) => {
   'id': id,
   'slug': id,
@@ -103,7 +103,7 @@ Map<String, dynamic> competitionJson({
   'entryFeeMinor': entryFeeMinor,
   'currency': currency,
   'prizeAmountMinor': prizeAmountMinor,
-  'registrationClosesAt': '2026-10-13T16:00:00Z',
+  'registrationClosesAt': '2027-01-13T16:00:00Z',
   'startsAt': startsAt,
 };
 
@@ -265,3 +265,73 @@ List<Map<String, dynamic>> ladderJson() => [
       if (rank == 24) 'playerId': myPlayerId,
     },
 ];
+
+const myGameAccountId = '9b2f2a1e-1c2d-4e5f-8a9b-0c1d2e3f4a5b';
+
+Map<String, dynamic> eligibilityJson({
+  String status = 'eligible',
+  String action = 'submit_registration',
+  int fee = 0,
+  String? paymentId,
+  List<Map<String, dynamic>> issues = const [],
+}) => {
+  'data': {
+    'competitionId': 'c1',
+    'gameId': 'efootball-mobile',
+    'status': status,
+    'eligible': !issues.any((i) => i['severity'] == 'blocking'),
+    'canRegisterNow': action == 'submit_registration',
+    'requiredAction': action,
+    'entryFeeMinor': fee,
+    'currency': 'KES',
+    'requirements': {
+      'minimumAge': null,
+      'allowedCountries': <String>[],
+      'minimumRating': null,
+      'maximumRank': null,
+      'requireVerifiedGameAccount': false,
+    },
+    'issues': issues,
+    'paymentId': paymentId,
+    'evaluatedAt': '2026-10-18T09:00:00Z',
+  },
+};
+
+Map<String, dynamic> issueJson(String code, String message) => {
+  'code': code,
+  'category': 'country',
+  'severity': 'blocking',
+  'message': message,
+};
+
+Map<String, dynamic> paymentJson({
+  String id = 'pay1',
+  String status = 'pending',
+  String registrationStatus = 'pending',
+  String? providerMessage,
+}) => {
+  'id': id,
+  'competitionId': 'c2',
+  'entryId': null,
+  'amountMinor': 10000,
+  'currency': 'KES',
+  'phoneNumber': '+2547******78',
+  'status': status,
+  'registrationStatus': registrationStatus,
+  'refund': null,
+  'providerResultDescription': providerMessage,
+  'createdAt': '2026-10-18T09:00:00Z',
+  'updatedAt': '2026-10-18T09:00:00Z',
+  'completedAt': null,
+};
+
+/// The paid competition in the fixtures.
+Map<String, dynamic> paidCompetitionJson() => competitionJson(
+  id: 'c2',
+  name: 'Mombasa Masters',
+  entryType: 'paid',
+  entryFeeMinor: 10000,
+  entryCount: 11,
+  maxEntries: 16,
+  prizeAmountMinor: 800000,
+);

@@ -24,7 +24,7 @@ void main() {
     expect(c.format, CompetitionFormat.singleElimination);
     expect(c.entryType, EntryType.paid);
     expect(c.entryFeeMinor, 10000);
-    expect(c.startsAt, DateTime.utc(2026, 10, 14, 16));
+    expect(c.startsAt, DateTime.utc(2027, 1, 14, 16));
   });
 
   test('unknown enum values do not break parsing', () {
@@ -127,5 +127,15 @@ void main() {
       final rows = neighbourhood(ladder, 'someone-else');
       expect(rows.map((r) => r.rank), [21, 22, 23]);
     });
+  });
+
+  test('an open competition past its deadline reads as ended', () {
+    final ended = Competition.fromJson({
+      ...competitionJson(),
+      'registrationClosesAt': '2020-01-01T00:00:00Z',
+    });
+    expect(ended.status, CompetitionStatus.registrationOpen);
+    expect(ended.registrationEnded, isTrue);
+    expect(Competition.fromJson(competitionJson()).registrationEnded, isFalse);
   });
 }

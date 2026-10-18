@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -57,21 +58,29 @@ class FakeApi {
         },
       ],
     }, 200),
-    '/v1/competitions': (_) => jsonResponse(
-      pageJson([
-        competitionJson(),
-        competitionJson(
-          id: 'c2',
-          name: 'Mombasa Masters',
-          entryType: 'paid',
-          entryFeeMinor: 10000,
-          entryCount: 11,
-          maxEntries: 16,
-          prizeAmountMinor: 800000,
-        ),
-      ]),
-      200,
-    ),
+    '/v1/competitions': (_) =>
+        jsonResponse(pageJson([competitionJson(), paidCompetitionJson()]), 200),
+    '/v1/competitions/c1': (_) =>
+        jsonResponse({'data': competitionJson()}, 200),
+    '/v1/competitions/c2': (_) =>
+        jsonResponse({'data': paidCompetitionJson()}, 200),
+    '/v1/competitions/c1/eligibility': (_) =>
+        jsonResponse(eligibilityJson(), 200),
+    '/v1/competitions/c2/eligibility': (_) =>
+        jsonResponse(eligibilityJson(action: 'start_payment', fee: 10000), 200),
+    '/v1/payments/mpesa/stk-push': (_) => jsonResponse(paymentJson(), 202),
+    '/v1/payments/pay1': (_) => jsonResponse(paymentJson(), 200),
+    '/v1/me/game-accounts': (_) => jsonResponse({
+      'data': [
+        {
+          'id': myGameAccountId,
+          'gameId': 'efootball-mobile',
+          'platform': 'android',
+          'inGameName': 'striker.9',
+          'verificationStatus': 'unverified',
+        },
+      ],
+    }, 200),
     '/v1/me/matches': (request) => jsonResponse(
       pageJson(
         request.url.queryParameters['state'] == 'history'
@@ -104,6 +113,7 @@ Future<FakeApi> pumpTonits(
   double textScale = 1,
   Brightness brightness = Brightness.light,
   Widget Function(Widget app)? wrap,
+  List<Override> overrides = const [],
 }) async {
   final fake = api ?? FakeApi();
   tester.view.physicalSize = size;
@@ -117,6 +127,7 @@ Future<FakeApi> pumpTonits(
     overrides: [
       apiClientProvider.overrideWithValue(fake.api()),
       tokenStoreProvider.overrideWithValue(MemoryTokenStore(refreshToken)),
+      ...overrides,
     ],
     // Fail fast in tests instead of backing off and retrying.
     retry: (_, _) => null,

@@ -47,5 +47,27 @@ void main() {
       }
       expect(find.text('Konami ID'), findsOneWidget);
     });
+
+    testWidgets('entry screens fit at text scale $scale', (tester) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(TonitsNavigationBar),
+          matching: find.text('Compete'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Mombasa Masters'));
+      await tester.pumpAndSettle();
+      expect(find.text('Pay Ksh 100 with M-Pesa'), findsOneWidget);
+      await tester.tap(find.text('Pay Ksh 100 with M-Pesa'));
+      await tester.pumpAndSettle();
+      expect(find.text('Send payment request'), findsOneWidget);
+    });
   }
 }

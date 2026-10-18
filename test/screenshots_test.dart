@@ -13,6 +13,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/payments/application/checkout_controller.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
@@ -48,8 +49,18 @@ Future<void> _loadFonts() async {
   }
 }
 
-Future<void> _shoot(WidgetTester tester, String name) async {
-  await tester.pumpAndSettle();
+/// [settle] waits for animations to finish; screens with a spinner never
+/// settle, so they are captured after a short pump instead.
+Future<void> _shoot(
+  WidgetTester tester,
+  String name, {
+  bool settle = true,
+}) async {
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump(const Duration(milliseconds: 300));
+  }
   final boundary = tester.renderObject<RenderRepaintBoundary>(find.byKey(_key));
   final image = await tester.runAsync(() => boundary.toImage(pixelRatio: 2));
   final bytes = await tester.runAsync(
@@ -71,6 +82,10 @@ Future<void> _pump(
   await pumpTonits(
     tester,
     api: api,
+    // Long enough that a waiting payment stays waiting for the shot.
+    overrides: [
+      paymentPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
+    ],
     brightness: brightness,
     refreshToken: refreshToken,
     size: Size(390, height),
@@ -120,6 +135,65 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Create account'));
       await _shoot(tester, 'recovery-code-$suffix');
+    });
+
+    testWidgets('entry ($suffix)', skip: skip, (tester) async {
+      await _pump(tester, brightness: brightness, refreshToken: 'stored');
+      await _openTab(tester, 'Compete');
+      await tester.tap(find.text('Nairobi Weekend Cup'));
+      await _shoot(tester, 'competition-free-$suffix');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Mombasa Masters'));
+      await _shoot(tester, 'competition-paid-$suffix');
+      await tester.tap(find.text('Pay Ksh 100 with M-Pesa'));
+      await _shoot(tester, 'checkout-form-$suffix');
+      await tester.enterText(
+        find.widgetWithText(TextFormField, '0712 345 678'),
+        '0712345678',
+      );
+      await tester.tap(find.text('Send payment request'));
+      await tester.pump();
+      await tester.pump();
+      await _shoot(tester, 'checkout-waiting-$suffix', settle: false);
+      // Leaving the checkout stops its polling.
+      await tester.pageBack();
+      await tester.pump(const Duration(milliseconds: 500));
+    });
+
+    testWidgets('entry outside Kenya ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/auth/refresh': (_) => jsonResponse({
+              ...sessionJson(),
+              'player': playerJson(countryCode: 'IN'),
+            }, 200),
+            '/v1/competitions/c2/eligibility': (_) => jsonResponse(
+              eligibilityJson(
+                status: 'ineligible',
+                action: 'none',
+                fee: 10000,
+                issues: [
+                  issueJson(
+                    'country_not_allowed',
+                    'Paid entry uses M-Pesa, which is only available to '
+                        'players in Kenya.',
+                  ),
+                ],
+              ),
+              200,
+            ),
+          },
+        ),
+      );
+      await _openTab(tester, 'Compete');
+      await _shoot(tester, 'competitions-india-$suffix');
+      await tester.tap(find.text('Mombasa Masters'));
+      await _shoot(tester, 'competition-paid-india-$suffix');
     });
 
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {

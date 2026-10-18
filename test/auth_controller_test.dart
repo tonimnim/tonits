@@ -325,4 +325,27 @@ void main() {
     // Shown by the caller, not held as pending.
     expect(auth.pendingRecoveryCode, isNull);
   });
+
+  test('the country goes with registration, in one call', () async {
+    final requests = <String>[];
+    final auth = controller((request) async {
+      requests.add('${request.method} ${request.url.path}');
+      expect(jsonDecode(request.body), containsPair('countryCode', 'US'));
+      return jsonResponse({
+        ...sessionJson(recoveryCode: firstRecoveryCode),
+        'player': playerJson(countryCode: 'US'),
+      }, 201);
+    }, MemoryTokenStore());
+
+    await auth.register(
+      username: 'striker.9',
+      konamiId: 'ABCD-1234-EFGH',
+      password: 'correct horse',
+      countryCode: 'US',
+    );
+
+    expect(requests, ['POST /v1/auth/register']);
+    expect(auth.player!.countryCode, 'US');
+    expect(auth.pendingCountryCode, isNull);
+  });
 }
