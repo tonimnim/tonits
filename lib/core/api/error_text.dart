@@ -20,7 +20,7 @@ String describeError(Object error) {
       return 'That code is wrong or has expired.';
     case 'invalid_recovery_code':
       return "That Konami ID and recovery code don't match.";
-    case 'rate_limited':
+    case 'rate_limited' || 'payment_rate_limited':
       final wait = error.retryAfter;
       if (wait == null) {
         return 'Too many attempts. Wait a moment and try again.';

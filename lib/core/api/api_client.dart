@@ -13,6 +13,7 @@ class ApiException implements Exception {
     required this.message,
     this.requestId,
     this.retryAfter,
+    this.details = const {},
   });
 
   final int status;
@@ -22,6 +23,10 @@ class ApiException implements Exception {
 
   /// From the `Retry-After` header on a `429`.
   final Duration? retryAfter;
+
+  /// The whole error body, for typed errors that carry more than a code
+  /// (such as `payment_in_progress` with its `paymentId`).
+  final Map<String, dynamic> details;
 
   @override
   String toString() => 'ApiException($status $code: $message)';
@@ -146,6 +151,7 @@ class ApiClient {
           'Request failed with status ${response.statusCode}',
       requestId: response.headers['x-request-id'],
       retryAfter: retryAfter == null ? null : Duration(seconds: retryAfter),
+      details: error is Map<String, dynamic> ? error : const {},
     );
   }
 }
