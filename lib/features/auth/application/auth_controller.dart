@@ -197,6 +197,12 @@ class AuthController extends Notifier<AuthState> {
     return issued.code;
   }
 
+  /// Takes the player as the API returned it after a change to the account.
+  void replacePlayer(Player player) {
+    if (state.status != AuthStatus.signedIn) return;
+    state = state.copyWith(player: player);
+  }
+
   Future<void> signOut() async {
     try {
       await _repository.logout();

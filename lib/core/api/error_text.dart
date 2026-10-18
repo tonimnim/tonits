@@ -20,6 +20,23 @@ String describeError(Object error) {
       return 'That code is wrong or has expired.';
     case 'invalid_recovery_code':
       return "That Konami ID and recovery code don't match.";
+    case 'email_taken':
+      return 'That email belongs to another account.';
+    case 'email_already_verified':
+      return 'That email is already verified on your account.';
+    case 'email_unavailable':
+      return "We can't send email right now. Try again shortly.";
+    case 'invalid_email':
+      return "That doesn't look like an email address.";
+    case 'phone_taken':
+      return 'That number belongs to another account. Tonits support can '
+          'help its owner.';
+    case 'invalid_phone':
+      return 'Enter the full number with its country code.';
+    case 'invalid_display_name':
+      return 'Use 2 to 80 characters.';
+    case 'weak_password':
+      return 'Choose a stronger password.';
     case 'rate_limited' || 'payment_rate_limited':
       final wait = error.retryAfter;
       if (wait == null) {
