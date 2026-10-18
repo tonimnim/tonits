@@ -67,6 +67,37 @@ class AuthRepository {
     body: {'konamiId': konamiId, 'code': code, 'newPassword': newPassword},
   );
 
+  /// Resets a forgotten password with the recovery code and signs in. The
+  /// session carries a new code, which replaces the spent one.
+  Future<AuthSession> resetWithRecoveryCode({
+    required String konamiId,
+    required String recoveryCode,
+    required String newPassword,
+    String? deviceName,
+  }) async {
+    final json = await _api.post(
+      '/v1/auth/password-reset/recovery-code',
+      body: {
+        'konamiId': konamiId,
+        'recoveryCode': recoveryCode,
+        'newPassword': newPassword,
+        'deviceName': ?deviceName,
+      },
+    );
+    return AuthSession.fromJson(json!);
+  }
+
+  /// Issues a new recovery code after the player confirms their password.
+  /// The previous code stops working.
+  Future<IssuedRecoveryCode> newRecoveryCode(String password) async {
+    final json = await _api.post(
+      '/v1/me/recovery-code',
+      body: {'password': password},
+      auth: true,
+    );
+    return IssuedRecoveryCode.fromJson(json!);
+  }
+
   Future<Player> currentPlayer() async {
     final json = await _api.get('/v1/me', auth: true);
     return Player.fromJson(json!);

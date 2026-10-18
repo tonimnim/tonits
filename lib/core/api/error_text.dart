@@ -18,6 +18,8 @@ String describeError(Object error) {
       return 'This account is suspended. Contact Tonits support.';
     case 'invalid_code':
       return 'That code is wrong or has expired.';
+    case 'invalid_recovery_code':
+      return "That Konami ID and recovery code don't match.";
     case 'rate_limited':
       final wait = error.retryAfter;
       if (wait == null) {
