@@ -8,8 +8,14 @@ class PlayersRepository {
 
   final ApiClient _api;
 
+  // Player reads carry the token: a profile starts private, and only its
+  // owner can read it then.
+
   Future<PlayerProfile> profile(String playerId) async {
-    final json = await _api.get('/v1/players/${Uri.encodeComponent(playerId)}');
+    final json = await _api.get(
+      '/v1/players/${Uri.encodeComponent(playerId)}',
+      auth: true,
+    );
     return PlayerProfile.fromJson(json!);
   }
 
@@ -24,6 +30,7 @@ class PlayersRepository {
         'limit': limit,
         'cursor': cursor,
       }),
+      auth: true,
     );
     return CursorPage.fromJson(json!, PlayedMatch.fromJson);
   }
@@ -42,6 +49,7 @@ class PlayersRepository {
           '/v1/players/${Uri.encodeComponent(playerId)}/rating-history',
           {'gameId': PlayerProfile.gameId, 'days': days},
         ),
+        auth: true,
       );
       return (json!['data'] as List)
           .cast<Map<String, dynamic>>()

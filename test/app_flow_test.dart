@@ -212,4 +212,18 @@ void main() {
     expect(find.text('Welcome back'), findsOneWidget);
     expect(find.byType(TonitsNavigationBar), findsNothing);
   });
+
+  testWidgets("the player's own profile is read with their token", (
+    tester,
+  ) async {
+    final api = await pumpTonits(tester, refreshToken: 'stored');
+
+    final reads = api.requests.where(
+      (r) => r.url.path.startsWith('/v1/players/$myPlayerId'),
+    );
+    expect(reads, isNotEmpty);
+    for (final read in reads) {
+      expect(read.headers['Authorization'], 'Bearer access-1');
+    }
+  });
 }
