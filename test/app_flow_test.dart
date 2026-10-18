@@ -191,8 +191,8 @@ void main() {
     expect(find.text('striker.9 (you)'), findsOneWidget);
 
     await openTab(tester, 'Profile');
+    await scrollPageTo(tester, find.text('ABCD-1234-EFGH'));
     expect(find.text('Konami ID'), findsOneWidget);
-    expect(find.text('ABCD-1234-EFGH'), findsOneWidget);
 
     await openTab(tester, 'Home');
     expect(find.text('1,542'), findsOneWidget);
@@ -202,7 +202,7 @@ void main() {
     await pumpTonits(tester, refreshToken: 'stored');
     await openTab(tester, 'Profile');
 
-    await tester.ensureVisible(find.text('Sign out'));
+    await scrollPageTo(tester, find.text('Sign out'));
     await tester.tap(find.text('Sign out'));
     await tester.pumpAndSettle();
     expect(find.text('Sign out of Tonits?'), findsOneWidget);

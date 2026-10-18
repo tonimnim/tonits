@@ -45,7 +45,8 @@ void main() {
         );
         await tester.pumpAndSettle();
       }
-      expect(find.text('Konami ID'), findsOneWidget);
+      // Build the whole Profile page too.
+      await scrollPageTo(tester, find.text('Sign out'));
     });
 
     testWidgets('entry screens fit at text scale $scale', (tester) async {
@@ -68,6 +69,37 @@ void main() {
       await tester.tap(find.text('Pay Ksh 100 with M-Pesa'));
       await tester.pumpAndSettle();
       expect(find.text('Send payment request'), findsOneWidget);
+    });
+
+    testWidgets('account screens fit at text scale $scale', (tester) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(TonitsNavigationBar),
+          matching: find.text('Profile'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (final (row, title) in [
+        ('Display name', 'Display name'),
+        ('Email', 'Email'),
+        ('Phone', 'Phone number'),
+        ('Password', 'Password'),
+      ]) {
+        await scrollPageTo(tester, find.text(row));
+        await tester.ensureVisible(find.text(row).last);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(row).last);
+        await tester.pumpAndSettle();
+        expect(find.widgetWithText(AppBar, title), findsOneWidget);
+        await tester.pageBack();
+        await tester.pumpAndSettle();
+      }
     });
   }
 }

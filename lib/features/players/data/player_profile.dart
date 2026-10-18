@@ -7,6 +7,7 @@ class PlayerProfile {
     required this.countryCode,
     required this.record,
     required this.rating,
+    this.joinedAt,
   });
 
   factory PlayerProfile.fromJson(Map<String, dynamic> json) {
@@ -22,6 +23,9 @@ class PlayerProfile {
       countryCode: json['countryCode'] as String,
       record: Record.fromJson(json['record'] as Map<String, dynamic>),
       rating: efootball,
+      joinedAt: json['joinedAt'] is String
+          ? DateTime.parse(json['joinedAt'] as String)
+          : null,
     );
   }
 
@@ -34,6 +38,7 @@ class PlayerProfile {
 
   /// Null until the player has a rating for eFootball.
   final GameRating? rating;
+  final DateTime? joinedAt;
 
   bool get hasPlayed => record.matchesPlayed > 0;
 }

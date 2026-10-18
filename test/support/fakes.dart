@@ -41,16 +41,19 @@ http.Response errorResponse(
 Map<String, dynamic> playerJson({
   String countryCode = 'KE',
   bool recoveryCodeSet = true,
+  String? email,
+  String? phoneNumber,
+  String displayName = 'striker.9',
 }) => {
   'id': '6f1c2c55-0d3e-4b9b-9a55-0c0b8a3e1d11',
   'recoveryCodeSet': recoveryCodeSet,
   'recoveryCodeCreatedAt': recoveryCodeSet ? '2026-10-01T09:00:00Z' : null,
   'username': 'striker.9',
   'konamiId': 'ABCD-1234-EFGH',
-  'displayName': 'striker.9',
-  'email': null,
-  'emailVerified': false,
-  'phoneNumber': null,
+  'displayName': displayName,
+  'email': email,
+  'emailVerified': email != null,
+  'phoneNumber': phoneNumber,
   'countryCode': countryCode,
   'birthDate': null,
   'status': 'active',
@@ -65,12 +68,13 @@ Map<String, dynamic> sessionJson({
   String refresh = 'refresh-1',
   String? recoveryCode,
   bool recoveryCodeSet = true,
+  Map<String, dynamic>? player,
 }) => {
   'accessToken': access,
   'refreshToken': refresh,
   'tokenType': 'Bearer',
   'expiresInSeconds': 900,
-  'player': playerJson(recoveryCodeSet: recoveryCodeSet),
+  'player': player ?? playerJson(recoveryCodeSet: recoveryCodeSet),
   'recoveryCode': ?recoveryCode,
 };
 

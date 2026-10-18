@@ -144,10 +144,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text("You can't recover your account yet"), findsOneWidget);
-    await scrollPageTo(tester, find.text('Not set'));
-
-    await tapText(tester, 'Create a recovery code');
+    // First on the setup list, with nothing done yet.
+    expect(find.text('0 of 3 done'), findsOneWidget);
+    await tapText(tester, 'Save a recovery code');
     await enter(tester, 'Your password', 'correct horse');
     await tapText(tester, 'Continue');
 
@@ -155,9 +154,17 @@ void main() {
     expect(find.text(nextRecoveryCode), findsOneWidget);
     await saveCodeAndContinue(tester);
 
-    // Back on Profile, now covered.
-    expect(find.text("You can't recover your account yet"), findsNothing);
-    await scrollPageTo(tester, find.text('Set'));
+    // Back on Profile, the step is done.
+    expect(find.text('1 of 3 done'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (w) =>
+            w is Semantics &&
+            w.properties.label == 'Save a recovery code, done',
+      ),
+      findsOneWidget,
+    );
+    await scrollPageTo(tester, find.text('Saved'));
   });
 
   testWidgets('a wrong password when getting a new code says so', (
@@ -181,7 +188,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tapText(tester, 'New code');
+    await scrollPageTo(tester, find.text('Recovery code'));
+    await tapText(tester, 'Recovery code');
     expect(
       find.text(
         'Your current code will stop working. Confirm your '

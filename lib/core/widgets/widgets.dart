@@ -12,5 +12,6 @@ export 'section_header.dart';
 export 'sparkline.dart';
 export 'stat_tile.dart';
 export 'segmented_tabs.dart';
+export 'settings_list.dart';
 export 'states.dart';
 export 'status_badge.dart';

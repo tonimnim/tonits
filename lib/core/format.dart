@@ -28,6 +28,10 @@ abstract final class Format {
         : DateFormat('d MMM y').format(local);
   }
 
+  /// "March 2026".
+  static String monthYear(DateTime value) =>
+      DateFormat('MMMM y').format(value.toLocal());
+
   /// Money from minor units with the currency's own decimals, dropping a
   /// zero fraction: "Ksh 100", "₹49.50", "\$5".
   static String money(int minorUnits, String currency) {

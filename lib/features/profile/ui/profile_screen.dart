@@ -4,15 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_controller.dart';
-import 'widgets/account_details_card.dart';
+import 'widgets/about_section.dart';
+import 'widgets/account_section.dart';
+import 'widgets/contact_section.dart';
 import 'widgets/profile_header.dart';
-import 'widgets/recovery_prompt.dart';
-import 'widgets/security_card.dart';
-import 'widgets/sign_out_button.dart';
+import 'widgets/security_section.dart';
+import 'widgets/setup_checklist.dart';
+import 'widgets/sign_out_row.dart';
 
-/// Tab 5: who the player is, their account details and sign-out.
+/// Tab 5: who the player is, what's left to set up, and every account
+/// setting, each one a row that opens where it's changed.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
+
+  static const _gap = SizedBox(height: TonitsSpace.lg);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,14 +31,21 @@ class ProfileScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(
-          TonitsSpace.lg,
           TonitsSpace.md,
-          TonitsSpace.lg,
+          TonitsSpace.sm,
+          TonitsSpace.md,
           TonitsSpace.xl,
         ),
         children: [
           ProfileHeader(player: player),
           const SizedBox(height: TonitsSpace.xl),
+          if (player.status != 'active') ...[
+            const Notice(
+              'Your account is restricted. Contact Tonits support to find '
+              'out why.',
+            ),
+            _gap,
+          ],
           if (pendingCountry != null) ...[
             Notice(
               "Your country wasn't saved.",
@@ -44,21 +56,21 @@ class ProfileScreen extends ConsumerWidget {
                 child: const Text('Retry'),
               ),
             ),
-            const SizedBox(height: TonitsSpace.md),
+            _gap,
           ],
-          if (!player.canRecoverAccount) ...[
-            const RecoveryPrompt(),
-            const SizedBox(height: TonitsSpace.xl),
+          if (SetupChecklist.isNeeded(player)) ...[
+            SetupChecklist(player: player),
+            _gap,
           ],
-          const SectionLabel('Account'),
-          const SizedBox(height: TonitsSpace.sm),
-          AccountDetailsCard(player: player),
-          const SizedBox(height: TonitsSpace.xl),
-          const SectionLabel('Security'),
-          const SizedBox(height: TonitsSpace.sm),
-          SecurityCard(player: player),
-          const SizedBox(height: TonitsSpace.xl),
-          const SignOutButton(),
+          AccountSection(player: player),
+          _gap,
+          ContactSection(player: player),
+          _gap,
+          SecuritySection(player: player),
+          _gap,
+          const AboutSection(),
+          _gap,
+          const SignOutRow(),
         ],
       ),
     );
