@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tonits/core/format.dart';
 import 'package:tonits/features/notifications/application/notification_target.dart';
 import 'package:tonits/features/notifications/data/app_notification.dart';
 import 'package:tonits/features/notifications/ui/widgets/notification_bell.dart';
@@ -39,9 +40,18 @@ void main() {
 
     expect(find.widgetWithText(AppBar, 'Notifications'), findsOneWidget);
     expect(find.text('Confirm the match result'), findsOneWidget);
-    expect(find.text('5 min'), findsOneWidget);
-    expect(find.text('3 h'), findsOneWidget);
-    expect(find.text('Yesterday'), findsOneWidget);
+    // As the inbox words each age, which depends on the time of day: just
+    // after midnight a 3-hour-old item is yesterday's.
+    for (final age in const [
+      Duration(minutes: 5),
+      Duration(hours: 3),
+      Duration(days: 1),
+    ]) {
+      expect(
+        find.text(Format.ago(testNow.subtract(age), en, now: testNow)),
+        findsWidgets,
+      );
+    }
   });
 
   testWidgets('a result notification is marked read and opens its match', (

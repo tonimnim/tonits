@@ -126,9 +126,12 @@ Future<void> showNotificationDetails(
               children: [
                 IconDot(icon: NotificationTile.iconFor(item.category)),
                 const SizedBox(width: 12),
-                Text(
-                  Format.dateTime(item.createdAt, l),
-                  style: TextStyle(fontSize: 13, color: p.mutedForeground),
+                // Wraps rather than overflowing at large text sizes.
+                Expanded(
+                  child: Text(
+                    Format.dateTime(item.createdAt, l),
+                    style: TextStyle(fontSize: 13, color: p.mutedForeground),
+                  ),
                 ),
               ],
             ),

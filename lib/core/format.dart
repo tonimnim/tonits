@@ -8,7 +8,8 @@ abstract final class Format {
   /// year when it isn't this year.
   static String dateTime(DateTime value, AppLocalizations l, {DateTime? now}) {
     final local = value.toLocal();
-    final today = _day(now ?? DateTime.now());
+    // Days are the player's own: compare in local time, whatever [now] is.
+    final today = _day((now ?? DateTime.now()).toLocal());
     final day = _day(local);
     final time = DateFormat.Hm().format(local);
     final difference = day.difference(today).inDays;
@@ -33,7 +34,7 @@ abstract final class Format {
   /// How long ago, briefly: "Now", "5 min", "3 h", "Yesterday", then the
   /// date.
   static String ago(DateTime value, AppLocalizations l, {DateTime? now}) {
-    final current = now ?? DateTime.now();
+    final current = (now ?? DateTime.now()).toLocal();
     final passed = current.difference(value);
     if (passed.inMinutes < 1) return l.notifJustNow;
     if (passed.inMinutes < 60) return l.notifMinutesAgo(passed.inMinutes);
