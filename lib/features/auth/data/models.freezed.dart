@@ -22,7 +22,8 @@ mixin _$Player {
 /// existed are complete.
  bool get onboardingCompleted;/// Proven by a successful M-Pesa payment from the number.
  bool get phoneVerified;/// `google`, `apple` and, for staff accounts, `password`.
- Set<String> get signInMethods;
+ Set<String> get signInMethods;/// What the player can change about their public profile.
+ ProfileSettings? get profile;
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -34,20 +35,20 @@ $PlayerCopyWith<Player> get copyWith => _$PlayerCopyWithImpl<Player>(this as Pla
 @override
 bool operator ==(Object other) {
   final _this = this as Player;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Player&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.username, _this.username) || other.username == _this.username)&&(identical(other.konamiId, _this.konamiId) || other.konamiId == _this.konamiId)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.emailVerified, _this.emailVerified) || other.emailVerified == _this.emailVerified)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.onboardingCompleted, _this.onboardingCompleted) || other.onboardingCompleted == _this.onboardingCompleted)&&(identical(other.phoneVerified, _this.phoneVerified) || other.phoneVerified == _this.phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _this.signInMethods));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Player&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.username, _this.username) || other.username == _this.username)&&(identical(other.konamiId, _this.konamiId) || other.konamiId == _this.konamiId)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.emailVerified, _this.emailVerified) || other.emailVerified == _this.emailVerified)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.onboardingCompleted, _this.onboardingCompleted) || other.onboardingCompleted == _this.onboardingCompleted)&&(identical(other.phoneVerified, _this.phoneVerified) || other.phoneVerified == _this.phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _this.signInMethods)&&(identical(other.profile, _this.profile) || other.profile == _this.profile));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Player;
-  return Object.hash(runtimeType,_this.id,_this.username,_this.konamiId,_this.displayName,_this.email,_this.emailVerified,_this.phoneNumber,_this.countryCode,_this.status,_this.onboardingCompleted,_this.phoneVerified,const DeepCollectionEquality().hash(_this.signInMethods));
+  return Object.hash(runtimeType,_this.id,_this.username,_this.konamiId,_this.displayName,_this.email,_this.emailVerified,_this.phoneNumber,_this.countryCode,_this.status,_this.onboardingCompleted,_this.phoneVerified,const DeepCollectionEquality().hash(_this.signInMethods),_this.profile);
 }
 
 @override
 String toString() {
   final _this = this as Player;
-  return 'Player(id: ${_this.id}, username: ${_this.username}, konamiId: ${_this.konamiId}, displayName: ${_this.displayName}, email: ${_this.email}, emailVerified: ${_this.emailVerified}, phoneNumber: ${_this.phoneNumber}, countryCode: ${_this.countryCode}, status: ${_this.status}, onboardingCompleted: ${_this.onboardingCompleted}, phoneVerified: ${_this.phoneVerified}, signInMethods: ${_this.signInMethods})';
+  return 'Player(id: ${_this.id}, username: ${_this.username}, konamiId: ${_this.konamiId}, displayName: ${_this.displayName}, email: ${_this.email}, emailVerified: ${_this.emailVerified}, phoneNumber: ${_this.phoneNumber}, countryCode: ${_this.countryCode}, status: ${_this.status}, onboardingCompleted: ${_this.onboardingCompleted}, phoneVerified: ${_this.phoneVerified}, signInMethods: ${_this.signInMethods}, profile: ${_this.profile})';
 }
 
 
@@ -58,11 +59,11 @@ abstract mixin class $PlayerCopyWith<$Res>  {
   factory $PlayerCopyWith(Player value, $Res Function(Player) _then) = _$PlayerCopyWithImpl;
 @useResult
 $Res call({
- String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods
+ String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods, ProfileSettings? profile
 });
 
 
-
+$ProfileSettingsCopyWith<$Res>? get profile;
 
 }
 /// @nodoc
@@ -75,7 +76,7 @@ class _$PlayerCopyWithImpl<$Res>
 
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,Object? profile = freezed,}) {
   return _then(Player(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -89,10 +90,23 @@ as String,status: null == status ? _self.status : status // ignore: cast_nullabl
 as String,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
 as bool,signInMethods: null == signInMethods ? _self.signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
+as ProfileSettings?,
   ));
 }
+/// Create a copy of Player
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProfileSettingsCopyWith<$Res>? get profile {
+    if (_self.profile == null) {
+    return null;
+  }
 
+  return $ProfileSettingsCopyWith<$Res>(_self.profile!, (value) {
+    return _then(_self.copyWith(profile: value));
+  });
+}
 }
 
 
@@ -174,10 +188,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Player() when $default != null:
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
   return orElse();
 
 }
@@ -195,10 +209,10 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)  $default,) {final _that = this;
 switch (_that) {
 case _Player():
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -215,10 +229,10 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,) {final _that = this;
 switch (_that) {
 case _Player() when $default != null:
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
   return null;
 
 }
@@ -229,8 +243,8 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 /// @nodoc
 @JsonSerializable(createToJson: false)
 
-class _Player implements Player {
-  const _Player({required this.id, required this.username, required this.konamiId, required this.displayName, required this.email, this.emailVerified = false, required this.phoneNumber, this.countryCode = '', required this.status, this.onboardingCompleted = true, this.phoneVerified = false,  Set<String> signInMethods = const <String>{}}): _signInMethods = signInMethods;
+class _Player extends Player {
+  const _Player({required this.id, required this.username, required this.konamiId, required this.displayName, required this.email, this.emailVerified = false, required this.phoneNumber, this.countryCode = '', required this.status, this.onboardingCompleted = true, this.phoneVerified = false,  Set<String> signInMethods = const <String>{}, this.profile}): _signInMethods = signInMethods,super._();
   factory _Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
 @override final  String id;
@@ -258,6 +272,8 @@ class _Player implements Player {
   return EqualUnmodifiableSetView(_signInMethods);
 }
 
+/// What the player can change about their public profile.
+@override final  ProfileSettings? profile;
 
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
@@ -269,18 +285,18 @@ _$PlayerCopyWith<_Player> get copyWith => __$PlayerCopyWithImpl<_Player>(this, _
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Player&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.konamiId, konamiId) || other.konamiId == konamiId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _signInMethods));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Player&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.konamiId, konamiId) || other.konamiId == konamiId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _signInMethods)&&(identical(other.profile, profile) || other.profile == profile));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,username,konamiId,displayName,email,emailVerified,phoneNumber,countryCode,status,onboardingCompleted,phoneVerified,const DeepCollectionEquality().hash(_signInMethods));
+    return Object.hash(runtimeType,id,username,konamiId,displayName,email,emailVerified,phoneNumber,countryCode,status,onboardingCompleted,phoneVerified,const DeepCollectionEquality().hash(_signInMethods),profile);
 }
 
 @override
 String toString() {
-    return 'Player(id: $id, username: $username, konamiId: $konamiId, displayName: $displayName, email: $email, emailVerified: $emailVerified, phoneNumber: $phoneNumber, countryCode: $countryCode, status: $status, onboardingCompleted: $onboardingCompleted, phoneVerified: $phoneVerified, signInMethods: $signInMethods)';
+    return 'Player(id: $id, username: $username, konamiId: $konamiId, displayName: $displayName, email: $email, emailVerified: $emailVerified, phoneNumber: $phoneNumber, countryCode: $countryCode, status: $status, onboardingCompleted: $onboardingCompleted, phoneVerified: $phoneVerified, signInMethods: $signInMethods, profile: $profile)';
 }
 
 
@@ -291,11 +307,11 @@ abstract mixin class _$PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$PlayerCopyWith(_Player value, $Res Function(_Player) _then) = __$PlayerCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods
+ String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods, ProfileSettings? profile
 });
 
 
-
+@override $ProfileSettingsCopyWith<$Res>? get profile;
 
 }
 /// @nodoc
@@ -308,7 +324,7 @@ class __$PlayerCopyWithImpl<$Res>
 
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,Object? profile = freezed,}) {
   return _then(_Player(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -322,7 +338,303 @@ as String,status: null == status ? _self.status : status // ignore: cast_nullabl
 as String,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
 as bool,signInMethods: null == signInMethods ? _self._signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
+as ProfileSettings?,
+  ));
+}
+
+/// Create a copy of Player
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ProfileSettingsCopyWith<$Res>? get profile {
+    if (_self.profile == null) {
+    return null;
+  }
+
+  return $ProfileSettingsCopyWith<$Res>(_self.profile!, (value) {
+    return _then(_self.copyWith(profile: value));
+  });
+}
+}
+
+
+/// @nodoc
+mixin _$ProfileSettings {
+
+/// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
+/// starting with a letter or digit.
+ String get handle; String get bio;/// Shown in rankings and search, with a photo others can see.
+ bool get discoverable; bool get analyticsConsent; bool get scoutingConsent;
+/// Create a copy of ProfileSettings
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ProfileSettingsCopyWith<ProfileSettings> get copyWith => _$ProfileSettingsCopyWithImpl<ProfileSettings>(this as ProfileSettings, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as ProfileSettings;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileSettings&&(identical(other.handle, _this.handle) || other.handle == _this.handle)&&(identical(other.bio, _this.bio) || other.bio == _this.bio)&&(identical(other.discoverable, _this.discoverable) || other.discoverable == _this.discoverable)&&(identical(other.analyticsConsent, _this.analyticsConsent) || other.analyticsConsent == _this.analyticsConsent)&&(identical(other.scoutingConsent, _this.scoutingConsent) || other.scoutingConsent == _this.scoutingConsent));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as ProfileSettings;
+  return Object.hash(runtimeType,_this.handle,_this.bio,_this.discoverable,_this.analyticsConsent,_this.scoutingConsent);
+}
+
+@override
+String toString() {
+  final _this = this as ProfileSettings;
+  return 'ProfileSettings(handle: ${_this.handle}, bio: ${_this.bio}, discoverable: ${_this.discoverable}, analyticsConsent: ${_this.analyticsConsent}, scoutingConsent: ${_this.scoutingConsent})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ProfileSettingsCopyWith<$Res>  {
+  factory $ProfileSettingsCopyWith(ProfileSettings value, $Res Function(ProfileSettings) _then) = _$ProfileSettingsCopyWithImpl;
+@useResult
+$Res call({
+ String handle, String bio, bool discoverable, bool analyticsConsent, bool scoutingConsent
+});
+
+
+
+
+}
+/// @nodoc
+class _$ProfileSettingsCopyWithImpl<$Res>
+    implements $ProfileSettingsCopyWith<$Res> {
+  _$ProfileSettingsCopyWithImpl(this._self, this._then);
+
+  final ProfileSettings _self;
+  final $Res Function(ProfileSettings) _then;
+
+/// Create a copy of ProfileSettings
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? handle = null,Object? bio = null,Object? discoverable = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
+  return _then(ProfileSettings(
+handle: null == handle ? _self.handle : handle // ignore: cast_nullable_to_non_nullable
+as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String,discoverable: null == discoverable ? _self.discoverable : discoverable // ignore: cast_nullable_to_non_nullable
+as bool,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
+as bool,scoutingConsent: null == scoutingConsent ? _self.scoutingConsent : scoutingConsent // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ProfileSettings].
+extension ProfileSettingsPatterns on ProfileSettings {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ProfileSettings value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ProfileSettings() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ProfileSettings value)  $default,){
+final _that = this;
+switch (_that) {
+case _ProfileSettings():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ProfileSettings value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ProfileSettings() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ProfileSettings() when $default != null:
+return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)  $default,) {final _that = this;
+switch (_that) {
+case _ProfileSettings():
+return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)?  $default,) {final _that = this;
+switch (_that) {
+case _ProfileSettings() when $default != null:
+return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable(createToJson: false)
+
+class _ProfileSettings implements ProfileSettings {
+  const _ProfileSettings({required this.handle, this.bio = '', this.discoverable = true, this.analyticsConsent = false, this.scoutingConsent = false});
+  factory _ProfileSettings.fromJson(Map<String, dynamic> json) => _$ProfileSettingsFromJson(json);
+
+/// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
+/// starting with a letter or digit.
+@override final  String handle;
+@override@JsonKey() final  String bio;
+/// Shown in rankings and search, with a photo others can see.
+@override@JsonKey() final  bool discoverable;
+@override@JsonKey() final  bool analyticsConsent;
+@override@JsonKey() final  bool scoutingConsent;
+
+/// Create a copy of ProfileSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ProfileSettingsCopyWith<_ProfileSettings> get copyWith => __$ProfileSettingsCopyWithImpl<_ProfileSettings>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileSettings&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.discoverable, discoverable) || other.discoverable == discoverable)&&(identical(other.analyticsConsent, analyticsConsent) || other.analyticsConsent == analyticsConsent)&&(identical(other.scoutingConsent, scoutingConsent) || other.scoutingConsent == scoutingConsent));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,handle,bio,discoverable,analyticsConsent,scoutingConsent);
+}
+
+@override
+String toString() {
+    return 'ProfileSettings(handle: $handle, bio: $bio, discoverable: $discoverable, analyticsConsent: $analyticsConsent, scoutingConsent: $scoutingConsent)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ProfileSettingsCopyWith<$Res> implements $ProfileSettingsCopyWith<$Res> {
+  factory _$ProfileSettingsCopyWith(_ProfileSettings value, $Res Function(_ProfileSettings) _then) = __$ProfileSettingsCopyWithImpl;
+@override @useResult
+$Res call({
+ String handle, String bio, bool discoverable, bool analyticsConsent, bool scoutingConsent
+});
+
+
+
+
+}
+/// @nodoc
+class __$ProfileSettingsCopyWithImpl<$Res>
+    implements _$ProfileSettingsCopyWith<$Res> {
+  __$ProfileSettingsCopyWithImpl(this._self, this._then);
+
+  final _ProfileSettings _self;
+  final $Res Function(_ProfileSettings) _then;
+
+/// Create a copy of ProfileSettings
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? handle = null,Object? bio = null,Object? discoverable = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
+  return _then(_ProfileSettings(
+handle: null == handle ? _self.handle : handle // ignore: cast_nullable_to_non_nullable
+as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String,discoverable: null == discoverable ? _self.discoverable : discoverable // ignore: cast_nullable_to_non_nullable
+as bool,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
+as bool,scoutingConsent: null == scoutingConsent ? _self.scoutingConsent : scoutingConsent // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

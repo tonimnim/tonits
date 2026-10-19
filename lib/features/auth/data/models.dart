@@ -7,6 +7,8 @@ part 'models.g.dart';
 /// the app uses are read.
 @freezed
 abstract class Player with _$Player {
+  const Player._();
+
   const factory Player({
     required String id,
     required String? username,
@@ -30,9 +32,39 @@ abstract class Player with _$Player {
 
     /// `google`, `apple` and, for staff accounts, `password`.
     @Default(<String>{}) Set<String> signInMethods,
+
+    /// What the player can change about their public profile.
+    ProfileSettings? profile,
   }) = _Player;
 
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
+
+  /// The @handle: the username, which the profile's handle replaces when
+  /// it's changed.
+  String? get handle => switch (profile?.handle ?? username) {
+    final handle? when handle.isNotEmpty => handle,
+    _ => null,
+  };
+}
+
+/// The player's public profile settings (`ProfileInput`). Saving sends
+/// every field back, so the consents travel unchanged.
+@freezed
+abstract class ProfileSettings with _$ProfileSettings {
+  const factory ProfileSettings({
+    /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
+    /// starting with a letter or digit.
+    required String handle,
+    @Default('') String bio,
+
+    /// Shown in rankings and search, with a photo others can see.
+    @Default(true) bool discoverable,
+    @Default(false) bool analyticsConsent,
+    @Default(false) bool scoutingConsent,
+  }) = _ProfileSettings;
+
+  factory ProfileSettings.fromJson(Map<String, dynamic> json) =>
+      _$ProfileSettingsFromJson(json);
 }
 
 @freezed

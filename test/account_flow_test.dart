@@ -64,7 +64,7 @@ void main() {
     // The username now shows as the handle, beside the country.
     await tester.drag(find.byType(Scrollable).first, const Offset(0, 1000));
     await tester.pumpAndSettle();
-    expect(find.textContaining('@striker.9'), findsOneWidget);
+    expect(find.textContaining('@striker.9  ·'), findsOneWidget);
     final patch = api.requests.lastWhere((r) => r.method == 'PATCH');
     expect(bodyOf(patch), {'displayName': 'Lake Striker'});
   });

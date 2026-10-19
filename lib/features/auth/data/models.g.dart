@@ -30,9 +30,36 @@ _Player _$PlayerFromJson(
           (v as List<dynamic>?)?.map((e) => e as String).toSet() ??
           const <String>{},
     ),
+    profile: $checkedConvert(
+      'profile',
+      (v) => v == null
+          ? null
+          : ProfileSettings.fromJson(v as Map<String, dynamic>),
+    ),
   );
   return val;
 });
+
+_ProfileSettings _$ProfileSettingsFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('_ProfileSettings', json, ($checkedConvert) {
+      final val = _ProfileSettings(
+        handle: $checkedConvert('handle', (v) => v as String),
+        bio: $checkedConvert('bio', (v) => v as String? ?? ''),
+        discoverable: $checkedConvert(
+          'discoverable',
+          (v) => v as bool? ?? true,
+        ),
+        analyticsConsent: $checkedConvert(
+          'analyticsConsent',
+          (v) => v as bool? ?? false,
+        ),
+        scoutingConsent: $checkedConvert(
+          'scoutingConsent',
+          (v) => v as bool? ?? false,
+        ),
+      );
+      return val;
+    });
 
 _AuthSession _$AuthSessionFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_AuthSession', json, ($checkedConvert) {

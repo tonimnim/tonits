@@ -478,6 +478,66 @@ abstract class AppLocalizations {
   /// **'Display name updated'**
   String get accountDisplayNameUpdated;
 
+  /// No description provided for @accountUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get accountUsername;
+
+  /// No description provided for @accountEditUsernameIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Your @handle in rankings and links. Your display name stays the same.'**
+  String get accountEditUsernameIntro;
+
+  /// No description provided for @accountUsernameUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Username updated'**
+  String get accountUsernameUpdated;
+
+  /// No description provided for @accountBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get accountBio;
+
+  /// No description provided for @accountEditBioIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'A line or two other players see on your profile.'**
+  String get accountEditBioIntro;
+
+  /// No description provided for @accountBioHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What should opponents know about you?'**
+  String get accountBioHint;
+
+  /// No description provided for @accountBioUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio updated'**
+  String get accountBioUpdated;
+
+  /// No description provided for @accountPublicProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Public profile'**
+  String get accountPublicProfile;
+
+  /// No description provided for @accountProfilePublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is public'**
+  String get accountProfilePublic;
+
+  /// After turning Public profile off: others can't find the player or see their photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is hidden'**
+  String get accountProfileHidden;
+
   /// No description provided for @accountEnterEmail.
   ///
   /// In en, this message translates to:

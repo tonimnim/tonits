@@ -225,6 +225,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountDisplayNameUpdated => 'Display name updated';
 
   @override
+  String get accountUsername => 'Username';
+
+  @override
+  String get accountEditUsernameIntro =>
+      'Your @handle in rankings and links. Your display name stays the same.';
+
+  @override
+  String get accountUsernameUpdated => 'Username updated';
+
+  @override
+  String get accountBio => 'Bio';
+
+  @override
+  String get accountEditBioIntro =>
+      'A line or two other players see on your profile.';
+
+  @override
+  String get accountBioHint => 'What should opponents know about you?';
+
+  @override
+  String get accountBioUpdated => 'Bio updated';
+
+  @override
+  String get accountPublicProfile => 'Public profile';
+
+  @override
+  String get accountProfilePublic => 'Your profile is public';
+
+  @override
+  String get accountProfileHidden => 'Your profile is hidden';
+
+  @override
   String get accountEnterEmail => 'Enter your email';
 
   @override

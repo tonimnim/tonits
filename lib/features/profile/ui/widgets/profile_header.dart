@@ -22,7 +22,7 @@ class ProfileHeader extends ConsumerWidget {
     final country = Country.byCode(player.countryCode);
     // The join date is on the public profile; the line waits for it.
     final joinedAt = ref.watch(myProfileProvider).value?.joinedAt;
-    final handle = player.username;
+    final handle = player.handle;
     final details = [
       if (handle != null && handle != player.displayName) '@$handle',
       country == null ? player.countryCode : '${country.flag} ${country.name}',

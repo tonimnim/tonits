@@ -69,6 +69,7 @@ Map<String, dynamic> playerJson({
   String displayName = 'striker.9',
   bool onboarded = true,
   List<String> signInMethods = const ['google'],
+  Map<String, dynamic>? profile,
 }) => {
   'id': '6f1c2c55-0d3e-4b9b-9a55-0c0b8a3e1d11',
   'username': onboarded ? 'striker.9' : newPlayerHandle,
@@ -83,7 +84,21 @@ Map<String, dynamic> playerJson({
   'status': 'active',
   'onboardingCompleted': onboarded,
   'signInMethods': signInMethods,
-  'profile': null,
+  'profile': profile,
+};
+
+/// A `Profile`: the player's public profile settings.
+Map<String, dynamic> profileSettingsJson({
+  String handle = 'striker.9',
+  String bio = '',
+  bool discoverable = true,
+}) => {
+  'handle': handle,
+  'bio': bio,
+  'discoverable': discoverable,
+  // Consents the app never shows, which every save must keep.
+  'analyticsConsent': true,
+  'scoutingConsent': false,
 };
 
 /// The handle the API generates for a new Google or Apple player.

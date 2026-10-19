@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/routes.dart';
+import '../features/account/ui/edit_bio_screen.dart';
 import '../features/account/ui/edit_name_screen.dart';
+import '../features/account/ui/edit_username_screen.dart';
 import '../features/account/ui/email_screen.dart';
 import '../features/account/ui/phone_screen.dart';
 import '../features/auth/application/auth_controller.dart';
@@ -111,6 +113,8 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
   ],
   AppTab.profile => [
     GoRoute(path: 'name', builder: (_, _) => const EditNameScreen()),
+    GoRoute(path: 'username', builder: (_, _) => const EditUsernameScreen()),
+    GoRoute(path: 'bio', builder: (_, _) => const EditBioScreen()),
     GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
     GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
     GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),

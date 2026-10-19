@@ -36,6 +36,27 @@ class AccountService {
     _adopt(await _repository.currentPlayer());
   }
 
+  /// Changes part of the public profile and keeps the rest as it is.
+  Future<void> updateProfile({
+    String? handle,
+    String? bio,
+    bool? discoverable,
+  }) async {
+    final player = _ref.read(currentPlayerProvider);
+    if (player == null) throw StateError('Signed out');
+    final current =
+        player.profile ?? ProfileSettings(handle: player.username ?? '');
+    _adopt(
+      await _repository.updateProfile(
+        current.copyWith(
+          handle: handle ?? current.handle,
+          bio: bio ?? current.bio,
+          discoverable: discoverable ?? current.discoverable,
+        ),
+      ),
+    );
+  }
+
   void _adopt(Player player) {
     _ref.read(authControllerProvider.notifier).replacePlayer(player);
     _ref.invalidate(myProfileProvider);

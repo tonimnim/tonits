@@ -270,12 +270,16 @@ void main() {
         displayName: 'Amina Otieno',
         email: 'amina@example.com',
         phoneNumber: '+254712345678',
+        profile: profileSettingsJson(
+          handle: 'amina.otieno',
+          bio: 'Left foot, Nairobi, weekends only.',
+        ),
       );
       await _pump(
         tester,
         brightness: brightness,
         refreshToken: 'stored',
-        height: 1240,
+        height: 1560,
         api: FakeApi(
           routes: {
             '/v1/auth/refresh': (_) =>
@@ -298,6 +302,8 @@ void main() {
       }
 
       await open('Display name', 'account-name-$suffix');
+      await open('Username', 'account-username-$suffix');
+      await open('Bio', 'account-bio-$suffix');
       await open('Email', 'account-email-$suffix');
       await open('+254712345678', 'account-phone-$suffix');
     });

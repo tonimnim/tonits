@@ -7,7 +7,7 @@ String describeError(Object error, AppLocalizations l) {
   if (error is! ApiException) return l.errorGeneric;
 
   switch (error.code) {
-    case 'username_taken':
+    case 'username_taken' || 'handle_taken':
       return l.errorUsernameTaken;
     case 'konami_id_taken':
       return l.errorKonamiIdTaken;
@@ -23,7 +23,7 @@ String describeError(Object error, AppLocalizations l) {
       return l.errorIdentityProviderUnavailable;
     case 'invalid_konami_id':
       return l.errorInvalidKonamiId;
-    case 'invalid_username':
+    case 'invalid_username' || 'invalid_handle':
       return l.errorInvalidUsername;
     case 'invalid_country':
       return l.errorInvalidCountry;

@@ -48,6 +48,24 @@ class AccountRepository {
 
   Future<void> removePhone() => _api.send('DELETE', '/v1/me/phone', auth: true);
 
+  /// Replaces the public profile. The handle is the username; changing it
+  /// leaves the display name and Konami ID alone.
+  Future<Player> updateProfile(ProfileSettings profile) async {
+    final json = await _api.send(
+      'PUT',
+      '/v1/me/profile',
+      body: {
+        'handle': profile.handle,
+        'bio': profile.bio,
+        'discoverable': profile.discoverable,
+        'analyticsConsent': profile.analyticsConsent,
+        'scoutingConsent': profile.scoutingConsent,
+      },
+      auth: true,
+    );
+    return Player.fromJson(json!);
+  }
+
   Future<Player> currentPlayer() async {
     final json = await _api.get('/v1/me', auth: true);
     return Player.fromJson(json!);

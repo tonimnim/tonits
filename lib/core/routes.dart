@@ -34,6 +34,8 @@ abstract final class Routes {
 
   // Account settings, under the Profile tab.
   static const editName = '$profile/name';
+  static const editUsername = '$profile/username';
+  static const editBio = '$profile/bio';
   static const email = '$profile/email';
   static const phone = '$profile/phone';
 
