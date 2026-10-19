@@ -89,6 +89,18 @@ class FakeApi {
       200,
     ),
     '/v1/matches/m1': (_) => jsonResponse({'data': matchRoomJson()}, 200),
+    '/v1/me/notifications/unread-count': (_) =>
+        jsonResponse({'unreadCount': 2}, 200),
+    '/v1/me/notifications': (request) => jsonResponse(
+      pageJson(
+        request.url.queryParameters['unreadOnly'] == 'true'
+            ? inboxJson().where((n) => n['readAt'] == null).toList()
+            : inboxJson(),
+      ),
+      200,
+    ),
+    '/v1/me/notifications/read-all': (_) =>
+        jsonResponse({'updatedCount': 2, 'unreadCount': 0}, 200),
     '/v1/rankings': (_) => jsonResponse({
       ...pageJson(ladderJson()),
       'snapshotAt': '2026-10-09T00:00:00Z',

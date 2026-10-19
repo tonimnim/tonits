@@ -511,3 +511,51 @@ Map<String, dynamic> gameJson(int home, int away, {(int, int)? pens}) => {
   if (pens case (final h, final a))
     'tiebreak': {'type': 'penalties', 'homeScore': h, 'awayScore': a},
 };
+
+/// An inbox item; [data] holds its kind and ids.
+Map<String, dynamic> notificationJson({
+  String id = 'n1',
+  String category = 'result',
+  String title = 'Confirm the match result',
+  String body = 'Amina Otieno reported the score. Confirm or reject it.',
+  Map<String, Object?> data = const {
+    'kind': 'result.report_received',
+    'matchId': 'm1',
+  },
+  String? actionUrl = '/matches/m1',
+  bool read = false,
+  Duration age = const Duration(minutes: 5),
+}) => {
+  'id': id,
+  'category': category,
+  'title': title,
+  'body': body,
+  'data': data,
+  'actionUrl': actionUrl,
+  'readAt': read ? testNow.toIso8601String() : null,
+  'createdAt': testNow.subtract(age).toIso8601String(),
+};
+
+/// A few inbox items, newest first: two unread, one read.
+List<Map<String, dynamic>> inboxJson() => [
+  notificationJson(),
+  notificationJson(
+    id: 'n2',
+    category: 'payment',
+    title: 'Payment received',
+    body: 'Ksh 100 for Mombasa Masters. Your place is confirmed.',
+    data: const {'kind': 'payment.succeeded', 'paymentId': 'pay1'},
+    actionUrl: '/payments/pay1',
+    age: const Duration(hours: 3),
+  ),
+  notificationJson(
+    id: 'n3',
+    category: 'competition',
+    title: 'Tournament draw is ready',
+    body: 'Nairobi Weekend Cup has its bracket.',
+    data: const {'kind': 'competition.draw_generated', 'competitionId': 'c1'},
+    actionUrl: '/competitions/c1/bracket',
+    read: true,
+    age: const Duration(days: 1),
+  ),
+];

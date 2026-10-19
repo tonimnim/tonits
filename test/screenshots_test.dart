@@ -474,6 +474,15 @@ void main() {
       await _shoot(tester, 'competition-series-$suffix');
     });
 
+    testWidgets('inbox ($suffix)', skip: skip, (tester) async {
+      await _pump(tester, brightness: brightness, refreshToken: 'stored');
+      await _shoot(tester, 'home-bell-$suffix');
+      await tester.tap(find.byTooltip('Notifications'));
+      await _shoot(tester, 'inbox-$suffix');
+      await tester.tap(find.text('Payment received'));
+      await _shoot(tester, 'inbox-details-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,

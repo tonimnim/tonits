@@ -187,5 +187,19 @@ void main() {
         }
       }
     });
+
+    testWidgets('the inbox fits at text scale $scale', (tester) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+      );
+      await tester.tap(find.byTooltip('Notifications'));
+      await tester.pumpAndSettle();
+      expect(find.text('Mark all read'), findsOneWidget);
+      await tester.tap(find.text('Payment received'));
+      await tester.pumpAndSettle();
+    });
   }
 }
