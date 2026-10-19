@@ -5,6 +5,7 @@ import '../../../core/api/error_text.dart';
 import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../chat/ui/widgets/chat_button.dart';
 import '../application/matches_providers.dart';
 import '../data/match_room.dart';
 import '../data/match_summary.dart';
@@ -27,6 +28,10 @@ class MatchRoomScreen extends ConsumerWidget {
     return switch (room) {
       AsyncData(:final value) => HeroScaffold(
         title: value.summary.competitionName,
+        actions: [
+          if (value.summary.chat case final chat?)
+            ChatButton(matchId: matchId, unread: chat.unread),
+        ],
         hero: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -71,6 +76,7 @@ class MatchRoomScreen extends ConsumerWidget {
           opponent: opponent,
           instructions: room.instructions,
           series: room.isSeries,
+          roomCode: room.summary.chat?.roomCode,
         ),
         const SizedBox(height: 28),
       ],

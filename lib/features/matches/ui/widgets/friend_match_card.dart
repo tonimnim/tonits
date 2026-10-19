@@ -14,6 +14,7 @@ class FriendMatchCard extends StatelessWidget {
     required this.opponent,
     required this.instructions,
     this.series = false,
+    this.roomCode,
   });
 
   final MatchParticipant opponent;
@@ -21,6 +22,9 @@ class FriendMatchCard extends StatelessWidget {
 
   /// A best of 3 or 5, whose disputes need every game's screenshot.
   final bool series;
+
+  /// The Friend Match room code a player shared in the chat.
+  final String? roomCode;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +74,10 @@ class FriendMatchCard extends StatelessWidget {
               const SizedBox(height: 10),
             ],
             _CopyField(label: l.matchInGameName, value: account.inGameName),
+          ],
+          if (roomCode case final code?) ...[
+            const SizedBox(height: 10),
+            _CopyField(label: l.chatRoomCode, value: code, mono: true),
           ],
           if (series) ...[
             const SizedBox(height: 18),

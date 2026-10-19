@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/chat/application/chat_providers.dart';
 import 'package:tonits/features/evidence/application/evidence_providers.dart';
 import 'package:tonits/features/matches/application/matches_providers.dart';
 
@@ -38,6 +39,7 @@ Future<FakeApi> openRoom(
         fast: const Duration(hours: 1),
         slow: const Duration(hours: 1),
       )),
+      chatPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
       evidencePollDelayProvider.overrideWithValue((_) => Duration.zero),
       screenshotPickerProvider.overrideWithValue(() async => pngBytes),
     ],

@@ -48,6 +48,19 @@ class MatchCard extends StatelessWidget {
                       style: TextStyle(fontSize: 13, color: p.subtleForeground),
                     ),
                   ),
+                  if (match.chat?.unread case final unread?
+                      when unread > 0) ...[
+                    const SizedBox(width: TonitsSpace.sm),
+                    Semantics(
+                      label: l.chatUnread(unread),
+                      excludeSemantics: true,
+                      child: Pill(
+                        '$unread',
+                        icon: Icons.chat_bubble_rounded,
+                        color: p.primary,
+                      ),
+                    ),
+                  ],
                   const SizedBox(width: TonitsSpace.sm),
                   LifecycleBadge(match: match),
                 ],

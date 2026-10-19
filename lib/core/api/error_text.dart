@@ -47,7 +47,10 @@ String describeError(Object error, AppLocalizations l) {
       return l.errorWithdrawalClosed;
     case 'refund_request_exists':
       return l.errorRefundRequestExists;
-    case 'rate_limited' || 'payment_rate_limited' || 'avatar_rate_limited':
+    case 'rate_limited' ||
+        'payment_rate_limited' ||
+        'avatar_rate_limited' ||
+        'chat_rate_limited':
       final wait = error.retryAfter;
       if (wait == null) return l.errorRateLimited;
       return wait.inSeconds < 60

@@ -676,6 +676,312 @@ abstract class AppLocalizations {
   /// **'Remove phone number'**
   String get accountRemovePhone;
 
+  /// The match room's button to its chat, and screen reader label.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatTitle;
+
+  /// No description provided for @chatUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 unread message} other{{count} unread messages}}'**
+  String chatUnread(int count);
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree a time and share your room code.'**
+  String get chatEmpty;
+
+  /// No description provided for @chatPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Ozone reads chats only for result reviews and reports.'**
+  String get chatPrivacy;
+
+  /// No description provided for @chatClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat is closed.'**
+  String get chatClosed;
+
+  /// No description provided for @chatMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get chatMessageHint;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get chatSend;
+
+  /// Screen reader label of the composer's + button.
+  ///
+  /// In en, this message translates to:
+  /// **'Room code or time'**
+  String get chatMore;
+
+  /// No description provided for @chatShareRoomCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Share room code'**
+  String get chatShareRoomCode;
+
+  /// No description provided for @chatRoomCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Room code'**
+  String get chatRoomCode;
+
+  /// No description provided for @chatRoomCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Use letters, numbers, spaces or dashes.'**
+  String get chatRoomCodeInvalid;
+
+  /// No description provided for @chatShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get chatShare;
+
+  /// No description provided for @chatProposeTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Propose a time'**
+  String get chatProposeTime;
+
+  /// No description provided for @chatInMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'In {minutes} min'**
+  String chatInMinutes(int minutes);
+
+  /// No description provided for @chatInAnHour.
+  ///
+  /// In en, this message translates to:
+  /// **'In 1 hour'**
+  String get chatInAnHour;
+
+  /// No description provided for @chatPickTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time'**
+  String get chatPickTime;
+
+  /// No description provided for @chatKickOffAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick-off at'**
+  String get chatKickOffAt;
+
+  /// No description provided for @chatAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get chatAccept;
+
+  /// No description provided for @chatDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get chatDecline;
+
+  /// No description provided for @chatAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get chatAccepted;
+
+  /// No description provided for @chatDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get chatDeclined;
+
+  /// No description provided for @chatWaitingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name}'**
+  String chatWaitingFor(String name);
+
+  /// No description provided for @chatTimeAgreed.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick-off agreed'**
+  String get chatTimeAgreed;
+
+  /// No description provided for @chatYouDeclinedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'You declined the time'**
+  String get chatYouDeclinedTime;
+
+  /// No description provided for @chatTheyDeclinedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} declined the time'**
+  String chatTheyDeclinedTime(String name);
+
+  /// No description provided for @chatAgreedKickOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreed kick-off'**
+  String get chatAgreedKickOff;
+
+  /// No description provided for @chatDeadlinesApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in and result deadlines still apply.'**
+  String get chatDeadlinesApply;
+
+  /// No description provided for @chatSeen.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen'**
+  String get chatSeen;
+
+  /// No description provided for @chatSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get chatSending;
+
+  /// No description provided for @chatNotSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent. Tap to retry.'**
+  String get chatNotSent;
+
+  /// No description provided for @chatContactHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact details are hidden.'**
+  String get chatContactHidden;
+
+  /// No description provided for @chatQuickReadyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready now'**
+  String get chatQuickReadyNow;
+
+  /// No description provided for @chatQuickFiveMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'5 minutes'**
+  String get chatQuickFiveMinutes;
+
+  /// No description provided for @chatQuickTenMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'10 minutes'**
+  String get chatQuickTenMinutes;
+
+  /// No description provided for @chatQuickFriendRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Friend request sent'**
+  String get chatQuickFriendRequestSent;
+
+  /// No description provided for @chatQuickRoomCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Room created'**
+  String get chatQuickRoomCreated;
+
+  /// No description provided for @chatQuickGoodGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Good game'**
+  String get chatQuickGoodGame;
+
+  /// No description provided for @chatReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get chatReport;
+
+  /// No description provided for @chatReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this message'**
+  String get chatReportTitle;
+
+  /// No description provided for @chatReasonAbuse.
+  ///
+  /// In en, this message translates to:
+  /// **'Abuse'**
+  String get chatReasonAbuse;
+
+  /// No description provided for @chatReasonHarassment.
+  ///
+  /// In en, this message translates to:
+  /// **'Harassment'**
+  String get chatReasonHarassment;
+
+  /// No description provided for @chatReasonCheating.
+  ///
+  /// In en, this message translates to:
+  /// **'Cheating'**
+  String get chatReasonCheating;
+
+  /// No description provided for @chatReasonSpam.
+  ///
+  /// In en, this message translates to:
+  /// **'Spam'**
+  String get chatReasonSpam;
+
+  /// No description provided for @chatReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get chatReasonOther;
+
+  /// No description provided for @chatReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Reported. Ozone will look at it.'**
+  String get chatReported;
+
+  /// No description provided for @chatErrorClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat is closed.'**
+  String get chatErrorClosed;
+
+  /// No description provided for @chatErrorFull.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat is full.'**
+  String get chatErrorFull;
+
+  /// No description provided for @chatErrorProposedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time before the match deadline.'**
+  String get chatErrorProposedTime;
+
+  /// No description provided for @chatErrorProposalGone.
+  ///
+  /// In en, this message translates to:
+  /// **'That time was already answered or replaced.'**
+  String get chatErrorProposalGone;
+
+  /// No description provided for @chatErrorProposalExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'That time has passed.'**
+  String get chatErrorProposalExpired;
+
+  /// No description provided for @chatErrorAlreadyReported.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already reported this message.'**
+  String get chatErrorAlreadyReported;
+
   /// Title of the Competitions tab.
   ///
   /// In en, this message translates to:

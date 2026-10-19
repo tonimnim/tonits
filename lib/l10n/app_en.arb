@@ -204,6 +204,91 @@
   "accountPhoneIntroMpesa": "Your M-Pesa number. Entry fees are requested from it, so you don't type it each time.",
   "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
   "accountRemovePhone": "Remove phone number",
+  "chatTitle": "Chat",
+  "@chatTitle": {
+    "description": "The match room's button to its chat, and screen reader label."
+  },
+  "chatUnread": "{count, plural, =1{1 unread message} other{{count} unread messages}}",
+  "@chatUnread": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatEmpty": "Agree a time and share your room code.",
+  "chatPrivacy": "Ozone reads chats only for result reviews and reports.",
+  "chatClosed": "This chat is closed.",
+  "chatMessageHint": "Message",
+  "chatSend": "Send",
+  "chatMore": "Room code or time",
+  "@chatMore": {
+    "description": "Screen reader label of the composer's + button."
+  },
+  "chatShareRoomCode": "Share room code",
+  "chatRoomCode": "Room code",
+  "chatRoomCodeInvalid": "Use letters, numbers, spaces or dashes.",
+  "chatShare": "Share",
+  "chatProposeTime": "Propose a time",
+  "chatInMinutes": "In {minutes} min",
+  "@chatInMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "chatInAnHour": "In 1 hour",
+  "chatPickTime": "Pick a time",
+  "chatKickOffAt": "Kick-off at",
+  "chatAccept": "Accept",
+  "chatDecline": "Decline",
+  "chatAccepted": "Accepted",
+  "chatDeclined": "Declined",
+  "chatWaitingFor": "Waiting for {name}",
+  "@chatWaitingFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatTimeAgreed": "Kick-off agreed",
+  "chatYouDeclinedTime": "You declined the time",
+  "chatTheyDeclinedTime": "{name} declined the time",
+  "@chatTheyDeclinedTime": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatAgreedKickOff": "Agreed kick-off",
+  "chatDeadlinesApply": "Check-in and result deadlines still apply.",
+  "chatSeen": "Seen",
+  "chatSending": "Sending",
+  "chatNotSent": "Not sent. Tap to retry.",
+  "chatContactHidden": "Contact details are hidden.",
+  "chatQuickReadyNow": "Ready now",
+  "chatQuickFiveMinutes": "5 minutes",
+  "chatQuickTenMinutes": "10 minutes",
+  "chatQuickFriendRequestSent": "Friend request sent",
+  "chatQuickRoomCreated": "Room created",
+  "chatQuickGoodGame": "Good game",
+  "chatReport": "Report",
+  "chatReportTitle": "Report this message",
+  "chatReasonAbuse": "Abuse",
+  "chatReasonHarassment": "Harassment",
+  "chatReasonCheating": "Cheating",
+  "chatReasonSpam": "Spam",
+  "chatReasonOther": "Something else",
+  "chatReported": "Reported. Ozone will look at it.",
+  "chatErrorClosed": "This chat is closed.",
+  "chatErrorFull": "This chat is full.",
+  "chatErrorProposedTime": "Pick a time before the match deadline.",
+  "chatErrorProposalGone": "That time was already answered or replaced.",
+  "chatErrorProposalExpired": "That time has passed.",
+  "chatErrorAlreadyReported": "You've already reported this message.",
   "competitionsTitle": "Competitions",
   "@competitionsTitle": {
     "description": "Title of the Competitions tab."

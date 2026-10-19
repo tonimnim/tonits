@@ -13,6 +13,7 @@ import '../features/auth/application/auth_controller.dart';
 import '../features/auth/application/auth_providers.dart';
 import '../features/auth/ui/session_screens.dart';
 import '../features/auth/ui/welcome_screen.dart';
+import '../features/chat/ui/match_chat_screen.dart';
 import '../features/competitions/ui/competition_screen.dart';
 import '../features/competitions/ui/competitions_screen.dart';
 import '../features/competitions/ui/my_entries_screen.dart';
@@ -108,6 +109,11 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
           path: 'report',
           builder: (_, state) =>
               ReportScoreScreen(matchId: state.pathParameters['id']!),
+        ),
+        GoRoute(
+          path: 'chat',
+          builder: (_, state) =>
+              MatchChatScreen(matchId: state.pathParameters['id']!),
         ),
       ],
     ),

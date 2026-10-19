@@ -30,6 +30,9 @@ abstract class MatchSummary with _$MatchSummary {
 
     /// 1, 3 or 5 games.
     @Default(1) int bestOf,
+
+    /// The match's chat, once both sides are known.
+    ChatSummary? chat,
   }) = _MatchSummary;
 
   factory MatchSummary.fromJson(Map<String, dynamic> json) =>
@@ -48,6 +51,28 @@ abstract class MatchSummary with _$MatchSummary {
     roundName,
     if (bestOf > 1) bestOfLabel(bestOf),
   ].join(' · ');
+}
+
+/// A match's chat as the room and the list show it (`MatchChatSummary`).
+@freezed
+abstract class ChatSummary with _$ChatSummary {
+  const factory ChatSummary({
+    /// Players can post while both sides are known and the match isn't
+    /// final.
+    @Default(false) bool open,
+
+    /// The opponent's messages the player hasn't read.
+    @Default(0) int unread,
+
+    /// The Friend Match room code a player pinned.
+    String? roomCode,
+
+    /// The kick-off both players agreed. It moves no deadline.
+    DateTime? agreedStartAt,
+  }) = _ChatSummary;
+
+  factory ChatSummary.fromJson(Map<String, dynamic> json) =>
+      _$ChatSummaryFromJson(json);
 }
 
 @freezed

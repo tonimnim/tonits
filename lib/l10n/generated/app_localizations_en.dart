@@ -344,6 +344,176 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountRemovePhone => 'Remove phone number';
 
   @override
+  String get chatTitle => 'Chat';
+
+  @override
+  String chatUnread(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread messages',
+      one: '1 unread message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatEmpty => 'Agree a time and share your room code.';
+
+  @override
+  String get chatPrivacy =>
+      'Ozone reads chats only for result reviews and reports.';
+
+  @override
+  String get chatClosed => 'This chat is closed.';
+
+  @override
+  String get chatMessageHint => 'Message';
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String get chatMore => 'Room code or time';
+
+  @override
+  String get chatShareRoomCode => 'Share room code';
+
+  @override
+  String get chatRoomCode => 'Room code';
+
+  @override
+  String get chatRoomCodeInvalid => 'Use letters, numbers, spaces or dashes.';
+
+  @override
+  String get chatShare => 'Share';
+
+  @override
+  String get chatProposeTime => 'Propose a time';
+
+  @override
+  String chatInMinutes(int minutes) {
+    return 'In $minutes min';
+  }
+
+  @override
+  String get chatInAnHour => 'In 1 hour';
+
+  @override
+  String get chatPickTime => 'Pick a time';
+
+  @override
+  String get chatKickOffAt => 'Kick-off at';
+
+  @override
+  String get chatAccept => 'Accept';
+
+  @override
+  String get chatDecline => 'Decline';
+
+  @override
+  String get chatAccepted => 'Accepted';
+
+  @override
+  String get chatDeclined => 'Declined';
+
+  @override
+  String chatWaitingFor(String name) {
+    return 'Waiting for $name';
+  }
+
+  @override
+  String get chatTimeAgreed => 'Kick-off agreed';
+
+  @override
+  String get chatYouDeclinedTime => 'You declined the time';
+
+  @override
+  String chatTheyDeclinedTime(String name) {
+    return '$name declined the time';
+  }
+
+  @override
+  String get chatAgreedKickOff => 'Agreed kick-off';
+
+  @override
+  String get chatDeadlinesApply => 'Check-in and result deadlines still apply.';
+
+  @override
+  String get chatSeen => 'Seen';
+
+  @override
+  String get chatSending => 'Sending';
+
+  @override
+  String get chatNotSent => 'Not sent. Tap to retry.';
+
+  @override
+  String get chatContactHidden => 'Contact details are hidden.';
+
+  @override
+  String get chatQuickReadyNow => 'Ready now';
+
+  @override
+  String get chatQuickFiveMinutes => '5 minutes';
+
+  @override
+  String get chatQuickTenMinutes => '10 minutes';
+
+  @override
+  String get chatQuickFriendRequestSent => 'Friend request sent';
+
+  @override
+  String get chatQuickRoomCreated => 'Room created';
+
+  @override
+  String get chatQuickGoodGame => 'Good game';
+
+  @override
+  String get chatReport => 'Report';
+
+  @override
+  String get chatReportTitle => 'Report this message';
+
+  @override
+  String get chatReasonAbuse => 'Abuse';
+
+  @override
+  String get chatReasonHarassment => 'Harassment';
+
+  @override
+  String get chatReasonCheating => 'Cheating';
+
+  @override
+  String get chatReasonSpam => 'Spam';
+
+  @override
+  String get chatReasonOther => 'Something else';
+
+  @override
+  String get chatReported => 'Reported. Ozone will look at it.';
+
+  @override
+  String get chatErrorClosed => 'This chat is closed.';
+
+  @override
+  String get chatErrorFull => 'This chat is full.';
+
+  @override
+  String get chatErrorProposedTime => 'Pick a time before the match deadline.';
+
+  @override
+  String get chatErrorProposalGone =>
+      'That time was already answered or replaced.';
+
+  @override
+  String get chatErrorProposalExpired => 'That time has passed.';
+
+  @override
+  String get chatErrorAlreadyReported =>
+      'You\'ve already reported this message.';
+
+  @override
   String get competitionsTitle => 'Competitions';
 
   @override

@@ -32,6 +32,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
     switch (NotificationTarget.of(item)) {
       case OpenMatch(:final matchId):
         context.go(Routes.match(matchId));
+      case OpenMatchChat(:final matchId):
+        context.go(Routes.matchChat(matchId));
       case OpenCompetition(:final competitionId):
         context.go(Routes.competition(competitionId));
       case ShowDetails():

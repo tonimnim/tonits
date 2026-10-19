@@ -11,6 +11,9 @@ sealed class NotificationTarget {
     final kind = n.kind;
     final match = n.matchId;
     final competition = n.competitionId;
+    if (kind == 'match.chat_message' && match != null) {
+      return OpenMatchChat(match);
+    }
     // Match and result events, and the removal, which names its match.
     if ((kind.startsWith('match.') ||
             kind.startsWith('result.') ||
@@ -35,6 +38,13 @@ sealed class NotificationTarget {
 
 class OpenMatch extends NotificationTarget {
   const OpenMatch(this.matchId);
+
+  final String matchId;
+}
+
+/// A new message in a match's chat.
+class OpenMatchChat extends NotificationTarget {
+  const OpenMatchChat(this.matchId);
 
   final String matchId;
 }

@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
+import 'package:tonits/features/chat/application/chat_providers.dart';
 import 'package:tonits/features/payments/application/payments_providers.dart';
 
 import 'support/draw_fixtures.dart';
@@ -686,6 +687,95 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Delete account'));
       await _shoot(tester, 'delete-waiting-$suffix');
+    });
+
+    testWidgets('match chat ($suffix)', skip: skip, (tester) async {
+      final kickOff = testNow.add(const Duration(hours: 2)).toIso8601String();
+      var n = 0;
+      Map<String, dynamic> message(
+        String kind, {
+        bool mine = false,
+        String? text,
+        String? quickReply,
+        String? roomCode,
+        String? proposedStartAt,
+        int? replyToSeq,
+        bool? accepted,
+      }) => {
+        'seq': ++n,
+        'senderId': mine ? myPlayerId : 'p-amina',
+        'sender': mine ? 'home' : 'away',
+        'mine': mine,
+        'kind': kind,
+        'text': text,
+        'quickReply': quickReply,
+        'roomCode': roomCode,
+        'proposedStartAt': proposedStartAt,
+        'replyToSeq': replyToSeq,
+        'accepted': accepted,
+        'contactHidden': false,
+        'sentAt': testNow
+            .subtract(Duration(minutes: 20 - n * 3))
+            .toIso8601String(),
+      };
+      final messages = [
+        message('text', text: 'Hey! Free tonight?'),
+        message('text', mine: true, text: 'Yes, after 8 works for me'),
+        message('time_proposal', proposedStartAt: kickOff),
+        message('time_answer', mine: true, replyToSeq: 3, accepted: true),
+        message('quick_reply', mine: true, quickReply: 'friend_request_sent'),
+        message('room_code', roomCode: '4821 3390'),
+        message('quick_reply', quickReply: 'room_created'),
+      ];
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        overrides: [
+          chatPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
+        ],
+        api: FakeApi(
+          routes: {
+            '/v1/matches/m1': (_) => jsonResponse({
+              'data': {
+                ...matchRoomJson(),
+                'chat': {
+                  'open': true,
+                  'lastSeq': messages.length,
+                  'unread': 2,
+                  'roomCode': '4821 3390',
+                  'agreedStartAt': kickOff,
+                },
+              },
+            }, 200),
+            '/v1/matches/m1/chat': (_) => jsonResponse({
+              'data': {
+                'matchId': 'm1',
+                'open': true,
+                'roomCode': {
+                  'code': '4821 3390',
+                  'setBy': 'away',
+                  'setAt': kickOff,
+                },
+                'agreedStartAt': kickOff,
+                'playBy': testNow
+                    .add(const Duration(days: 1))
+                    .toIso8601String(),
+                'lastSeq': messages.length,
+                'readSeq': messages.length,
+                'opponentReadSeq': 5,
+                'messages': messages,
+                'hasMore': false,
+              },
+            }, 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Matches');
+      await tester.tap(find.text('vs Amina Otieno'));
+      await _shoot(tester, 'match-room-chat-button-$suffix');
+      await tester.tap(find.byTooltip('Chat'));
+      await _shoot(tester, 'match-chat-$suffix');
     });
 
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {

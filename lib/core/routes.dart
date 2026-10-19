@@ -29,6 +29,9 @@ abstract final class Routes {
   /// A match room, under the Matches tab.
   static String match(String id) => '$matches/$id';
 
+  /// A match's chat with the opponent.
+  static String matchChat(String id) => '$matches/$id/chat';
+
   /// Reporting a match's final score.
   static String reportScore(String id) => '$matches/$id/report';
 

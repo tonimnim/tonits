@@ -58,6 +58,10 @@ _MatchSummary _$MatchSummaryFromJson(
           const <String>{},
     ),
     bestOf: $checkedConvert('bestOf', (v) => (v as num?)?.toInt() ?? 1),
+    chat: $checkedConvert(
+      'chat',
+      (v) => v == null ? null : ChatSummary.fromJson(v as Map<String, dynamic>),
+    ),
   );
   return val;
 });
@@ -86,6 +90,20 @@ const _$MatchOutcomeEnumMap = {
   MatchOutcome.drawn: 'drawn',
   MatchOutcome.noResult: 'no_result',
 };
+
+_ChatSummary _$ChatSummaryFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('_ChatSummary', json, ($checkedConvert) {
+      final val = _ChatSummary(
+        open: $checkedConvert('open', (v) => v as bool? ?? false),
+        unread: $checkedConvert('unread', (v) => (v as num?)?.toInt() ?? 0),
+        roomCode: $checkedConvert('roomCode', (v) => v as String?),
+        agreedStartAt: $checkedConvert(
+          'agreedStartAt',
+          (v) => v == null ? null : DateTime.parse(v as String),
+        ),
+      );
+      return val;
+    });
 
 _MatchParticipant _$MatchParticipantFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_MatchParticipant', json, ($checkedConvert) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/chat/application/chat_providers.dart';
 
 import 'support/draw_fixtures.dart';
 import 'support/fakes.dart';
@@ -116,6 +117,82 @@ void main() {
       await tester.tap(find.text('My entries'));
       await tester.pumpAndSettle();
       expect(find.text('Refund pending'), findsOneWidget);
+    });
+
+    testWidgets('a match chat fits at text scale $scale', (tester) async {
+      final at = testNow.add(const Duration(hours: 2)).toIso8601String();
+      Map<String, dynamic> message(int seq, String kind, {bool mine = false}) =>
+          {
+            'seq': seq,
+            'senderId': 'x',
+            'sender': mine ? 'home' : 'away',
+            'mine': mine,
+            'kind': kind,
+            'text': kind == 'text' ? 'A long message ' * 6 : null,
+            'quickReply': kind == 'quick_reply' ? 'friend_request_sent' : null,
+            'roomCode': kind == 'room_code' ? 'ABCD-1234-EFGH-5678' : null,
+            'proposedStartAt': kind == 'time_proposal' ? at : null,
+            'replyToSeq': null,
+            'accepted': null,
+            'contactHidden': false,
+            'sentAt': testNow.toIso8601String(),
+          };
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+        overrides: [
+          chatPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
+        ],
+        api: FakeApi(
+          routes: {
+            '/v1/matches/m1': (_) => jsonResponse({
+              'data': {
+                ...matchRoomJson(),
+                'chat': {'open': true, 'lastSeq': 4, 'unread': 4},
+              },
+            }, 200),
+            '/v1/matches/m1/chat': (_) => jsonResponse({
+              'data': {
+                'matchId': 'm1',
+                'open': true,
+                'roomCode': {
+                  'code': 'ABCD-1234-EFGH-5678',
+                  'setBy': 'away',
+                  'setAt': at,
+                },
+                'agreedStartAt': at,
+                'playBy': testNow
+                    .add(const Duration(days: 1))
+                    .toIso8601String(),
+                'lastSeq': 4,
+                'readSeq': 4,
+                'opponentReadSeq': 4,
+                'messages': [
+                  message(1, 'text'),
+                  message(2, 'quick_reply', mine: true),
+                  message(3, 'room_code'),
+                  message(4, 'time_proposal'),
+                ],
+                'hasMore': false,
+              },
+            }, 200),
+          },
+        ),
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(TonitsNavigationBar),
+          matching: find.text('Matches'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('vs Amina Otieno'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Chat'));
+      await tester.pumpAndSettle();
+      expect(find.text('Kick-off at'), findsOneWidget);
     });
 
     testWidgets('every tab fits at text scale $scale', (tester) async {
