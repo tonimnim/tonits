@@ -20,7 +20,9 @@ Future<void> openProfile(WidgetTester tester, {FakeApi? api}) async {
 }
 
 Future<void> tapText(WidgetTester tester, String text) async {
-  await scrollPageTo(tester, find.text(text));
+  if (find.text(text).evaluate().isEmpty) {
+    await scrollPageTo(tester, find.text(text));
+  }
   // Bring it clear of the bottom bar, not just partly into view.
   await tester.ensureVisible(find.text(text).last);
   await tester.pumpAndSettle();
@@ -89,11 +91,6 @@ void main() {
     expect(find.text('Country changed to India'), findsOneWidget);
     final patch = api.requests.lastWhere((r) => r.method == 'PATCH');
     expect(bodyOf(patch), {'countryCode': 'IN'});
-    // M-Pesa is Kenya only, so the phone step leaves the setup list.
-    await tester.drag(find.byType(Scrollable).first, const Offset(0, 1000));
-    await tester.pumpAndSettle();
-    expect(find.text('0 of 2 done'), findsNothing);
-    expect(find.text('1 of 2 done'), findsOneWidget);
   });
 
   testWidgets('an email is verified with the code sent to it', (tester) async {
@@ -106,9 +103,7 @@ void main() {
       },
     );
     await openProfile(tester, api: api);
-    expect(find.text('1 of 3 done'), findsOneWidget);
-
-    await tapText(tester, 'Verify your email');
+    await tapText(tester, 'Email');
     await enter(tester, 'you@example.com', 'amina@example');
     await tapText(tester, 'Send code');
     expect(find.text('Enter a valid email address'), findsOneWidget);
@@ -130,8 +125,8 @@ void main() {
     await enter(tester, '000000', '123456');
     await tapText(tester, 'Verify');
     expect(find.text('Email verified'), findsOneWidget);
-    expect(find.text('2 of 3 done'), findsOneWidget);
-    await scrollPageTo(tester, find.text('amina@example.com'));
+    // In Contact, and beside the linked Google account.
+    expect(find.text('amina@example.com'), findsWidgets);
   });
 
   testWidgets("an email on another account isn't accepted", (tester) async {
@@ -141,7 +136,7 @@ void main() {
         routes: {'/v1/me/email': (_) => errorResponse(409, 'email_taken')},
       ),
     );
-    await tapText(tester, 'Verify your email');
+    await tapText(tester, 'Email');
     await enter(tester, 'you@example.com', 'taken@example.com');
     await tapText(tester, 'Send code');
 
@@ -161,7 +156,7 @@ void main() {
     );
     await openProfile(tester, api: api);
 
-    await tapText(tester, 'Add your M-Pesa number');
+    await tapText(tester, 'Phone');
     expect(find.text('+254'), findsOneWidget);
     await enter(tester, '0712 345 678', '0712 345 678');
     await tapText(tester, 'Save');
@@ -201,36 +196,5 @@ void main() {
 
     expect(find.text('Phone number removed'), findsOneWidget);
     expect(api.requests.where((r) => r.method == 'DELETE'), hasLength(1));
-  });
-
-  testWidgets('changing the password checks the current one', (tester) async {
-    final api = FakeApi(
-      routes: {
-        '/v1/me/password': (request) =>
-            bodyOf(request)['currentPassword'] == 'correct horse'
-            ? http.Response('', 204)
-            : errorResponse(401, 'invalid_credentials'),
-      },
-    );
-    await openProfile(tester, api: api);
-    await tapText(tester, 'Password');
-
-    final fields = find.byType(TextFormField);
-    await tester.enterText(fields.at(0), 'wrong one');
-    await tester.enterText(fields.at(1), 'battery staple');
-    await tester.enterText(fields.at(2), 'battery stable');
-    await tapText(tester, 'Change password');
-    expect(find.text("The passwords don't match"), findsOneWidget);
-
-    await tester.enterText(fields.at(2), 'battery staple');
-    await tapText(tester, 'Change password');
-    expect(find.text("Your current password isn't right."), findsOneWidget);
-
-    await tester.enterText(fields.at(0), 'correct horse');
-    await tapText(tester, 'Change password');
-    expect(
-      find.text('Password changed. Your other devices were signed out.'),
-      findsOneWidget,
-    );
   });
 }

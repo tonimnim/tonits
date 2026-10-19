@@ -6,16 +6,7 @@ import 'support/fakes.dart';
 import 'support/harness.dart';
 
 Future<void> signIn(WidgetTester tester) async {
-  await tester.enterText(
-    find.widgetWithText(TextFormField, 'ABCD-1234-EFGH'),
-    'ABCD-1234-EFGH',
-  );
-  await tester.enterText(
-    find.widgetWithText(TextFormField, 'Your password'),
-    'correct horse',
-  );
-  await tester.ensureVisible(find.text('Sign in'));
-  await tester.tap(find.text('Sign in'));
+  await tester.tap(find.text('Continue with Google'));
   await tester.pumpAndSettle();
 }
 
@@ -30,19 +21,24 @@ Future<void> openTab(WidgetTester tester, String label) async {
 }
 
 void main() {
-  testWidgets('without a session the app opens on sign in', (tester) async {
+  testWidgets('without a session the app opens on the welcome screen', (
+    tester,
+  ) async {
     await pumpTonits(tester);
 
-    expect(find.text('Welcome back'), findsOneWidget);
+    expect(find.text('Your game, ranked.'), findsOneWidget);
+    expect(find.text('Continue with Google'), findsOneWidget);
+    // Apple is offered on iPhone only.
+    expect(find.text('Continue with Apple'), findsNothing);
     expect(find.byType(TonitsNavigationBar), findsNothing);
   });
 
-  testWidgets('wrong credentials show a message', (tester) async {
+  testWidgets('a sign-in the server refuses says why', (tester) async {
     await pumpTonits(
       tester,
       api: FakeApi(
         routes: {
-          '/v1/auth/login': (_) => errorResponse(401, 'invalid_credentials'),
+          '/v1/auth/google': (_) => errorResponse(503, 'sign_in_unavailable'),
         },
       ),
     );
@@ -50,7 +46,7 @@ void main() {
     await signIn(tester);
 
     expect(
-      find.text("That Konami ID and password don't match."),
+      find.text("That sign-in option isn't available yet. Try again later."),
       findsOneWidget,
     );
   });
@@ -214,7 +210,7 @@ void main() {
     await tester.tap(find.widgetWithText(TextButton, 'Sign out'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Welcome back'), findsOneWidget);
+    expect(find.text('Your game, ranked.'), findsOneWidget);
     expect(find.byType(TonitsNavigationBar), findsNothing);
   });
 

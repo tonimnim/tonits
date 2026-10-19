@@ -2,7 +2,25 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:tonits/features/auth/data/identity_providers.dart';
 import 'package:tonits/features/auth/data/token_store.dart';
+
+/// Stands in for the Google or Apple account picker. [token] null means
+/// the player closed it.
+class FakeIdentity implements IdentityProvider {
+  FakeIdentity(this.token, {this.nonce});
+
+  final String? token;
+  final String? nonce;
+  int signOuts = 0;
+
+  @override
+  Future<IdentityToken?> obtain() async =>
+      token == null ? null : IdentityToken(token!, nonce: nonce);
+
+  @override
+  Future<void> signOut() async => signOuts++;
+}
 
 class MemoryTokenStore implements TokenStore {
   MemoryTokenStore([this.token]);
@@ -39,44 +57,47 @@ http.Response errorResponse(
   headers: headers,
 );
 
+/// A player as the API returns it. A Google or Apple player who hasn't
+/// finished onboarding ([onboarded] false) has a generated handle and no
+/// Konami ID, country or phone yet.
 Map<String, dynamic> playerJson({
   String countryCode = 'KE',
-  bool recoveryCodeSet = true,
   String? email,
   String? phoneNumber,
   String displayName = 'striker.9',
+  bool onboarded = true,
+  List<String> signInMethods = const ['google'],
 }) => {
   'id': '6f1c2c55-0d3e-4b9b-9a55-0c0b8a3e1d11',
-  'recoveryCodeSet': recoveryCodeSet,
-  'recoveryCodeCreatedAt': recoveryCodeSet ? '2026-10-01T09:00:00Z' : null,
-  'username': 'striker.9',
-  'konamiId': 'ABCD-1234-EFGH',
-  'displayName': displayName,
+  'username': onboarded ? 'striker.9' : newPlayerHandle,
+  'konamiId': onboarded ? 'ABCD-1234-EFGH' : null,
+  'displayName': onboarded ? displayName : newPlayerHandle,
   'email': email,
   'emailVerified': email != null,
-  'phoneNumber': phoneNumber,
-  'countryCode': countryCode,
+  'phoneNumber': onboarded ? phoneNumber : null,
+  'phoneVerified': false,
+  'countryCode': onboarded ? countryCode : '',
   'birthDate': null,
   'status': 'active',
+  'onboardingCompleted': onboarded,
+  'signInMethods': signInMethods,
   'profile': null,
 };
 
-const firstRecoveryCode = '7KQ0-1XRP-9TVD-4HNW-C3JA';
-const nextRecoveryCode = 'M2PB-8QWE-5RTZ-0YUA-6DFG';
+/// The handle the API generates for a new Google or Apple player.
+const newPlayerHandle = 'Wanjiru_4821';
 
 Map<String, dynamic> sessionJson({
   String access = 'access-1',
   String refresh = 'refresh-1',
-  String? recoveryCode,
-  bool recoveryCodeSet = true,
+  bool onboarded = true,
   Map<String, dynamic>? player,
 }) => {
   'accessToken': access,
   'refreshToken': refresh,
   'tokenType': 'Bearer',
   'expiresInSeconds': 900,
-  'player': player ?? playerJson(recoveryCodeSet: recoveryCodeSet),
-  'recoveryCode': ?recoveryCode,
+  'player': player ?? playerJson(onboarded: onboarded),
 };
 
 Map<String, dynamic> competitionJson({

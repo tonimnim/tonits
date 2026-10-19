@@ -13,19 +13,45 @@ void main() {
   for (final scale in [1.0, 1.3]) {
     testWidgets('signed-out screens fit at text scale $scale', (tester) async {
       await pumpTonits(tester, size: small, textScale: scale);
-      expect(find.text('Welcome back'), findsOneWidget);
+      expect(find.text('Your game, ranked.'), findsOneWidget);
 
-      await tester.tap(find.text('Create an account'));
+      // Developer sign-in, in debug builds.
+      await tester.ensureVisible(find.text('Developer sign-in'));
       await tester.pumpAndSettle();
-      expect(find.text('Create your account'), findsOneWidget);
+      await tester.tap(find.text('Developer sign-in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+      expect(find.text('Create test account'), findsOneWidget);
+    });
 
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Forgot password?'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Forgot password?'));
-      await tester.pumpAndSettle();
-      expect(find.text('Reset password'), findsOneWidget);
+    testWidgets('onboarding fits at text scale $scale', (tester) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/auth/refresh': (_) =>
+                jsonResponse(sessionJson(onboarded: false), 200),
+          },
+        ),
+      );
+      for (final (title, value) in [
+        ('Pick your username', null),
+        ('Link eFootball', 'ABCD-1234-EFGH'),
+        ('Where do you play from?', null),
+        ('Your phone number', null),
+      ]) {
+        expect(find.text(title), findsOneWidget);
+        if (value != null) {
+          await tester.enterText(find.byType(TextFormField), value);
+        }
+        if (title == 'Your phone number') break;
+        await tester.tap(find.text('Continue'));
+        await tester.pumpAndSettle();
+      }
     });
 
     testWidgets('every tab fits at text scale $scale', (tester) async {
@@ -92,7 +118,6 @@ void main() {
         ('Display name', 'Display name'),
         ('Email', 'Email'),
         ('Phone', 'Phone number'),
-        ('Password', 'Password'),
       ]) {
         await scrollPageTo(tester, find.text(row));
         await tester.ensureVisible(find.text(row).last);

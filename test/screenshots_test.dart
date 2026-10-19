@@ -109,32 +109,39 @@ void main() {
   for (final brightness in Brightness.values) {
     final suffix = brightness.name;
 
-    testWidgets('signed out ($suffix)', skip: skip, (tester) async {
-      await _pump(tester, brightness: brightness, height: 1000);
-      await _shoot(tester, 'sign-in-$suffix');
-      await tester.tap(find.text('Create an account'));
-      await _shoot(tester, 'register-$suffix');
-      await tester.pageBack();
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Forgot password?'));
-      await _shoot(tester, 'forgot-password-$suffix');
+    testWidgets('welcome ($suffix)', skip: skip, (tester) async {
+      await _pump(tester, brightness: brightness);
+      await _shoot(tester, 'welcome-$suffix');
+      await tester.tap(find.text('Developer sign-in'));
+      await _shoot(tester, 'dev-sign-in-$suffix');
     });
 
-    testWidgets('recovery code after sign-up ($suffix)', skip: skip, (
-      tester,
-    ) async {
-      await _pump(tester, brightness: brightness, height: 1000);
-      await tester.tap(find.text('Create an account'));
-      await tester.pumpAndSettle();
-      Future<void> enter(String hint, String text) =>
-          tester.enterText(find.widgetWithText(TextFormField, hint), text);
-      await enter('striker.9', 'striker.9');
-      await enter('ABCD-1234-EFGH', 'ABCD-1234-EFGH');
-      await enter('Choose a password', 'correct horse');
-      await tester.ensureVisible(find.text('Create account'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Create account'));
-      await _shoot(tester, 'recovery-code-$suffix');
+    testWidgets('onboarding ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/auth/refresh': (_) =>
+                jsonResponse(sessionJson(onboarded: false), 200),
+          },
+        ),
+      );
+      for (final (name, value) in [
+        ('username', null),
+        ('konami-id', 'ABCD-1234-EFGH'),
+        ('country', null),
+        ('phone', '(512) 555-0134'),
+      ]) {
+        if (value != null) {
+          await tester.enterText(find.byType(TextFormField), value);
+        }
+        await _shoot(tester, 'onboarding-$name-$suffix');
+        if (name == 'phone') break;
+        await tester.tap(find.text('Continue'));
+        await tester.pumpAndSettle();
+      }
     });
 
     testWidgets('entry ($suffix)', skip: skip, (tester) async {
@@ -246,23 +253,6 @@ void main() {
       await _shoot(tester, 'profile-$suffix');
     });
 
-    testWidgets('profile, new account ($suffix)', skip: skip, (tester) async {
-      await _pump(
-        tester,
-        brightness: brightness,
-        refreshToken: 'stored',
-        height: 844,
-        api: FakeApi(
-          routes: {
-            '/v1/auth/refresh': (_) =>
-                jsonResponse(sessionJson(recoveryCodeSet: false), 200),
-          },
-        ),
-      );
-      await _openTab(tester, 'Profile');
-      await _shoot(tester, 'profile-new-$suffix');
-    });
-
     testWidgets('profile, all set ($suffix)', skip: skip, (tester) async {
       final player = playerJson(
         displayName: 'Amina Otieno',
@@ -296,9 +286,8 @@ void main() {
       }
 
       await open('Display name', 'account-name-$suffix');
-      await open('amina@example.com', 'account-email-$suffix');
+      await open('Email', 'account-email-$suffix');
       await open('+254712345678', 'account-phone-$suffix');
-      await open('Password', 'account-password-$suffix');
     });
 
     testWidgets('email code ($suffix)', skip: skip, (tester) async {
@@ -313,7 +302,9 @@ void main() {
         ),
       );
       await _openTab(tester, 'Profile');
-      await tester.tap(find.text('Verify your email'));
+      await tester.ensureVisible(find.text('Email'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Email'));
       await tester.pumpAndSettle();
       await tester.enterText(
         find.widgetWithText(TextFormField, 'you@example.com'),
