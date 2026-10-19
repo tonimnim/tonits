@@ -5,12 +5,12 @@ import '../../../../core/countries.dart';
 import '../../../../core/format.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
-import '../../../../core/widgets/widgets.dart';
 import '../../../auth/data/models.dart';
 import '../../../players/application/players_providers.dart';
+import 'profile_photo.dart';
 
-/// Who the player is: avatar, name, handle, country and how long they've
-/// played on Tonits.
+/// Who the player is: photo, name, handle, country and how long they've
+/// played on Ozone.
 class ProfileHeader extends ConsumerWidget {
   const ProfileHeader({super.key, required this.player});
 
@@ -30,11 +30,7 @@ class ProfileHeader extends ConsumerWidget {
 
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(color: p.card, shape: BoxShape.circle),
-          child: InitialsAvatar(name: player.displayName, size: 80),
-        ),
+        ProfilePhoto(name: player.displayName),
         const SizedBox(height: TonitsSpace.md),
         Text(
           player.displayName,

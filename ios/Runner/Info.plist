@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Ozone needs a screenshot of the Full Time screen when a match result is disputed.</string>
+	<string>Ozone uses your photos for your profile picture, and for Full Time screenshots when a match result is disputed.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>

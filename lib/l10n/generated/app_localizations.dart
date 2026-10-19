@@ -538,6 +538,42 @@ abstract class AppLocalizations {
   /// **'Your profile is hidden'**
   String get accountProfileHidden;
 
+  /// No description provided for @profileChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get profileChangePhoto;
+
+  /// No description provided for @profilePhotoUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo updated'**
+  String get profilePhotoUpdated;
+
+  /// No description provided for @profilePhotoWrongType.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a JPEG, PNG or WebP photo.'**
+  String get profilePhotoWrongType;
+
+  /// No description provided for @profilePhotoTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That photo is over 10 MB. Try a smaller one.'**
+  String get profilePhotoTooLarge;
+
+  /// No description provided for @profilePhotoUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo didn\'t upload. Try again.'**
+  String get profilePhotoUploadFailed;
+
+  /// No description provided for @profilePhotoUnusable.
+  ///
+  /// In en, this message translates to:
+  /// **'That photo can\'t be used. Try another.'**
+  String get profilePhotoUnusable;
+
   /// No description provided for @accountEnterEmail.
   ///
   /// In en, this message translates to:

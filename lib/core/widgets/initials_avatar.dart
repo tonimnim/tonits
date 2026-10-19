@@ -2,29 +2,55 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-/// A round lavender avatar with up to two initials.
+/// A round avatar: the player's photo when there is one, otherwise up to
+/// two initials on lavender. The initials also show while the photo loads
+/// and if it can't.
 class InitialsAvatar extends StatelessWidget {
-  const InitialsAvatar({super.key, required this.name, this.size = 40});
+  const InitialsAvatar({
+    super.key,
+    required this.name,
+    this.size = 40,
+    this.image,
+  });
 
   final String name;
   final double size;
+  final Uri? image;
 
   @override
   Widget build(BuildContext context) {
-    final p = context.palette;
+    final initials = _initials(context);
+    final image = this.image;
     return ExcludeSemantics(
-      child: Container(
-        width: size,
-        height: size,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
-        child: Text(
-          initialsOf(name),
-          style: TextStyle(
-            color: p.onSoft,
-            fontWeight: FontWeight.w700,
-            fontSize: size * 0.36,
-          ),
+      child: image == null
+          ? initials
+          : ClipOval(
+              child: Image.network(
+                image.toString(),
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+                frameBuilder: (_, child, frame, synchronous) =>
+                    frame == null && !synchronous ? initials : child,
+                errorBuilder: (_, _, _) => initials,
+              ),
+            ),
+    );
+  }
+
+  Widget _initials(BuildContext context) {
+    final p = context.palette;
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
+      child: Text(
+        initialsOf(name),
+        style: TextStyle(
+          color: p.onSoft,
+          fontWeight: FontWeight.w700,
+          fontSize: size * 0.36,
         ),
       ),
     );

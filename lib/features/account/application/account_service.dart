@@ -1,10 +1,17 @@
+import 'dart:typed_data';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/api/api_client.dart';
+import '../../../core/l10n.dart';
 
 import '../../auth/application/auth_providers.dart';
 import '../../auth/data/models.dart';
 import '../../players/application/players_providers.dart';
 import '../data/account_repository.dart';
 import 'account_providers.dart';
+import 'photo.dart';
 
 /// Edits the signed-in player's account and keeps the session's copy of the
 /// player current, so every screen shows the change at once.
@@ -55,6 +62,39 @@ class AccountService {
         ),
       ),
     );
+  }
+
+  /// Uploads [bytes] as the profile photo and makes it the one shown.
+  /// Throws [PhotoProblem] with a sentence for the player.
+  Future<void> changePhoto(Uint8List bytes) async {
+    final l = _ref.read(l10nProvider);
+    final mediaType = photoTypeOf(bytes);
+    if (mediaType == null) throw PhotoProblem(l.profilePhotoWrongType);
+    if (bytes.length > maxPhotoBytes) {
+      throw PhotoProblem(l.profilePhotoTooLarge);
+    }
+    final intent = await _repository.createAvatarUpload(
+      mediaType: mediaType,
+      byteSize: bytes.length,
+      sha256: sha256.convert(bytes).toString(),
+    );
+    if (!await _repository.uploadAvatar(intent, bytes)) {
+      throw PhotoProblem(l.profilePhotoUploadFailed);
+    }
+    final bool ready;
+    try {
+      ready = await _repository.completeAvatarUpload(intent.id);
+    } on ApiException catch (e) {
+      throw switch (e.code) {
+        'avatar_verification_failed' => PhotoProblem(l.profilePhotoUnusable),
+        'avatar_upload_expired' ||
+        'avatar_upload_incomplete' => PhotoProblem(l.profilePhotoUploadFailed),
+        _ => e,
+      };
+    }
+    if (!ready) throw PhotoProblem(l.profilePhotoUnusable);
+    await _repository.selectAvatar(intent.id);
+    _ref.invalidate(myAvatarProvider);
   }
 
   void _adopt(Player player) {

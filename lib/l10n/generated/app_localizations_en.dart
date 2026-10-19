@@ -257,6 +257,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountProfileHidden => 'Your profile is hidden';
 
   @override
+  String get profileChangePhoto => 'Change photo';
+
+  @override
+  String get profilePhotoUpdated => 'Photo updated';
+
+  @override
+  String get profilePhotoWrongType => 'Use a JPEG, PNG or WebP photo.';
+
+  @override
+  String get profilePhotoTooLarge =>
+      'That photo is over 10 MB. Try a smaller one.';
+
+  @override
+  String get profilePhotoUploadFailed => 'The photo didn\'t upload. Try again.';
+
+  @override
+  String get profilePhotoUnusable => 'That photo can\'t be used. Try another.';
+
+  @override
   String get accountEnterEmail => 'Enter your email';
 
   @override

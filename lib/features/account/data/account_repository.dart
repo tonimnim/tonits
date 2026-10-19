@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import '../../../core/api/api_client.dart';
 import '../../auth/data/models.dart';
+import '../../evidence/data/evidence.dart';
 
 /// Changes to the signed-in player's own account. Every change that
 /// returns the player gives back the updated one.
@@ -64,6 +67,61 @@ class AccountRepository {
       auth: true,
     );
     return Player.fromJson(json!);
+  }
+
+  /// Declares a new profile photo by its type, size and SHA-256.
+  Future<UploadIntent> createAvatarUpload({
+    required String mediaType,
+    required int byteSize,
+    required String sha256,
+  }) async {
+    final json = await _api.post(
+      '/v1/me/avatar/uploads',
+      body: {'mediaType': mediaType, 'byteSize': byteSize, 'sha256': sha256},
+      auth: true,
+    );
+    return UploadIntent.fromJson(json!['data'] as Map<String, dynamic>);
+  }
+
+  /// Sends the photo straight to storage. False when storage refused it.
+  Future<bool> uploadAvatar(UploadIntent intent, Uint8List bytes) async {
+    final status = await _api.putBytes(
+      intent.url,
+      bytes,
+      headers: intent.headers,
+    );
+    // 412: a retried PUT whose first attempt already stored the file.
+    return (status >= 200 && status < 300) || status == 412;
+  }
+
+  /// Checks the stored photo. True once it's ready to use.
+  Future<bool> completeAvatarUpload(String id) async {
+    final json = await _api.post(
+      '/v1/me/avatar/uploads/${Uri.encodeComponent(id)}/complete',
+      auth: true,
+    );
+    final status = (json!['data'] as Map<String, dynamic>)['status'];
+    return status == 'completed' || status == 'attached';
+  }
+
+  /// Makes a checked upload the profile photo.
+  Future<void> selectAvatar(String uploadId) => _api.send(
+    'PATCH',
+    '/v1/me/avatar',
+    body: {'uploadId': uploadId},
+    auth: true,
+  );
+
+  /// A short-lived link to the player's own photo, or null without one.
+  Future<Uri?> myAvatarUrl() async {
+    try {
+      final json = await _api.get('/v1/me/avatar', auth: true);
+      final data = json!['data'] as Map<String, dynamic>;
+      return Uri.parse(data['downloadUrl'] as String);
+    } on ApiException catch (e) {
+      if (e.status == 404) return null;
+      rethrow;
+    }
   }
 
   Future<Player> currentPlayer() async {
