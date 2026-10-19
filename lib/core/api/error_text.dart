@@ -3,7 +3,7 @@ import 'api_client.dart';
 /// Turns an API failure into a sentence for the player.
 String describeError(Object error) {
   if (error is NetworkException) {
-    return "Can't reach Tonits. Check your connection and try again.";
+    return "Can't reach Ozone. Check your connection and try again.";
   }
   if (error is! ApiException) return 'Something went wrong. Try again.';
 
@@ -15,7 +15,7 @@ String describeError(Object error) {
     case 'konami_id_taken':
       return 'That Konami ID already has an account. Sign in instead.';
     case 'account_unavailable':
-      return 'This account is suspended. Contact Tonits support.';
+      return 'This account is suspended. Contact Ozone support.';
     case 'invalid_code':
       return 'That code is wrong or has expired.';
     case 'invalid_recovery_code':
@@ -43,7 +43,7 @@ String describeError(Object error) {
     case 'invalid_email':
       return "That doesn't look like an email address.";
     case 'phone_taken':
-      return 'That number belongs to another account. Tonits support can '
+      return 'That number belongs to another account. Ozone support can '
           'help its owner.';
     case 'invalid_phone':
       return 'Enter the full number with its country code.';
@@ -62,7 +62,7 @@ String describeError(Object error) {
           : 'Too many attempts. Try again in $minutes minute${minutes == 1 ? '' : 's'}.';
   }
   if (error.status >= 500) {
-    return 'Tonits is having trouble right now. Try again shortly.';
+    return 'Ozone is having trouble right now. Try again shortly.';
   }
   return error.message;
 }

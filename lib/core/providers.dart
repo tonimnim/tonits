@@ -13,5 +13,5 @@ final apiClientProvider = Provider<ApiClient>(
 /// Sent with sign-in so the player can recognise this device in their
 /// session list.
 final deviceNameProvider = Provider<String>(
-  (ref) => 'Tonits on ${defaultTargetPlatform.name}',
+  (ref) => 'Ozone on ${defaultTargetPlatform.name}',
 );

@@ -92,7 +92,7 @@ class NextStep {
         tone: StepTone.action,
         message:
             'The result was rejected. Send one screenshot of the Full Time '
-            'screen; Tonits compares both players\' screenshots.',
+            'screen; Ozone compares both players\' screenshots.',
         deadline: v.screenshotDeadline,
         deadlineNote:
             "If you don't send one in time, you're removed from the "
@@ -102,8 +102,8 @@ class NextStep {
         title: 'Screenshot sent',
         tone: StepTone.waiting,
         message: v.opponentScreenshotSent
-            ? 'Both screenshots are in. Tonits will review them.'
-            : 'Waiting for $opp\'s screenshot. Tonits then checks both.',
+            ? 'Both screenshots are in. Ozone will review them.'
+            : 'Waiting for $opp\'s screenshot. Ozone then checks both.',
         deadline: v.screenshotDeadline,
       ),
       MatchLifecycle.awaitingResolution => const NextStep(
@@ -115,7 +115,7 @@ class NextStep {
         title: 'Under review',
         tone: StepTone.waiting,
         message:
-            'Tonits is checking both screenshots against the reported '
+            'Ozone is checking both screenshots against the reported '
             "score. You'll be notified of the decision.",
       ),
       MatchLifecycle.completed => NextStep(
@@ -129,7 +129,7 @@ class NextStep {
             "$opp didn't answer in time, so your result stood.",
           ('unanswered', _) =>
             "The result wasn't answered in time, so it stood.",
-          ('platform_review', _) => 'Tonits decided the result after a review.',
+          ('platform_review', _) => 'Ozone decided the result after a review.',
           _ => 'The result is confirmed.',
         },
       ),
@@ -152,7 +152,7 @@ class NextStep {
             'Neither player sent a screenshot, so both were removed.',
           'double_no_show' => 'Neither player checked in.',
           'competition_cancelled' => 'The competition was cancelled.',
-          'platform_review' => 'Tonits cancelled the match after a review.',
+          'platform_review' => 'Ozone cancelled the match after a review.',
           'reset_not_required' ||
           'correction_voided' => 'The bracket no longer needed this match.',
           _ => 'This match was cancelled.',
@@ -166,7 +166,7 @@ class NextStep {
       MatchLifecycle.unknown => const NextStep(
         title: 'Match',
         tone: StepTone.neutral,
-        message: 'Update Tonits to see where this match stands.',
+        message: 'Update Ozone to see where this match stands.',
       ),
     };
   }
@@ -218,7 +218,7 @@ class NextStep {
       won
           ? "$opp didn't send a screenshot after the result was rejected."
           : "You didn't send a screenshot in time, so you were removed.",
-    'platform_review' => 'Tonits decided the match after a review.',
+    'platform_review' => 'Ozone decided the match after a review.',
     _ =>
       won ? 'You won without playing.' : 'The match was decided without you.',
   };

@@ -32,7 +32,7 @@ class OfflineScreen extends ConsumerWidget {
               Icon(Icons.wifi_off_rounded, color: p.mutedForeground, size: 32),
               const SizedBox(height: TonitsSpace.md),
               Text(
-                "Can't reach Tonits",
+                "Can't reach Ozone",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),

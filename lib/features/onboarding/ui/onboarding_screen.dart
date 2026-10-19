@@ -107,10 +107,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   static String _message(ApiException e) => switch (e.code) {
     'konami_id_taken' =>
-      'That Konami ID is linked to another Tonits account. Contact Tonits '
+      'That Konami ID is linked to another Ozone account. Contact Ozone '
           "support if it's yours.",
     'phone_taken' =>
-      'That number is linked to another Tonits account. Contact Tonits '
+      'That number is linked to another Ozone account. Contact Ozone '
           "support if it's yours.",
     _ => describeError(e),
   };
@@ -139,7 +139,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ),
       _Step.konamiId => (
         'Link eFootball',
-        'Your Konami ID connects Tonits to your eFootball account. Enter it '
+        'Your Konami ID connects Ozone to your eFootball account. Enter it '
             'exactly as the game shows it.',
         KonamiIdField(
           controller: _konamiId,

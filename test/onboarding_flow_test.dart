@@ -108,7 +108,7 @@ void main() {
     expect(find.text('Link eFootball'), findsOneWidget);
     expect(
       find.text(
-        "That Konami ID is linked to another Tonits account. Contact Tonits "
+        "That Konami ID is linked to another Ozone account. Contact Ozone "
         "support if it's yours.",
       ),
       findsOneWidget,

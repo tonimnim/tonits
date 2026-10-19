@@ -206,7 +206,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sign out'));
     await tester.pumpAndSettle();
-    expect(find.text('Sign out of Tonits?'), findsOneWidget);
+    expect(find.text('Sign out of Ozone?'), findsOneWidget);
     await tester.tap(find.widgetWithText(TextButton, 'Sign out'));
     await tester.pumpAndSettle();
 

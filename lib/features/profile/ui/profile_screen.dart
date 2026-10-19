@@ -28,7 +28,7 @@ class ProfileScreen extends ConsumerWidget {
       children: [
         if (player.status != 'active') ...[
           const Notice(
-            'Your account is restricted. Contact Tonits support to find '
+            'Your account is restricted. Contact Ozone support to find '
             'out why.',
           ),
           _gap,

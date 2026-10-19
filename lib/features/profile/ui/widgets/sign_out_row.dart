@@ -21,7 +21,7 @@ class SignOutRow extends ConsumerWidget {
             final confirmed = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('Sign out of Tonits?'),
+                title: const Text('Sign out of Ozone?'),
                 content: const Text(
                   'You can sign back in any time with your Konami ID.',
                 ),

@@ -23,7 +23,7 @@ class _TonitsAppState extends ConsumerState<TonitsApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Tonits',
+      title: 'Ozone',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(Brightness.light),
       darkTheme: buildTheme(Brightness.dark),
