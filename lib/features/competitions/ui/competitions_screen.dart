@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../../core/routes.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -23,18 +24,19 @@ class _CompetitionsScreenState extends ConsumerState<CompetitionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final provider = competitionsProvider(_filter);
     return Scaffold(
-      appBar: AppBar(title: const Text('Competitions')),
+      appBar: AppBar(title: Text(l.competitionsTitle)),
       body: PagedListView(
         value: ref.watch(provider),
         onRefresh: () => ref.refresh(provider.future),
         onLoadMore: () => ref.read(provider.notifier).loadMore(),
-        errorText: describeError,
+        errorText: (e) => describeError(e, l),
         header: Padding(
           padding: const EdgeInsets.only(bottom: TonitsSpace.md),
           child: SegmentedTabs(
-            options: {for (final f in CompetitionFilter.values) f: f.label},
+            options: {for (final f in CompetitionFilter.values) f: f.label(l)},
             selected: _filter,
             onChanged: (f) => setState(() => _filter = f),
           ),
@@ -46,12 +48,12 @@ class _CompetitionsScreenState extends ConsumerState<CompetitionsScreen> {
         empty: EmptyState(
           icon: Icons.emoji_events_outlined,
           title: switch (_filter) {
-            CompetitionFilter.open => 'Nothing open right now',
-            CompetitionFilter.upcoming => 'Nothing announced yet',
-            CompetitionFilter.finished => 'No finished competitions',
+            CompetitionFilter.open => l.competitionsEmptyOpen,
+            CompetitionFilter.upcoming => l.competitionsEmptyUpcoming,
+            CompetitionFilter.finished => l.competitionsEmptyFinished,
           },
           message: _filter == CompetitionFilter.open
-              ? 'New competitions open for registration regularly.'
+              ? l.competitionsEmptyOpenMessage
               : null,
         ),
       ),

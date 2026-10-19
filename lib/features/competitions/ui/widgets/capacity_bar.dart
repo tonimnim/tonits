@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 
 /// How full a competition is: a thin bar with "23 of 32 players".
@@ -12,15 +13,16 @@ class CapacityBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final label = context.l10n.competitionCapacity(entries, max);
     final fraction = max == 0 ? 0.0 : (entries / max).clamp(0.0, 1.0);
     return Semantics(
-      label: '$entries of $max players',
+      label: label,
       excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            '$entries of $max players',
+            label,
             style: TextStyle(fontSize: 13, color: p.subtleForeground),
           ),
           const SizedBox(height: 6),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../../core/routes.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -25,19 +26,20 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
   Widget build(BuildContext context) {
     final provider = myMatchesProvider(_kind);
     final active = _kind == MatchListKind.active;
+    final l = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: const Text('Matches')),
+      appBar: AppBar(title: Text(l.tabMatches)),
       body: PagedListView(
         value: ref.watch(provider),
         onRefresh: () => ref.refresh(provider.future),
         onLoadMore: () => ref.read(provider.notifier).loadMore(),
-        errorText: describeError,
+        errorText: (e) => describeError(e, l),
         header: Padding(
           padding: const EdgeInsets.only(bottom: TonitsSpace.md),
           child: SegmentedTabs(
-            options: const {
-              MatchListKind.active: 'Active',
-              MatchListKind.history: 'History',
+            options: {
+              MatchListKind.active: l.matchListActive,
+              MatchListKind.history: l.matchListHistory,
             },
             selected: _kind,
             onChanged: (kind) => setState(() => _kind = kind),
@@ -46,11 +48,9 @@ class _MatchesScreenState extends ConsumerState<MatchesScreen> {
         itemBuilder: (context, match) => MatchCard(match: match),
         empty: EmptyState(
           icon: Icons.sports_esports_outlined,
-          title: active ? 'No active matches' : 'No matches played yet',
-          message: active
-              ? 'Matches appear here once a competition you entered starts.'
-              : 'Your finished matches will be listed here.',
-          actionLabel: active ? 'Browse competitions' : null,
+          title: active ? l.matchNoActiveTitle : l.matchNoHistoryTitle,
+          message: active ? l.matchNoActiveMessage : l.matchNoHistoryMessage,
+          actionLabel: active ? l.matchBrowseCompetitions : null,
           onAction: active ? () => context.go(Routes.competitions) : null,
         ),
       ),

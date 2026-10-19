@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../l10n.dart';
 import '../theme.dart';
 
 /// The Ozone mark: a ring whose counter is a game controller; in the
@@ -39,7 +40,7 @@ class BrandLockup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Ozone',
+      label: context.l10n.appName,
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,

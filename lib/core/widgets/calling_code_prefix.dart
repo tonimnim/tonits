@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../countries.dart';
+import '../l10n.dart';
 import '../theme.dart';
 
 /// The flag and calling code inside the field; tapping changes country.
@@ -19,7 +20,7 @@ class CallingCodePrefix extends StatelessWidget {
     final p = context.palette;
     return Semantics(
       button: true,
-      label: 'Calling code +${country.dialCode}, ${country.name}. Change',
+      label: context.l10n.callingCodeLabel(country.dialCode, country.name),
       excludeSemantics: true,
       child: InkWell(
         onTap: onTap,

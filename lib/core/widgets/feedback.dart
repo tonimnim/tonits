@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n.dart';
+
 /// Asks the player to confirm an action. Returns true only when they
 /// chose [confirmLabel].
 Future<bool> confirmAction(
@@ -8,7 +10,7 @@ Future<bool> confirmAction(
   required String title,
   required String message,
   required String confirmLabel,
-  String cancelLabel = 'Cancel',
+  String? cancelLabel,
 }) async {
   final confirmed = await showDialog<bool>(
     context: context,
@@ -18,7 +20,7 @@ Future<bool> confirmAction(
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: Text(cancelLabel),
+          child: Text(cancelLabel ?? context.l10n.cancel),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
@@ -49,5 +51,5 @@ Future<void> copyToClipboard(
   required String what,
 }) async {
   await Clipboard.setData(ClipboardData(text: value));
-  if (context.mounted) showMessage(context, '$what copied');
+  if (context.mounted) showMessage(context, context.l10n.copied(what));
 }

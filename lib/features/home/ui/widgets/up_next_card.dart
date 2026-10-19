@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -19,14 +20,15 @@ class UpNextCard extends ConsumerWidget {
     final match = ref.watch(nextMatchProvider).value;
     if (match == null) return const SizedBox.shrink();
     final p = context.palette;
-    final when = _when(match);
+    final l = context.l10n;
+    final when = _when(match, l);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SectionHeader(title: 'Up next'),
+          SectionHeader(title: l.homeUpNext),
           const SizedBox(height: TonitsSpace.sm),
           Card(
             clipBehavior: Clip.antiAlias,
@@ -62,8 +64,8 @@ class UpNextCard extends ConsumerWidget {
                           const SizedBox(height: 8),
                           Text(
                             match.opponent == null
-                                ? 'Opponent to be decided'
-                                : 'vs ${match.opponent!.displayName}',
+                                ? l.homeOpponentToBeDecided
+                                : l.playerVersus(match.opponent!.displayName),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleMedium,
@@ -92,12 +94,12 @@ class UpNextCard extends ConsumerWidget {
   }
 
   /// The deadline that matters now: check-in when it's open, else kick-off.
-  static String? _when(MatchSummary match) {
+  static String? _when(MatchSummary match, AppLocalizations l) {
     if (match.lifecycle == MatchLifecycle.readyForCheckIn &&
         match.checkInClosesAt != null) {
-      return 'by ${Format.dateTime(match.checkInClosesAt!)}';
+      return l.homeCheckInBy(Format.dateTime(match.checkInClosesAt!, l));
     }
     final at = match.scheduledAt;
-    return at == null ? null : Format.dateTime(at);
+    return at == null ? null : Format.dateTime(at, l);
   }
 }

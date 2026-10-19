@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/l10n.dart';
 import '../core/theme.dart';
 import '../features/auth/application/auth_providers.dart';
 import 'router.dart';
@@ -29,7 +30,9 @@ class _TonitsAppState extends ConsumerState<TonitsApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Ozone',
+      onGenerateTitle: (context) => context.l10n.appName,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       theme: buildTheme(Brightness.light),
       darkTheme: buildTheme(Brightness.dark),

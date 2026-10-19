@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n.dart';
 import '../theme.dart';
 import 'round_icon_button.dart';
 
@@ -129,7 +130,7 @@ class _HeroScaffoldState extends State<HeroScaffold> {
                 child: Center(
                   child: RoundIconButton(
                     icon: Icons.arrow_back,
-                    tooltip: 'Back',
+                    tooltip: context.l10n.back,
                     background: p.card.withValues(alpha: 0.85),
                     onPressed: () => Navigator.of(context).maybePop(),
                   ),

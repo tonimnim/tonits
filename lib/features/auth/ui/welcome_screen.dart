@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../account/application/legal_links.dart';
@@ -34,7 +35,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     try {
       await ref.read(authControllerProvider.notifier).signInWith(method);
     } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
+      if (mounted) setState(() => _error = describeError(e, context.l10n));
     } finally {
       if (mounted) setState(() => _busy = null);
     }
@@ -43,6 +44,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final apple = ref.watch(appleSignInOfferedProvider);
     return Scaffold(
       backgroundColor: p.card,
@@ -77,10 +79,10 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        'Sign up or sign in',
+                      Text(
+                        l.welcomeSheetTitle,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.3,
@@ -89,12 +91,8 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       const SizedBox(height: 6),
                       Text(
                         apple
-                            ? 'New to Ozone? Continue with Google or Apple to '
-                                  'create your account. Already playing? The '
-                                  'same button signs you in.'
-                            : 'New to Ozone? Continue with Google to create '
-                                  'your account. Already playing? The same '
-                                  'button signs you in.',
+                            ? l.welcomeSheetBodyWithApple
+                            : l.welcomeSheetBody,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
@@ -171,10 +169,10 @@ class _Pitch extends StatelessWidget {
                   children: [
                     Semantics(
                       header: true,
-                      child: const Text(
-                        'Your game, ranked.',
+                      child: Text(
+                        context.l10n.welcomeHeadline,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.9,
@@ -184,8 +182,7 @@ class _Pitch extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Enter eFootball competitions, play your matches and '
-                      "climb your country's ladder.",
+                      context.l10n.welcomePitch,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
@@ -212,6 +209,7 @@ class _FinePrint extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
+    final l = context.l10n;
     TextSpan link(String label, LegalDocumentType type) => TextSpan(
       text: label,
       style: TextStyle(color: p.primary, fontWeight: FontWeight.w600),
@@ -222,11 +220,11 @@ class _FinePrint extends ConsumerWidget {
       TextSpan(
         style: TextStyle(fontSize: 13, height: 1.5, color: p.mutedForeground),
         children: [
-          const TextSpan(text: 'By continuing you agree to the '),
-          link('Terms', LegalDocumentType.terms),
-          const TextSpan(text: ' and '),
-          link('Privacy Notice', LegalDocumentType.privacy),
-          const TextSpan(text: '.'),
+          TextSpan(text: l.welcomeAgreeBefore),
+          link(l.accountLegalTerms, LegalDocumentType.terms),
+          TextSpan(text: l.welcomeAgreeBetween),
+          link(l.accountLegalPrivacy, LegalDocumentType.privacy),
+          TextSpan(text: l.welcomeAgreeAfter),
         ],
       ),
       textAlign: TextAlign.center,

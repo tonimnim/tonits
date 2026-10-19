@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../data/played_match.dart';
 
@@ -22,11 +23,7 @@ class ResultChip extends StatelessWidget {
       MatchResult.draw => (p.mutedForeground, p.muted),
     };
     return Semantics(
-      label: switch (result) {
-        MatchResult.win => 'Win',
-        MatchResult.draw => 'Draw',
-        MatchResult.loss => 'Loss',
-      },
+      label: result.label(context.l10n),
       excludeSemantics: true,
       child: Container(
         width: size,
@@ -37,7 +34,7 @@ class ResultChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
-          result.letter,
+          result.letter(context.l10n),
           style: TextStyle(
             fontSize: size * 0.46,
             fontWeight: FontWeight.w700,
@@ -47,4 +44,21 @@ class ResultChip extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A result's player-facing words.
+extension MatchResultText on MatchResult {
+  /// Win, Draw or Loss.
+  String label(AppLocalizations l) => switch (this) {
+    MatchResult.win => l.playerResultWin,
+    MatchResult.draw => l.playerResultDraw,
+    MatchResult.loss => l.playerResultLoss,
+  };
+
+  /// W, D or L.
+  String letter(AppLocalizations l) => switch (this) {
+    MatchResult.win => l.playerResultWinLetter,
+    MatchResult.draw => l.playerResultDrawLetter,
+    MatchResult.loss => l.playerResultLossLetter,
+  };
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/api/error_text.dart';
 import '../../../core/format.dart';
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
@@ -46,7 +47,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final player = ref.watch(currentPlayerProvider);
 
     return Scaffold(
-      appBar: AppBar(titleSpacing: 0, title: const Text('Pay with M-Pesa')),
+      appBar: AppBar(titleSpacing: 0, title: Text(context.l10n.paymentTitle)),
       body: switch (competition) {
         AsyncData(value: final c) => ListView(
           padding: const EdgeInsets.fromLTRB(
@@ -84,7 +85,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ],
         ),
         AsyncError(:final error) => ErrorState(
-          message: describeError(error),
+          message: describeError(error, context.l10n),
           onRetry: () =>
               ref.invalidate(competitionProvider(widget.competitionId)),
         ),

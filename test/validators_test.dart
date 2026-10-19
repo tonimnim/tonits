@@ -2,30 +2,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/core/countries.dart';
 import 'package:tonits/features/auth/ui/validators.dart';
 
+import 'support/fakes.dart';
+
 void main() {
   group('username', () {
     test('accepts the API pattern', () {
-      expect(AuthValidators.username('striker.9'), isNull);
-      expect(AuthValidators.username('abc'), isNull);
+      expect(AuthValidators.username('striker.9', en), isNull);
+      expect(AuthValidators.username('abc', en), isNull);
     });
 
     test('rejects bad lengths and characters', () {
-      expect(AuthValidators.username('ab'), isNotNull);
-      expect(AuthValidators.username('a' * 25), isNotNull);
-      expect(AuthValidators.username('_striker'), isNotNull);
-      expect(AuthValidators.username('strik er'), isNotNull);
+      expect(AuthValidators.username('ab', en), isNotNull);
+      expect(AuthValidators.username('a' * 25, en), isNotNull);
+      expect(AuthValidators.username('_striker', en), isNotNull);
+      expect(AuthValidators.username('strik er', en), isNotNull);
     });
   });
 
   group('konamiId', () {
     test('accepts IDs with separators', () {
-      expect(AuthValidators.konamiId('ABCD-1234-EFGH'), isNull);
-      expect(AuthValidators.konamiId('abcd1234efgh'), isNull);
+      expect(AuthValidators.konamiId('ABCD-1234-EFGH', en), isNull);
+      expect(AuthValidators.konamiId('abcd1234efgh', en), isNull);
     });
 
     test('needs six letters or digits', () {
-      expect(AuthValidators.konamiId('ab-c-d'), isNotNull);
-      expect(AuthValidators.konamiId(''), isNotNull);
+      expect(AuthValidators.konamiId('ab-c-d', en), isNotNull);
+      expect(AuthValidators.konamiId('', en), isNotNull);
     });
 
     test('normalizes the way the API compares', () {
@@ -37,9 +39,9 @@ void main() {
   });
 
   test('reset code is six digits', () {
-    expect(AuthValidators.resetCode('123456'), isNull);
-    expect(AuthValidators.resetCode('12345'), isNotNull);
-    expect(AuthValidators.resetCode('12345a'), isNotNull);
+    expect(AuthValidators.resetCode('123456', en), isNull);
+    expect(AuthValidators.resetCode('12345', en), isNotNull);
+    expect(AuthValidators.resetCode('12345a', en), isNotNull);
   });
 
   group('countries', () {

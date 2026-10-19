@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/countries.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -26,6 +27,7 @@ class RankNeighbourhoodSection extends ConsumerWidget {
     }
     final rows = slice.rows;
     final country = _countryName(player.countryCode);
+    final l = context.l10n;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
@@ -33,8 +35,10 @@ class RankNeighbourhoodSection extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SectionHeader(
-            title: slice.ranked ? '$country ladder' : 'Top in $country',
-            actionLabel: 'See all',
+            title: slice.ranked
+                ? l.homeCountryLadder(country)
+                : l.homeTopInCountry(country),
+            actionLabel: l.homeSeeAll,
             onAction: () => context.go(Routes.rankings),
           ),
           const SizedBox(height: TonitsSpace.sm),

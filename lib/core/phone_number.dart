@@ -1,5 +1,6 @@
 import 'countries.dart';
 import 'kenyan_phone.dart';
+import 'l10n.dart';
 
 /// Turns a number typed the local way into international (E.164) format
 /// for [country]. Kenyan numbers must be mobile numbers, since M-Pesa uses
@@ -24,12 +25,12 @@ abstract final class PhoneNumber {
     return '+$digits';
   }
 
-  static String? validate(String? input, Country country) {
-    if ((input ?? '').trim().isEmpty) return 'Enter your phone number';
+  static String? validate(String? input, Country country, AppLocalizations l) {
+    if ((input ?? '').trim().isEmpty) return l.validateEnterPhone;
     if (normalize(input!, country) != null) return null;
     return country.code == 'KE'
-        ? 'Enter a Kenyan mobile number, like 0712 345 678'
-        : 'Enter a valid phone number';
+        ? l.validateKenyanMobile
+        : l.validatePhoneInvalid;
   }
 
   /// A saved number without its calling code, the way it's typed at home.

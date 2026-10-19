@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/auth_providers.dart';
@@ -32,19 +33,19 @@ class OfflineScreen extends ConsumerWidget {
               Icon(Icons.wifi_off_rounded, color: p.mutedForeground, size: 32),
               const SizedBox(height: TonitsSpace.md),
               Text(
-                "Can't reach Ozone",
+                context.l10n.welcomeOfflineTitle,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: TonitsSpace.sm),
               Text(
-                "Check your connection. You're still signed in.",
+                context.l10n.welcomeOfflineBody,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: p.subtleForeground),
               ),
               const SizedBox(height: TonitsSpace.xl),
               PrimaryButton(
-                label: 'Try again',
+                label: context.l10n.tryAgain,
                 onPressed: () =>
                     ref.read(authControllerProvider.notifier).restore(),
               ),

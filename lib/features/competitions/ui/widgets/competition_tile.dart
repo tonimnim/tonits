@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/competition.dart';
@@ -27,6 +28,7 @@ class CompetitionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = competition;
     final p = context.palette;
+    final l = context.l10n;
     final free = c.entryType == EntryType.free || c.entryFeeMinor == 0;
     final left = c.maxEntries - c.entryCount;
     final closes = c.registrationClosesAt;
@@ -52,12 +54,17 @@ class CompetitionTile extends StatelessWidget {
                 children: [
                   for (final (i, badge) in [
                     StatusBadge(
-                      free ? 'Free' : Format.money(c.entryFeeMinor, c.currency),
+                      free
+                          ? l.competitionFree
+                          : Format.money(c.entryFeeMinor, c.currency),
                       tone: free ? StatusTone.good : StatusTone.info,
                     ),
                     if (c.isPaid) KenyaOnlyBadge(competition: c),
                     if (left > 0 && left <= _scarce)
-                      StatusBadge('$left left', tone: StatusTone.warn),
+                      StatusBadge(
+                        l.competitionPlacesLeft(left),
+                        tone: StatusTone.warn,
+                      ),
                   ].indexed) ...[
                     if (i > 0) const SizedBox(width: 6),
                     Flexible(
@@ -83,9 +90,11 @@ class CompetitionTile extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 [
-                  if (closes != null) Format.closesIn(closes),
+                  if (closes != null) Format.closesIn(closes, l),
                   if (c.prizeAmountMinor > 0)
-                    'Prize ${Format.money(c.prizeAmountMinor, c.currency)}',
+                    l.competitionPrize(
+                      Format.money(c.prizeAmountMinor, c.currency),
+                    ),
                 ].join(' · '),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

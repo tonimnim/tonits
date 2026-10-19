@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../data/played_match.dart';
 import 'result_chip.dart';
@@ -14,6 +15,7 @@ class MatchResultRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     return MergeSemantics(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -29,7 +31,7 @@ class MatchResultRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'vs ${match.opponentName ?? 'a former player'}',
+                    l.playerVersus(match.opponentName ?? l.playerFormerPlayer),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.w600),

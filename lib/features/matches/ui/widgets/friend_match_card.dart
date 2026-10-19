@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/match_room.dart';
@@ -20,6 +21,7 @@ class FriendMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final account = opponent.gameAccount;
 
     return Panel(
@@ -30,7 +32,7 @@ class FriendMatchCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Find ${opponent.displayName}',
+                  l.matchFind(opponent.displayName),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -52,20 +54,19 @@ class FriendMatchCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             account == null
-                ? "They haven't linked an eFootball account yet."
+                ? l.matchNoGameAccount
                 : account.userId == null
-                ? "They haven't added their User ID, so search for their "
-                      'in-game name.'
-                : 'Add them as a friend in eFootball with their User ID.',
+                ? l.matchNoUserId
+                : l.matchAddByUserId,
             style: TextStyle(fontSize: 14, color: p.subtleForeground),
           ),
           if (account != null) ...[
             const SizedBox(height: 16),
             if (account.userId case final id?) ...[
-              _CopyField(label: 'User ID', value: id, mono: true),
+              _CopyField(label: l.matchUserId, value: id, mono: true),
               const SizedBox(height: 10),
             ],
-            _CopyField(label: 'In-game name', value: account.inGameName),
+            _CopyField(label: l.matchInGameName, value: account.inGameName),
           ],
           if (instructions.isNotEmpty) ...[
             const SizedBox(height: 22),
@@ -124,7 +125,7 @@ class _CopyField extends StatelessWidget {
           ),
           RoundIconButton(
             icon: Icons.copy_rounded,
-            tooltip: 'Copy $label',
+            tooltip: context.l10n.matchCopyLabel(label),
             background: p.card,
             onPressed: () => copyToClipboard(context, value, what: label),
           ),

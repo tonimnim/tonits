@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -17,15 +18,16 @@ class MatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final opponent = match.opponent;
     final checkInBy =
         match.lifecycle == MatchLifecycle.readyForCheckIn &&
         match.checkInClosesAt != null;
     final when = checkInBy
-        ? 'Check in by ${Format.dateTime(match.checkInClosesAt!)}'
+        ? l.matchCheckInBy(Format.dateTime(match.checkInClosesAt!, l))
         : match.scheduledAt == null
         ? null
-        : Format.dateTime(match.scheduledAt!);
+        : Format.dateTime(match.scheduledAt!, l);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -61,15 +63,15 @@ class MatchCard extends StatelessWidget {
                       children: [
                         Text(
                           opponent == null
-                              ? 'Opponent to be decided'
-                              : 'vs ${opponent.displayName}',
+                              ? l.matchOpponentToBeDecided
+                              : l.matchVsOpponent(opponent.displayName),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
                           opponent == null
-                              ? 'Waiting for an earlier round'
+                              ? l.matchWaitingEarlierRound
                               : '@${opponent.handle}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/paged.dart';
+import '../l10n.dart';
 import '../theme.dart';
 import 'states.dart';
 
@@ -102,7 +103,7 @@ class _Footer<T> extends StatelessWidget {
         child: Center(
           child: TextButton(
             onPressed: onLoadMore,
-            child: const Text("Couldn't load more. Try again"),
+            child: Text(context.l10n.couldNotLoadMore),
           ),
         ),
       );

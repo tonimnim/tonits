@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/matches_providers.dart';
@@ -29,7 +30,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
   Future<void> _submit(MatchRoom room) async {
     final penalties = _needsPenalties(room);
     if (penalties && _penMine == _penTheirs) {
-      setState(() => error = 'A penalty shootout needs a winner.');
+      setState(() => error = context.l10n.matchPenaltyNeedsWinner);
       return;
     }
     final home = room.summary.isHome;
@@ -48,11 +49,12 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
           .reportScore(score),
     );
     if (!sent || !mounted) return;
-    final opponent = room.summary.opponent?.displayName ?? 'Your opponent';
+    final l = context.l10n;
+    final opponent =
+        room.summary.opponent?.displayName ?? l.matchYourOpponentStart;
     popWithMessage(
       context,
-      'Score sent. $opponent has ${room.windows.confirm.inMinutes} '
-      'minutes to confirm it.',
+      l.matchScoreSent(opponent, room.windows.confirm.inMinutes),
     );
   }
 
@@ -65,10 +67,11 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
       return Scaffold(appBar: AppBar(), body: const LoadingState());
     }
     final p = context.palette;
-    final opponent = room.summary.opponent?.displayName ?? 'Opponent';
+    final l = context.l10n;
+    final opponent = room.summary.opponent?.displayName ?? l.matchOpponent;
     final penalties = _needsPenalties(room);
 
-    final me = room.summary.me?.displayName ?? 'You';
+    final me = room.summary.me?.displayName ?? l.matchYou;
 
     Widget scorePanel({
       required String title,
@@ -90,7 +93,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             ),
           ),
           ScoreStepper(
-            label: 'You',
+            label: l.matchYou,
             avatarName: me,
             value: mine,
             onChanged: onMine,
@@ -102,7 +105,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Report the score')),
+      appBar: AppBar(title: Text(l.matchReportScore)),
       body: SafeArea(
         top: false,
         child: ListView(
@@ -116,9 +119,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                'Enter the final score from the Full Time screen. $opponent '
-                'confirms it, and if they don\'t answer within '
-                '${room.windows.confirm.inMinutes} minutes, it stands.',
+                l.matchReportIntro(opponent, room.windows.confirm.inMinutes),
                 style: TextStyle(
                   fontSize: 15,
                   height: 1.45,
@@ -128,7 +129,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             ),
             const SizedBox(height: 20),
             scorePanel(
-              title: 'Full time',
+              title: l.matchFullTime,
               mine: _mine,
               theirs: _theirs,
               onMine: (v) => setState(() => _mine = v),
@@ -137,7 +138,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             if (penalties) ...[
               const SizedBox(height: TonitsSpace.md),
               scorePanel(
-                title: 'Penalty shootout',
+                title: l.matchPenaltyShootout,
                 mine: _penMine,
                 theirs: _penTheirs,
                 onMine: (v) => setState(() => _penMine = v),
@@ -147,7 +148,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Text(
-                  'A level knockout match is decided on penalties.',
+                  l.matchLevelKnockoutNote,
                   style: TextStyle(fontSize: 13, color: p.mutedForeground),
                 ),
               ),
@@ -163,7 +164,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
               const SizedBox(height: TonitsSpace.md),
             ],
             PrimaryButton(
-              label: 'Send score',
+              label: l.matchSendScore,
               busy: busy,
               onPressed: _declared ? () => _submit(room) : null,
             ),
@@ -198,8 +199,7 @@ class _Declaration extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(
-                  'This is the real score. Reporting a false score can get '
-                  'me removed from the competition.',
+                  context.l10n.matchDeclaration,
                   style: TextStyle(height: 1.4, color: p.subtleForeground),
                 ),
               ),

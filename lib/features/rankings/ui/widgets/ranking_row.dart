@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/countries.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/ranked_player.dart';
@@ -44,7 +45,9 @@ class RankingRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isMe ? '${player.displayName} (you)' : player.displayName,
+                    isMe
+                        ? context.l10n.rankingsYou(player.displayName)
+                        : player.displayName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.w600),
@@ -94,7 +97,9 @@ class _Movement extends StatelessWidget {
     final up = n > 0;
     final color = up ? p.good.$1 : p.destructive;
     return Semantics(
-      label: up ? 'Up $n' : 'Down ${-n}',
+      label: up
+          ? context.l10n.rankingsMovedUp(n)
+          : context.l10n.rankingsMovedDown(-n),
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,

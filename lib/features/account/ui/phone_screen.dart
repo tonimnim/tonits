@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/countries.dart';
+import '../../../core/l10n.dart';
 import '../../../core/phone_number.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -61,21 +62,22 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
     }
     await run(() async {
       await ref.read(accountServiceProvider).savePhone(number);
-      if (mounted) popWithMessage(context, 'Phone number saved');
+      if (mounted) popWithMessage(context, context.l10n.accountPhoneSaved);
     });
   }
 
   Future<void> _remove() async {
+    final l = context.l10n;
     final confirmed = await confirmAction(
       context,
-      title: 'Remove your phone number?',
-      message: "You'll enter a number each time you pay an entry fee.",
-      confirmLabel: 'Remove',
+      title: l.accountRemovePhoneTitle,
+      message: l.accountRemovePhoneMessage,
+      confirmLabel: l.accountRemove,
     );
     if (!confirmed || !mounted) return;
     await run(() async {
       await ref.read(accountServiceProvider).removePhone();
-      if (mounted) popWithMessage(context, 'Phone number removed');
+      if (mounted) popWithMessage(context, context.l10n.accountPhoneRemoved);
     });
   }
 
@@ -87,18 +89,18 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final kenya = _country.code == 'KE';
     return AccountFormPage(
-      title: 'Phone number',
-      intro: kenya
-          ? 'Your M-Pesa number. Entry fees are requested from it, so you '
-                "don't type it each time."
-          : 'Saved for paying entry fees. Other players never see it.',
+      title: l.accountPhoneNumberLabel,
+      intro: kenya ? l.accountPhoneIntroMpesa : l.accountPhoneIntro,
       children: [
         Form(
           key: _form,
           child: LabeledField(
-            label: kenya ? 'M-Pesa number' : 'Phone number',
+            label: kenya
+                ? l.accountMpesaNumberLabel
+                : l.accountPhoneNumberLabel,
             child: TextFormField(
               controller: _phone,
               autofocus: _saved == null,
@@ -106,9 +108,9 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
               autofillHints: const [AutofillHints.telephoneNumberNational],
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _save(),
-              validator: (value) => PhoneNumber.validate(value, _country),
+              validator: (value) => PhoneNumber.validate(value, _country, l),
               decoration: InputDecoration(
-                hintText: kenya ? '0712 345 678' : 'Phone number',
+                hintText: kenya ? '0712 345 678' : l.accountPhoneNumberLabel,
                 prefixIcon: CallingCodePrefix(
                   country: _country,
                   onTap: busy ? null : _pickCountry,
@@ -119,14 +121,14 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
         ),
         const SizedBox(height: TonitsSpace.lg),
         FormError(error),
-        PrimaryButton(label: 'Save', busy: busy, onPressed: _save),
+        PrimaryButton(label: l.accountSave, busy: busy, onPressed: _save),
         if (_saved != null) ...[
           const SizedBox(height: TonitsSpace.md),
           Center(
             child: TextButton(
               onPressed: busy ? null : _remove,
               style: TextButton.styleFrom(foregroundColor: p.destructive),
-              child: const Text('Remove phone number'),
+              child: Text(l.accountRemovePhone),
             ),
           ),
         ],

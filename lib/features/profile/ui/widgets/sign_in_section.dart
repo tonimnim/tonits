@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/data/models.dart';
 
@@ -11,29 +12,30 @@ class SignInSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final methods = player.signInMethods;
     return SettingsGroup(
-      title: 'Sign-in',
+      title: l.profileSignInTitle,
       rows: [
         if (methods.contains('google'))
           SettingsRow(
             icon: Icons.account_circle_outlined,
             label: 'Google',
-            value: player.email ?? 'Linked',
+            value: player.email ?? l.profileLinked,
           ),
         if (methods.contains('apple'))
           SettingsRow(
             icon: Icons.apple,
             label: 'Apple',
             value: methods.contains('google')
-                ? 'Linked'
-                : player.email ?? 'Linked',
+                ? l.profileLinked
+                : player.email ?? l.profileLinked,
           ),
         if (!methods.contains('google') && !methods.contains('apple'))
-          const SettingsRow(
+          SettingsRow(
             icon: Icons.key_outlined,
-            label: 'Konami ID and password',
-            value: 'Test account',
+            label: l.profileKonamiIdAndPassword,
+            value: l.profileTestAccount,
           ),
       ],
     );

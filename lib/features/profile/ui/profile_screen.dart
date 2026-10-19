@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
@@ -27,10 +28,7 @@ class ProfileScreen extends ConsumerWidget {
       hero: ProfileHeader(player: player),
       children: [
         if (player.status != 'active') ...[
-          const Notice(
-            'Your account is restricted. Contact Ozone support to find '
-            'out why.',
-          ),
+          Notice(context.l10n.profileRestricted),
           _gap,
         ],
         AccountSection(player: player),

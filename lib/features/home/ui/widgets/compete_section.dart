@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -17,14 +18,15 @@ class CompeteSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final open = ref.watch(closingSoonProvider);
+    final l = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SectionHeader(
-            title: 'Closing soon',
-            actionLabel: 'See all',
+            title: l.homeClosingSoon,
+            actionLabel: l.homeSeeAll,
             onAction: () => context.go(Routes.competitions),
           ),
           const SizedBox(height: TonitsSpace.sm),
@@ -32,8 +34,8 @@ class CompeteSection extends ConsumerWidget {
             AsyncData(value: final list) when list.isEmpty =>
               SectionMessageCard.empty(
                 icon: Icons.emoji_events_outlined,
-                title: 'Nothing open right now',
-                message: 'New competitions open for registration regularly.',
+                title: l.homeNothingOpenTitle,
+                message: l.homeNothingOpenMessage,
               ),
             AsyncData(value: final list) => SizedBox(
               // Grows with the player's text size so tiles never clip.

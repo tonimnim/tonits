@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/matches_providers.dart';
@@ -28,12 +29,12 @@ class MatchRoomScreen extends ConsumerWidget {
         hero: RoomHero(room: value),
         onRefresh: () =>
             ref.read(matchRoomProvider(matchId).notifier).refresh(),
-        children: _sheet(value),
+        children: _sheet(value, context.l10n),
       ),
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(),
         body: ErrorState(
-          message: describeError(error),
+          message: describeError(error, context.l10n),
           onRetry: () => ref.invalidate(matchRoomProvider(matchId)),
         ),
       ),
@@ -41,7 +42,7 @@ class MatchRoomScreen extends ConsumerWidget {
     };
   }
 
-  static List<Widget> _sheet(MatchRoom room) {
+  static List<Widget> _sheet(MatchRoom room, AppLocalizations l) {
     final opponent = room.summary.opponent;
     final live =
         !room.lifecycle.isOver &&
@@ -49,7 +50,7 @@ class MatchRoomScreen extends ConsumerWidget {
         opponent != null;
     return [
       if (room.verification.entryRemoved) ...[
-        const Notice('This match removed you from the competition.'),
+        Notice(l.matchRemovedNotice),
         const SizedBox(height: TonitsSpace.md),
       ],
       NextStepPanel(room: room),
@@ -58,9 +59,9 @@ class MatchRoomScreen extends ConsumerWidget {
         FriendMatchCard(opponent: opponent, instructions: room.instructions),
       ],
       const SizedBox(height: 28),
-      const Padding(
-        padding: EdgeInsets.only(left: 4),
-        child: SectionLabel('Match info'),
+      Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: SectionLabel(l.matchInfoLabel),
       ),
       const SizedBox(height: 10),
       MatchFacts(room: room),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -23,7 +24,7 @@ class KonamiIdField extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.palette;
     return LabeledField(
-      label: 'Konami ID',
+      label: context.l10n.accountKonamiIdLabel,
       child: TextFormField(
         controller: controller,
         enabled: enabled,

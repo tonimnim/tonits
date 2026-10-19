@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
@@ -29,10 +30,10 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen>
     super.dispose();
   }
 
-  static String? _validate(String? value) {
+  static String? _validate(String? value, AppLocalizations l) {
     final length = (value ?? '').trim().runes.length;
-    if (length == 0) return 'Enter a display name';
-    if (length < 2 || length > 80) return 'Use 2 to 80 characters';
+    if (length == 0) return l.accountEnterDisplayName;
+    if (length < 2 || length > 80) return l.accountDisplayNameLength;
     return null;
   }
 
@@ -45,22 +46,23 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen>
     }
     await run(() async {
       await ref.read(accountServiceProvider).updateDisplayName(name);
-      if (mounted) popWithMessage(context, 'Display name updated');
+      if (mounted) {
+        popWithMessage(context, context.l10n.accountDisplayNameUpdated);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return AccountFormPage(
-      title: 'Display name',
-      intro:
-          'The name opponents see in matches, rankings and on your profile. '
-          'Your username stays the same.',
+      title: l.accountDisplayName,
+      intro: l.accountEditNameIntro,
       children: [
         Form(
           key: _form,
           child: LabeledField(
-            label: 'Display name',
+            label: l.accountDisplayName,
             child: TextFormField(
               controller: _name,
               autofocus: true,
@@ -68,9 +70,9 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen>
               textCapitalization: TextCapitalization.words,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _save(),
-              validator: _validate,
-              decoration: const InputDecoration(
-                hintText: 'Your name',
+              validator: (v) => _validate(v, l),
+              decoration: InputDecoration(
+                hintText: l.accountYourNameHint,
                 counterText: '',
               ),
             ),
@@ -78,7 +80,7 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen>
         ),
         const SizedBox(height: TonitsSpace.lg),
         FormError(error),
-        PrimaryButton(label: 'Save', busy: busy, onPressed: _save),
+        PrimaryButton(label: l.accountSave, busy: busy, onPressed: _save),
       ],
     );
   }

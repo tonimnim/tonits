@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/api/api_client.dart';
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -38,14 +39,13 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
   });
 
   Future<void> _withdraw() async {
+    final l = context.l10n;
     final confirmed = await confirmAction(
       context,
-      title: 'Withdraw from this competition?',
-      message:
-          'Your place goes back to the pool. You can enter again while '
-          'registration is open.',
-      confirmLabel: 'Withdraw',
-      cancelLabel: 'Stay in',
+      title: l.competitionWithdrawTitle,
+      message: l.competitionWithdrawMessage,
+      confirmLabel: l.competitionWithdraw,
+      cancelLabel: l.competitionStayIn,
     );
     if (confirmed) {
       await _act(() => ref.read(entryServiceProvider).withdraw(_id));
@@ -55,6 +55,7 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final eligibility = ref.watch(eligibilityProvider(_id));
     final c = widget.competition;
     final fee = Format.money(c.entryFeeMinor, c.currency);
@@ -63,10 +64,10 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
       AsyncData(value: final e) => _forDecision(e, fee),
       AsyncError() => _Message(
         icon: Icons.cloud_off_outlined,
-        text: "Couldn't check whether you can enter.",
+        text: l.competitionEligibilityFailed,
         action: TextButton(
           onPressed: () => ref.invalidate(eligibilityProvider(_id)),
-          child: const Text('Try again'),
+          child: Text(l.tryAgain),
         ),
       ),
       _ => const LoadingState(height: 52),
@@ -100,10 +101,11 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
   }
 
   Widget _forDecision(Eligibility e, String fee) {
+    final l = context.l10n;
     // A payment in flight decides, whatever the action says.
     if (e.paymentId != null && !e.isRegistered) {
       return PrimaryButton(
-        label: 'Check your payment',
+        label: l.competitionCheckPayment,
         onPressed: () => context.push(Routes.checkout(_id)),
       );
     }
@@ -118,26 +120,26 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
     }
     return switch (e.requiredAction) {
       RequiredAction.submitRegistration => PrimaryButton(
-        label: 'Enter for free',
+        label: l.competitionEnterFree,
         busy: busy,
         onPressed: () =>
             _act(() => ref.read(entryServiceProvider).enterFree(_id)),
       ),
       RequiredAction.startPayment => PrimaryButton(
-        label: 'Pay $fee with M-Pesa',
+        label: l.competitionPayWithMpesa(fee),
         onPressed: () => context.push(Routes.checkout(_id)),
       ),
       RequiredAction.pollPayment => PrimaryButton(
-        label: 'Check your payment',
+        label: l.competitionCheckPayment,
         onPressed: () => context.push(Routes.checkout(_id)),
       ),
-      RequiredAction.viewRefund => const _Message(
+      RequiredAction.viewRefund => _Message(
         icon: Icons.replay_outlined,
-        text: 'Your entry fee is being refunded.',
+        text: l.competitionRefundInProgress,
       ),
       _ => _Message(
         icon: Icons.block_outlined,
-        text: e.blockingIssue?.message ?? "You can't enter this competition.",
+        text: e.blockingIssue?.message ?? l.competitionCannotEnter,
       ),
     };
   }
@@ -171,14 +173,14 @@ class _Registered extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              "You're in",
+              context.l10n.competitionYoureIn,
               style: TextStyle(fontWeight: FontWeight.w600, color: text),
             ),
           ),
           if (canWithdraw)
             TextButton(
               onPressed: busy ? null : onWithdraw,
-              child: const Text('Withdraw'),
+              child: Text(context.l10n.competitionWithdraw),
             ),
         ],
       ),

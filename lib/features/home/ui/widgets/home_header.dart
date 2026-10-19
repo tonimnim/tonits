@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -16,11 +17,12 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final hour = (now ?? DateTime.now()).hour;
+    final l = context.l10n;
     final greeting = hour < 12
-        ? 'Good morning'
+        ? l.homeGoodMorning
         : hour < 17
-        ? 'Good afternoon'
-        : 'Good evening';
+        ? l.homeGoodAfternoon
+        : l.homeGoodEvening;
     return Row(
       children: [
         Container(

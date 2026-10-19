@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -26,8 +27,8 @@ class RecentMatchesSection extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SectionHeader(
-            title: 'Recent matches',
-            actionLabel: 'See all',
+            title: context.l10n.homeRecentMatches,
+            actionLabel: context.l10n.homeSeeAll,
             onAction: () => context.go(Routes.matches),
           ),
           const SizedBox(height: TonitsSpace.sm),

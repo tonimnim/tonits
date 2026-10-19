@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/payment.dart';
@@ -24,55 +25,54 @@ class PaymentOutcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final amount = Format.money(payment.amountMinor, payment.currency);
 
     final (icon, tone, title, message, actions) = switch (payment) {
       Payment(status: PaymentStatus.review) => (
         Icons.hourglass_top_rounded,
         p.info,
-        'Payment under review',
-        "We're checking this payment with M-Pesa. You won't be charged "
-            "twice, and you'll be notified when it's settled.",
-        [SecondaryButton(label: 'Check again', onPressed: onCheckAgain)],
+        l.paymentUnderReview,
+        l.paymentUnderReviewMessage,
+        [SecondaryButton(label: l.paymentCheckAgain, onPressed: onCheckAgain)],
       ),
       Payment(registrationStatus: RegistrationOutcome.registered) => (
         Icons.check_circle_rounded,
         p.good,
-        "You're in",
-        'Paid $amount. Your place is confirmed.',
-        [PrimaryButton(label: 'Done', onPressed: onDone)],
+        l.paymentYoureIn,
+        l.paymentConfirmed(amount),
+        [PrimaryButton(label: l.paymentDone, onPressed: onDone)],
       ),
       Payment(registrationStatus: RegistrationOutcome.refundPending) => (
         Icons.replay_rounded,
         p.warn,
-        'Paid, but no place left',
-        'The places filled or registration closed before your payment '
-            'arrived. A full refund of $amount is on its way.',
-        [PrimaryButton(label: 'Done', onPressed: onDone)],
+        l.paymentNoPlaceLeft,
+        l.paymentNoPlaceLeftMessage(amount),
+        [PrimaryButton(label: l.paymentDone, onPressed: onDone)],
       ),
       Payment(registrationStatus: RegistrationOutcome.refunded) => (
         Icons.replay_rounded,
         p.info,
-        'Refunded',
-        '$amount has been returned to your M-Pesa.',
-        [PrimaryButton(label: 'Done', onPressed: onDone)],
+        l.paymentRefunded,
+        l.paymentRefundedMessage(amount),
+        [PrimaryButton(label: l.paymentDone, onPressed: onDone)],
       ),
       Payment(registrationStatus: RegistrationOutcome.removed) => (
         Icons.block_rounded,
         p.warn,
-        'Entry removed',
-        'Your entry was removed from this competition.',
-        [PrimaryButton(label: 'Done', onPressed: onDone)],
+        l.paymentEntryRemoved,
+        l.paymentEntryRemovedMessage,
+        [PrimaryButton(label: l.paymentDone, onPressed: onDone)],
       ),
       _ => (
         Icons.error_outline_rounded,
         (p.destructive, p.destructive.withValues(alpha: 0.12)),
-        "Payment didn't go through",
-        payment.providerMessage ?? "M-Pesa didn't confirm the payment.",
+        l.paymentFailed,
+        payment.providerMessage ?? l.paymentFailedMessage,
         [
-          PrimaryButton(label: 'Try again', onPressed: onTryAgain),
+          PrimaryButton(label: l.tryAgain, onPressed: onTryAgain),
           const SizedBox(height: TonitsSpace.sm),
-          SecondaryButton(label: 'Not now', onPressed: onDone),
+          SecondaryButton(label: l.paymentNotNow, onPressed: onDone),
         ],
       ),
     };

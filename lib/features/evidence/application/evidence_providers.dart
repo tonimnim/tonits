@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/providers.dart';
 import '../data/evidence_repository.dart';
 import 'screenshot_uploader.dart';
@@ -18,5 +19,6 @@ final screenshotUploaderProvider = Provider<ScreenshotUploader>(
   (ref) => ScreenshotUploader(
     ref.watch(evidenceRepositoryProvider),
     ref.watch(evidencePollDelayProvider),
+    ref.watch(l10nProvider),
   ),
 );

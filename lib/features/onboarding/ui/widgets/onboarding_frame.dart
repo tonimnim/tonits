@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -61,14 +62,14 @@ class OnboardingFrame extends StatelessWidget {
                           if (onBack != null)
                             RoundIconButton(
                               icon: Icons.arrow_back,
-                              tooltip: 'Back',
+                              tooltip: context.l10n.back,
                               background: p.card.withValues(alpha: 0.85),
                               onPressed: onBack,
                             ),
                           const Spacer(),
                           trailing ??
                               Pill(
-                                'Step ${step + 1} of $steps',
+                                context.l10n.onboardingStepOf(step + 1, steps),
                                 filled: p.card,
                               ),
                         ],
@@ -152,7 +153,7 @@ class _Progress extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Semantics(
-      label: 'Step ${step + 1} of $steps',
+      label: context.l10n.onboardingStepOf(step + 1, steps),
       excludeSemantics: true,
       child: Row(
         children: [

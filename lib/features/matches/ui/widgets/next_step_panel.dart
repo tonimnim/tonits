@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -29,7 +30,8 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
   MatchRoom get room => widget.room;
   MatchRoomController get _controller =>
       ref.read(matchRoomProvider(room.id).notifier);
-  String get _opponent => room.summary.opponent?.displayName ?? 'your opponent';
+  String get _opponent =>
+      room.summary.opponent?.displayName ?? context.l10n.matchYourOpponent;
 
   Future<void> _run(Future<String?> Function() action) async {
     await runForMessage(action);
@@ -37,15 +39,13 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
   }
 
   Future<void> _reject() async {
+    final l = context.l10n;
     final minutes = room.windows.screenshot.inMinutes;
     final confirmed = await confirmAction(
       context,
-      title: 'Reject this result?',
-      message:
-          'You and $_opponent will each have $minutes minutes to send a '
-          "screenshot of the Full Time screen. If you don't send one, you're "
-          'removed from the competition.',
-      confirmLabel: 'Reject',
+      title: l.matchRejectTitle,
+      message: l.matchRejectMessage(_opponent, minutes),
+      confirmLabel: l.matchReject,
     );
     if (confirmed) await _run(() => _controller.answer(confirm: false));
   }
@@ -66,13 +66,14 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final step = NextStep.of(room);
+    final l = context.l10n;
+    final step = NextStep.of(room, l);
     final (label, color) = switch (step.tone) {
-      StepTone.action => ('Your move', p.primary),
-      StepTone.waiting => ('Waiting', p.info.$1),
-      StepTone.won => ('Final', p.good.$1),
-      StepTone.neutral => ('Final', p.subtleForeground),
-      StepTone.bad => ('Final', p.destructive),
+      StepTone.action => (l.matchToneYourMove, p.primary),
+      StepTone.waiting => (l.matchToneWaiting, p.info.$1),
+      StepTone.won => (l.matchToneFinal, p.good.$1),
+      StepTone.neutral => (l.matchToneFinal, p.subtleForeground),
+      StepTone.bad => (l.matchToneFinal, p.destructive),
     };
 
     return Panel(
@@ -120,8 +121,8 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
               const SizedBox(height: 12),
               Text(
                 _stage == UploadStage.uploading
-                    ? 'Uploading your screenshot…'
-                    : 'Checking your screenshot…',
+                    ? l.matchUploadingScreenshot
+                    : l.matchCheckingScreenshot,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13, color: p.mutedForeground),
               ),
@@ -137,12 +138,13 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
   }
 
   List<Widget> _actions() {
+    final l = context.l10n;
     const gap = SizedBox(height: 22);
     if (room.can(MatchAction.checkIn)) {
       return [
         gap,
         PrimaryButton(
-          label: 'Check in',
+          label: l.matchCheckIn,
           busy: busy,
           onPressed: () => _run(_controller.checkIn),
         ),
@@ -152,7 +154,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
       return [
         gap,
         PrimaryButton(
-          label: 'Report the score',
+          label: l.matchReportScore,
           onPressed: () => context.push(Routes.reportScore(room.id)),
         ),
       ];
@@ -161,14 +163,14 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
       return [
         gap,
         PrimaryButton(
-          label: "Yes, that's right",
+          label: l.matchConfirmYes,
           busy: busy,
           onPressed: () => _run(() => _controller.answer(confirm: true)),
         ),
         if (room.can(MatchAction.rejectResult)) ...[
           const SizedBox(height: TonitsSpace.sm),
           SecondaryButton(
-            label: "No, it's wrong",
+            label: l.matchConfirmNo,
             onPressed: busy ? null : _reject,
           ),
         ],
@@ -178,7 +180,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
       return [
         gap,
         PrimaryButton(
-          label: 'Choose screenshot',
+          label: l.matchChooseScreenshot,
           busy: busy,
           onPressed: _sendScreenshot,
         ),

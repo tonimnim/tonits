@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../data/player_profile.dart';
 
@@ -12,14 +13,14 @@ class RecordBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final parts = [
-      (record.wins, p.good.$1, 'Wins'),
-      (record.draws, p.mutedForeground, 'Draws'),
-      (record.losses, p.destructive, 'Losses'),
+      (record.wins, p.good.$1, l.playerWins),
+      (record.draws, p.mutedForeground, l.playerDraws),
+      (record.losses, p.destructive, l.playerLosses),
     ];
     return Semantics(
-      label:
-          '${record.wins} wins, ${record.draws} draws, ${record.losses} losses',
+      label: l.playerRecordSemantics(record.wins, record.draws, record.losses),
       excludeSemantics: true,
       child: Column(
         children: [

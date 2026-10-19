@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -16,6 +17,7 @@ class MatchFacts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final match = room.summary;
     final kickOff = match.scheduledAt?.toLocal();
     return Column(
@@ -25,27 +27,32 @@ class MatchFacts extends StatelessWidget {
           children: [
             FactTile(
               icon: Icons.sports_soccer_outlined,
-              label: 'Format',
-              value: room.bestOf == 1 ? '1 game' : 'Best of ${room.bestOf}',
+              label: l.matchFormat,
+              value: room.bestOf == 1
+                  ? l.matchFormatOneGame
+                  : l.matchFormatBestOf(room.bestOf),
             ),
             FactTile(
               icon: Icons.schedule,
               label: kickOff == null
-                  ? 'Kick-off'
+                  ? l.matchKickOff
                   : DateFormat('d MMM').format(kickOff),
               value: kickOff == null
-                  ? 'Not set'
+                  ? l.matchNotSet
                   : DateFormat.Hm().format(kickOff),
             ),
             FactTile(
               icon: Icons.tag,
-              label: 'Code',
+              label: l.matchCode,
               value: room.code.isEmpty ? '—' : room.code,
               mono: true,
               onTap: room.code.isEmpty
                   ? null
-                  : () =>
-                        copyToClipboard(context, room.code, what: 'Match code'),
+                  : () => copyToClipboard(
+                      context,
+                      room.code,
+                      what: l.matchCodeName,
+                    ),
             ),
           ],
         ),
@@ -69,7 +76,9 @@ class MatchFacts extends StatelessWidget {
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
-                      room.drawAllowed ? 'Draws count' : 'Penalties if level',
+                      room.drawAllowed
+                          ? l.matchDrawsCount
+                          : l.matchPenaltiesIfLevel,
                       style: TextStyle(fontSize: 13, color: p.mutedForeground),
                     ),
                   ],

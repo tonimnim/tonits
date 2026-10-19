@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/countries.dart';
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/data/models.dart';
@@ -55,7 +56,7 @@ class ProfileHeader extends ConsumerWidget {
         if (joinedAt != null) ...[
           const SizedBox(height: 2),
           Text(
-            'Member since ${Format.monthYear(joinedAt)}',
+            context.l10n.profileMemberSince(Format.monthYear(joinedAt)),
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: p.mutedForeground),
           ),

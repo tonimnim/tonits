@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../core/l10n.dart';
+
 part 'competition.freezed.dart';
 part 'competition.g.dart';
 
@@ -52,14 +54,17 @@ enum EntryType { free, paid }
 
 @JsonEnum(fieldRename: FieldRename.snake)
 enum CompetitionFormat {
-  singleElimination('Single elimination'),
-  doubleElimination('Double elimination'),
-  roundRobin('Round robin'),
-  unknown('Competition');
+  singleElimination,
+  doubleElimination,
+  roundRobin,
+  unknown;
 
-  const CompetitionFormat(this.label);
-
-  final String label;
+  String label(AppLocalizations l) => switch (this) {
+    singleElimination => l.competitionFormatSingleElimination,
+    doubleElimination => l.competitionFormatDoubleElimination,
+    roundRobin => l.competitionFormatRoundRobin,
+    unknown => l.competitionFormatUnknown,
+  };
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)

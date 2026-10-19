@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/competition.dart';
 
@@ -17,17 +18,36 @@ class CompetitionStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final (label, tone) = switch (status) {
       CompetitionStatus.registrationOpen when registrationEnded => (
-        'Closed',
+        l.closed,
         StatusTone.muted,
       ),
-      CompetitionStatus.registrationOpen => ('Open', StatusTone.good),
-      CompetitionStatus.published => ('Upcoming', StatusTone.info),
-      CompetitionStatus.checkIn => ('Check-in', StatusTone.warn),
-      CompetitionStatus.running => ('In progress', StatusTone.info),
-      CompetitionStatus.completed => ('Finished', StatusTone.muted),
-      CompetitionStatus.cancelled => ('Cancelled', StatusTone.bad),
+      CompetitionStatus.registrationOpen => (
+        l.competitionStatusOpen,
+        StatusTone.good,
+      ),
+      CompetitionStatus.published => (
+        l.competitionStatusUpcoming,
+        StatusTone.info,
+      ),
+      CompetitionStatus.checkIn => (
+        l.competitionStatusCheckIn,
+        StatusTone.warn,
+      ),
+      CompetitionStatus.running => (
+        l.competitionStatusRunning,
+        StatusTone.info,
+      ),
+      CompetitionStatus.completed => (
+        l.competitionStatusFinished,
+        StatusTone.muted,
+      ),
+      CompetitionStatus.cancelled => (
+        l.competitionStatusCancelled,
+        StatusTone.bad,
+      ),
       CompetitionStatus.unknown => ('—', StatusTone.muted),
     };
     return StatusBadge(label, tone: tone);

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/application/auth_providers.dart';
@@ -47,7 +48,7 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
 
   void _onChanged(String value) {
     _debounce?.cancel();
-    if (AuthValidators.username(value) != null) {
+    if (AuthValidators.username(value, context.l10n) != null) {
       setState(() => _availability = _Availability.unknown);
       return;
     }
@@ -57,7 +58,7 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
 
   Future<void> _check(String value) async {
     final name = value.trim();
-    if (AuthValidators.username(name) != null) return;
+    if (AuthValidators.username(name, ref.read(l10nProvider)) != null) return;
     _asked = name;
     try {
       final free = await ref
@@ -80,22 +81,23 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final (helper, icon) = switch (_availability) {
       _Availability.available => (
-        'Available',
+        l.onboardingUsernameAvailable,
         Icon(Icons.check_circle, size: 20, color: p.good.$1),
       ),
       _Availability.checking => (
-        'Checking…',
+        l.onboardingUsernameChecking,
         const SizedBox.square(
           dimension: 16,
           child: CircularProgressIndicator(strokeWidth: 2),
         ),
       ),
-      _ => ('Letters, numbers, _ and .', null),
+      _ => (l.onboardingUsernameHelper, null),
     };
     return LabeledField(
-      label: 'Username',
+      label: l.onboardingUsernameLabel,
       child: TextFormField(
         controller: widget.controller,
         autofocus: true,
@@ -104,9 +106,9 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
         onChanged: _onChanged,
         onFieldSubmitted: (_) => widget.onSubmitted(),
         validator: (value) =>
-            AuthValidators.username(value) ??
+            AuthValidators.username(value, l) ??
             (_availability == _Availability.taken
-                ? 'That username is taken. Try another.'
+                ? l.errorUsernameTaken
                 : null),
         autovalidateMode: _availability == _Availability.taken
             ? AutovalidateMode.always

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/match_summary.dart';
 
@@ -12,46 +13,58 @@ class LifecycleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final (label, tone) = switch (match.lifecycle) {
-      MatchLifecycle.assigned => ('Scheduled', StatusTone.muted),
-      MatchLifecycle.readyForCheckIn => ('Check in', StatusTone.warn),
-      MatchLifecycle.checkedIn => ('Checked in', StatusTone.info),
-      MatchLifecycle.reportRequired => ('Report score', StatusTone.warn),
+      MatchLifecycle.assigned => (l.matchScheduled, StatusTone.muted),
+      MatchLifecycle.readyForCheckIn => (l.matchCheckIn, StatusTone.warn),
+      MatchLifecycle.checkedIn => (l.matchCheckedIn, StatusTone.info),
+      MatchLifecycle.reportRequired => (
+        l.matchBadgeReportScore,
+        StatusTone.warn,
+      ),
       MatchLifecycle.awaitingOpponentConfirmation => (
-        'Waiting on opponent',
+        l.matchBadgeWaitingOnOpponent,
         StatusTone.info,
       ),
       MatchLifecycle.confirmationRequired => (
-        'Confirm result',
+        l.matchBadgeConfirmResult,
         StatusTone.warn,
       ),
       MatchLifecycle.screenshotRequired => (
-        'Send screenshots',
+        l.matchBadgeSendScreenshots,
         StatusTone.warn,
       ),
       MatchLifecycle.awaitingOpponentScreenshot => (
-        'Waiting on opponent',
+        l.matchBadgeWaitingOnOpponent,
         StatusTone.info,
       ),
-      MatchLifecycle.awaitingResolution => ('Settling', StatusTone.info),
-      MatchLifecycle.underReview => ('Under review', StatusTone.warn),
-      MatchLifecycle.forfeited => _outcome(match.outcome, fallback: 'Forfeit'),
-      MatchLifecycle.completed => _outcome(match.outcome),
-      MatchLifecycle.cancelled => ('Cancelled', StatusTone.muted),
-      MatchLifecycle.outOfCompetition => ('Out', StatusTone.bad),
+      MatchLifecycle.awaitingResolution => (
+        l.matchBadgeSettling,
+        StatusTone.info,
+      ),
+      MatchLifecycle.underReview => (l.matchUnderReview, StatusTone.warn),
+      MatchLifecycle.forfeited => _outcome(
+        match.outcome,
+        l,
+        fallback: l.matchBadgeForfeit,
+      ),
+      MatchLifecycle.completed => _outcome(match.outcome, l),
+      MatchLifecycle.cancelled => (l.matchBadgeCancelled, StatusTone.muted),
+      MatchLifecycle.outOfCompetition => (l.matchBadgeOut, StatusTone.bad),
       MatchLifecycle.unknown => ('—', StatusTone.muted),
     };
     return StatusBadge(label, tone: tone);
   }
 
   static (String, StatusTone) _outcome(
-    MatchOutcome? outcome, {
-    String fallback = 'Finished',
+    MatchOutcome? outcome,
+    AppLocalizations l, {
+    String? fallback,
   }) => switch (outcome) {
-    MatchOutcome.won => ('Won', StatusTone.good),
-    MatchOutcome.lost => ('Lost', StatusTone.bad),
-    MatchOutcome.drawn => ('Drawn', StatusTone.muted),
-    MatchOutcome.noResult => ('No result', StatusTone.muted),
-    null => (fallback, StatusTone.muted),
+    MatchOutcome.won => (l.matchBadgeWon, StatusTone.good),
+    MatchOutcome.lost => (l.matchBadgeLost, StatusTone.bad),
+    MatchOutcome.drawn => (l.matchBadgeDrawn, StatusTone.muted),
+    MatchOutcome.noResult => (l.matchNoResult, StatusTone.muted),
+    null => (fallback ?? l.matchFinished, StatusTone.muted),
   };
 }

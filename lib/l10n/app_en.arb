@@ -1,0 +1,1164 @@
+{
+  "@@locale": "en",
+  "welcomeHeadline": "Your game, ranked.",
+  "welcomePitch": "Enter eFootball competitions, play your matches and climb your country's ladder.",
+  "welcomeSheetTitle": "Sign up or sign in",
+  "welcomeSheetBody": "New to Ozone? Continue with Google to create your account. Already playing? The same button signs you in.",
+  "welcomeSheetBodyWithApple": "New to Ozone? Continue with Google or Apple to create your account. Already playing? The same button signs you in.",
+  "welcomeContinueWithGoogle": "Continue with Google",
+  "welcomeContinueWithApple": "Continue with Apple",
+  "welcomeProviderWorking": "{label}, working",
+  "@welcomeProviderWorking": {
+    "description": "Screen-reader label for a sign-in button while it waits.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Continue with Google"
+      }
+    }
+  },
+  "welcomeAgreeBefore": "By continuing you agree to the ",
+  "@welcomeAgreeBefore": {
+    "description": "Start of: By continuing you agree to the [Terms] and [Privacy Notice]. Keep the trailing space."
+  },
+  "welcomeAgreeBetween": " and ",
+  "@welcomeAgreeBetween": {
+    "description": "Between the Terms and Privacy Notice links on the welcome screen. Keep the spaces."
+  },
+  "welcomeAgreeAfter": ".",
+  "@welcomeAgreeAfter": {
+    "description": "End of the welcome screen's agreement sentence, after the Privacy Notice link."
+  },
+  "welcomeOfflineTitle": "Can't reach Ozone",
+  "welcomeOfflineBody": "Check your connection. You're still signed in.",
+  "accountLegalTerms": "Terms",
+  "@accountLegalTerms": {
+    "description": "Link to the Terms, inside a sentence."
+  },
+  "accountLegalPrivacy": "Privacy Notice",
+  "@accountLegalPrivacy": {
+    "description": "Link to or name of the Privacy Notice."
+  },
+  "accountKonamiIdLabel": "Konami ID",
+  "accountMpesaNumberLabel": "M-Pesa number",
+  "accountPhoneNumberLabel": "Phone number",
+  "accountDisplayName": "Display name",
+  "accountEmailTitle": "Email",
+  "accountSave": "Save",
+  "onboardingStepOf": "Step {step} of {steps}",
+  "@onboardingStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingUsernameTitle": "Pick your username",
+  "onboardingUsernameSubtitle": "It's how players see you in matches and on the ladder.",
+  "onboardingKonamiIdTitle": "Link eFootball",
+  "onboardingKonamiIdSubtitle": "Your Konami ID connects Ozone to your eFootball account. Enter it exactly as the game shows it.",
+  "onboardingCountryTitle": "Where do you play from?",
+  "onboardingCountrySubtitle": "Your country decides your ladder and the competitions you can enter.",
+  "onboardingPhoneTitle": "Your phone number",
+  "onboardingPhoneSubtitleMpesa": "Your M-Pesa number, for paying entry fees. Other players never see it.",
+  "onboardingPhoneSubtitle": "For paying entry fees. Other players never see it.",
+  "onboardingFinish": "Finish",
+  "onboardingContinue": "Continue",
+  "onboardingAcceptBefore": "By finishing you accept the ",
+  "@onboardingAcceptBefore": {
+    "description": "Start of: By finishing you accept the [Terms] and the [Privacy Notice]. Keep the trailing space."
+  },
+  "onboardingAcceptBetween": " and the ",
+  "@onboardingAcceptBetween": {
+    "description": "Between the Terms and Privacy Notice links on the last onboarding step. Keep the spaces."
+  },
+  "onboardingAcceptAfter": ".",
+  "@onboardingAcceptAfter": {
+    "description": "End of the onboarding acceptance sentence, after the Privacy Notice link."
+  },
+  "onboardingUsernameLabel": "Username",
+  "onboardingUsernameAvailable": "Available",
+  "onboardingUsernameChecking": "Checking…",
+  "onboardingUsernameHelper": "Letters, numbers, _ and .",
+  "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
+  "profileAboutTitle": "About",
+  "profileTermsOfService": "Terms of Service",
+  "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
+  "@profileCouldNotOpen": {
+    "placeholders": {
+      "document": {
+        "type": "String",
+        "example": "Privacy Notice"
+      }
+    }
+  },
+  "profileAccountTitle": "Account",
+  "profileNotLinked": "Not linked",
+  "profileChangeCountryTitle": "Change your country to {country}?",
+  "@profileChangeCountryTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "profileChangeCountryMessage": "Your country ranking and the competitions open to you follow your country.",
+  "profileChangeCountryConfirm": "Change",
+  "profileCountryChanged": "Country changed to {country}",
+  "@profileCountryChanged": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "profileContactTitle": "Contact",
+  "profilePhone": "Phone",
+  "profileAdd": "Add",
+  "profileMemberSince": "Member since {date}",
+  "@profileMemberSince": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "October 2026"
+      }
+    }
+  },
+  "profileSignInTitle": "Sign-in",
+  "profileLinked": "Linked",
+  "profileKonamiIdAndPassword": "Konami ID and password",
+  "profileTestAccount": "Test account",
+  "profileSignOut": "Sign out",
+  "profileSignOutTitle": "Sign out of Ozone?",
+  "profileSignOutMessage": "You can sign back in any time with the same Google or Apple account.",
+  "accountEditNameIntro": "The name opponents see in matches, rankings and on your profile. Your username stays the same.",
+  "accountEnterDisplayName": "Enter a display name",
+  "accountDisplayNameLength": "Use 2 to 80 characters",
+  "accountYourNameHint": "Your name",
+  "accountDisplayNameUpdated": "Display name updated",
+  "accountEnterEmail": "Enter your email",
+  "accountEmailInvalid": "Enter a valid email address",
+  "accountNewCodeSent": "New code sent to {email}",
+  "@accountNewCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "accountEmailVerified": "Email verified",
+  "accountEmailIntroAdd": "With a verified email you can reset a forgotten password. We'll send a code to confirm it.",
+  "accountEmailIntroChange": "Your email is {email}. Enter a new address and it replaces this one once confirmed.",
+  "@accountEmailIntroChange": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "accountNewEmailLabel": "New email",
+  "accountSendCode": "Send code",
+  "accountCodeExpiresSoon": "It expires soon.",
+  "accountCodeExpiresIn": "{minutes, plural, =1{It expires in 1 minute.} other{It expires in {minutes} minutes.}}",
+  "@accountCodeExpiresIn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "accountCheckEmailTitle": "Check your email",
+  "accountCodeSentIntro": "We sent a 6-digit code to {email}. {expiry}",
+  "@accountCodeSentIntro": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "expiry": {
+        "type": "String",
+        "example": "It expires in 10 minutes."
+      }
+    }
+  },
+  "accountCodeLabel": "Code",
+  "accountVerify": "Verify",
+  "accountSendNewCode": "Send a new code",
+  "accountUseAnotherEmail": "Use another email",
+  "accountPhoneSaved": "Phone number saved",
+  "accountRemovePhoneTitle": "Remove your phone number?",
+  "accountRemovePhoneMessage": "You'll enter a number each time you pay an entry fee.",
+  "accountRemove": "Remove",
+  "accountPhoneRemoved": "Phone number removed",
+  "accountPhoneIntroMpesa": "Your M-Pesa number. Entry fees are requested from it, so you don't type it each time.",
+  "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
+  "accountRemovePhone": "Remove phone number",
+  "competitionsTitle": "Competitions",
+  "@competitionsTitle": {
+    "description": "Title of the Competitions tab."
+  },
+  "competitionFilterOpen": "Open",
+  "@competitionFilterOpen": {
+    "description": "Filter: competitions taking entries."
+  },
+  "competitionFilterUpcoming": "Upcoming",
+  "@competitionFilterUpcoming": {
+    "description": "Filter: announced competitions not yet open."
+  },
+  "competitionFilterFinished": "Finished",
+  "@competitionFilterFinished": {
+    "description": "Filter: completed competitions."
+  },
+  "competitionsEmptyOpen": "Nothing open right now",
+  "competitionsEmptyUpcoming": "Nothing announced yet",
+  "competitionsEmptyFinished": "No finished competitions",
+  "competitionsEmptyOpenMessage": "New competitions open for registration regularly.",
+  "competitionFormatSingleElimination": "Single elimination",
+  "competitionFormatDoubleElimination": "Double elimination",
+  "competitionFormatRoundRobin": "Round robin",
+  "competitionFormatUnknown": "Competition",
+  "@competitionFormatUnknown": {
+    "description": "Shown as the format when the app doesn't know it."
+  },
+  "competitionStatusOpen": "Open",
+  "@competitionStatusOpen": {
+    "description": "Status badge: taking entries."
+  },
+  "competitionStatusUpcoming": "Upcoming",
+  "competitionStatusCheckIn": "Check-in",
+  "competitionStatusRunning": "In progress",
+  "competitionStatusFinished": "Finished",
+  "competitionStatusCancelled": "Cancelled",
+  "competitionKenyaOnly": "Kenya only",
+  "@competitionKenyaOnly": {
+    "description": "Badge on paid competitions, which only players in Kenya can enter."
+  },
+  "competitionFactEntry": "Entry",
+  "@competitionFactEntry": {
+    "description": "Label above the entry fee."
+  },
+  "competitionFree": "Free",
+  "@competitionFree": {
+    "description": "Entry fee value for a free competition."
+  },
+  "competitionFactPrize": "Prize",
+  "competitionFactFormat": "Format",
+  "competitionStarts": "Starts",
+  "competitionRegistration": "Registration",
+  "@competitionRegistration": {
+    "description": "Label above when registration closes."
+  },
+  "competitionPlayers": "Players",
+  "competitionAbout": "About",
+  "competitionClosesOn": "Closes {dateTime}",
+  "@competitionClosesOn": {
+    "placeholders": {
+      "dateTime": {
+        "type": "String",
+        "example": "Sat 13 Oct, 18:30"
+      }
+    }
+  },
+  "competitionByOrganizer": "by {organizer}",
+  "@competitionByOrganizer": {
+    "placeholders": {
+      "organizer": {
+        "type": "String"
+      }
+    }
+  },
+  "competitionFreeEntry": "Free entry",
+  "competitionPaidEntry": "{fee} entry",
+  "@competitionPaidEntry": {
+    "placeholders": {
+      "fee": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "competitionFormatStarts": "{format} · Starts {dateTime}",
+  "@competitionFormatStarts": {
+    "placeholders": {
+      "format": {
+        "type": "String",
+        "example": "Round robin"
+      },
+      "dateTime": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "competitionPrize": "Prize {amount}",
+  "@competitionPrize": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "Ksh 5,000"
+      }
+    }
+  },
+  "competitionPlacesLeft": "{count} left",
+  "@competitionPlacesLeft": {
+    "description": "Badge: places left in a competition.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "competitionCapacity": "{entries} of {max} players",
+  "@competitionCapacity": {
+    "placeholders": {
+      "entries": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "competitionWithdrawTitle": "Withdraw from this competition?",
+  "competitionWithdrawMessage": "Your place goes back to the pool. You can enter again while registration is open.",
+  "competitionWithdraw": "Withdraw",
+  "competitionStayIn": "Stay in",
+  "@competitionStayIn": {
+    "description": "Cancel button of the withdraw dialog."
+  },
+  "competitionEligibilityFailed": "Couldn't check whether you can enter.",
+  "competitionCheckPayment": "Check your payment",
+  "competitionEnterFree": "Enter for free",
+  "competitionPayWithMpesa": "Pay {fee} with M-Pesa",
+  "@competitionPayWithMpesa": {
+    "placeholders": {
+      "fee": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "competitionRefundInProgress": "Your entry fee is being refunded.",
+  "competitionCannotEnter": "You can't enter this competition.",
+  "competitionYoureIn": "You're in",
+  "paymentTitle": "Pay with M-Pesa",
+  "paymentNotConfirmed": "We couldn't confirm the request with M-Pesa. Try again; you won't be charged twice.",
+  "paymentUnderReview": "Payment under review",
+  "paymentUnderReviewMessage": "We're checking this payment with M-Pesa. You won't be charged twice, and you'll be notified when it's settled.",
+  "paymentCheckAgain": "Check again",
+  "paymentYoureIn": "You're in",
+  "paymentConfirmed": "Paid {amount}. Your place is confirmed.",
+  "@paymentConfirmed": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "paymentNoPlaceLeft": "Paid, but no place left",
+  "paymentNoPlaceLeftMessage": "The places filled or registration closed before your payment arrived. A full refund of {amount} is on its way.",
+  "@paymentNoPlaceLeftMessage": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "paymentRefunded": "Refunded",
+  "paymentRefundedMessage": "{amount} has been returned to your M-Pesa.",
+  "@paymentRefundedMessage": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "paymentEntryRemoved": "Entry removed",
+  "paymentEntryRemovedMessage": "Your entry was removed from this competition.",
+  "paymentFailed": "Payment didn't go through",
+  "paymentFailedMessage": "M-Pesa didn't confirm the payment.",
+  "paymentDone": "Done",
+  "paymentNotNow": "Not now",
+  "paymentCheckYourPhone": "Check your phone",
+  "paymentYourPhone": "your phone",
+  "@paymentYourPhone": {
+    "description": "Used in paymentEnterPin when the number isn't known."
+  },
+  "paymentEnterPin": "Enter your M-Pesa PIN on {phone} to pay {amount}.",
+  "@paymentEnterPin": {
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "07** *** 678"
+      },
+      "amount": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "paymentWaiting": "Waiting for M-Pesa…",
+  "paymentSlow": "Still waiting? M-Pesa can take a minute. You won't be charged twice.",
+  "paymentEntryFee": "Entry fee",
+  "paymentMpesaNumber": "M-Pesa number",
+  "paymentPhoneHelper": "A Safaricom number. You'll confirm with your PIN.",
+  "paymentSendRequest": "Send payment request",
+  "appName": "Ozone",
+  "@appName": {
+    "description": "The app's name; do not translate."
+  },
+  "tabHome": "Home",
+  "tabCompete": "Compete",
+  "tabMatches": "Matches",
+  "tabRankings": "Rankings",
+  "tabProfile": "Profile",
+  "cancel": "Cancel",
+  "back": "Back",
+  "tryAgain": "Try again",
+  "couldNotLoad": "Couldn't load this",
+  "couldNotLoadMore": "Couldn't load more. Try again",
+  "copied": "{what} copied",
+  "@copied": {
+    "placeholders": {
+      "what": {
+        "type": "String",
+        "example": "Konami ID"
+      }
+    }
+  },
+  "countryLabel": "Country",
+  "chooseYourCountry": "Choose your country",
+  "countrySuggested": "Suggested",
+  "countryAll": "All countries",
+  "countrySearchHint": "Search country or code",
+  "countryNoMatch": "No country matches that search",
+  "callingCodeLabel": "Calling code +{dialCode}, {country}. Change",
+  "@callingCodeLabel": {
+    "placeholders": {
+      "dialCode": {
+        "type": "String"
+      },
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "errorNetwork": "Can't reach Ozone. Check your connection and try again.",
+  "errorGeneric": "Something went wrong. Try again.",
+  "errorServer": "Ozone is having trouble right now. Try again shortly.",
+  "errorUsernameTaken": "That username is taken. Try another.",
+  "errorKonamiIdTaken": "That Konami ID is linked to another Ozone account. Contact Ozone support if it's yours.",
+  "errorAccountUnavailable": "This account is suspended. Contact Ozone support.",
+  "errorInvalidCode": "That code is wrong or has expired.",
+  "errorSignInUnavailable": "That sign-in option isn't available yet. Try again later.",
+  "errorInvalidIdentityToken": "Sign-in didn't go through. Try again.",
+  "errorIdentityProviderUnavailable": "Can't reach the sign-in service right now. Try again shortly.",
+  "errorInvalidKonamiId": "Enter the Konami ID exactly as eFootball shows it.",
+  "errorInvalidUsername": "Use 3 to 24 letters, numbers, underscores or dots.",
+  "errorInvalidCountry": "Choose your country.",
+  "errorProfileIncomplete": "Finish setting up your account first.",
+  "errorEmailTaken": "That email belongs to another account.",
+  "errorEmailAlreadyVerified": "That email is already verified on your account.",
+  "errorEmailUnavailable": "We can't send email right now. Try again shortly.",
+  "errorInvalidEmail": "That doesn't look like an email address.",
+  "errorPhoneTaken": "That number is linked to another Ozone account. Contact Ozone support if it's yours.",
+  "errorInvalidPhone": "Enter the full number with its country code.",
+  "errorInvalidDisplayName": "Use 2 to 80 characters.",
+  "errorRateLimited": "Too many attempts. Wait a moment and try again.",
+  "errorRateLimitedSeconds": "{seconds, plural, =1{Too many attempts. Try again in 1 second.} other{Too many attempts. Try again in {seconds} seconds.}}",
+  "@errorRateLimitedSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "errorRateLimitedMinutes": "{minutes, plural, =1{Too many attempts. Try again in 1 minute.} other{Too many attempts. Try again in {minutes} minutes.}}",
+  "@errorRateLimitedMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "formatToday": "Today, {time}",
+  "@formatToday": {
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "18:30"
+      }
+    }
+  },
+  "formatTomorrow": "Tomorrow, {time}",
+  "@formatTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "formatYesterday": "Yesterday, {time}",
+  "@formatYesterday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "formatDateTime": "{date}, {time}",
+  "@formatDateTime": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Sat 13 Oct"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "closed": "Closed",
+  "closesInMinutes": "{minutes, plural, =1{Closes in 1 min} other{Closes in {minutes} min}}",
+  "@closesInMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "closesInHours": "{hours, plural, =1{Closes in 1 hour} other{Closes in {hours} hours}}",
+  "@closesInHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "closesInDays": "{days, plural, =1{Closes in 1 day} other{Closes in {days} days}}",
+  "@closesInDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "timeLeftShort": "{minutes}:{seconds} left",
+  "@timeLeftShort": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "String",
+        "example": "05"
+      }
+    }
+  },
+  "timeLeftHours": "{hours} h left",
+  "@timeLeftHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeLeftHoursMinutes": "{hours} h {minutes} min left",
+  "@timeLeftHoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "validateChooseUsername": "Choose a username",
+  "validateUsernameLength": "Use 3 to 24 characters",
+  "validateUsernameCharacters": "Use letters, numbers, underscores or dots, starting with a letter or number",
+  "validateEnterKonamiId": "Enter your Konami ID",
+  "validateKonamiIdFormat": "Enter the Konami ID exactly as eFootball shows it",
+  "validateCode": "Enter the 6-digit code",
+  "validateEnterPhone": "Enter your phone number",
+  "validateEnterMpesaNumber": "Enter your M-Pesa number",
+  "validateKenyanMobile": "Enter a Kenyan mobile number, like 0712 345 678",
+  "validatePhoneInvalid": "Enter a valid phone number",
+  "homeGoodMorning": "Good morning",
+  "homeGoodAfternoon": "Good afternoon",
+  "homeGoodEvening": "Good evening",
+  "homeSeeAll": "See all",
+  "@homeSeeAll": {
+    "description": "Action on a Home section header that opens the full list."
+  },
+  "homeClosingSoon": "Closing soon",
+  "homeNothingOpenTitle": "Nothing open right now",
+  "homeNothingOpenMessage": "New competitions open for registration regularly.",
+  "homeRating": "Rating",
+  "homeRatingSemantics": "Rating {rating}",
+  "@homeRatingSemantics": {
+    "description": "Screen reader label for the player's rating.",
+    "placeholders": {
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
+  "homeLast30Days": "Last 30 days",
+  "@homeLast30Days": {
+    "description": "Caption under the rating trend line."
+  },
+  "homeInCountry": "in {countryCode}",
+  "@homeInCountry": {
+    "description": "Rank pill label when the country's name is unknown.",
+    "placeholders": {
+      "countryCode": {
+        "type": "String",
+        "example": "KE"
+      }
+    }
+  },
+  "homeUnranked": "Unranked",
+  "homeUnratedMessage": "Play your first rated match to get a rating and a place on the ladder.",
+  "homeFindCompetition": "Find a competition",
+  "homeMovedUp": "{places, plural, =1{Up 1 place} other{Up {places} places}}",
+  "@homeMovedUp": {
+    "description": "Screen reader label for rank movement.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "homeMovedDown": "{places, plural, =1{Down 1 place} other{Down {places} places}}",
+  "@homeMovedDown": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "homePlaces": "{places, plural, =1{1 place} other{{places} places}}",
+  "@homePlaces": {
+    "description": "Rank movement next to an up or down arrow.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCountryLadder": "{country} ladder",
+  "@homeCountryLadder": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "homeTopInCountry": "Top in {country}",
+  "@homeTopInCountry": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "homeRecentMatches": "Recent matches",
+  "homeOverview": "Overview",
+  "homeWinRate": "Win rate",
+  "homeWinsOfPlayed": "{wins} of {played} won",
+  "@homeWinsOfPlayed": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "played": {
+        "type": "int"
+      }
+    }
+  },
+  "homeMatches": "Matches",
+  "homeAllTime": "All time",
+  "homeGoalsPerMatch": "Goals per match",
+  "homeLastMatches": "{count, plural, =1{Last 1 match} other{Last {count} matches}}",
+  "@homeLastMatches": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeCurrentStreak": "Current streak",
+  "homeWinsInARow": "Wins in a row",
+  "homeLossesInARow": "Losses in a row",
+  "homeDrawsInARow": "Draws in a row",
+  "homeUpNext": "Up next",
+  "homeOpponentToBeDecided": "Opponent to be decided",
+  "homeCheckInBy": "by {time}",
+  "@homeCheckInBy": {
+    "description": "Check-in deadline next to the match status.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "playerVersus": "vs {opponent}",
+  "@playerVersus": {
+    "placeholders": {
+      "opponent": {
+        "type": "String",
+        "example": "striker.9"
+      }
+    }
+  },
+  "playerFormerPlayer": "a former player",
+  "@playerFormerPlayer": {
+    "description": "Stands in for an opponent whose profile is no longer public, as in 'vs a former player'."
+  },
+  "playerWins": "Wins",
+  "playerDraws": "Draws",
+  "playerLosses": "Losses",
+  "playerRecordSemantics": "{wins} wins, {draws} draws, {losses} losses",
+  "@playerRecordSemantics": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "draws": {
+        "type": "int"
+      },
+      "losses": {
+        "type": "int"
+      }
+    }
+  },
+  "playerResultWin": "Win",
+  "playerResultDraw": "Draw",
+  "playerResultLoss": "Loss",
+  "playerResultWinLetter": "W",
+  "@playerResultWinLetter": {
+    "description": "One-letter abbreviation of a win."
+  },
+  "playerResultDrawLetter": "D",
+  "@playerResultDrawLetter": {
+    "description": "One-letter abbreviation of a draw."
+  },
+  "playerResultLossLetter": "L",
+  "@playerResultLossLetter": {
+    "description": "One-letter abbreviation of a loss."
+  },
+  "rankingsGlobal": "Global",
+  "rankingsEmptyTitle": "No rankings yet",
+  "rankingsEmptyMessage": "Players are ranked once they finish rated matches.",
+  "rankingsYou": "{name} (you)",
+  "@rankingsYou": {
+    "description": "The signed-in player's own name on a ladder.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "striker.9"
+      }
+    }
+  },
+  "rankingsMovedUp": "Up {places}",
+  "@rankingsMovedUp": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "rankingsMovedDown": "Down {places}",
+  "@rankingsMovedDown": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "matchYou": "You",
+  "@matchYou": {
+    "description": "The signed-in player's own side in a match."
+  },
+  "matchOpponent": "Opponent",
+  "matchYourOpponent": "your opponent",
+  "@matchYourOpponent": {
+    "description": "Stands in for the opponent's name mid-sentence when it isn't known yet."
+  },
+  "matchYourOpponentStart": "Your opponent",
+  "@matchYourOpponentStart": {
+    "description": "Stands in for the opponent's name at the start of a sentence."
+  },
+  "matchTheScore": "the score",
+  "@matchTheScore": {
+    "description": "Stands in for a reported score mid-sentence when it isn't known."
+  },
+  "matchScoreWithPens": "{mine}–{theirs} ({penMine}–{penTheirs} pens)",
+  "@matchScoreWithPens": {
+    "description": "A score with a penalty shootout, from the player's side.",
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "theirs": {
+        "type": "int"
+      },
+      "penMine": {
+        "type": "int"
+      },
+      "penTheirs": {
+        "type": "int"
+      }
+    }
+  },
+  "matchScheduled": "Scheduled",
+  "matchCheckIn": "Check in",
+  "matchCheckedIn": "Checked in",
+  "matchUnderReview": "Under review",
+  "matchNoResult": "No result",
+  "matchFinished": "Finished",
+  "matchFullTime": "Full time",
+  "matchReportScore": "Report the score",
+  "matchStepOpponentFromEarlierRound": "Your opponent comes from an earlier round.",
+  "matchStepCheckInOpens": "Check-in opens {when}.",
+  "@matchStepCheckInOpens": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "matchStepKickOff": "Kick-off {when}.",
+  "@matchStepKickOff": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "matchStepWeWillLetYouKnow": "We'll let you know when it's time to play.",
+  "matchStepCheckInTitle": "Time to check in",
+  "matchStepCheckInMessage": "Check in to say you're ready. If only one player checks in, that player wins.",
+  "matchStepCheckedInTitle": "You're checked in",
+  "matchStepCheckedInMessage": "Waiting for {opponent} to check in.",
+  "@matchStepCheckedInMessage": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepPlayTitle": "Play your match",
+  "matchStepPlayMessage": "Play a Friend Match with {opponent} in eFootball. When it ends, either of you reports the score.",
+  "@matchStepPlayMessage": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepPlayDeadlineNote": "If nobody reports in time, you are both removed.",
+  "matchStepAwaitingConfirmationTitle": "Waiting for {opponent} to confirm",
+  "@matchStepAwaitingConfirmationTitle": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepAwaitingConfirmationMessage": "You reported {score}. If {opponent} doesn't answer in time, your result stands.",
+  "@matchStepAwaitingConfirmationMessage": {
+    "placeholders": {
+      "score": {
+        "type": "String",
+        "example": "2–1"
+      },
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepConfirmTitle": "Confirm the result",
+  "matchStepConfirmMessage": "{opponent} reported the score above. Is it right? If you don't answer in time, it stands.",
+  "@matchStepConfirmMessage": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepScreenshotTitle": "Send your screenshot",
+  "matchStepScreenshotMessage": "The result was rejected. Send one screenshot of the Full Time screen; Ozone compares both players' screenshots.",
+  "matchStepScreenshotDeadlineNote": "If you don't send one in time, you're removed from the competition.",
+  "matchStepScreenshotSentTitle": "Screenshot sent",
+  "matchStepBothScreenshotsIn": "Both screenshots are in. Ozone will review them.",
+  "matchStepWaitingForScreenshot": "Waiting for {opponent}'s screenshot. Ozone then checks both.",
+  "@matchStepWaitingForScreenshot": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepSettlingTitle": "Settling the result",
+  "matchStepSettlingMessage": "A deadline just passed. This takes a few seconds.",
+  "matchStepUnderReviewMessage": "Ozone is checking both screenshots against the reported score. You'll be notified of the decision.",
+  "matchStepOpponentConfirmedYours": "{opponent} confirmed your result.",
+  "@matchStepOpponentConfirmedYours": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepYouConfirmed": "You confirmed the result.",
+  "matchStepBothAgreed": "Both players agreed on the result.",
+  "matchStepOpponentUnanswered": "{opponent} didn't answer in time, so your result stood.",
+  "@matchStepOpponentUnanswered": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchStepUnanswered": "The result wasn't answered in time, so it stood.",
+  "matchStepDecidedByReview": "Ozone decided the result after a review.",
+  "matchStepResultConfirmed": "The result is confirmed.",
+  "matchStepOutTitle": "You're out of this competition",
+  "matchStepOutMessage": "This match will be settled without you.",
+  "matchStepUnknownTitle": "Match",
+  "matchStepUnknownMessage": "Update Ozone to see where this match stands.",
+  "matchCancelledNoResultReported": "Nobody reported a score in time, so both players were removed.",
+  "matchCancelledResponseTimeout": "Neither player sent a screenshot, so both were removed.",
+  "matchCancelledDoubleNoShow": "Neither player checked in.",
+  "matchCancelledCompetitionCancelled": "The competition was cancelled.",
+  "matchCancelledPlatformReview": "Ozone cancelled the match after a review.",
+  "matchCancelledNotNeeded": "The bracket no longer needed this match.",
+  "matchCancelledOther": "This match was cancelled.",
+  "matchOutcomeYouWon": "You won",
+  "matchOutcomeYouLost": "You lost",
+  "matchOutcomeDraw": "Draw",
+  "matchForfeitOpponentNoCheckIn": "{opponent} didn't check in.",
+  "@matchForfeitOpponentNoCheckIn": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchForfeitYouNoCheckIn": "You didn't check in in time.",
+  "matchForfeitOpponentLeft": "{opponent} had already left the competition.",
+  "@matchForfeitOpponentLeft": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchForfeitYouLeft": "Your entry had already left the competition.",
+  "matchForfeitOpponentNoScreenshot": "{opponent} didn't send a screenshot after the result was rejected.",
+  "@matchForfeitOpponentNoScreenshot": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "matchForfeitYouNoScreenshot": "You didn't send a screenshot in time, so you were removed.",
+  "matchForfeitPlatformReview": "Ozone decided the match after a review.",
+  "matchForfeitWonWithoutPlaying": "You won without playing.",
+  "matchForfeitDecidedWithoutYou": "The match was decided without you.",
+  "matchErrorOpponentAlreadyReported": "Your opponent already reported the result. Confirm or reject it instead.",
+  "matchErrorAlreadySubmitted": "Your side already reported the result.",
+  "matchErrorWindowClosed": "The time for that has passed.",
+  "matchErrorInvalidScore": "That score doesn't fit this match's format.",
+  "matchErrorMatchChanged": "The match changed. Check the latest and try again.",
+  "matchErrorCompetitionClosed": "This competition has ended.",
+  "matchErrorEvidenceRateLimited": "Too many uploads. Wait a moment and try again.",
+  "matchRemovedNotice": "This match removed you from the competition.",
+  "matchInfoLabel": "Match info",
+  "matchPenaltyNeedsWinner": "A penalty shootout needs a winner.",
+  "matchScoreSent": "{minutes, plural, =1{Score sent. {opponent} has 1 minute to confirm it.} other{Score sent. {opponent} has {minutes} minutes to confirm it.}}",
+  "@matchScoreSent": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "matchReportIntro": "{minutes, plural, =1{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don't answer within 1 minute, it stands.} other{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don't answer within {minutes} minutes, it stands.}}",
+  "@matchReportIntro": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "matchPenaltyShootout": "Penalty shootout",
+  "matchLevelKnockoutNote": "A level knockout match is decided on penalties.",
+  "matchSendScore": "Send score",
+  "matchDeclaration": "This is the real score. Reporting a false score can get me removed from the competition.",
+  "matchListActive": "Active",
+  "matchListHistory": "History",
+  "matchNoActiveTitle": "No active matches",
+  "matchNoHistoryTitle": "No matches played yet",
+  "matchNoActiveMessage": "Matches appear here once a competition you entered starts.",
+  "matchNoHistoryMessage": "Your finished matches will be listed here.",
+  "matchBrowseCompetitions": "Browse competitions",
+  "matchTimesUp": "Time's up",
+  "matchUntil": "until {when}",
+  "@matchUntil": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "matchFind": "Find {name}",
+  "@matchFind": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchNoGameAccount": "They haven't linked an eFootball account yet.",
+  "matchNoUserId": "They haven't added their User ID, so search for their in-game name.",
+  "matchAddByUserId": "Add them as a friend in eFootball with their User ID.",
+  "matchUserId": "User ID",
+  "matchInGameName": "In-game name",
+  "matchCopyLabel": "Copy {label}",
+  "@matchCopyLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "User ID"
+      }
+    }
+  },
+  "matchBadgeReportScore": "Report score",
+  "matchBadgeWaitingOnOpponent": "Waiting on opponent",
+  "matchBadgeConfirmResult": "Confirm result",
+  "matchBadgeSendScreenshots": "Send screenshots",
+  "matchBadgeSettling": "Settling",
+  "matchBadgeForfeit": "Forfeit",
+  "matchBadgeCancelled": "Cancelled",
+  "matchBadgeOut": "Out",
+  "matchBadgeWon": "Won",
+  "matchBadgeLost": "Lost",
+  "matchBadgeDrawn": "Drawn",
+  "matchCheckInBy": "Check in by {when}",
+  "@matchCheckInBy": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "matchOpponentToBeDecided": "Opponent to be decided",
+  "matchVsOpponent": "vs {name}",
+  "@matchVsOpponent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchWaitingEarlierRound": "Waiting for an earlier round",
+  "matchFormat": "Format",
+  "matchFormatOneGame": "1 game",
+  "matchFormatBestOf": "Best of {count}",
+  "@matchFormatBestOf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "matchKickOff": "Kick-off",
+  "matchNotSet": "Not set",
+  "matchCode": "Code",
+  "matchCodeName": "Match code",
+  "@matchCodeName": {
+    "description": "What was copied, as in \"Match code copied\"."
+  },
+  "matchDrawsCount": "Draws count",
+  "matchPenaltiesIfLevel": "Penalties if level",
+  "matchRejectTitle": "Reject this result?",
+  "matchRejectMessage": "{minutes, plural, =1{You and {opponent} will each have 1 minute to send a screenshot of the Full Time screen. If you don't send one, you're removed from the competition.} other{You and {opponent} will each have {minutes} minutes to send a screenshot of the Full Time screen. If you don't send one, you're removed from the competition.}}",
+  "@matchRejectMessage": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "matchReject": "Reject",
+  "matchToneYourMove": "Your move",
+  "matchToneWaiting": "Waiting",
+  "matchToneFinal": "Final",
+  "matchUploadingScreenshot": "Uploading your screenshot…",
+  "matchCheckingScreenshot": "Checking your screenshot…",
+  "matchConfirmYes": "Yes, that's right",
+  "matchConfirmNo": "No, it's wrong",
+  "matchChooseScreenshot": "Choose screenshot",
+  "matchReported": "Reported",
+  "matchToBeDecided": "To be decided",
+  "matchVs": "VS",
+  "matchOnPens": "{mine}–{theirs} on pens",
+  "@matchOnPens": {
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "theirs": {
+        "type": "int"
+      }
+    }
+  },
+  "matchOneLessFor": "One less for {name}",
+  "@matchOneLessFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchOneMoreFor": "One more for {name}",
+  "@matchOneMoreFor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchScreenshotWrongType": "Choose a screenshot saved as JPEG or PNG.",
+  "matchScreenshotTooLarge": "That image is too large. Choose the screenshot itself, up to 10 MB.",
+  "matchScreenshotUploadFailed": "The upload didn't go through. Try again.",
+  "matchScreenshotUnusable": "That image couldn't be used. Choose the original screenshot of the Full Time screen.",
+  "matchScreenshotSlow": "Checking the screenshot is taking longer than usual. Try again."
+}

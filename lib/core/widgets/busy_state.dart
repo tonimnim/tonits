@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../api/error_text.dart';
+import '../l10n.dart';
 
 /// The busy flag and error message every form and action screen keeps:
 /// [run] shows the work in progress, and the failure as a sentence for the
@@ -16,6 +17,7 @@ mixin BusyState<T extends StatefulWidget> on State<T> {
     String Function(Object error)? describe,
   }) async {
     if (busy) return;
+    final l = context.l10n;
     setState(() {
       busy = true;
       error = null;
@@ -23,7 +25,9 @@ mixin BusyState<T extends StatefulWidget> on State<T> {
     try {
       await action();
     } catch (e) {
-      if (mounted) setState(() => error = (describe ?? describeError)(e));
+      if (mounted) {
+        setState(() => error = describe?.call(e) ?? describeError(e, l));
+      }
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -33,6 +37,7 @@ mixin BusyState<T extends StatefulWidget> on State<T> {
   /// success. Returns whether it succeeded.
   Future<bool> runForMessage(Future<String?> Function() action) async {
     if (busy) return false;
+    final l = context.l10n;
     setState(() {
       busy = true;
       error = null;
@@ -41,7 +46,7 @@ mixin BusyState<T extends StatefulWidget> on State<T> {
     try {
       message = await action();
     } catch (e) {
-      message = describeError(e);
+      message = describeError(e, l);
     }
     if (mounted) {
       setState(() {

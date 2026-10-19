@@ -112,6 +112,25 @@ and dark). Components live one per file in `core/widgets/` and read colours
 from `context.palette`, never hard-coded. Screens stay minimal: one title, the
 content and one primary action, with no decorative imagery.
 
+**Text and languages.** Every player-facing string is in
+`lib/l10n/app_en.arb`, generated into `AppLocalizations` by gen-l10n.
+Widgets read `context.l10n`; code without a context (controllers, the
+screenshot uploader) reads `l10nProvider`; pure helpers such as
+`describeError`, `Format.dateTime` and the validators take the
+`AppLocalizations` as a parameter. English is written in fragments, one
+per area (`lib/l10n/parts/*.json`), merged by `tool/l10n_merge.py` so
+parallel work doesn't collide in one file. Counts use ICU plurals.
+
+To add a language (Swahili and Hindi are planned), add
+`lib/l10n/app_sw.arb` or `app_hi.arb` with the same keys, translated, and
+run `flutter gen-l10n`; the app picks the device's language when it is
+supported and falls back to English. Country names are still English.
+
+**Automated checks.** `.github/workflows/ci.yml` runs on every push and pull
+request: the generated models and strings must be up to date, then
+`dart format`, `flutter analyze --fatal-infos` and `flutter test`, on the
+pinned Flutter version.
+
 **Formatting.** `intl` formats dates and money in the device locale. Money
 arrives in minor units with a currency code (`entryFeeMinor` + `currency`).
 

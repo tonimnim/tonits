@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/application/auth_providers.dart';
 import '../../data/competition.dart';
@@ -21,6 +22,9 @@ class KenyaOnlyBadge extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final country = ref.watch(currentPlayerProvider)?.countryCode;
     if (!appliesTo(competition, country)) return const SizedBox.shrink();
-    return const StatusBadge('Kenya only', tone: StatusTone.muted);
+    return StatusBadge(
+      context.l10n.competitionKenyaOnly,
+      tone: StatusTone.muted,
+    );
   }
 }

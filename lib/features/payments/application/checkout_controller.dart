@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../../players/application/players_providers.dart';
 import '../data/payment.dart';
@@ -83,6 +84,8 @@ class CheckoutController extends Notifier<CheckoutState> {
     return done.future;
   }
 
+  AppLocalizations get _l10n => ref.read(l10nProvider);
+
   PaymentsRepository get _payments => ref.read(paymentsRepositoryProvider);
 
   /// Picks up the player's latest payment for this competition, if there
@@ -102,7 +105,7 @@ class CheckoutController extends Notifier<CheckoutState> {
       final payment = await _payments.get(paymentId);
       if (ref.mounted) _track(payment);
     } catch (e) {
-      if (ref.mounted) state = CheckoutState(error: describeError(e));
+      if (ref.mounted) state = CheckoutState(error: describeError(e, _l10n));
     }
   }
 
@@ -127,7 +130,7 @@ class CheckoutController extends Notifier<CheckoutState> {
     } on ApiException catch (e) {
       if (ref.mounted) await _startFailed(e);
     } catch (e) {
-      if (ref.mounted) state = CheckoutState(error: describeError(e));
+      if (ref.mounted) state = CheckoutState(error: describeError(e, _l10n));
     }
   }
 
@@ -143,7 +146,7 @@ class CheckoutController extends Notifier<CheckoutState> {
       state = CheckoutState(
         phase: state.phase,
         payment: payment,
-        error: describeError(e),
+        error: describeError(e, _l10n),
       );
     }
   }
@@ -170,18 +173,14 @@ class CheckoutController extends Notifier<CheckoutState> {
       case 'mpesa_request_failed' || 'payment_record_failed':
         // The prompt may have reached the phone. Retrying with the same key
         // returns that payment rather than charging again, so keep the key.
-        state = const CheckoutState(
-          error:
-              "We couldn't confirm the request with M-Pesa. Try again; you "
-              "won't be charged twice.",
-        );
+        state = CheckoutState(error: _l10n.paymentNotConfirmed);
         return;
       case 'competition_ineligible':
         ref.invalidate(eligibilityProvider(competitionId));
     }
     // Anything else is a new decision next time, so it gets a new key.
     _idempotencyKey = null;
-    state = CheckoutState(error: describeError(e));
+    state = CheckoutState(error: describeError(e, _l10n));
   }
 
   void _track(Payment payment) {
@@ -217,7 +216,7 @@ class CheckoutController extends Notifier<CheckoutState> {
       } on ApiException catch (e) {
         if (e.status == 404 || e.status == 400) {
           // That payment can't be read; stop rather than poll forever.
-          state = CheckoutState(error: describeError(e));
+          state = CheckoutState(error: describeError(e, _l10n));
           return;
         }
       } on NetworkException {

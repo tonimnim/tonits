@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/countries.dart';
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -67,6 +68,7 @@ class _Rated extends ConsumerWidget {
     final history = ref.watch(myRatingHistoryProvider).value;
     final country = Country.byCode(profile.countryCode);
     final soft = p.onPrimary.withValues(alpha: 0.75);
+    final l = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +76,7 @@ class _Rated extends ConsumerWidget {
         Row(
           children: [
             Text(
-              'Rating',
+              l.homeRating,
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -88,7 +90,7 @@ class _Rated extends ConsumerWidget {
         ),
         const SizedBox(height: 2),
         Semantics(
-          label: 'Rating ${rating.rating}',
+          label: l.homeRatingSemantics(rating.rating),
           excludeSemantics: true,
           child: Text(
             Format.number(rating.rating),
@@ -107,7 +109,7 @@ class _Rated extends ConsumerWidget {
             values: [for (final point in history) point.rating],
             color: p.onPrimary,
           ),
-          Text('Last 30 days', style: TextStyle(fontSize: 11, color: soft)),
+          Text(l.homeLast30Days, style: TextStyle(fontSize: 11, color: soft)),
         ],
         const SizedBox(height: 16),
         Row(
@@ -116,13 +118,16 @@ class _Rated extends ConsumerWidget {
               child: _RankPill(
                 rank: rating.countryRank,
                 label: country == null
-                    ? 'in ${profile.countryCode}'
+                    ? l.homeInCountry(profile.countryCode)
                     : '${country.flag} ${country.name}',
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: _RankPill(rank: rating.globalRank, label: 'Global'),
+              child: _RankPill(
+                rank: rating.globalRank,
+                label: l.rankingsGlobal,
+              ),
             ),
           ],
         ),
@@ -151,7 +156,9 @@ class _RankPill extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              rank == null ? 'Unranked' : '#${Format.number(rank!)}',
+              rank == null
+                  ? context.l10n.homeUnranked
+                  : '#${Format.number(rank!)}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -181,8 +188,9 @@ class _Movement extends StatelessWidget {
     final on = context.palette.onPrimary;
     final up = places > 0;
     final n = places.abs();
+    final l = context.l10n;
     return Semantics(
-      label: '${up ? 'Up' : 'Down'} $n place${n == 1 ? '' : 's'}',
+      label: up ? l.homeMovedUp(n) : l.homeMovedDown(n),
       excludeSemantics: true,
       child: Container(
         padding: const EdgeInsets.fromLTRB(6, 3, 10, 3),
@@ -199,7 +207,7 @@ class _Movement extends StatelessWidget {
               color: on,
             ),
             Text(
-              '$n place${n == 1 ? '' : 's'}',
+              l.homePlaces(n),
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
@@ -219,11 +227,12 @@ class _Unrated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Rating',
+          l.homeRating,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -231,7 +240,7 @@ class _Unrated extends StatelessWidget {
           ),
         ),
         Text(
-          'Unranked',
+          l.homeUnranked,
           style: TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.w700,
@@ -241,8 +250,7 @@ class _Unrated extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Play your first rated match to get a rating and a place on '
-          'the ladder.',
+          l.homeUnratedMessage,
           style: TextStyle(color: p.onPrimary.withValues(alpha: 0.85)),
         ),
         const SizedBox(height: 16),
@@ -261,7 +269,7 @@ class _Unrated extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          child: const Text('Find a competition'),
+          child: Text(l.homeFindCompetition),
         ),
       ],
     );

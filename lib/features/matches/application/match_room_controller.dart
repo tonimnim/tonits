@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
+import '../../../core/l10n.dart';
 import '../../evidence/application/evidence_providers.dart';
 import '../../evidence/application/screenshot_uploader.dart';
 import '../data/match_room.dart';
@@ -120,7 +121,7 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
       return null;
     } on NetworkException catch (e) {
       // Keep the key: trying again repeats this same request.
-      return describeError(e);
+      return describeError(e, ref.read(l10nProvider));
     } on ApiException catch (e) {
       _keys.remove(action);
       // The room moved on (a deadline passed, the opponent acted): show
@@ -164,28 +165,28 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     ref.invalidate(nextMatchProvider);
   }
 
-  static String _describe(Object error) {
+  String _describe(Object error) {
+    final l = ref.read(l10nProvider);
     if (error is ApiException) {
       switch (error.code) {
         case 'result_awaiting_confirmation':
-          return 'Your opponent already reported the result. Confirm or '
-              'reject it instead.';
+          return l.matchErrorOpponentAlreadyReported;
         case 'result_already_submitted':
-          return 'Your side already reported the result.';
+          return l.matchErrorAlreadySubmitted;
         case 'report_window_closed' ||
             'confirmation_window_closed' ||
             'screenshot_window_closed':
-          return 'The time for that has passed.';
+          return l.matchErrorWindowClosed;
         case 'invalid_score':
-          return "That score doesn't fit this match's format.";
+          return l.matchErrorInvalidScore;
         case 'match_changed':
-          return 'The match changed. Check the latest and try again.';
+          return l.matchErrorMatchChanged;
         case 'competition_closed':
-          return 'This competition has ended.';
+          return l.matchErrorCompetitionClosed;
         case 'evidence_rate_limited':
-          return 'Too many uploads. Wait a moment and try again.';
+          return l.matchErrorEvidenceRateLimited;
       }
     }
-    return describeError(error);
+    return describeError(error, l);
   }
 }

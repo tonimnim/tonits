@@ -34,15 +34,7 @@ Object? _goalsAgainst(Map<dynamic, dynamic> json, String _) =>
 Object? _competitionName(Map<dynamic, dynamic> json, String _) =>
     (json['competition'] as Map?)?['name'];
 
-enum MatchResult {
-  win('W'),
-  draw('D'),
-  loss('L');
-
-  const MatchResult(this.letter);
-
-  final String letter;
-}
+enum MatchResult { win, draw, loss }
 
 /// A point on the player's rating line.
 @freezed

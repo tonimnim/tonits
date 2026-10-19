@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/l10n.dart';
 import '../../core/theme.dart';
 import 'app_tab.dart';
 
@@ -63,7 +64,7 @@ class TonitsNavigationBar extends StatelessWidget {
               NavigationDestination(
                 icon: Icon(tab.icon),
                 selectedIcon: Icon(tab.selectedIcon),
-                label: tab.label,
+                label: tab.label(context.l10n),
               ),
           ],
         ),

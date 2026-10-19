@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../countries.dart';
+import '../l10n.dart';
 import '../theme.dart';
 import 'labeled_field.dart';
 import 'section_header.dart';
@@ -13,13 +14,13 @@ class CountryField extends FormField<Country> {
     super.initialValue,
     super.validator,
     ValueChanged<Country>? onChanged,
-    String label = 'Country',
+    String? label,
   }) : super(
          builder: (state) {
            final country = state.value;
            final palette = state.context.palette;
            return LabeledField(
-             label: label,
+             label: label ?? state.context.l10n.countryLabel,
              child: InkWell(
                borderRadius: BorderRadius.circular(TonitsRadius.control),
                onTap: () async {
@@ -30,7 +31,7 @@ class CountryField extends FormField<Country> {
                },
                child: InputDecorator(
                  decoration: InputDecoration(
-                   hintText: 'Choose your country',
+                   hintText: state.context.l10n.chooseYourCountry,
                    errorText: state.errorText,
                    prefixIcon: country == null
                        ? null
@@ -93,9 +94,9 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
     final q = _query.trim().toLowerCase().replaceFirst('+', '');
     if (q.isEmpty) {
       return [
-        'Suggested',
+        context.l10n.countrySuggested,
         ...Country.featuredCodes.map(Country.byCode).whereType<Country>(),
-        'All countries',
+        context.l10n.countryAll,
         ...Country.all.where((c) => !Country.featuredCodes.contains(c.code)),
       ];
     }
@@ -122,7 +123,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: TonitsSpace.lg),
               child: Text(
-                'Choose your country',
+                context.l10n.chooseYourCountry,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -136,7 +137,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               child: TextField(
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: 'Search country or code',
+                  hintText: context.l10n.countrySearchHint,
                   prefixIcon: const Icon(Icons.search, size: 20),
                   fillColor: palette.muted,
                 ),
@@ -147,7 +148,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
               child: rows.isEmpty
                   ? Center(
                       child: Text(
-                        'No country matches that search',
+                        context.l10n.countryNoMatch,
                         style: TextStyle(color: palette.subtleForeground),
                       ),
                     )

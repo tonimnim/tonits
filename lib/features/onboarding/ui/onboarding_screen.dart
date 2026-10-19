@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
 import '../../../core/countries.dart';
+import '../../../core/l10n.dart';
 import '../../../core/phone_number.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -96,59 +97,54 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       };
       setState(() {
         _step = step;
-        error = _message(e);
+        error = _message(e, context.l10n);
       });
     } catch (e) {
-      if (mounted) setState(() => error = describeError(e));
+      if (mounted) setState(() => error = describeError(e, context.l10n));
     } finally {
       if (mounted) setState(() => busy = false);
     }
   }
 
-  static String _message(ApiException e) => switch (e.code) {
-    'konami_id_taken' =>
-      'That Konami ID is linked to another Ozone account. Contact Ozone '
-          "support if it's yours.",
-    'phone_taken' =>
-      'That number is linked to another Ozone account. Contact Ozone '
-          "support if it's yours.",
-    _ => describeError(e),
-  };
+  static String _message(ApiException e, AppLocalizations l) =>
+      switch (e.code) {
+        'konami_id_taken' => l.errorKonamiIdTaken,
+        'phone_taken' => l.errorPhoneTaken,
+        _ => describeError(e, l),
+      };
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final (title, subtitle, field) = switch (_step) {
       _Step.username => (
-        'Pick your username',
-        "It's how players see you in matches and on the ladder.",
+        l.onboardingUsernameTitle,
+        l.onboardingUsernameSubtitle,
         UsernameField(controller: _username, onSubmitted: _next),
       ),
       _Step.konamiId => (
-        'Link eFootball',
-        'Your Konami ID connects Ozone to your eFootball account. Enter it '
-            'exactly as the game shows it.',
+        l.onboardingKonamiIdTitle,
+        l.onboardingKonamiIdSubtitle,
         KonamiIdField(
           controller: _konamiId,
-          validator: AuthValidators.konamiId,
+          validator: (v) => AuthValidators.konamiId(v, l),
           autofill: false,
         ),
       ),
       _Step.country => (
-        'Where do you play from?',
-        'Your country decides your ladder and the competitions you can '
-            'enter.',
+        l.onboardingCountryTitle,
+        l.onboardingCountrySubtitle,
         CountryField(
           initialValue: _country,
-          validator: (c) => c == null ? 'Choose your country' : null,
+          validator: (c) => c == null ? l.chooseYourCountry : null,
           onChanged: (c) => setState(() => _country = c),
         ),
       ),
       _Step.phone => (
-        'Your phone number',
+        l.onboardingPhoneTitle,
         _country?.code == 'KE'
-            ? 'Your M-Pesa number, for paying entry fees. Other players '
-                  'never see it.'
-            : 'For paying entry fees. Other players never see it.',
+            ? l.onboardingPhoneSubtitleMpesa
+            : l.onboardingPhoneSubtitle,
         _PhoneStep(
           controller: _phone,
           country: _country!,
@@ -176,7 +172,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             ? TextButton(
                 onPressed: () =>
                     ref.read(authControllerProvider.notifier).signOut(),
-                child: const Text('Sign out'),
+                child: Text(l.profileSignOut),
               )
             : null,
         action: Column(
@@ -187,7 +183,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               const SizedBox(height: TonitsSpace.md),
             ],
             PrimaryButton(
-              label: last ? 'Finish' : 'Continue',
+              label: last ? l.onboardingFinish : l.onboardingContinue,
               busy: busy,
               onPressed: _next,
             ),
@@ -220,9 +216,10 @@ class _PhoneStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final kenya = country.code == 'KE';
     return LabeledField(
-      label: kenya ? 'M-Pesa number' : 'Phone number',
+      label: kenya ? l.accountMpesaNumberLabel : l.accountPhoneNumberLabel,
       child: TextFormField(
         controller: controller,
         autofocus: true,
@@ -230,9 +227,9 @@ class _PhoneStep extends StatelessWidget {
         autofillHints: const [AutofillHints.telephoneNumberNational],
         textInputAction: TextInputAction.done,
         onFieldSubmitted: (_) => onSubmitted(),
-        validator: (value) => PhoneNumber.validate(value, country),
+        validator: (value) => PhoneNumber.validate(value, country, l),
         decoration: InputDecoration(
-          hintText: kenya ? '0712 345 678' : 'Phone number',
+          hintText: kenya ? '0712 345 678' : l.accountPhoneNumberLabel,
           prefixIcon: CallingCodePrefix(
             country: country,
             onTap: () async {
@@ -253,6 +250,7 @@ class _Acceptance extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
+    final l = context.l10n;
     TextSpan link(String label, LegalDocumentType type) => TextSpan(
       text: label,
       style: TextStyle(color: p.primary, fontWeight: FontWeight.w600),
@@ -263,11 +261,11 @@ class _Acceptance extends ConsumerWidget {
       TextSpan(
         style: TextStyle(fontSize: 13, height: 1.5, color: p.mutedForeground),
         children: [
-          const TextSpan(text: 'By finishing you accept the '),
-          link('Terms', LegalDocumentType.terms),
-          const TextSpan(text: ' and the '),
-          link('Privacy Notice', LegalDocumentType.privacy),
-          const TextSpan(text: '.'),
+          TextSpan(text: l.onboardingAcceptBefore),
+          link(l.accountLegalTerms, LegalDocumentType.terms),
+          TextSpan(text: l.onboardingAcceptBetween),
+          link(l.accountLegalPrivacy, LegalDocumentType.privacy),
+          TextSpan(text: l.onboardingAcceptAfter),
         ],
       ),
       textAlign: TextAlign.center,

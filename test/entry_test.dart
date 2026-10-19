@@ -24,8 +24,8 @@ void main() {
       expect(KenyanPhone.normalize('+919812345678'), isNull);
       expect(KenyanPhone.normalize('0212345678'), isNull);
       expect(KenyanPhone.normalize('07123'), isNull);
-      expect(KenyanPhone.validate(''), isNotNull);
-      expect(KenyanPhone.validate('0712 345 678'), isNull);
+      expect(KenyanPhone.validate('', en), isNotNull);
+      expect(KenyanPhone.validate('0712 345 678', en), isNull);
     });
   });
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/match_room.dart';
@@ -15,6 +16,7 @@ class RoomHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final match = room.summary;
     final confirmed = room.result?.score;
     final reported = room.verification.submitted?.score;
@@ -43,7 +45,7 @@ class RoomHero extends StatelessWidget {
             Expanded(
               child: _Side(
                 player: match.me,
-                caption: 'You',
+                caption: l.matchYou,
                 showCheckIn: preMatch,
               ),
             ),
@@ -55,9 +57,9 @@ class RoomHero extends StatelessWidget {
                   score: confirmed ?? reported,
                   home: match.isHome,
                   label: confirmed != null
-                      ? 'Full time'
+                      ? l.matchFullTime
                       : reported != null
-                      ? 'Reported'
+                      ? l.matchReported
                       : null,
                 ),
               ),
@@ -65,7 +67,7 @@ class RoomHero extends StatelessWidget {
             Expanded(
               child: _Side(
                 player: match.opponent,
-                caption: match.opponent == null ? 'To be decided' : null,
+                caption: match.opponent == null ? l.matchToBeDecided : null,
                 showCheckIn: preMatch,
               ),
             ),
@@ -103,7 +105,7 @@ class _Side extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(
-          player?.displayName ?? 'Opponent',
+          player?.displayName ?? context.l10n.matchOpponent,
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
@@ -120,7 +122,7 @@ class _Side extends StatelessWidget {
         if (showCheckIn && player != null && player.checkedIn) ...[
           const SizedBox(height: 8),
           Pill(
-            'Checked in',
+            context.l10n.matchCheckedIn,
             icon: Icons.check_circle,
             color: p.good.$1,
             filled: p.card,
@@ -146,7 +148,7 @@ class _Centre extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Text(
-          'VS',
+          context.l10n.matchVs,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
@@ -175,7 +177,7 @@ class _Centre extends StatelessWidget {
         ),
         if (pens != null)
           Text(
-            '${pens.$1}–${pens.$2} on pens',
+            context.l10n.matchOnPens(pens.$1, pens.$2),
             style: TextStyle(fontSize: 13, color: p.subtleForeground),
           ),
         if (label != null) ...[

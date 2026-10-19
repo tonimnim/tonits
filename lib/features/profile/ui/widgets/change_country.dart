@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/api/error_text.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../account/application/account_providers.dart';
 import '../../../auth/application/auth_providers.dart';
@@ -13,13 +14,12 @@ Future<void> changeCountry(BuildContext context, WidgetRef ref) async {
   final picked = await showCountryPicker(context);
   if (picked == null || picked.code == current || !context.mounted) return;
 
+  final l = context.l10n;
   final confirmed = await confirmAction(
     context,
-    title: 'Change your country to ${picked.name}?',
-    message:
-        'Your country ranking and the competitions open to you follow your '
-        'country.',
-    confirmLabel: 'Change',
+    title: l.profileChangeCountryTitle(picked.name),
+    message: l.profileChangeCountryMessage,
+    confirmLabel: l.profileChangeCountryConfirm,
   );
   if (!confirmed || !context.mounted) return;
 
@@ -27,9 +27,9 @@ Future<void> changeCountry(BuildContext context, WidgetRef ref) async {
   try {
     await ref.read(accountServiceProvider).updateCountry(picked.code);
     messenger.showSnackBar(
-      SnackBar(content: Text('Country changed to ${picked.name}')),
+      SnackBar(content: Text(l.profileCountryChanged(picked.name))),
     );
   } catch (e) {
-    messenger.showSnackBar(SnackBar(content: Text(describeError(e))));
+    messenger.showSnackBar(SnackBar(content: Text(describeError(e, l))));
   }
 }

@@ -1,3 +1,5 @@
+import 'l10n.dart';
+
 /// M-Pesa numbers: Kenyan mobile numbers, typed the way people write them
 /// (0712 345 678, 254712345678, +254 712 345 678). The API is the authority
 /// on whether it's a Safaricom number.
@@ -23,10 +25,8 @@ abstract final class KenyanPhone {
     return '+254$national';
   }
 
-  static String? validate(String? input) {
-    if ((input ?? '').trim().isEmpty) return 'Enter your M-Pesa number';
-    return normalize(input!) == null
-        ? 'Enter a Kenyan mobile number, like 0712 345 678'
-        : null;
+  static String? validate(String? input, AppLocalizations l) {
+    if ((input ?? '').trim().isEmpty) return l.validateEnterMpesaNumber;
+    return normalize(input!) == null ? l.validateKenyanMobile : null;
   }
 }

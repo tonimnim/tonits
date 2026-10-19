@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../core/kenyan_phone.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -49,6 +50,7 @@ class _MpesaFormState extends State<MpesaForm> {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     return Form(
       key: _form,
       child: Column(
@@ -64,7 +66,7 @@ class _MpesaFormState extends State<MpesaForm> {
             child: Column(
               children: [
                 Text(
-                  'Entry fee',
+                  l.paymentEntryFee,
                   style: TextStyle(fontSize: 13, color: p.subtleForeground),
                 ),
                 const SizedBox(height: 4),
@@ -81,7 +83,7 @@ class _MpesaFormState extends State<MpesaForm> {
           ),
           const SizedBox(height: TonitsSpace.lg),
           LabeledField(
-            label: 'M-Pesa number',
+            label: l.paymentMpesaNumber,
             child: TextFormField(
               controller: _phone,
               keyboardType: TextInputType.phone,
@@ -89,11 +91,11 @@ class _MpesaFormState extends State<MpesaForm> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[\d +]')),
               ],
-              validator: KenyanPhone.validate,
+              validator: (v) => KenyanPhone.validate(v, l),
               onFieldSubmitted: (_) => _submit(),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: '0712 345 678',
-                helperText: "A Safaricom number. You'll confirm with your PIN.",
+                helperText: l.paymentPhoneHelper,
               ),
             ),
           ),
@@ -102,7 +104,7 @@ class _MpesaFormState extends State<MpesaForm> {
             Notice(widget.error!),
             const SizedBox(height: TonitsSpace.md),
           ],
-          PrimaryButton(label: 'Send payment request', onPressed: _submit),
+          PrimaryButton(label: l.paymentSendRequest, onPressed: _submit),
         ],
       ),
     );

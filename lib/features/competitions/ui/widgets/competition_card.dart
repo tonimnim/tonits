@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../data/competition.dart';
 import 'capacity_bar.dart';
@@ -28,10 +29,11 @@ class CompetitionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = competition;
     final p = context.palette;
+    final l = context.l10n;
     final text = Theme.of(context).textTheme;
     final entry = c.entryType == EntryType.free || c.entryFeeMinor == 0
-        ? 'Free entry'
-        : '${Format.money(c.entryFeeMinor, c.currency)} entry';
+        ? l.competitionFreeEntry
+        : l.competitionPaidEntry(Format.money(c.entryFeeMinor, c.currency));
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -64,7 +66,10 @@ class CompetitionCard extends StatelessWidget {
               ),
               const SizedBox(height: TonitsSpace.xs),
               Text(
-                '${c.format.label} · Starts ${Format.dateTime(c.startsAt)}',
+                l.competitionFormatStarts(
+                  c.format.label(l),
+                  Format.dateTime(c.startsAt, l),
+                ),
                 style: TextStyle(fontSize: 13, color: p.subtleForeground),
               ),
               const SizedBox(height: TonitsSpace.md),
@@ -88,7 +93,9 @@ class CompetitionCard extends StatelessWidget {
                         ],
                         if (c.prizeAmountMinor > 0)
                           Text(
-                            'Prize ${Format.money(c.prizeAmountMinor, c.currency)}',
+                            l.competitionPrize(
+                              Format.money(c.prizeAmountMinor, c.currency),
+                            ),
                             style: TextStyle(
                               fontSize: 13,
                               color: p.subtleForeground,

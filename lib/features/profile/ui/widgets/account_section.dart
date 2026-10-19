@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/countries.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -18,20 +19,21 @@ class AccountSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
+    final l = context.l10n;
     final country = Country.byCode(player.countryCode);
     final konamiId = player.konamiId;
     return SettingsGroup(
-      title: 'Account',
+      title: l.profileAccountTitle,
       rows: [
         SettingsRow(
           icon: Icons.person_outline,
-          label: 'Display name',
+          label: l.accountDisplayName,
           value: player.displayName,
           onTap: () => context.push(Routes.editName),
         ),
         SettingsRow(
           icon: Icons.public,
-          label: 'Country',
+          label: l.countryLabel,
           value: country == null
               ? player.countryCode
               : '${country.flag}  ${country.name}',
@@ -39,8 +41,8 @@ class AccountSection extends ConsumerWidget {
         ),
         SettingsRow(
           icon: Icons.badge_outlined,
-          label: 'Konami ID',
-          value: konamiId ?? 'Not linked',
+          label: l.accountKonamiIdLabel,
+          value: konamiId ?? l.profileNotLinked,
           valueStyle: konamiId == null
               ? null
               : monoFont.copyWith(color: p.subtleForeground, fontSize: 14),
@@ -49,7 +51,11 @@ class AccountSection extends ConsumerWidget {
               : Icon(Icons.copy_rounded, size: 18, color: p.mutedForeground),
           onTap: konamiId == null
               ? null
-              : () => copyToClipboard(context, konamiId, what: 'Konami ID'),
+              : () => copyToClipboard(
+                  context,
+                  konamiId,
+                  what: l.accountKonamiIdLabel,
+                ),
         ),
       ],
     );

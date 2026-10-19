@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/core/format.dart';
 
+import 'support/fakes.dart';
+
 void main() {
   group('money', () {
     test('drops a zero fraction and spaces a lettered symbol', () {
@@ -20,26 +22,26 @@ void main() {
 
     test('names today, tomorrow and yesterday', () {
       expect(
-        Format.dateTime(DateTime(2026, 10, 9, 18, 30), now: now),
+        Format.dateTime(DateTime(2026, 10, 9, 18, 30), en, now: now),
         'Today, 18:30',
       );
       expect(
-        Format.dateTime(DateTime(2026, 10, 10, 9, 5), now: now),
+        Format.dateTime(DateTime(2026, 10, 10, 9, 5), en, now: now),
         'Tomorrow, 09:05',
       );
       expect(
-        Format.dateTime(DateTime(2026, 10, 8, 20), now: now),
+        Format.dateTime(DateTime(2026, 10, 8, 20), en, now: now),
         'Yesterday, 20:00',
       );
     });
 
     test('uses a short date this year and adds the year otherwise', () {
       expect(
-        Format.dateTime(DateTime(2026, 10, 13, 18, 30), now: now),
+        Format.dateTime(DateTime(2026, 10, 13, 18, 30), en, now: now),
         'Tue 13 Oct, 18:30',
       );
       expect(
-        Format.dateTime(DateTime(2027, 1, 2, 8), now: now),
+        Format.dateTime(DateTime(2027, 1, 2, 8), en, now: now),
         '2 Jan 2027, 08:00',
       );
     });

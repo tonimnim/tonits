@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
@@ -40,10 +41,10 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
 
   static final _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
-  static String? _validateEmail(String? value) {
+  static String? _validateEmail(String? value, AppLocalizations l) {
     final v = value?.trim() ?? '';
-    if (v.isEmpty) return 'Enter your email';
-    return _emailPattern.hasMatch(v) ? null : 'Enter a valid email address';
+    if (v.isEmpty) return l.accountEnterEmail;
+    return _emailPattern.hasMatch(v) ? null : l.accountEmailInvalid;
   }
 
   Future<void> _send() async {
@@ -68,14 +69,14 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
         .requestEmailCode(_sentTo!);
     if (!mounted) return;
     setState(() => _expiresIn = expiresIn);
-    showMessage(context, 'New code sent to $_sentTo');
+    showMessage(context, context.l10n.accountNewCodeSent(_sentTo!));
   });
 
   Future<void> _verify() async {
     if (!_codeForm.currentState!.validate()) return;
     await run(() async {
       await ref.read(accountServiceProvider).verifyEmail(_code.text.trim());
-      if (mounted) popWithMessage(context, 'Email verified');
+      if (mounted) popWithMessage(context, context.l10n.accountEmailVerified);
     });
   }
 
@@ -89,19 +90,20 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
   Widget build(BuildContext context) {
     final current = ref.watch(currentPlayerProvider)?.email;
     final sentTo = _sentTo;
-    if (sentTo != null) return _codeStep(sentTo);
+    final l = context.l10n;
+    if (sentTo != null) return _codeStep(sentTo, l);
     return AccountFormPage(
-      title: 'Email',
+      title: l.accountEmailTitle,
       intro: current == null
-          ? "With a verified email you can reset a forgotten password. We'll "
-                'send a code to confirm it.'
-          : 'Your email is $current. Enter a new address and it replaces '
-                'this one once confirmed.',
+          ? l.accountEmailIntroAdd
+          : l.accountEmailIntroChange(current),
       children: [
         Form(
           key: _emailForm,
           child: LabeledField(
-            label: current == null ? 'Email' : 'New email',
+            label: current == null
+                ? l.accountEmailTitle
+                : l.accountNewEmailLabel,
             child: TextFormField(
               controller: _email,
               autofocus: true,
@@ -110,33 +112,33 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
               autofillHints: const [AutofillHints.email],
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _send(),
-              validator: _validateEmail,
+              validator: (v) => _validateEmail(v, l),
               decoration: const InputDecoration(hintText: 'you@example.com'),
             ),
           ),
         ),
         const SizedBox(height: TonitsSpace.lg),
         FormError(error),
-        PrimaryButton(label: 'Send code', busy: busy, onPressed: _send),
+        PrimaryButton(label: l.accountSendCode, busy: busy, onPressed: _send),
       ],
     );
   }
 
-  static String _expiry(Duration? lasts) {
-    if (lasts == null) return 'It expires soon.';
+  static String _expiry(Duration? lasts, AppLocalizations l) {
+    if (lasts == null) return l.accountCodeExpiresSoon;
     final minutes = (lasts.inSeconds / 60).ceil();
-    return 'It expires in $minutes minute${minutes == 1 ? '' : 's'}.';
+    return l.accountCodeExpiresIn(minutes);
   }
 
-  Widget _codeStep(String sentTo) {
+  Widget _codeStep(String sentTo, AppLocalizations l) {
     return AccountFormPage(
-      title: 'Check your email',
-      intro: 'We sent a 6-digit code to $sentTo. ${_expiry(_expiresIn)}',
+      title: l.accountCheckEmailTitle,
+      intro: l.accountCodeSentIntro(sentTo, _expiry(_expiresIn, l)),
       children: [
         Form(
           key: _codeForm,
           child: LabeledField(
-            label: 'Code',
+            label: l.accountCodeLabel,
             child: TextFormField(
               controller: _code,
               autofocus: true,
@@ -148,7 +150,7 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
               ],
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (_) => _verify(),
-              validator: AuthValidators.resetCode,
+              validator: (v) => AuthValidators.resetCode(v, l),
               style: monoFont.copyWith(fontSize: 20, letterSpacing: 6),
               decoration: const InputDecoration(hintText: '000000'),
             ),
@@ -156,7 +158,7 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
         ),
         const SizedBox(height: TonitsSpace.lg),
         FormError(error),
-        PrimaryButton(label: 'Verify', busy: busy, onPressed: _verify),
+        PrimaryButton(label: l.accountVerify, busy: busy, onPressed: _verify),
         const SizedBox(height: TonitsSpace.md),
         Wrap(
           alignment: WrapAlignment.center,
@@ -164,11 +166,11 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
           children: [
             TextButton(
               onPressed: busy ? null : _resend,
-              child: const Text('Send a new code'),
+              child: Text(l.accountSendNewCode),
             ),
             TextButton(
               onPressed: busy ? null : _changeAddress,
-              child: const Text('Use another email'),
+              child: Text(l.accountUseAnotherEmail),
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../account/application/legal_links.dart';
@@ -13,10 +14,11 @@ class AboutSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
+    final l = context.l10n;
     Future<void> open(LegalDocumentType type, String name) async {
       final opened = await openLegalDocument(ref, type);
       if (opened || !context.mounted) return;
-      showMessage(context, "Couldn't open the $name. Try again.");
+      showMessage(context, context.l10n.profileCouldNotOpen(name));
     }
 
     final external = Icon(
@@ -25,19 +27,19 @@ class AboutSection extends ConsumerWidget {
       color: p.mutedForeground,
     );
     return SettingsGroup(
-      title: 'About',
+      title: l.profileAboutTitle,
       rows: [
         SettingsRow(
           icon: Icons.description_outlined,
-          label: 'Terms of Service',
+          label: l.profileTermsOfService,
           trailing: external,
-          onTap: () => open(LegalDocumentType.terms, 'Terms'),
+          onTap: () => open(LegalDocumentType.terms, l.accountLegalTerms),
         ),
         SettingsRow(
           icon: Icons.privacy_tip_outlined,
-          label: 'Privacy Notice',
+          label: l.accountLegalPrivacy,
           trailing: external,
-          onTap: () => open(LegalDocumentType.privacy, 'Privacy Notice'),
+          onTap: () => open(LegalDocumentType.privacy, l.accountLegalPrivacy),
         ),
       ],
     );

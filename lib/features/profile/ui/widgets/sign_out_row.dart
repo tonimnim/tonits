@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/application/auth_providers.dart';
 
@@ -10,21 +11,20 @@ class SignOutRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
     return SettingsGroup(
       rows: [
         SettingsRow(
           icon: Icons.logout,
-          label: 'Sign out',
+          label: l.profileSignOut,
           destructive: true,
           chevron: false,
           onTap: () async {
             final confirmed = await confirmAction(
               context,
-              title: 'Sign out of Ozone?',
-              message:
-                  'You can sign back in any time with the same Google or Apple '
-                  'account.',
-              confirmLabel: 'Sign out',
+              title: l.profileSignOutTitle,
+              message: l.profileSignOutMessage,
+              confirmLabel: l.profileSignOut,
             );
             if (confirmed) {
               await ref.read(authControllerProvider.notifier).signOut();

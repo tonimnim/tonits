@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:tonits/core/l10n.dart';
 import 'package:tonits/features/auth/data/identity_providers.dart';
 import 'package:tonits/features/auth/data/token_store.dart';
 
@@ -501,3 +503,6 @@ Map<String, dynamic> roomActionJson(Map<String, dynamic> room) => {
 final pngBytes = Uint8List.fromList([
   0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0, 0, 0, 13, //
 ]);
+
+/// The English text, for tests of code that takes [AppLocalizations].
+final en = lookupAppLocalizations(const Locale('en'));

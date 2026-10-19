@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/clock.dart';
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -16,8 +17,9 @@ class DeadlinePill extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
+    final l = context.l10n;
     final now = ref.watch(clockProvider).value ?? DateTime.now();
-    final left = timeLeft(deadline, now);
+    final left = timeLeft(deadline, now, l);
     final urgent = deadline.difference(now) < const Duration(minutes: 2);
     return Wrap(
       spacing: 10,
@@ -25,12 +27,12 @@ class DeadlinePill extends ConsumerWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Pill(
-          left ?? "Time's up",
+          left ?? l.matchTimesUp,
           icon: Icons.schedule,
           color: urgent ? p.warn.$1 : p.primary,
         ),
         Text(
-          'until ${Format.dateTime(deadline)}',
+          l.matchUntil(Format.dateTime(deadline, l)),
           style: TextStyle(fontSize: 13, color: p.mutedForeground),
         ),
       ],

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
+import '../../../core/l10n.dart';
 import '../data/evidence_repository.dart';
 
 enum UploadStage { uploading, verifying }
@@ -20,10 +21,13 @@ class ScreenshotProblem implements Exception {
 /// declare it, upload the original bytes, then wait for verification.
 /// The bytes are never recompressed: the reader needs the original.
 class ScreenshotUploader {
-  ScreenshotUploader(this._repository, this._delay);
+  ScreenshotUploader(this._repository, this._delay, this._l);
 
   final EvidenceRepository _repository;
   final Duration Function(int attempt) _delay;
+
+  /// The player-facing text for [ScreenshotProblem]s.
+  final AppLocalizations _l;
 
   static const maxBytes = 10 * 1024 * 1024;
 
@@ -37,14 +41,10 @@ class ScreenshotUploader {
   }) async {
     final mediaType = mediaTypeOf(bytes);
     if (mediaType == null) {
-      throw const ScreenshotProblem(
-        'Choose a screenshot saved as JPEG or PNG.',
-      );
+      throw ScreenshotProblem(_l.matchScreenshotWrongType);
     }
     if (bytes.length > maxBytes) {
-      throw const ScreenshotProblem(
-        'That image is too large. Choose the screenshot itself, up to 10 MB.',
-      );
+      throw ScreenshotProblem(_l.matchScreenshotTooLarge);
     }
 
     onStage?.call(UploadStage.uploading);
@@ -54,22 +54,17 @@ class ScreenshotUploader {
       sha256: sha256.convert(bytes).toString(),
     );
     if (!await _repository.upload(intent, bytes)) {
-      throw const ScreenshotProblem("The upload didn't go through. Try again.");
+      throw ScreenshotProblem(_l.matchScreenshotUploadFailed);
     }
 
     onStage?.call(UploadStage.verifying);
     var evidence = await _repository.complete(intent.id);
     for (var attempt = 0; !evidence.ready; attempt++) {
       if (evidence.failed) {
-        throw const ScreenshotProblem(
-          "That image couldn't be used. Choose the original screenshot of "
-          'the Full Time screen.',
-        );
+        throw ScreenshotProblem(_l.matchScreenshotUnusable);
       }
       if (attempt >= _maxChecks) {
-        throw const ScreenshotProblem(
-          'Checking the screenshot is taking longer than usual. Try again.',
-        );
+        throw ScreenshotProblem(_l.matchScreenshotSlow);
       }
       await Future<void>.delayed(_delay(attempt));
       evidence = await _repository.status(intent.id);

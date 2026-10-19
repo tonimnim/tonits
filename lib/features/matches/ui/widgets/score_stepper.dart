@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 
@@ -42,7 +43,7 @@ class ScoreStepper extends StatelessWidget {
           ),
           RoundIconButton(
             icon: Icons.remove,
-            tooltip: 'One less for $label',
+            tooltip: context.l10n.matchOneLessFor(label),
             size: 44,
             onPressed: value > 0 ? () => onChanged(value - 1) : null,
           ),
@@ -66,7 +67,7 @@ class ScoreStepper extends StatelessWidget {
           ),
           RoundIconButton(
             icon: Icons.add,
-            tooltip: 'One more for $label',
+            tooltip: context.l10n.matchOneMoreFor(label),
             size: 44,
             background: p.soft,
             foreground: p.onSoft,

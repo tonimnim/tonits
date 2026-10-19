@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/format.dart';
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/payment.dart';
@@ -21,9 +22,10 @@ class PaymentWaiting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    final l = context.l10n;
     final amount = Format.money(payment.amountMinor, payment.currency);
     final phone = payment.maskedPhone.isEmpty
-        ? 'your phone'
+        ? l.paymentYourPhone
         : payment.maskedPhone;
     return Semantics(
       liveRegion: true,
@@ -34,13 +36,13 @@ class PaymentWaiting extends StatelessWidget {
           Icon(Icons.phone_android_rounded, size: 52, color: p.primary),
           const SizedBox(height: TonitsSpace.lg),
           Text(
-            'Check your phone',
+            l.paymentCheckYourPhone,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: TonitsSpace.sm),
           Text(
-            'Enter your M-Pesa PIN on $phone to pay $amount.',
+            l.paymentEnterPin(phone, amount),
             textAlign: TextAlign.center,
             style: TextStyle(color: p.subtleForeground),
           ),
@@ -48,20 +50,22 @@ class PaymentWaiting extends StatelessWidget {
           const LoadingState(height: 32),
           const SizedBox(height: TonitsSpace.sm),
           Text(
-            'Waiting for M-Pesa…',
+            l.paymentWaiting,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 13, color: p.mutedForeground),
           ),
           if (slow) ...[
             const SizedBox(height: TonitsSpace.xl),
             Text(
-              "Still waiting? M-Pesa can take a minute. You won't be "
-              'charged twice.',
+              l.paymentSlow,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 13, color: p.subtleForeground),
             ),
             const SizedBox(height: TonitsSpace.md),
-            SecondaryButton(label: 'Check again', onPressed: onCheckAgain),
+            SecondaryButton(
+              label: l.paymentCheckAgain,
+              onPressed: onCheckAgain,
+            ),
           ],
         ],
       ),

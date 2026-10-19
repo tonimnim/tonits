@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n.dart';
 import '../theme.dart';
 import 'buttons.dart';
 
@@ -67,9 +68,9 @@ class ErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     return EmptyState(
       icon: Icons.cloud_off_outlined,
-      title: "Couldn't load this",
+      title: context.l10n.couldNotLoad,
       message: message,
-      actionLabel: 'Try again',
+      actionLabel: context.l10n.tryAgain,
       onAction: onRetry,
     );
   }

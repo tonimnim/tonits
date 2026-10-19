@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 
 // Button styles replace the theme's font unless it is named again.
@@ -22,7 +23,7 @@ class GoogleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return _ProviderButton(
-      label: 'Continue with Google',
+      label: context.l10n.welcomeContinueWithGoogle,
       icon: SvgPicture.string(_googleMark, width: 20, height: 20),
       background: p.card,
       foreground: p.foreground,
@@ -47,7 +48,7 @@ class AppleButton extends StatelessWidget {
     final background = dark ? Colors.white : Colors.black;
     final foreground = dark ? Colors.black : Colors.white;
     return _ProviderButton(
-      label: 'Continue with Apple',
+      label: context.l10n.welcomeContinueWithApple,
       icon: Icon(Icons.apple, size: 22, color: foreground),
       background: background,
       foreground: foreground,
@@ -93,7 +94,7 @@ class _ProviderButton extends StatelessWidget {
       ),
       child: busy
           ? Semantics(
-              label: '$label, working',
+              label: context.l10n.welcomeProviderWorking(label),
               child: SizedBox.square(
                 dimension: 20,
                 child: CircularProgressIndicator(

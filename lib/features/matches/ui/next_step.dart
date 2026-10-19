@@ -1,4 +1,5 @@
 import '../../../core/format.dart';
+import '../../../core/l10n.dart';
 import '../data/match_room.dart';
 import '../data/match_summary.dart';
 
@@ -28,145 +29,128 @@ class NextStep {
     this.deadlineNote,
   });
 
-  factory NextStep.of(MatchRoom room) {
+  factory NextStep.of(MatchRoom room, AppLocalizations l) {
     final match = room.summary;
-    final opp = match.opponent?.displayName ?? 'your opponent';
+    final opp = match.opponent?.displayName ?? l.matchYourOpponent;
     final v = room.verification;
     final reported = v.submitted == null
-        ? 'the score'
-        : scoreText(v.submitted!.score, home: match.isHome);
+        ? l.matchTheScore
+        : scoreText(v.submitted!.score, home: match.isHome, l: l);
 
     return switch (room.lifecycle) {
       MatchLifecycle.assigned => NextStep(
-        title: 'Scheduled',
+        title: l.matchScheduled,
         tone: StepTone.neutral,
         message: match.opponent == null
-            ? 'Your opponent comes from an earlier round.'
+            ? l.matchStepOpponentFromEarlierRound
             : room.checkInOpensAt != null
-            ? 'Check-in opens ${Format.dateTime(room.checkInOpensAt!)}.'
+            ? l.matchStepCheckInOpens(Format.dateTime(room.checkInOpensAt!, l))
             : match.scheduledAt != null
-            ? 'Kick-off ${Format.dateTime(match.scheduledAt!)}.'
-            : "We'll let you know when it's time to play.",
+            ? l.matchStepKickOff(Format.dateTime(match.scheduledAt!, l))
+            : l.matchStepWeWillLetYouKnow,
       ),
       MatchLifecycle.readyForCheckIn => NextStep(
-        title: 'Time to check in',
+        title: l.matchStepCheckInTitle,
         tone: StepTone.action,
-        message:
-            "Check in to say you're ready. If only one player checks in, "
-            'that player wins.',
+        message: l.matchStepCheckInMessage,
         deadline: match.checkInClosesAt,
       ),
       MatchLifecycle.checkedIn => NextStep(
-        title: "You're checked in",
+        title: l.matchStepCheckedInTitle,
         tone: StepTone.waiting,
-        message: 'Waiting for $opp to check in.',
+        message: l.matchStepCheckedInMessage(opp),
         deadline: match.checkInClosesAt,
       ),
       MatchLifecycle.reportRequired => NextStep(
-        title: 'Play your match',
+        title: l.matchStepPlayTitle,
         tone: StepTone.action,
-        message:
-            'Play a Friend Match with $opp in eFootball. When it ends, '
-            'either of you reports the score.',
+        message: l.matchStepPlayMessage(opp),
         deadline: room.resultDueAt,
-        deadlineNote: 'If nobody reports in time, you are both removed.',
+        deadlineNote: l.matchStepPlayDeadlineNote,
       ),
       MatchLifecycle.awaitingOpponentConfirmation => NextStep(
-        title: 'Waiting for $opp to confirm',
+        title: l.matchStepAwaitingConfirmationTitle(opp),
         tone: StepTone.waiting,
-        message:
-            'You reported $reported. If $opp doesn\'t answer in time, your '
-            'result stands.',
+        message: l.matchStepAwaitingConfirmationMessage(reported, opp),
         deadline: v.confirmationDeadline,
       ),
       MatchLifecycle.confirmationRequired => NextStep(
-        title: 'Confirm the result',
+        title: l.matchStepConfirmTitle,
         tone: StepTone.action,
-        message:
-            '$opp reported the score above. Is it right? If you don\'t '
-            'answer in time, it stands.',
+        message: l.matchStepConfirmMessage(opp),
         deadline: v.confirmationDeadline,
       ),
       MatchLifecycle.screenshotRequired => NextStep(
-        title: 'Send your screenshot',
+        title: l.matchStepScreenshotTitle,
         tone: StepTone.action,
-        message:
-            'The result was rejected. Send one screenshot of the Full Time '
-            'screen; Ozone compares both players\' screenshots.',
+        message: l.matchStepScreenshotMessage,
         deadline: v.screenshotDeadline,
-        deadlineNote:
-            "If you don't send one in time, you're removed from the "
-            'competition.',
+        deadlineNote: l.matchStepScreenshotDeadlineNote,
       ),
       MatchLifecycle.awaitingOpponentScreenshot => NextStep(
-        title: 'Screenshot sent',
+        title: l.matchStepScreenshotSentTitle,
         tone: StepTone.waiting,
         message: v.opponentScreenshotSent
-            ? 'Both screenshots are in. Ozone will review them.'
-            : 'Waiting for $opp\'s screenshot. Ozone then checks both.',
+            ? l.matchStepBothScreenshotsIn
+            : l.matchStepWaitingForScreenshot(opp),
         deadline: v.screenshotDeadline,
       ),
-      MatchLifecycle.awaitingResolution => const NextStep(
-        title: 'Settling the result',
+      MatchLifecycle.awaitingResolution => NextStep(
+        title: l.matchStepSettlingTitle,
         tone: StepTone.waiting,
-        message: 'A deadline just passed. This takes a few seconds.',
+        message: l.matchStepSettlingMessage,
       ),
-      MatchLifecycle.underReview => const NextStep(
-        title: 'Under review',
+      MatchLifecycle.underReview => NextStep(
+        title: l.matchUnderReview,
         tone: StepTone.waiting,
-        message:
-            'Ozone is checking both screenshots against the reported '
-            "score. You'll be notified of the decision.",
+        message: l.matchStepUnderReviewMessage,
       ),
       MatchLifecycle.completed => NextStep(
-        title: _outcomeTitle(match.outcome),
+        title: _outcomeTitle(match.outcome, l),
         tone: _outcomeTone(match.outcome),
         message: switch ((room.result?.origin, v.submitted?.byMe)) {
-          ('agreed_reports', true) => '$opp confirmed your result.',
-          ('agreed_reports', false) => 'You confirmed the result.',
-          ('agreed_reports', null) => 'Both players agreed on the result.',
-          ('unanswered', true) =>
-            "$opp didn't answer in time, so your result stood.",
-          ('unanswered', _) =>
-            "The result wasn't answered in time, so it stood.",
-          ('platform_review', _) => 'Ozone decided the result after a review.',
-          _ => 'The result is confirmed.',
+          ('agreed_reports', true) => l.matchStepOpponentConfirmedYours(opp),
+          ('agreed_reports', false) => l.matchStepYouConfirmed,
+          ('agreed_reports', null) => l.matchStepBothAgreed,
+          ('unanswered', true) => l.matchStepOpponentUnanswered(opp),
+          ('unanswered', _) => l.matchStepUnanswered,
+          ('platform_review', _) => l.matchStepDecidedByReview,
+          _ => l.matchStepResultConfirmed,
         },
       ),
       MatchLifecycle.forfeited => NextStep(
-        title: _outcomeTitle(match.outcome),
+        title: _outcomeTitle(match.outcome, l),
         tone: _outcomeTone(match.outcome),
         message: _forfeitReason(
           room.completionReason,
           won: match.outcome == MatchOutcome.won,
           opp: opp,
+          l: l,
         ),
       ),
       MatchLifecycle.cancelled => NextStep(
-        title: 'No result',
+        title: l.matchNoResult,
         tone: v.entryRemoved ? StepTone.bad : StepTone.neutral,
         message: switch (room.completionReason) {
-          'no_result_reported' =>
-            'Nobody reported a score in time, so both players were removed.',
-          'response_timeout' =>
-            'Neither player sent a screenshot, so both were removed.',
-          'double_no_show' => 'Neither player checked in.',
-          'competition_cancelled' => 'The competition was cancelled.',
-          'platform_review' => 'Ozone cancelled the match after a review.',
+          'no_result_reported' => l.matchCancelledNoResultReported,
+          'response_timeout' => l.matchCancelledResponseTimeout,
+          'double_no_show' => l.matchCancelledDoubleNoShow,
+          'competition_cancelled' => l.matchCancelledCompetitionCancelled,
+          'platform_review' => l.matchCancelledPlatformReview,
           'reset_not_required' ||
-          'correction_voided' => 'The bracket no longer needed this match.',
-          _ => 'This match was cancelled.',
+          'correction_voided' => l.matchCancelledNotNeeded,
+          _ => l.matchCancelledOther,
         },
       ),
-      MatchLifecycle.outOfCompetition => const NextStep(
-        title: "You're out of this competition",
+      MatchLifecycle.outOfCompetition => NextStep(
+        title: l.matchStepOutTitle,
         tone: StepTone.bad,
-        message: 'This match will be settled without you.',
+        message: l.matchStepOutMessage,
       ),
-      MatchLifecycle.unknown => const NextStep(
-        title: 'Match',
+      MatchLifecycle.unknown => NextStep(
+        title: l.matchStepUnknownTitle,
         tone: StepTone.neutral,
-        message: 'Update Ozone to see where this match stands.',
+        message: l.matchStepUnknownMessage,
       ),
     };
   }
@@ -182,20 +166,25 @@ class NextStep {
   final String? deadlineNote;
 
   /// "2–1", or "1–1 (4–3 pens)", from the player's side.
-  static String scoreText(Score score, {required bool home}) {
+  static String scoreText(
+    Score score, {
+    required bool home,
+    required AppLocalizations l,
+  }) {
     final (mine, theirs) = score.forSide(home: home);
     final pens = score.penalties;
     if (pens == null) return '$mine–$theirs';
     final (pMine, pTheirs) = pens.forSide(home: home);
-    return '$mine–$theirs ($pMine–$pTheirs pens)';
+    return l.matchScoreWithPens(mine, theirs, pMine, pTheirs);
   }
 
-  static String _outcomeTitle(MatchOutcome? outcome) => switch (outcome) {
-    MatchOutcome.won => 'You won',
-    MatchOutcome.lost => 'You lost',
-    MatchOutcome.drawn => 'Draw',
-    _ => 'Finished',
-  };
+  static String _outcomeTitle(MatchOutcome? outcome, AppLocalizations l) =>
+      switch (outcome) {
+        MatchOutcome.won => l.matchOutcomeYouWon,
+        MatchOutcome.lost => l.matchOutcomeYouLost,
+        MatchOutcome.drawn => l.matchOutcomeDraw,
+        _ => l.matchFinished,
+      };
 
   static StepTone _outcomeTone(MatchOutcome? outcome) => switch (outcome) {
     MatchOutcome.won => StepTone.won,
@@ -207,19 +196,17 @@ class NextStep {
     String? reason, {
     required bool won,
     required String opp,
+    required AppLocalizations l,
   }) => switch (reason) {
     'timeout_forfeit' =>
-      won ? "$opp didn't check in." : "You didn't check in in time.",
-    'walkover' =>
-      won
-          ? '$opp had already left the competition.'
-          : 'Your entry had already left the competition.',
+      won ? l.matchForfeitOpponentNoCheckIn(opp) : l.matchForfeitYouNoCheckIn,
+    'walkover' => won ? l.matchForfeitOpponentLeft(opp) : l.matchForfeitYouLeft,
     'response_timeout' =>
       won
-          ? "$opp didn't send a screenshot after the result was rejected."
-          : "You didn't send a screenshot in time, so you were removed.",
-    'platform_review' => 'Ozone decided the match after a review.',
+          ? l.matchForfeitOpponentNoScreenshot(opp)
+          : l.matchForfeitYouNoScreenshot,
+    'platform_review' => l.matchForfeitPlatformReview,
     _ =>
-      won ? 'You won without playing.' : 'The match was decided without you.',
+      won ? l.matchForfeitWonWithoutPlaying : l.matchForfeitDecidedWithoutYou,
   };
 }

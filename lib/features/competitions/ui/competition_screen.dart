@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/error_text.dart';
 import '../../../core/format.dart';
+import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/competitions_providers.dart';
@@ -36,7 +37,7 @@ class CompetitionScreen extends ConsumerWidget {
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(),
         body: ErrorState(
-          message: describeError(error),
+          message: describeError(error, context.l10n),
           onRetry: () => ref.invalidate(competitionProvider(competitionId)),
         ),
       ),
@@ -46,28 +47,29 @@ class CompetitionScreen extends ConsumerWidget {
 
   static List<Widget> _sheet(BuildContext context, Competition c) {
     final p = context.palette;
+    final l = context.l10n;
     final closes = c.registrationClosesAt;
     return [
       FactRow(
         children: [
           FactTile(
             icon: Icons.confirmation_number_outlined,
-            label: 'Entry',
+            label: l.competitionFactEntry,
             value: c.isPaid
                 ? Format.money(c.entryFeeMinor, c.currency)
-                : 'Free',
+                : l.competitionFree,
           ),
           FactTile(
             icon: Icons.emoji_events_outlined,
-            label: 'Prize',
+            label: l.competitionFactPrize,
             value: c.prizeAmountMinor > 0
                 ? Format.money(c.prizeAmountMinor, c.currency)
                 : '—',
           ),
           FactTile(
             icon: Icons.account_tree_outlined,
-            label: 'Format',
-            value: c.format.label,
+            label: l.competitionFactFormat,
+            value: c.format.label(l),
           ),
         ],
       ),
@@ -79,15 +81,15 @@ class CompetitionScreen extends ConsumerWidget {
           children: [
             _When(
               icon: Icons.event_outlined,
-              label: 'Starts',
-              value: Format.dateTime(c.startsAt),
+              label: l.competitionStarts,
+              value: Format.dateTime(c.startsAt, l),
             ),
             if (closes != null) ...[
               const Divider(indent: 50),
               _When(
                 icon: Icons.how_to_reg_outlined,
-                label: 'Registration',
-                value: _closing(closes),
+                label: l.competitionRegistration,
+                value: _closing(closes, l),
               ),
             ],
           ],
@@ -101,7 +103,7 @@ class CompetitionScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Players',
+              l.competitionPlayers,
               style: TextStyle(fontSize: 13, color: p.mutedForeground),
             ),
             const SizedBox(height: 8),
@@ -111,9 +113,9 @@ class CompetitionScreen extends ConsumerWidget {
       ),
       if (c.description.trim().isNotEmpty) ...[
         const SizedBox(height: 28),
-        const Padding(
-          padding: EdgeInsets.only(left: 4),
-          child: SectionLabel('About'),
+        Padding(
+          padding: const EdgeInsets.only(left: 4),
+          child: SectionLabel(l.competitionAbout),
         ),
         const SizedBox(height: 10),
         Panel(
@@ -127,11 +129,11 @@ class CompetitionScreen extends ConsumerWidget {
   }
 
   /// The countdown when it's close, the date when it isn't.
-  static String _closing(DateTime closes) {
+  static String _closing(DateTime closes, AppLocalizations l) {
     final left = closes.difference(DateTime.now());
-    if (left.isNegative) return 'Closed';
-    if (left < const Duration(days: 3)) return Format.closesIn(closes);
-    return 'Closes ${Format.dateTime(closes)}';
+    if (left.isNegative) return l.closed;
+    if (left < const Duration(days: 3)) return Format.closesIn(closes, l);
+    return l.competitionClosesOn(Format.dateTime(closes, l));
   }
 }
 
@@ -174,7 +176,7 @@ class _Hero extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'by ${c.organizerName}',
+          context.l10n.competitionByOrganizer(c.organizerName),
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 15, color: p.subtleForeground),
         ),
