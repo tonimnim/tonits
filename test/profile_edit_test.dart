@@ -51,7 +51,9 @@ void main() {
     final api = await pumpTonits(
       tester,
       refreshToken: 'stored',
-      api: _api(profileSettingsJson(bio: 'Left foot only.')),
+      api: _api(
+        profileSettingsJson(bio: 'Left foot only.', discoverable: false),
+      ),
     );
     await _openProfile(tester);
     expect(find.text('@striker.9'), findsOneWidget);
@@ -63,7 +65,8 @@ void main() {
     expect(find.text('Available'), findsOneWidget);
     await tapText(tester, 'Save');
 
-    // The whole profile goes back, consents unchanged.
+    // The whole profile goes back: bio and consents unchanged, and public
+    // even if it was hidden.
     expect(_saved(api), {
       'handle': 'striker.10',
       'bio': 'Left foot only.',
@@ -93,64 +96,5 @@ void main() {
 
     expect(find.text('That username is taken. Try another.'), findsOneWidget);
     expect(find.widgetWithText(AppBar, 'Username'), findsOneWidget);
-  });
-
-  testWidgets('a bio is saved and shown', (tester) async {
-    final api = await pumpTonits(
-      tester,
-      refreshToken: 'stored',
-      api: _api(profileSettingsJson()),
-    );
-    await _openProfile(tester);
-    await tapText(tester, 'Bio');
-    await tester.enterText(
-      find.byType(TextField),
-      '  Nairobi. Weekends only.  ',
-    );
-    await tapText(tester, 'Save');
-
-    expect(_saved(api)['bio'], 'Nairobi. Weekends only.');
-    expect(find.text('Bio updated'), findsOneWidget);
-    expect(find.text('Nairobi. Weekends only.'), findsOneWidget);
-  });
-
-  testWidgets('switching the profile off hides it at once', (tester) async {
-    final api = await pumpTonits(
-      tester,
-      refreshToken: 'stored',
-      api: _api(profileSettingsJson()),
-    );
-    await _openProfile(tester);
-    await scrollPageTo(tester, find.text('Public profile'));
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
-
-    await tester.tap(find.byType(Switch));
-    await tester.pumpAndSettle();
-
-    expect(_saved(api)['discoverable'], isFalse);
-    expect(_saved(api)['handle'], 'striker.9');
-    expect(find.text('Your profile is hidden'), findsOneWidget);
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
-  });
-
-  testWidgets('a failed switch goes back and says why', (tester) async {
-    await pumpTonits(
-      tester,
-      refreshToken: 'stored',
-      api: _api(
-        profileSettingsJson(),
-        onSave: (_) => errorResponse(503, 'database_unavailable'),
-      ),
-    );
-    await _openProfile(tester);
-    await scrollPageTo(tester, find.text('Public profile'));
-    await tester.tap(find.byType(Switch));
-    await tester.pumpAndSettle();
-
-    expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
-    expect(
-      find.text('Ozone is having trouble right now. Try again shortly.'),
-      findsOneWidget,
-    );
   });
 }

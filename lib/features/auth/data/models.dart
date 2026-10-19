@@ -55,9 +55,12 @@ abstract class ProfileSettings with _$ProfileSettings {
     /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
     /// starting with a letter or digit.
     required String handle,
+
+    /// Not shown in the app; sent back as it is because the API still
+    /// requires it.
     @Default('') String bio,
 
-    /// Shown in rankings and search, with a photo others can see.
+    /// Profiles are public: the app always saves this as true.
     @Default(true) bool discoverable,
     @Default(false) bool analyticsConsent,
     @Default(false) bool scoutingConsent,

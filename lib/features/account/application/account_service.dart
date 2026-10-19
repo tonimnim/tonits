@@ -43,23 +43,16 @@ class AccountService {
     _adopt(await _repository.currentPlayer());
   }
 
-  /// Changes part of the public profile and keeps the rest as it is.
-  Future<void> updateProfile({
-    String? handle,
-    String? bio,
-    bool? discoverable,
-  }) async {
+  /// Changes the handle and keeps the rest of the profile as it is.
+  /// Profiles are public, so every save makes it so.
+  Future<void> updateProfile({required String handle}) async {
     final player = _ref.read(currentPlayerProvider);
     if (player == null) throw StateError('Signed out');
     final current =
         player.profile ?? ProfileSettings(handle: player.username ?? '');
     _adopt(
       await _repository.updateProfile(
-        current.copyWith(
-          handle: handle ?? current.handle,
-          bio: bio ?? current.bio,
-          discoverable: discoverable ?? current.discoverable,
-        ),
+        current.copyWith(handle: handle, discoverable: true),
       ),
     );
   }

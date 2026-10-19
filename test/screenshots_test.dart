@@ -303,7 +303,6 @@ void main() {
 
       await open('Display name', 'account-name-$suffix');
       await open('Username', 'account-username-$suffix');
-      await open('Bio', 'account-bio-$suffix');
       await open('Email', 'account-email-$suffix');
       await open('+254712345678', 'account-phone-$suffix');
     });

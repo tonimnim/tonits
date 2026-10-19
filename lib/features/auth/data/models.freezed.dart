@@ -364,7 +364,9 @@ mixin _$ProfileSettings {
 
 /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
 /// starting with a letter or digit.
- String get handle; String get bio;/// Shown in rankings and search, with a photo others can see.
+ String get handle;/// Not shown in the app; sent back as it is because the API still
+/// requires it.
+ String get bio;/// Profiles are public: the app always saves this as true.
  bool get discoverable; bool get analyticsConsent; bool get scoutingConsent;
 /// Create a copy of ProfileSettings
 /// with the given fields replaced by the non-null parameter values.
@@ -572,8 +574,10 @@ class _ProfileSettings implements ProfileSettings {
 /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
 /// starting with a letter or digit.
 @override final  String handle;
+/// Not shown in the app; sent back as it is because the API still
+/// requires it.
 @override@JsonKey() final  String bio;
-/// Shown in rankings and search, with a photo others can see.
+/// Profiles are public: the app always saves this as true.
 @override@JsonKey() final  bool discoverable;
 @override@JsonKey() final  bool analyticsConsent;
 @override@JsonKey() final  bool scoutingConsent;
