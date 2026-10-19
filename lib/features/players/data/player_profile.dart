@@ -1,94 +1,68 @@
-/// A player's public profile (`PublicPlayerProfile`), reduced to what the app
-/// shows: their record and their rating for the one game we run.
-class PlayerProfile {
-  const PlayerProfile({
-    required this.playerId,
-    required this.displayName,
-    required this.countryCode,
-    required this.record,
-    required this.rating,
-    this.joinedAt,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  factory PlayerProfile.fromJson(Map<String, dynamic> json) {
-    final ratings = (json['ratings'] as List? ?? const [])
-        .cast<Map<String, dynamic>>();
-    final efootball = ratings
-        .where((r) => r['gameId'] == gameId)
-        .map(GameRating.fromJson)
-        .firstOrNull;
-    return PlayerProfile(
-      playerId: json['playerId'] as String,
-      displayName: json['displayName'] as String,
-      countryCode: json['countryCode'] as String,
-      record: Record.fromJson(json['record'] as Map<String, dynamic>),
-      rating: efootball,
-      joinedAt: json['joinedAt'] is String
-          ? DateTime.parse(json['joinedAt'] as String)
-          : null,
-    );
-  }
+part 'player_profile.freezed.dart';
+part 'player_profile.g.dart';
+
+/// A player's public profile (`PublicPlayerProfile`): their record, and
+/// their rating for the one game we run.
+@freezed
+abstract class PlayerProfile with _$PlayerProfile {
+  const PlayerProfile._();
+
+  const factory PlayerProfile({
+    required String playerId,
+    required String displayName,
+    required String countryCode,
+    required MatchRecord record,
+    @Default(<GameRating>[]) List<GameRating> ratings,
+    DateTime? joinedAt,
+  }) = _PlayerProfile;
+
+  factory PlayerProfile.fromJson(Map<String, dynamic> json) =>
+      _$PlayerProfileFromJson(json);
 
   static const gameId = 'efootball-mobile';
 
-  final String playerId;
-  final String displayName;
-  final String countryCode;
-  final Record record;
-
   /// Null until the player has a rating for eFootball.
-  final GameRating? rating;
-  final DateTime? joinedAt;
+  GameRating? get rating =>
+      ratings.where((r) => r.gameId == gameId).firstOrNull;
 
   bool get hasPlayed => record.matchesPlayed > 0;
 }
 
 /// Wins, draws and losses across confirmed matches.
-class Record {
-  const Record({
-    required this.matchesPlayed,
-    required this.wins,
-    required this.draws,
-    required this.losses,
-  });
+@freezed
+abstract class MatchRecord with _$MatchRecord {
+  const MatchRecord._();
 
-  factory Record.fromJson(Map<String, dynamic> json) => Record(
-    matchesPlayed: json['matchesPlayed'] as int,
-    wins: json['wins'] as int,
-    draws: json['draws'] as int,
-    losses: json['losses'] as int,
-  );
+  const factory MatchRecord({
+    required int matchesPlayed,
+    required int wins,
+    required int draws,
+    required int losses,
+  }) = _MatchRecord;
 
-  final int matchesPlayed;
-  final int wins;
-  final int draws;
-  final int losses;
+  factory MatchRecord.fromJson(Map<String, dynamic> json) =>
+      _$MatchRecordFromJson(json);
 
   /// 0–1, or null before the first match.
   double? get winRate => matchesPlayed == 0 ? null : wins / matchesPlayed;
 }
 
-class GameRating {
-  const GameRating({
-    required this.rating,
-    required this.globalRank,
-    required this.countryRank,
-    required this.rankMovement,
-  });
+@freezed
+abstract class GameRating with _$GameRating {
+  const factory GameRating({
+    required String gameId,
+    required int rating,
 
-  factory GameRating.fromJson(Map<String, dynamic> json) => GameRating(
-    rating: json['rating'] as int,
-    globalRank: json['globalRank'] as int?,
-    countryRank: json['countryRank'] as int?,
-    rankMovement: json['rankMovement'] as int?,
-  );
+    /// Null while provisional.
+    int? globalRank,
+    int? countryRank,
 
-  final int rating;
+    /// Places gained (positive) or lost since the previous snapshot.
+    int? rankMovement,
+  }) = _GameRating;
 
-  /// Null while provisional.
-  final int? globalRank;
-  final int? countryRank;
-
-  /// Places gained (positive) or lost since the previous snapshot.
-  final int? rankMovement;
+  factory GameRating.fromJson(Map<String, dynamic> json) =>
+      _$GameRatingFromJson(json);
 }

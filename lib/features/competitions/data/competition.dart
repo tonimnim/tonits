@@ -1,61 +1,40 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'competition.freezed.dart';
+part 'competition.g.dart';
+
 /// A public competition (`Competition` in the OpenAPI contract). Only the
-/// fields the app shows are parsed.
-class Competition {
-  const Competition({
-    required this.id,
-    required this.name,
-    required this.gameName,
-    required this.organizerName,
-    required this.format,
-    required this.status,
-    required this.maxEntries,
-    required this.entryCount,
-    required this.entryType,
-    required this.entryFeeMinor,
-    required this.currency,
-    required this.prizeAmountMinor,
-    required this.startsAt,
-    this.registrationClosesAt,
-    this.description = '',
-  });
+/// fields the app shows are read.
+@freezed
+abstract class Competition with _$Competition {
+  const Competition._();
 
-  factory Competition.fromJson(Map<String, dynamic> json) => Competition(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    gameName: json['gameName'] as String,
-    organizerName: json['organizerName'] as String,
-    format: CompetitionFormat.parse(json['format'] as String),
-    status: CompetitionStatus.parse(json['status'] as String),
-    maxEntries: json['maxEntries'] as int,
-    entryCount: json['entryCount'] as int,
-    entryType: json['entryType'] == 'paid' ? EntryType.paid : EntryType.free,
-    entryFeeMinor: json['entryFeeMinor'] as int? ?? 0,
-    currency: json['currency'] as String,
-    prizeAmountMinor: json['prizeAmountMinor'] as int? ?? 0,
-    startsAt: DateTime.parse(json['startsAt'] as String),
-    registrationClosesAt: _date(json['registrationClosesAt']),
-    description: json['description'] as String? ?? '',
-  );
+  const factory Competition({
+    required String id,
+    required String name,
+    required String gameName,
+    required String organizerName,
+    @JsonKey(unknownEnumValue: CompetitionFormat.unknown)
+    required CompetitionFormat format,
+    @JsonKey(unknownEnumValue: CompetitionStatus.unknown)
+    required CompetitionStatus status,
+    required int maxEntries,
+    required int entryCount,
+    @JsonKey(unknownEnumValue: EntryType.free) required EntryType entryType,
 
-  final String id;
-  final String name;
-  final String gameName;
-  final String organizerName;
-  final CompetitionFormat format;
-  final CompetitionStatus status;
-  final int maxEntries;
-  final int entryCount;
-  final EntryType entryType;
+    /// In the currency's minor units; zero for free entry.
+    @Default(0) int entryFeeMinor,
+    required String currency,
 
-  /// In the currency's minor units; zero for free entry.
-  final int entryFeeMinor;
-  final String currency;
+    /// In minor units; zero when there is no prize.
+    @Default(0) int prizeAmountMinor,
+    required DateTime startsAt,
+    DateTime? registrationClosesAt,
+    @Default('') String description,
+  }) = _Competition;
 
-  /// In minor units; zero when there is no prize.
-  final int prizeAmountMinor;
-  final DateTime startsAt;
-  final DateTime? registrationClosesAt;
-  final String description;
+  factory Competition.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionFromJson(json);
 
   bool get isPaid => entryType == EntryType.paid && entryFeeMinor > 0;
 
@@ -67,13 +46,11 @@ class Competition {
     final closes = registrationClosesAt;
     return closes != null && !closes.isAfter(DateTime.now());
   }
-
-  static DateTime? _date(Object? value) =>
-      value is String ? DateTime.parse(value) : null;
 }
 
 enum EntryType { free, paid }
 
+@JsonEnum(fieldRename: FieldRename.snake)
 enum CompetitionFormat {
   singleElimination('Single elimination'),
   doubleElimination('Double elimination'),
@@ -83,15 +60,9 @@ enum CompetitionFormat {
   const CompetitionFormat(this.label);
 
   final String label;
-
-  static CompetitionFormat parse(String value) => switch (value) {
-    'single_elimination' => singleElimination,
-    'double_elimination' => doubleElimination,
-    'round_robin' => roundRobin,
-    _ => unknown,
-  };
 }
 
+@JsonEnum(fieldRename: FieldRename.snake)
 enum CompetitionStatus {
   published,
   registrationOpen,
@@ -100,16 +71,6 @@ enum CompetitionStatus {
   completed,
   cancelled,
   unknown;
-
-  static CompetitionStatus parse(String value) => switch (value) {
-    'published' => published,
-    'registration_open' => registrationOpen,
-    'check_in' => checkIn,
-    'running' => running,
-    'completed' => completed,
-    'cancelled' => cancelled,
-    _ => unknown,
-  };
 
   /// The query value for `GET /v1/competitions?status=`.
   String get wire => switch (this) {

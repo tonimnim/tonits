@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:tonits/core/api/cursor_page.dart';
 import 'package:tonits/features/competitions/data/competition.dart';
 import 'package:tonits/features/matches/data/match_summary.dart';
@@ -61,13 +62,38 @@ void main() {
   });
 
   test('lifecycle and outcome parse from snake_case', () {
+    MatchSummary parse(String lifecycle, String? outcome) =>
+        MatchSummary.fromJson({
+          ...matchJson(),
+          'lifecycle': lifecycle,
+          'outcome': outcome,
+        });
+    final m = parse('awaiting_opponent_confirmation', 'no_result');
+    expect(m.lifecycle, MatchLifecycle.awaitingOpponentConfirmation);
+    expect(m.outcome, MatchOutcome.noResult);
+  });
+
+  test('values the app does not know yet fall back instead of failing', () {
+    final m = MatchSummary.fromJson({
+      ...matchJson(),
+      'lifecycle': 'a_new_state',
+      'outcome': 'a_new_outcome',
+    });
+    expect(m.lifecycle, MatchLifecycle.unknown);
+    expect(m.outcome, isNull);
+  });
+
+  test('a field the contract requires names itself when missing', () {
     expect(
-      MatchLifecycle.parse('awaiting_opponent_confirmation'),
-      MatchLifecycle.awaitingOpponentConfirmation,
+      () => MatchSummary.fromJson({...matchJson()}..remove('roundName')),
+      throwsA(
+        isA<CheckedFromJsonException>().having(
+          (e) => e.key,
+          'key',
+          'roundName',
+        ),
+      ),
     );
-    expect(MatchLifecycle.parse('new_state'), MatchLifecycle.unknown);
-    expect(MatchOutcome.parse('no_result'), MatchOutcome.noResult);
-    expect(MatchOutcome.parse(null), isNull);
   });
 
   test('a provisional ranked player has no rank or rating', () {
@@ -102,7 +128,7 @@ void main() {
 
   test('no matches means no goals or streak', () {
     final stats = PlayerStats.from(
-      const Record(matchesPlayed: 0, wins: 0, draws: 0, losses: 0),
+      const MatchRecord(matchesPlayed: 0, wins: 0, draws: 0, losses: 0),
       const [],
     );
     expect(stats.goalsPerMatch, isNull);

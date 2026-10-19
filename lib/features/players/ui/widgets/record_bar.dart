@@ -7,7 +7,7 @@ import '../../data/player_profile.dart';
 class RecordBar extends StatelessWidget {
   const RecordBar({super.key, required this.record});
 
-  final Record record;
+  final MatchRecord record;
 
   @override
   Widget build(BuildContext context) {

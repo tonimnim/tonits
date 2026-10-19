@@ -89,9 +89,17 @@ the app (see the same issue with google_fonts 9).
 
 **Networking: package:http behind `ApiClient`.** One place adds
 `X-Request-ID`, the bearer token and the serialized 401 refresh. Repositories
-turn JSON into typed models and nothing else. Hand-written `fromJson` matches
-the OpenAPI schemas. Code generation (freezed, json_serializable) is deferred
-until the model count makes it pay for itself.
+turn JSON into typed models and nothing else.
+
+**Models: freezed + json_serializable.** Every API model is a freezed class
+whose fields follow the OpenAPI schema, with `@JsonKey` for renames and
+`readValue` for nested values the screens read flat. Parsing is `checked`,
+so a missing or mistyped field fails with the key's name instead of a vague
+cast error, and every enum names an `unknownEnumValue` so a value the app
+doesn't know yet never crashes it. The app only reads JSON (requests are
+built by hand), so no `toJson` is generated (see `build.yaml`). After
+changing a model, run `dart run build_runner build`; the generated
+`*.freezed.dart` and `*.g.dart` files are committed.
 
 **Sessions.** Players sign in with Google or Apple (`IdentityProvider`
 fakes stand in for both in tests). The refresh token lives in

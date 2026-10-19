@@ -1,43 +1,38 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'played_match.freezed.dart';
+part 'played_match.g.dart';
+
 /// A confirmed match from a player's public history (`PublicMatch`), seen
 /// from that player's side.
-class PlayedMatch {
-  const PlayedMatch({
-    required this.matchId,
-    required this.playedAt,
-    required this.opponentName,
-    required this.goalsFor,
-    required this.goalsAgainst,
-    required this.result,
-    required this.competitionName,
-    required this.stage,
-  });
+@freezed
+abstract class PlayedMatch with _$PlayedMatch {
+  const factory PlayedMatch({
+    required String matchId,
+    required DateTime playedAt,
 
-  factory PlayedMatch.fromJson(Map<String, dynamic> json) {
-    final score = json['score'] as Map<String, dynamic>;
-    final opponent = json['opponent'] as Map<String, dynamic>?;
-    return PlayedMatch(
-      matchId: json['matchId'] as String,
-      playedAt: DateTime.parse(json['playedAt'] as String),
-      opponentName: opponent?['displayName'] as String?,
-      goalsFor: score['player'] as int,
-      goalsAgainst: score['opponent'] as int,
-      result: MatchResult.parse(json['outcome'] as String),
-      competitionName: (json['competition'] as Map)['name'] as String,
-      stage: json['stage'] as String,
-    );
-  }
+    /// Null when the opponent's profile is no longer public.
+    @JsonKey(readValue: _opponentName) String? opponentName,
+    @JsonKey(readValue: _goalsFor) required int goalsFor,
+    @JsonKey(readValue: _goalsAgainst) required int goalsAgainst,
+    @JsonKey(name: 'outcome', unknownEnumValue: MatchResult.draw)
+    required MatchResult result,
+    @JsonKey(readValue: _competitionName) required String competitionName,
+    required String stage,
+  }) = _PlayedMatch;
 
-  final String matchId;
-  final DateTime playedAt;
-
-  /// Null when the opponent's profile is no longer public.
-  final String? opponentName;
-  final int goalsFor;
-  final int goalsAgainst;
-  final MatchResult result;
-  final String competitionName;
-  final String stage;
+  factory PlayedMatch.fromJson(Map<String, dynamic> json) =>
+      _$PlayedMatchFromJson(json);
 }
+
+Object? _opponentName(Map<dynamic, dynamic> json, String _) =>
+    (json['opponent'] as Map?)?['displayName'];
+Object? _goalsFor(Map<dynamic, dynamic> json, String _) =>
+    (json['score'] as Map?)?['player'];
+Object? _goalsAgainst(Map<dynamic, dynamic> json, String _) =>
+    (json['score'] as Map?)?['opponent'];
+Object? _competitionName(Map<dynamic, dynamic> json, String _) =>
+    (json['competition'] as Map?)?['name'];
 
 enum MatchResult {
   win('W'),
@@ -47,23 +42,14 @@ enum MatchResult {
   const MatchResult(this.letter);
 
   final String letter;
-
-  static MatchResult parse(String value) => switch (value) {
-    'win' => win,
-    'loss' => loss,
-    _ => draw,
-  };
 }
 
 /// A point on the player's rating line.
-class RatingPoint {
-  const RatingPoint({required this.at, required this.rating});
+@freezed
+abstract class RatingPoint with _$RatingPoint {
+  const factory RatingPoint({required DateTime at, required int rating}) =
+      _RatingPoint;
 
-  factory RatingPoint.fromJson(Map<String, dynamic> json) => RatingPoint(
-    at: DateTime.parse(json['at'] as String),
-    rating: json['rating'] as int,
-  );
-
-  final DateTime at;
-  final int rating;
+  factory RatingPoint.fromJson(Map<String, dynamic> json) =>
+      _$RatingPointFromJson(json);
 }

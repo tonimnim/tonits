@@ -12,7 +12,7 @@ class PlayerStats {
   });
 
   /// [recent] is newest first.
-  factory PlayerStats.from(Record record, List<PlayedMatch> recent) {
+  factory PlayerStats.from(MatchRecord record, List<PlayedMatch> recent) {
     // Goals come from the recent matches until the API reports totals
     // (docs/backend-requests.md).
     final goals = recent.fold(0, (sum, m) => sum + m.goalsFor);
@@ -29,7 +29,7 @@ class PlayerStats {
     );
   }
 
-  final Record record;
+  final MatchRecord record;
 
   /// Average goals scored over [goalsSample] recent matches.
   final double? goalsPerMatch;

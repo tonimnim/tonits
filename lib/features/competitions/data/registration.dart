@@ -1,24 +1,21 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'registration.freezed.dart';
+part 'registration.g.dart';
+
 /// The player's entry in a competition (`Registration`).
-class Registration {
-  const Registration({
-    required this.id,
-    required this.competitionId,
-    required this.status,
-    required this.entryFeeMinor,
-  });
+@freezed
+abstract class Registration with _$Registration {
+  const factory Registration({
+    required String id,
+    required String competitionId,
 
-  factory Registration.fromJson(Map<String, dynamic> json) => Registration(
-    id: json['id'] as String,
-    competitionId: json['competitionId'] as String,
-    status: json['status'] as String,
-    entryFeeMinor: json['entryFeeMinor'] as int? ?? 0,
-  );
+    /// `registered`, `checked_in`, `accepted`, `withdrawal_pending`,
+    /// `withdrawn` or `disqualified`.
+    required String status,
+    @Default(0) int entryFeeMinor,
+  }) = _Registration;
 
-  final String id;
-  final String competitionId;
-
-  /// `registered`, `checked_in`, `accepted`, `withdrawal_pending`,
-  /// `withdrawn` or `disqualified`.
-  final String status;
-  final int entryFeeMinor;
+  factory Registration.fromJson(Map<String, dynamic> json) =>
+      _$RegistrationFromJson(json);
 }

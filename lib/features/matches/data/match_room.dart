@@ -1,74 +1,56 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'match_summary.dart';
+
+part 'match_room.freezed.dart';
+part 'match_room.g.dart';
 
 /// The signed-in player's view of one match (`MatchRoom` in the OpenAPI
 /// contract): the summary, plus the result being settled and its deadlines.
-class MatchRoom {
-  const MatchRoom({
-    required this.summary,
-    required this.code,
-    required this.bestOf,
-    required this.drawAllowed,
-    required this.checkInOpensAt,
-    required this.resultDueAt,
-    required this.completionReason,
-    required this.instructions,
-    required this.verification,
-    required this.result,
-    required this.windows,
-  });
+@freezed
+abstract class MatchRoom with _$MatchRoom {
+  const MatchRoom._();
 
-  factory MatchRoom.fromJson(Map<String, dynamic> json) => MatchRoom(
-    summary: MatchSummary.fromJson(json),
-    code: json['code'] as String? ?? '',
-    bestOf: json['bestOf'] as int? ?? 1,
-    drawAllowed: json['drawAllowed'] as bool? ?? false,
-    checkInOpensAt: _date(json['checkInOpensAt']),
-    resultDueAt: _date(json['resultDueAt']),
-    completionReason: json['completionReason'] as String?,
-    instructions: [
-      for (final i in (json['friendMatchInstructions'] as List? ?? const []))
-        FriendMatchInstruction.fromJson(i as Map<String, dynamic>),
-    ],
-    verification: ResultVerification.fromJson(
-      json['resultVerification'] as Map<String, dynamic>,
-    ),
-    result: json['result'] is Map<String, dynamic>
-        ? ConfirmedResult.fromJson(json['result'] as Map<String, dynamic>)
-        : null,
-    windows: VerificationWindows.fromJson(
-      json['verificationPolicy'] as Map<String, dynamic>? ?? const {},
-    ),
-  );
+  const factory MatchRoom({
+    /// The summary fields, read from the same object.
+    @JsonKey(readValue: _whole) required MatchSummary summary,
 
-  final MatchSummary summary;
+    /// A short reference, such as "M-1042", for support.
+    @Default('') String code,
+    @Default(1) int bestOf,
 
-  /// A short reference, such as "M-1042", for support.
-  final String code;
-  final int bestOf;
+    /// Round-robin matches may end level; knockouts need penalties.
+    @Default(false) bool drawAllowed,
+    DateTime? checkInOpensAt,
 
-  /// Round-robin matches may end level; knockouts need penalties.
-  final bool drawAllowed;
-  final DateTime? checkInOpensAt;
+    /// When a result must be in; with none by then, both entries are removed.
+    DateTime? resultDueAt,
 
-  /// When a result must be in; with none by then, both entries are removed.
-  final DateTime? resultDueAt;
+    /// Why a finished match ended (`played`, `walkover`, ...).
+    String? completionReason,
+    @JsonKey(name: 'friendMatchInstructions')
+    @Default(<FriendMatchInstruction>[])
+    List<FriendMatchInstruction> instructions,
+    @JsonKey(name: 'resultVerification')
+    required ResultVerification verification,
 
-  /// Why a finished match ended (`played`, `walkover`, ...).
-  final String? completionReason;
-  final List<FriendMatchInstruction> instructions;
-  final ResultVerification verification;
+    /// The final score, once the match is completed.
+    ConfirmedResult? result,
+    @JsonKey(name: 'verificationPolicy')
+    @Default(VerificationWindows())
+    VerificationWindows windows,
+  }) = _MatchRoom;
 
-  /// The final score, once the match is completed.
-  final ConfirmedResult? result;
-  final VerificationWindows windows;
+  factory MatchRoom.fromJson(Map<String, dynamic> json) =>
+      _$MatchRoomFromJson(json);
 
   String get id => summary.id;
   MatchLifecycle get lifecycle => summary.lifecycle;
   bool can(MatchAction action) => summary.allowedActions.contains(action.wire);
-
-  static DateTime? _date(Object? value) =>
-      value is String ? DateTime.parse(value) : null;
 }
+
+/// Reads the whole object, for a field built from its parent's keys.
+Object? _whole(Map<dynamic, dynamic> json, String _) => json;
 
 /// What the server lets the player do now, by its wire name.
 enum MatchAction {
@@ -83,150 +65,118 @@ enum MatchAction {
   final String wire;
 }
 
-class FriendMatchInstruction {
-  const FriendMatchInstruction({required this.title, required this.detail});
+@freezed
+abstract class FriendMatchInstruction with _$FriendMatchInstruction {
+  const factory FriendMatchInstruction({
+    required String title,
+    required String detail,
+  }) = _FriendMatchInstruction;
 
   factory FriendMatchInstruction.fromJson(Map<String, dynamic> json) =>
-      FriendMatchInstruction(
-        title: json['title'] as String,
-        detail: json['detail'] as String,
-      );
-
-  final String title;
-  final String detail;
+      _$FriendMatchInstructionFromJson(json);
 }
 
+@JsonEnum(fieldRename: FieldRename.snake)
 enum VerificationPhase {
   notStarted,
   awaitingConfirmation,
   awaitingScreenshots,
   inReview,
-  resolved;
-
-  static VerificationPhase parse(String? value) => switch (value) {
-    'awaiting_confirmation' => awaitingConfirmation,
-    'awaiting_screenshots' => awaitingScreenshots,
-    'in_review' => inReview,
-    'resolved' => resolved,
-    _ => notStarted,
-  };
+  resolved,
 }
 
 /// The result being settled, as this player sees it. Neither player ever
 /// sees the other's screenshot.
-class ResultVerification {
-  const ResultVerification({
-    required this.phase,
-    required this.submitted,
-    required this.myScreenshotSent,
-    required this.opponentScreenshotSent,
-    required this.confirmationDeadline,
-    required this.screenshotDeadline,
-    required this.resolution,
-    required this.entryRemoved,
-  });
+@freezed
+abstract class ResultVerification with _$ResultVerification {
+  const factory ResultVerification({
+    @JsonKey(unknownEnumValue: VerificationPhase.notStarted)
+    @Default(VerificationPhase.notStarted)
+    VerificationPhase phase,
+    @JsonKey(name: 'submittedResult') SubmittedResult? submitted,
+    @JsonKey(name: 'myScreenshot', readValue: _present)
+    @Default(false)
+    bool myScreenshotSent,
+    @JsonKey(name: 'opponentScreenshotSubmitted')
+    @Default(false)
+    bool opponentScreenshotSent,
+    DateTime? confirmationDeadline,
+    DateTime? screenshotDeadline,
+
+    /// `agreed`, `confirmation_timeout`, `response_timeout`, ...
+    String? resolution,
+
+    /// True only on the match that removed this player's entry.
+    @Default(false) bool entryRemoved,
+  }) = _ResultVerification;
 
   factory ResultVerification.fromJson(Map<String, dynamic> json) =>
-      ResultVerification(
-        phase: VerificationPhase.parse(json['phase'] as String?),
-        submitted: json['submittedResult'] is Map<String, dynamic>
-            ? SubmittedResult.fromJson(
-                json['submittedResult'] as Map<String, dynamic>,
-              )
-            : null,
-        myScreenshotSent: json['myScreenshot'] != null,
-        opponentScreenshotSent:
-            json['opponentScreenshotSubmitted'] as bool? ?? false,
-        confirmationDeadline: MatchRoom._date(json['confirmationDeadline']),
-        screenshotDeadline: MatchRoom._date(json['screenshotDeadline']),
-        resolution: json['resolution'] as String?,
-        entryRemoved: json['entryRemoved'] as bool? ?? false,
-      );
-
-  final VerificationPhase phase;
-  final SubmittedResult? submitted;
-  final bool myScreenshotSent;
-  final bool opponentScreenshotSent;
-  final DateTime? confirmationDeadline;
-  final DateTime? screenshotDeadline;
-
-  /// `agreed`, `confirmation_timeout`, `response_timeout`, ...
-  final String? resolution;
-
-  /// True only on the match that removed this player's entry.
-  final bool entryRemoved;
+      _$ResultVerificationFromJson(json);
 }
 
+/// Whether the key holds a value.
+Object? _present(Map<dynamic, dynamic> json, String key) => json[key] != null;
+
 /// A home–away score with an optional penalty shootout.
-class Score {
-  const Score(this.home, this.away, {this.penalties});
+@freezed
+abstract class Score with _$Score {
+  const Score._();
 
-  static Score fromJson(Map<String, dynamic> json) => Score(
-    json['homeScore'] as int,
-    json['awayScore'] as int,
-    penalties: json['tiebreak'] is Map<String, dynamic>
-        ? Score.fromJson(json['tiebreak'] as Map<String, dynamic>)
-        : null,
-  );
+  const factory Score(
+    @JsonKey(name: 'homeScore') int home,
+    @JsonKey(name: 'awayScore') int away, {
+    @JsonKey(name: 'tiebreak') Score? penalties,
+  }) = _Score;
 
-  final int home;
-  final int away;
-  final Score? penalties;
+  factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
   /// The score from one side's point of view: (mine, theirs).
   (int, int) forSide({required bool home}) =>
       home ? (this.home, away) : (away, this.home);
 }
 
-class SubmittedResult {
-  const SubmittedResult({
-    required this.score,
-    required this.byMe,
-    required this.at,
-  });
+@freezed
+abstract class SubmittedResult with _$SubmittedResult {
+  const factory SubmittedResult({
+    @JsonKey(readValue: _whole) required Score score,
+    @JsonKey(name: 'submittedByMe') required bool byMe,
+    @JsonKey(name: 'submittedAt') required DateTime at,
+  }) = _SubmittedResult;
 
   factory SubmittedResult.fromJson(Map<String, dynamic> json) =>
-      SubmittedResult(
-        score: Score.fromJson(json),
-        byMe: json['submittedByMe'] as bool,
-        at: DateTime.parse(json['submittedAt'] as String),
-      );
-
-  final Score score;
-  final bool byMe;
-  final DateTime at;
+      _$SubmittedResultFromJson(json);
 }
 
-class ConfirmedResult {
-  const ConfirmedResult({required this.score, required this.origin});
+@freezed
+abstract class ConfirmedResult with _$ConfirmedResult {
+  const factory ConfirmedResult({
+    @JsonKey(readValue: _whole) required Score score,
+
+    /// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
+    required String origin,
+  }) = _ConfirmedResult;
 
   factory ConfirmedResult.fromJson(Map<String, dynamic> json) =>
-      ConfirmedResult(
-        score: Score.fromJson(json),
-        origin: json['origin'] as String,
-      );
-
-  final Score score;
-
-  /// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
-  final String origin;
+      _$ConfirmedResultFromJson(json);
 }
 
 /// How long each step of settling a result lasts.
-class VerificationWindows {
-  const VerificationWindows({required this.confirm, required this.screenshot});
+@freezed
+abstract class VerificationWindows with _$VerificationWindows {
+  const factory VerificationWindows({
+    /// The opponent's time to confirm or reject a submitted result.
+    @JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)
+    @Default(Duration(minutes: 10))
+    Duration confirm,
+
+    /// Each side's time to send a screenshot after a rejection.
+    @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)
+    @Default(Duration(minutes: 10))
+    Duration screenshot,
+  }) = _VerificationWindows;
 
   factory VerificationWindows.fromJson(Map<String, dynamic> json) =>
-      VerificationWindows(
-        confirm: Duration(seconds: json['reportWindowSeconds'] as int? ?? 600),
-        screenshot: Duration(
-          seconds: json['responseWindowSeconds'] as int? ?? 600,
-        ),
-      );
-
-  /// The opponent's time to confirm or reject a submitted result.
-  final Duration confirm;
-
-  /// Each side's time to send a screenshot after a rejection.
-  final Duration screenshot;
+      _$VerificationWindowsFromJson(json);
 }
+
+Duration _seconds(int value) => Duration(seconds: value);
