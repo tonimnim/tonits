@@ -364,10 +364,7 @@ mixin _$ProfileSettings {
 
 /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
 /// starting with a letter or digit.
- String get handle;/// Not shown in the app; sent back as it is because the API still
-/// requires it.
- String get bio;/// Profiles are public: the app always saves this as true.
- bool get discoverable; bool get analyticsConsent; bool get scoutingConsent;
+ String get handle; bool get analyticsConsent; bool get scoutingConsent;
 /// Create a copy of ProfileSettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -379,20 +376,20 @@ $ProfileSettingsCopyWith<ProfileSettings> get copyWith => _$ProfileSettingsCopyW
 @override
 bool operator ==(Object other) {
   final _this = this as ProfileSettings;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileSettings&&(identical(other.handle, _this.handle) || other.handle == _this.handle)&&(identical(other.bio, _this.bio) || other.bio == _this.bio)&&(identical(other.discoverable, _this.discoverable) || other.discoverable == _this.discoverable)&&(identical(other.analyticsConsent, _this.analyticsConsent) || other.analyticsConsent == _this.analyticsConsent)&&(identical(other.scoutingConsent, _this.scoutingConsent) || other.scoutingConsent == _this.scoutingConsent));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileSettings&&(identical(other.handle, _this.handle) || other.handle == _this.handle)&&(identical(other.analyticsConsent, _this.analyticsConsent) || other.analyticsConsent == _this.analyticsConsent)&&(identical(other.scoutingConsent, _this.scoutingConsent) || other.scoutingConsent == _this.scoutingConsent));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as ProfileSettings;
-  return Object.hash(runtimeType,_this.handle,_this.bio,_this.discoverable,_this.analyticsConsent,_this.scoutingConsent);
+  return Object.hash(runtimeType,_this.handle,_this.analyticsConsent,_this.scoutingConsent);
 }
 
 @override
 String toString() {
   final _this = this as ProfileSettings;
-  return 'ProfileSettings(handle: ${_this.handle}, bio: ${_this.bio}, discoverable: ${_this.discoverable}, analyticsConsent: ${_this.analyticsConsent}, scoutingConsent: ${_this.scoutingConsent})';
+  return 'ProfileSettings(handle: ${_this.handle}, analyticsConsent: ${_this.analyticsConsent}, scoutingConsent: ${_this.scoutingConsent})';
 }
 
 
@@ -403,7 +400,7 @@ abstract mixin class $ProfileSettingsCopyWith<$Res>  {
   factory $ProfileSettingsCopyWith(ProfileSettings value, $Res Function(ProfileSettings) _then) = _$ProfileSettingsCopyWithImpl;
 @useResult
 $Res call({
- String handle, String bio, bool discoverable, bool analyticsConsent, bool scoutingConsent
+ String handle, bool analyticsConsent, bool scoutingConsent
 });
 
 
@@ -420,12 +417,10 @@ class _$ProfileSettingsCopyWithImpl<$Res>
 
 /// Create a copy of ProfileSettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? handle = null,Object? bio = null,Object? discoverable = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? handle = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
   return _then(ProfileSettings(
 handle: null == handle ? _self.handle : handle // ignore: cast_nullable_to_non_nullable
-as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
-as String,discoverable: null == discoverable ? _self.discoverable : discoverable // ignore: cast_nullable_to_non_nullable
-as bool,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
+as String,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
 as bool,scoutingConsent: null == scoutingConsent ? _self.scoutingConsent : scoutingConsent // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -512,10 +507,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String handle,  bool analyticsConsent,  bool scoutingConsent)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileSettings() when $default != null:
-return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+return $default(_that.handle,_that.analyticsConsent,_that.scoutingConsent);case _:
   return orElse();
 
 }
@@ -533,10 +528,10 @@ return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String handle,  bool analyticsConsent,  bool scoutingConsent)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileSettings():
-return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+return $default(_that.handle,_that.analyticsConsent,_that.scoutingConsent);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -553,10 +548,10 @@ return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String handle,  String bio,  bool discoverable,  bool analyticsConsent,  bool scoutingConsent)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String handle,  bool analyticsConsent,  bool scoutingConsent)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileSettings() when $default != null:
-return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent,_that.scoutingConsent);case _:
+return $default(_that.handle,_that.analyticsConsent,_that.scoutingConsent);case _:
   return null;
 
 }
@@ -568,17 +563,12 @@ return $default(_that.handle,_that.bio,_that.discoverable,_that.analyticsConsent
 @JsonSerializable(createToJson: false)
 
 class _ProfileSettings implements ProfileSettings {
-  const _ProfileSettings({required this.handle, this.bio = '', this.discoverable = true, this.analyticsConsent = false, this.scoutingConsent = false});
+  const _ProfileSettings({required this.handle, this.analyticsConsent = false, this.scoutingConsent = false});
   factory _ProfileSettings.fromJson(Map<String, dynamic> json) => _$ProfileSettingsFromJson(json);
 
 /// The username, as `@handle`: 3 to 24 letters, digits, `_` or `.`,
 /// starting with a letter or digit.
 @override final  String handle;
-/// Not shown in the app; sent back as it is because the API still
-/// requires it.
-@override@JsonKey() final  String bio;
-/// Profiles are public: the app always saves this as true.
-@override@JsonKey() final  bool discoverable;
 @override@JsonKey() final  bool analyticsConsent;
 @override@JsonKey() final  bool scoutingConsent;
 
@@ -592,18 +582,18 @@ _$ProfileSettingsCopyWith<_ProfileSettings> get copyWith => __$ProfileSettingsCo
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileSettings&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.discoverable, discoverable) || other.discoverable == discoverable)&&(identical(other.analyticsConsent, analyticsConsent) || other.analyticsConsent == analyticsConsent)&&(identical(other.scoutingConsent, scoutingConsent) || other.scoutingConsent == scoutingConsent));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileSettings&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.analyticsConsent, analyticsConsent) || other.analyticsConsent == analyticsConsent)&&(identical(other.scoutingConsent, scoutingConsent) || other.scoutingConsent == scoutingConsent));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,handle,bio,discoverable,analyticsConsent,scoutingConsent);
+    return Object.hash(runtimeType,handle,analyticsConsent,scoutingConsent);
 }
 
 @override
 String toString() {
-    return 'ProfileSettings(handle: $handle, bio: $bio, discoverable: $discoverable, analyticsConsent: $analyticsConsent, scoutingConsent: $scoutingConsent)';
+    return 'ProfileSettings(handle: $handle, analyticsConsent: $analyticsConsent, scoutingConsent: $scoutingConsent)';
 }
 
 
@@ -614,7 +604,7 @@ abstract mixin class _$ProfileSettingsCopyWith<$Res> implements $ProfileSettings
   factory _$ProfileSettingsCopyWith(_ProfileSettings value, $Res Function(_ProfileSettings) _then) = __$ProfileSettingsCopyWithImpl;
 @override @useResult
 $Res call({
- String handle, String bio, bool discoverable, bool analyticsConsent, bool scoutingConsent
+ String handle, bool analyticsConsent, bool scoutingConsent
 });
 
 
@@ -631,12 +621,10 @@ class __$ProfileSettingsCopyWithImpl<$Res>
 
 /// Create a copy of ProfileSettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? handle = null,Object? bio = null,Object? discoverable = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? handle = null,Object? analyticsConsent = null,Object? scoutingConsent = null,}) {
   return _then(_ProfileSettings(
 handle: null == handle ? _self.handle : handle // ignore: cast_nullable_to_non_nullable
-as String,bio: null == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
-as String,discoverable: null == discoverable ? _self.discoverable : discoverable // ignore: cast_nullable_to_non_nullable
-as bool,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
+as String,analyticsConsent: null == analyticsConsent ? _self.analyticsConsent : analyticsConsent // ignore: cast_nullable_to_non_nullable
 as bool,scoutingConsent: null == scoutingConsent ? _self.scoutingConsent : scoutingConsent // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

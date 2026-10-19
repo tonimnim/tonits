@@ -51,9 +51,7 @@ void main() {
     final api = await pumpTonits(
       tester,
       refreshToken: 'stored',
-      api: _api(
-        profileSettingsJson(bio: 'Left foot only.', discoverable: false),
-      ),
+      api: _api(profileSettingsJson()),
     );
     await _openProfile(tester);
     expect(find.text('@striker.9'), findsOneWidget);
@@ -65,12 +63,10 @@ void main() {
     expect(find.text('Available'), findsOneWidget);
     await tapText(tester, 'Save');
 
-    // The whole profile goes back: bio and consents unchanged, and public
-    // even if it was hidden.
+    // The whole profile goes back, consents unchanged; nothing else, as the
+    // API refuses unknown fields.
     expect(_saved(api), {
       'handle': 'striker.10',
-      'bio': 'Left foot only.',
-      'discoverable': true,
       'analyticsConsent': true,
       'scoutingConsent': false,
     });

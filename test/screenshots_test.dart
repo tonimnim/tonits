@@ -270,10 +270,7 @@ void main() {
         displayName: 'Amina Otieno',
         email: 'amina@example.com',
         phoneNumber: '+254712345678',
-        profile: profileSettingsJson(
-          handle: 'amina.otieno',
-          bio: 'Left foot, Nairobi, weekends only.',
-        ),
+        profile: profileSettingsJson(handle: 'amina.otieno'),
       );
       await _pump(
         tester,

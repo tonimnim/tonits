@@ -60,8 +60,6 @@ class AccountRepository {
       '/v1/me/profile',
       body: {
         'handle': profile.handle,
-        'bio': profile.bio,
-        'discoverable': profile.discoverable,
         'analyticsConsent': profile.analyticsConsent,
         'scoutingConsent': profile.scoutingConsent,
       },

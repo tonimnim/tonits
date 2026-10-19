@@ -43,18 +43,13 @@ class AccountService {
     _adopt(await _repository.currentPlayer());
   }
 
-  /// Changes the handle and keeps the rest of the profile as it is.
-  /// Profiles are public, so every save makes it so.
+  /// Changes the handle and keeps the consents as they are.
   Future<void> updateProfile({required String handle}) async {
     final player = _ref.read(currentPlayerProvider);
     if (player == null) throw StateError('Signed out');
     final current =
         player.profile ?? ProfileSettings(handle: player.username ?? '');
-    _adopt(
-      await _repository.updateProfile(
-        current.copyWith(handle: handle, discoverable: true),
-      ),
-    );
+    _adopt(await _repository.updateProfile(current.copyWith(handle: handle)));
   }
 
   /// Uploads [bytes] as the profile photo and makes it the one shown.

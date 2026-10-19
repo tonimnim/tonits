@@ -89,14 +89,8 @@ Map<String, dynamic> playerJson({
 };
 
 /// A `Profile`: the player's public profile settings.
-Map<String, dynamic> profileSettingsJson({
-  String handle = 'striker.9',
-  String bio = '',
-  bool discoverable = true,
-}) => {
+Map<String, dynamic> profileSettingsJson({String handle = 'striker.9'}) => {
   'handle': handle,
-  'bio': bio,
-  'discoverable': discoverable,
   // Consents the app never shows, which every save must keep.
   'analyticsConsent': true,
   'scoutingConsent': false,
@@ -221,7 +215,6 @@ Map<String, dynamic> profileJson({
   'playerId': myPlayerId,
   'handle': 'striker.9',
   'displayName': 'striker.9',
-  'bio': '',
   'avatarUrl': null,
   'countryCode': 'KE',
   'joinedAt': '2026-09-01T00:00:00Z',

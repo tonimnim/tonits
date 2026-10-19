@@ -44,11 +44,6 @@ _ProfileSettings _$ProfileSettingsFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_ProfileSettings', json, ($checkedConvert) {
       final val = _ProfileSettings(
         handle: $checkedConvert('handle', (v) => v as String),
-        bio: $checkedConvert('bio', (v) => v as String? ?? ''),
-        discoverable: $checkedConvert(
-          'discoverable',
-          (v) => v as bool? ?? true,
-        ),
         analyticsConsent: $checkedConvert(
           'analyticsConsent',
           (v) => v as bool? ?? false,

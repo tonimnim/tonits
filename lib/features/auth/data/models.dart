@@ -47,8 +47,9 @@ abstract class Player with _$Player {
   };
 }
 
-/// The player's public profile settings (`ProfileInput`). Saving sends
-/// every field back, so the consents travel unchanged.
+/// The player's profile settings (`ProfileInput`). Every profile is
+/// public. Saving sends every field back, so the consents travel
+/// unchanged.
 @freezed
 abstract class ProfileSettings with _$ProfileSettings {
   const factory ProfileSettings({
@@ -56,12 +57,6 @@ abstract class ProfileSettings with _$ProfileSettings {
     /// starting with a letter or digit.
     required String handle,
 
-    /// Not shown in the app; sent back as it is because the API still
-    /// requires it.
-    @Default('') String bio,
-
-    /// Profiles are public: the app always saves this as true.
-    @Default(true) bool discoverable,
     @Default(false) bool analyticsConsent,
     @Default(false) bool scoutingConsent,
   }) = _ProfileSettings;
