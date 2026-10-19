@@ -37,6 +37,9 @@ abstract final class Routes {
   static const email = '$profile/email';
   static const phone = '$profile/phone';
 
+  /// The competitions the player has entered.
+  static const myEntries = '$profile/entries';
+
   /// Paths reachable while signed out.
   static bool isSignedOut(String path) => path.startsWith(welcome);
 }

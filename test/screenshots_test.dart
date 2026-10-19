@@ -569,6 +569,67 @@ void main() {
       await _shoot(tester, 'competition-groups-$suffix');
     });
 
+    testWidgets('my entries ($suffix)', skip: skip, (tester) async {
+      Map<String, dynamic> entry(
+        String id,
+        String name,
+        String status, {
+        String competition = 'registration_open',
+        int fee = 0,
+        String starts = '2026-10-25T16:00:00Z',
+      }) => {
+        'id': id,
+        'competitionId': 'c1',
+        'competitionName': name,
+        'status': status,
+        'entryFeeMinor': fee,
+        'currency': 'KES',
+        'startsAt': starts,
+        'competitionStatus': competition,
+      };
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/registrations': (_) => jsonResponse(
+              pageJson([
+                entry('r1', 'Nairobi Weekend Cup', 'registered'),
+                entry('r2', 'Mombasa Masters', 'accepted', fee: 10000),
+                entry('r3', 'Kisumu Open', 'withdrawal_pending', fee: 5000),
+                entry(
+                  'r4',
+                  'Ozone Launch Cup',
+                  'checked_in',
+                  competition: 'running',
+                  starts: '2026-10-18T16:00:00Z',
+                ),
+                entry(
+                  'r5',
+                  'October Kickoff',
+                  'accepted',
+                  competition: 'completed',
+                  starts: '2026-10-09T16:00:00Z',
+                ),
+                entry(
+                  'r6',
+                  'Thika Cup',
+                  'registered',
+                  competition: 'cancelled',
+                ),
+              ]),
+              200,
+            ),
+          },
+        ),
+      );
+      await _openTab(tester, 'Profile');
+      await _shoot(tester, 'profile-entries-row-$suffix');
+      await tester.tap(find.text('My entries'));
+      await _shoot(tester, 'my-entries-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,

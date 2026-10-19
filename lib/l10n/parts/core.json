@@ -46,6 +46,8 @@
   "errorPhoneTaken": "That number is linked to another Ozone account. Contact Ozone support if it's yours.",
   "errorInvalidPhone": "Enter the full number with its country code.",
   "errorInvalidDisplayName": "Use 2 to 80 characters.",
+  "errorWithdrawalClosed": "Registration has closed, so you can't withdraw now.",
+  "errorRefundRequestExists": "You've already asked for a refund.",
   "errorRateLimited": "Too many attempts. Wait a moment and try again.",
   "errorRateLimitedSeconds": "{seconds, plural, =1{Too many attempts. Try again in 1 second.} other{Too many attempts. Try again in {seconds} seconds.}}",
   "@errorRateLimitedSeconds": {"placeholders": {"seconds": {"type": "int"}}},

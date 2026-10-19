@@ -856,6 +856,30 @@ abstract class AppLocalizations {
   /// **'Stay in'**
   String get competitionStayIn;
 
+  /// No description provided for @competitionWithdrawPaidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw and get a refund?'**
+  String get competitionWithdrawPaidTitle;
+
+  /// No description provided for @competitionWithdrawPaidMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll review it and refund {fee} to your M-Pesa. Your place is held until then.'**
+  String competitionWithdrawPaidMessage(String fee);
+
+  /// No description provided for @competitionWithdrawPaidConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for refund'**
+  String get competitionWithdrawPaidConfirm;
+
+  /// No description provided for @competitionWithdrawRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund requested.'**
+  String get competitionWithdrawRequested;
+
   /// No description provided for @competitionEligibilityFailed.
   ///
   /// In en, this message translates to:
@@ -1294,6 +1318,18 @@ abstract class AppLocalizations {
   /// **'Use 2 to 80 characters.'**
   String get errorInvalidDisplayName;
 
+  /// No description provided for @errorWithdrawalClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration has closed, so you can\'t withdraw now.'**
+  String get errorWithdrawalClosed;
+
+  /// No description provided for @errorRefundRequestExists.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve already asked for a refund.'**
+  String get errorRefundRequestExists;
+
   /// No description provided for @errorRateLimited.
   ///
   /// In en, this message translates to:
@@ -1641,6 +1677,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Place {place}'**
   String drawPlacing(int place);
+
+  /// Title of the list of competitions the player entered, and its row on Profile.
+  ///
+  /// In en, this message translates to:
+  /// **'My entries'**
+  String get entriesTitle;
+
+  /// Profile group holding My entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitions'**
+  String get entriesGroup;
+
+  /// No description provided for @entriesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No entries yet'**
+  String get entriesEmpty;
+
+  /// No description provided for @entriesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitions you enter show up here.'**
+  String get entriesEmptyMessage;
+
+  /// No description provided for @entriesFind.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a competition'**
+  String get entriesFind;
+
+  /// No description provided for @entryRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Entered'**
+  String get entryRegistered;
+
+  /// No description provided for @entryCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get entryCheckedIn;
+
+  /// An entry accepted into the competition's draw.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get entryAccepted;
+
+  /// No description provided for @entryRefundPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund pending'**
+  String get entryRefundPending;
+
+  /// No description provided for @entryWithdrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn'**
+  String get entryWithdrawn;
+
+  /// An entry disqualified by staff.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed'**
+  String get entryRemoved;
+
+  /// The competition was cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get entryCancelled;
+
+  /// The competition is over.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get entryFinished;
 
   /// No description provided for @homeGoodMorning.
   ///

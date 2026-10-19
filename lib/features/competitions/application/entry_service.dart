@@ -40,6 +40,29 @@ class EntryService {
     }
   }
 
+  /// One key per paid competition's withdrawal request, kept only to retry
+  /// it after a dropped connection, so it's never asked for twice.
+  final _withdrawalKeys = <String, String>{};
+
+  /// Asks to leave a paid competition; staff review the refund. Throws
+  /// [ApiException] with `withdrawal_closed` once registration has closed,
+  /// or `refund_request_exists`.
+  Future<void> requestWithdrawal(String competitionId) async {
+    final key = _withdrawalKeys[competitionId] ??= newUuid();
+    try {
+      await _ref
+          .read(competitionsRepositoryProvider)
+          .requestWithdrawal(competitionId, idempotencyKey: key);
+      _withdrawalKeys.remove(competitionId);
+    } on ApiException {
+      // The server answered: a new attempt is a new request.
+      _withdrawalKeys.remove(competitionId);
+      rethrow;
+    } finally {
+      refreshAfterEntry(competitionId);
+    }
+  }
+
   /// An entry changes the competition's numbers, the player's decision and
   /// what Home shows.
   void refreshAfterEntry(String competitionId) {
@@ -47,6 +70,7 @@ class EntryService {
       ..invalidate(eligibilityProvider(competitionId))
       ..invalidate(competitionProvider(competitionId))
       ..invalidate(competitionsProvider)
+      ..invalidate(myEntriesProvider)
       ..invalidate(nextMatchProvider);
   }
 }

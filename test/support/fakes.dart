@@ -295,6 +295,7 @@ Map<String, dynamic> eligibilityJson({
   String action = 'submit_registration',
   int fee = 0,
   String? paymentId,
+  String? entryId,
   List<Map<String, dynamic>> issues = const [],
 }) => {
   'data': {
@@ -315,6 +316,8 @@ Map<String, dynamic> eligibilityJson({
     },
     'issues': issues,
     'paymentId': paymentId,
+    'entryId': entryId,
+    'entryStatus': entryId == null ? null : 'accepted',
     'evaluatedAt': '2026-10-18T09:00:00Z',
   },
 };

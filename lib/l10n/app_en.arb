@@ -328,6 +328,18 @@
   "@competitionStayIn": {
     "description": "Cancel button of the withdraw dialog."
   },
+  "competitionWithdrawPaidTitle": "Withdraw and get a refund?",
+  "competitionWithdrawPaidMessage": "We'll review it and refund {fee} to your M-Pesa. Your place is held until then.",
+  "@competitionWithdrawPaidMessage": {
+    "placeholders": {
+      "fee": {
+        "type": "String",
+        "example": "Ksh 100"
+      }
+    }
+  },
+  "competitionWithdrawPaidConfirm": "Ask for refund",
+  "competitionWithdrawRequested": "Refund requested.",
   "competitionEligibilityFailed": "Couldn't check whether you can enter.",
   "competitionCheckPayment": "Check your payment",
   "competitionEnterFree": "Enter for free",
@@ -469,6 +481,8 @@
   "errorPhoneTaken": "That number is linked to another Ozone account. Contact Ozone support if it's yours.",
   "errorInvalidPhone": "Enter the full number with its country code.",
   "errorInvalidDisplayName": "Use 2 to 80 characters.",
+  "errorWithdrawalClosed": "Registration has closed, so you can't withdraw now.",
+  "errorRefundRequestExists": "You've already asked for a refund.",
   "errorRateLimited": "Too many attempts. Wait a moment and try again.",
   "errorRateLimitedSeconds": "{seconds, plural, =1{Too many attempts. Try again in 1 second.} other{Too many attempts. Try again in {seconds} seconds.}}",
   "@errorRateLimitedSeconds": {
@@ -698,6 +712,37 @@
         "type": "int"
       }
     }
+  },
+  "entriesTitle": "My entries",
+  "@entriesTitle": {
+    "description": "Title of the list of competitions the player entered, and its row on Profile."
+  },
+  "entriesGroup": "Competitions",
+  "@entriesGroup": {
+    "description": "Profile group holding My entries."
+  },
+  "entriesEmpty": "No entries yet",
+  "entriesEmptyMessage": "Competitions you enter show up here.",
+  "entriesFind": "Find a competition",
+  "entryRegistered": "Entered",
+  "entryCheckedIn": "Checked in",
+  "entryAccepted": "Confirmed",
+  "@entryAccepted": {
+    "description": "An entry accepted into the competition's draw."
+  },
+  "entryRefundPending": "Refund pending",
+  "entryWithdrawn": "Withdrawn",
+  "entryRemoved": "Removed",
+  "@entryRemoved": {
+    "description": "An entry disqualified by staff."
+  },
+  "entryCancelled": "Cancelled",
+  "@entryCancelled": {
+    "description": "The competition was cancelled."
+  },
+  "entryFinished": "Finished",
+  "@entryFinished": {
+    "description": "The competition is over."
   },
   "homeGoodMorning": "Good morning",
   "homeGoodAfternoon": "Good afternoon",

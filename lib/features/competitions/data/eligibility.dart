@@ -23,6 +23,10 @@ abstract class Eligibility with _$Eligibility {
     /// The player's latest payment for this competition. Whenever it is set,
     /// its status decides what happens, whatever [requiredAction] says.
     String? paymentId,
+
+    /// The player's own entry, whatever its status, or null when they
+    /// never entered. Brackets and standings name entries by it.
+    String? entryId,
   }) = _Eligibility;
 
   factory Eligibility.fromJson(Map<String, dynamic> json) =>

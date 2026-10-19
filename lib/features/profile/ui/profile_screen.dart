@@ -8,6 +8,7 @@ import '../../auth/application/auth_providers.dart';
 import 'widgets/about_section.dart';
 import 'widgets/account_section.dart';
 import 'widgets/contact_section.dart';
+import 'widgets/entries_section.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/sign_in_section.dart';
 import 'widgets/sign_out_row.dart';
@@ -31,6 +32,8 @@ class ProfileScreen extends ConsumerWidget {
           Notice(context.l10n.profileRestricted),
           _gap,
         ],
+        const EntriesSection(),
+        _gap,
         AccountSection(player: player),
         _gap,
         ContactSection(player: player),

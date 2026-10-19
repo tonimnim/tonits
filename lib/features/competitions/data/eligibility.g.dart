@@ -35,6 +35,7 @@ _Eligibility _$EligibilityFromJson(Map<String, dynamic> json) =>
               const <EligibilityIssue>[],
         ),
         paymentId: $checkedConvert('paymentId', (v) => v as String?),
+        entryId: $checkedConvert('entryId', (v) => v as String?),
       );
       return val;
     });

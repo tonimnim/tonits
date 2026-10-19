@@ -8,9 +8,11 @@ import '../data/competition.dart';
 import '../data/competitions_repository.dart';
 import '../data/draw.dart';
 import '../data/eligibility.dart';
+import '../data/registration.dart';
 import 'competition_filter.dart';
 import 'competitions_notifier.dart';
 import 'entry_service.dart';
+import 'my_entries_notifier.dart';
 
 final competitionsRepositoryProvider = Provider<CompetitionsRepository>(
   (ref) => CompetitionsRepository(ref.watch(apiClientProvider)),
@@ -55,13 +57,16 @@ final myEntryIdProvider = FutureProvider.autoDispose.family<String?, String>((
   competitionId,
 ) async {
   if (ref.watch(currentPlayerProvider) == null) return null;
-  final page = await ref
-      .watch(competitionsRepositoryProvider)
-      .myRegistrations();
-  return page.items
-      .where((r) => r.competitionId == competitionId)
-      .firstOrNull
-      ?.id;
+  final eligibility = await ref.watch(
+    eligibilityProvider(competitionId).future,
+  );
+  return eligibility.entryId;
 });
+
+/// Every competition the player has entered, for Profile's My entries.
+final myEntriesProvider =
+    AsyncNotifierProvider.autoDispose<MyEntriesNotifier, Paged<Registration>>(
+      MyEntriesNotifier.new,
+    );
 
 final entryServiceProvider = Provider<EntryService>(EntryService.new);

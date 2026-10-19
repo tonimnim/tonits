@@ -43,6 +43,10 @@ String describeError(Object error, AppLocalizations l) {
       return l.errorInvalidPhone;
     case 'invalid_display_name':
       return l.errorInvalidDisplayName;
+    case 'withdrawal_closed':
+      return l.errorWithdrawalClosed;
+    case 'refund_request_exists':
+      return l.errorRefundRequestExists;
     case 'rate_limited' || 'payment_rate_limited':
       final wait = error.retryAfter;
       if (wait == null) return l.errorRateLimited;

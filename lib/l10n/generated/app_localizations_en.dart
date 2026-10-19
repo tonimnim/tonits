@@ -448,6 +448,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get competitionStayIn => 'Stay in';
 
   @override
+  String get competitionWithdrawPaidTitle => 'Withdraw and get a refund?';
+
+  @override
+  String competitionWithdrawPaidMessage(String fee) {
+    return 'We\'ll review it and refund $fee to your M-Pesa. Your place is held until then.';
+  }
+
+  @override
+  String get competitionWithdrawPaidConfirm => 'Ask for refund';
+
+  @override
+  String get competitionWithdrawRequested => 'Refund requested.';
+
+  @override
   String get competitionEligibilityFailed =>
       'Couldn\'t check whether you can enter.';
 
@@ -700,6 +714,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorInvalidDisplayName => 'Use 2 to 80 characters.';
 
   @override
+  String get errorWithdrawalClosed =>
+      'Registration has closed, so you can\'t withdraw now.';
+
+  @override
+  String get errorRefundRequestExists => 'You\'ve already asked for a refund.';
+
+  @override
   String get errorRateLimited =>
       'Too many attempts. Wait a moment and try again.';
 
@@ -942,6 +963,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String drawPlacing(int place) {
     return 'Place $place';
   }
+
+  @override
+  String get entriesTitle => 'My entries';
+
+  @override
+  String get entriesGroup => 'Competitions';
+
+  @override
+  String get entriesEmpty => 'No entries yet';
+
+  @override
+  String get entriesEmptyMessage => 'Competitions you enter show up here.';
+
+  @override
+  String get entriesFind => 'Find a competition';
+
+  @override
+  String get entryRegistered => 'Entered';
+
+  @override
+  String get entryCheckedIn => 'Checked in';
+
+  @override
+  String get entryAccepted => 'Confirmed';
+
+  @override
+  String get entryRefundPending => 'Refund pending';
+
+  @override
+  String get entryWithdrawn => 'Withdrawn';
+
+  @override
+  String get entryRemoved => 'Removed';
+
+  @override
+  String get entryCancelled => 'Cancelled';
+
+  @override
+  String get entryFinished => 'Finished';
 
   @override
   String get homeGoodMorning => 'Good morning';

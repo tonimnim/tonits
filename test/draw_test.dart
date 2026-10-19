@@ -110,9 +110,10 @@ void main() {
     expect(find.text('No opponent'), findsOneWidget);
     expect(find.text('Walkover'), findsOneWidget);
     expect(find.text('Coast Ace'), findsNothing);
+    // The player's entry comes with the eligibility check.
     expect(
       api.requests.where((r) => r.url.path == '/v1/me/registrations'),
-      isNotEmpty,
+      isEmpty,
     );
 
     await tapChip(tester, 'Quarter-finals');

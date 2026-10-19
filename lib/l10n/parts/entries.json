@@ -1,0 +1,21 @@
+{
+  "entriesTitle": "My entries",
+  "@entriesTitle": {"description": "Title of the list of competitions the player entered, and its row on Profile."},
+  "entriesGroup": "Competitions",
+  "@entriesGroup": {"description": "Profile group holding My entries."},
+  "entriesEmpty": "No entries yet",
+  "entriesEmptyMessage": "Competitions you enter show up here.",
+  "entriesFind": "Find a competition",
+  "entryRegistered": "Entered",
+  "entryCheckedIn": "Checked in",
+  "entryAccepted": "Confirmed",
+  "@entryAccepted": {"description": "An entry accepted into the competition's draw."},
+  "entryRefundPending": "Refund pending",
+  "entryWithdrawn": "Withdrawn",
+  "entryRemoved": "Removed",
+  "@entryRemoved": {"description": "An entry disqualified by staff."},
+  "entryCancelled": "Cancelled",
+  "@entryCancelled": {"description": "The competition was cancelled."},
+  "entryFinished": "Finished",
+  "@entryFinished": {"description": "The competition is over."}
+}

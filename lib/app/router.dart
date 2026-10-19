@@ -12,6 +12,7 @@ import '../features/auth/ui/session_screens.dart';
 import '../features/auth/ui/welcome_screen.dart';
 import '../features/competitions/ui/competition_screen.dart';
 import '../features/competitions/ui/competitions_screen.dart';
+import '../features/competitions/ui/my_entries_screen.dart';
 import '../features/home/ui/home_screen.dart';
 import '../features/matches/ui/match_room_screen.dart';
 import '../features/matches/ui/matches_screen.dart';
@@ -112,6 +113,7 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
     GoRoute(path: 'name', builder: (_, _) => const EditNameScreen()),
     GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
     GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
+    GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
   ],
   _ => const [],
 };

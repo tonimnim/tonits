@@ -65,6 +65,19 @@ class CompetitionsRepository {
     auth: true,
   );
 
+  /// Asks to leave a paid competition. The entry stays reserved, as
+  /// `withdrawal_pending`, until staff review the refund.
+  /// [idempotencyKey] is one per request, reused only to retry it.
+  Future<void> requestWithdrawal(
+    String id, {
+    required String idempotencyKey,
+  }) => _api.post(
+    '/v1/competitions/${Uri.encodeComponent(id)}/registrations/me/withdrawal-requests',
+    body: {'reasonCode': 'player_withdrawal'},
+    headers: {'Idempotency-Key': idempotencyKey},
+    auth: true,
+  );
+
   /// The draw: every stage, round and match. Empty before the draw.
   Future<Bracket> bracket(String id) async {
     final json = await _api.get(

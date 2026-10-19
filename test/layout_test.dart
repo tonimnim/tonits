@@ -79,6 +79,45 @@ void main() {
       });
     }
 
+    testWidgets('My entries fits at text scale $scale', (tester) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/registrations': (_) => jsonResponse(
+              pageJson([
+                {
+                  'id': 'r1',
+                  'competitionId': 'c1',
+                  'competitionName': 'The Very Long Nairobi Weekend Cup Final',
+                  'status': 'withdrawal_pending',
+                  'entryFeeMinor': 10000,
+                  'currency': 'KES',
+                  'startsAt': '2027-01-14T16:00:00Z',
+                  'competitionStatus': 'registration_open',
+                },
+              ]),
+              200,
+            ),
+          },
+        ),
+      );
+      await tester.tap(
+        find.descendant(
+          of: find.byType(TonitsNavigationBar),
+          matching: find.text('Profile'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await scrollPageTo(tester, find.text('My entries'));
+      await tester.tap(find.text('My entries'));
+      await tester.pumpAndSettle();
+      expect(find.text('Refund pending'), findsOneWidget);
+    });
+
     testWidgets('every tab fits at text scale $scale', (tester) async {
       await pumpTonits(
         tester,

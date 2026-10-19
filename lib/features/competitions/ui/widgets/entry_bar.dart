@@ -14,7 +14,8 @@ import '../../data/eligibility.dart';
 
 /// The bottom of a competition: what the player can do, as the server's
 /// eligibility decision says. Enter for free, pay with M-Pesa, follow a
-/// payment, or see why they can't enter.
+/// payment, leave while registration is open (a paid entry asks for a
+/// refund), or see why they can't enter.
 class EntryBar extends ConsumerStatefulWidget {
   const EntryBar({super.key, required this.competition});
 
@@ -40,16 +41,30 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
 
   Future<void> _withdraw() async {
     final l = context.l10n;
+    final c = widget.competition;
     final confirmed = await confirmAction(
       context,
-      title: l.competitionWithdrawTitle,
-      message: l.competitionWithdrawMessage,
-      confirmLabel: l.competitionWithdraw,
+      title: c.isPaid
+          ? l.competitionWithdrawPaidTitle
+          : l.competitionWithdrawTitle,
+      message: c.isPaid
+          ? l.competitionWithdrawPaidMessage(
+              Format.money(c.entryFeeMinor, c.currency),
+            )
+          : l.competitionWithdrawMessage,
+      confirmLabel: c.isPaid
+          ? l.competitionWithdrawPaidConfirm
+          : l.competitionWithdraw,
       cancelLabel: l.competitionStayIn,
     );
-    if (confirmed) {
-      await _act(() => ref.read(entryServiceProvider).withdraw(_id));
-    }
+    if (!confirmed) return;
+    final entries = ref.read(entryServiceProvider);
+    if (!c.isPaid) return _act(() => entries.withdraw(_id));
+    final sent = await runForMessage(() async {
+      await entries.requestWithdrawal(_id);
+      return null;
+    });
+    if (sent && mounted) showMessage(context, l.competitionWithdrawRequested);
   }
 
   @override
@@ -109,10 +124,17 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
         onPressed: () => context.push(Routes.checkout(_id)),
       );
     }
+    // A paid entry that asked to leave is still registered until its
+    // refund is settled.
+    if (e.requiredAction == RequiredAction.viewRefund) {
+      return _Message(
+        icon: Icons.replay_outlined,
+        text: l.competitionRefundInProgress,
+      );
+    }
     if (e.isRegistered) {
       return _Registered(
         canWithdraw:
-            !widget.competition.isPaid &&
             widget.competition.status == CompetitionStatus.registrationOpen,
         busy: busy,
         onWithdraw: _withdraw,

@@ -19,7 +19,9 @@ mixin _$Eligibility {
 /// `eligible`, `ineligible` or `registered`.
  String get status; bool get eligible;@JsonKey(unknownEnumValue: RequiredAction.none) RequiredAction get requiredAction; int get entryFeeMinor; String get currency; List<EligibilityIssue> get issues;/// The player's latest payment for this competition. Whenever it is set,
 /// its status decides what happens, whatever [requiredAction] says.
- String? get paymentId;
+ String? get paymentId;/// The player's own entry, whatever its status, or null when they
+/// never entered. Brackets and standings name entries by it.
+ String? get entryId;
 /// Create a copy of Eligibility
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,20 +33,20 @@ $EligibilityCopyWith<Eligibility> get copyWith => _$EligibilityCopyWithImpl<Elig
 @override
 bool operator ==(Object other) {
   final _this = this as Eligibility;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Eligibility&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.eligible, _this.eligible) || other.eligible == _this.eligible)&&(identical(other.requiredAction, _this.requiredAction) || other.requiredAction == _this.requiredAction)&&(identical(other.entryFeeMinor, _this.entryFeeMinor) || other.entryFeeMinor == _this.entryFeeMinor)&&(identical(other.currency, _this.currency) || other.currency == _this.currency)&&const DeepCollectionEquality().equals(other.issues, _this.issues)&&(identical(other.paymentId, _this.paymentId) || other.paymentId == _this.paymentId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Eligibility&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.eligible, _this.eligible) || other.eligible == _this.eligible)&&(identical(other.requiredAction, _this.requiredAction) || other.requiredAction == _this.requiredAction)&&(identical(other.entryFeeMinor, _this.entryFeeMinor) || other.entryFeeMinor == _this.entryFeeMinor)&&(identical(other.currency, _this.currency) || other.currency == _this.currency)&&const DeepCollectionEquality().equals(other.issues, _this.issues)&&(identical(other.paymentId, _this.paymentId) || other.paymentId == _this.paymentId)&&(identical(other.entryId, _this.entryId) || other.entryId == _this.entryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Eligibility;
-  return Object.hash(runtimeType,_this.status,_this.eligible,_this.requiredAction,_this.entryFeeMinor,_this.currency,const DeepCollectionEquality().hash(_this.issues),_this.paymentId);
+  return Object.hash(runtimeType,_this.status,_this.eligible,_this.requiredAction,_this.entryFeeMinor,_this.currency,const DeepCollectionEquality().hash(_this.issues),_this.paymentId,_this.entryId);
 }
 
 @override
 String toString() {
   final _this = this as Eligibility;
-  return 'Eligibility(status: ${_this.status}, eligible: ${_this.eligible}, requiredAction: ${_this.requiredAction}, entryFeeMinor: ${_this.entryFeeMinor}, currency: ${_this.currency}, issues: ${_this.issues}, paymentId: ${_this.paymentId})';
+  return 'Eligibility(status: ${_this.status}, eligible: ${_this.eligible}, requiredAction: ${_this.requiredAction}, entryFeeMinor: ${_this.entryFeeMinor}, currency: ${_this.currency}, issues: ${_this.issues}, paymentId: ${_this.paymentId}, entryId: ${_this.entryId})';
 }
 
 
@@ -55,7 +57,7 @@ abstract mixin class $EligibilityCopyWith<$Res>  {
   factory $EligibilityCopyWith(Eligibility value, $Res Function(Eligibility) _then) = _$EligibilityCopyWithImpl;
 @useResult
 $Res call({
- String status, bool eligible,@JsonKey(unknownEnumValue: RequiredAction.none) RequiredAction requiredAction, int entryFeeMinor, String currency, List<EligibilityIssue> issues, String? paymentId
+ String status, bool eligible,@JsonKey(unknownEnumValue: RequiredAction.none) RequiredAction requiredAction, int entryFeeMinor, String currency, List<EligibilityIssue> issues, String? paymentId, String? entryId
 });
 
 
@@ -72,7 +74,7 @@ class _$EligibilityCopyWithImpl<$Res>
 
 /// Create a copy of Eligibility
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? eligible = null,Object? requiredAction = null,Object? entryFeeMinor = null,Object? currency = null,Object? issues = null,Object? paymentId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? eligible = null,Object? requiredAction = null,Object? entryFeeMinor = null,Object? currency = null,Object? issues = null,Object? paymentId = freezed,Object? entryId = freezed,}) {
   return _then(Eligibility(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,eligible: null == eligible ? _self.eligible : eligible // ignore: cast_nullable_to_non_nullable
@@ -81,6 +83,7 @@ as RequiredAction,entryFeeMinor: null == entryFeeMinor ? _self.entryFeeMinor : e
 as int,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,issues: null == issues ? _self.issues : issues // ignore: cast_nullable_to_non_nullable
 as List<EligibilityIssue>,paymentId: freezed == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
+as String?,entryId: freezed == entryId ? _self.entryId : entryId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -166,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId,  String? entryId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Eligibility() when $default != null:
-return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId);case _:
+return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId,_that.entryId);case _:
   return orElse();
 
 }
@@ -187,10 +190,10 @@ return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeM
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId,  String? entryId)  $default,) {final _that = this;
 switch (_that) {
 case _Eligibility():
-return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId);case _:
+return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId,_that.entryId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +210,10 @@ return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeM
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String status,  bool eligible, @JsonKey(unknownEnumValue: RequiredAction.none)  RequiredAction requiredAction,  int entryFeeMinor,  String currency,  List<EligibilityIssue> issues,  String? paymentId,  String? entryId)?  $default,) {final _that = this;
 switch (_that) {
 case _Eligibility() when $default != null:
-return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId);case _:
+return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeMinor,_that.currency,_that.issues,_that.paymentId,_that.entryId);case _:
   return null;
 
 }
@@ -222,7 +225,7 @@ return $default(_that.status,_that.eligible,_that.requiredAction,_that.entryFeeM
 @JsonSerializable(createToJson: false)
 
 class _Eligibility extends Eligibility {
-  const _Eligibility({required this.status, required this.eligible, @JsonKey(unknownEnumValue: RequiredAction.none) required this.requiredAction, this.entryFeeMinor = 0, required this.currency,  List<EligibilityIssue> issues = const <EligibilityIssue>[], this.paymentId}): _issues = issues,super._();
+  const _Eligibility({required this.status, required this.eligible, @JsonKey(unknownEnumValue: RequiredAction.none) required this.requiredAction, this.entryFeeMinor = 0, required this.currency,  List<EligibilityIssue> issues = const <EligibilityIssue>[], this.paymentId, this.entryId}): _issues = issues,super._();
   factory _Eligibility.fromJson(Map<String, dynamic> json) => _$EligibilityFromJson(json);
 
 /// `eligible`, `ineligible` or `registered`.
@@ -241,6 +244,9 @@ class _Eligibility extends Eligibility {
 /// The player's latest payment for this competition. Whenever it is set,
 /// its status decides what happens, whatever [requiredAction] says.
 @override final  String? paymentId;
+/// The player's own entry, whatever its status, or null when they
+/// never entered. Brackets and standings name entries by it.
+@override final  String? entryId;
 
 /// Create a copy of Eligibility
 /// with the given fields replaced by the non-null parameter values.
@@ -252,18 +258,18 @@ _$EligibilityCopyWith<_Eligibility> get copyWith => __$EligibilityCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Eligibility&&(identical(other.status, status) || other.status == status)&&(identical(other.eligible, eligible) || other.eligible == eligible)&&(identical(other.requiredAction, requiredAction) || other.requiredAction == requiredAction)&&(identical(other.entryFeeMinor, entryFeeMinor) || other.entryFeeMinor == entryFeeMinor)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.issues, _issues)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Eligibility&&(identical(other.status, status) || other.status == status)&&(identical(other.eligible, eligible) || other.eligible == eligible)&&(identical(other.requiredAction, requiredAction) || other.requiredAction == requiredAction)&&(identical(other.entryFeeMinor, entryFeeMinor) || other.entryFeeMinor == entryFeeMinor)&&(identical(other.currency, currency) || other.currency == currency)&&const DeepCollectionEquality().equals(other.issues, _issues)&&(identical(other.paymentId, paymentId) || other.paymentId == paymentId)&&(identical(other.entryId, entryId) || other.entryId == entryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,status,eligible,requiredAction,entryFeeMinor,currency,const DeepCollectionEquality().hash(_issues),paymentId);
+    return Object.hash(runtimeType,status,eligible,requiredAction,entryFeeMinor,currency,const DeepCollectionEquality().hash(_issues),paymentId,entryId);
 }
 
 @override
 String toString() {
-    return 'Eligibility(status: $status, eligible: $eligible, requiredAction: $requiredAction, entryFeeMinor: $entryFeeMinor, currency: $currency, issues: $issues, paymentId: $paymentId)';
+    return 'Eligibility(status: $status, eligible: $eligible, requiredAction: $requiredAction, entryFeeMinor: $entryFeeMinor, currency: $currency, issues: $issues, paymentId: $paymentId, entryId: $entryId)';
 }
 
 
@@ -274,7 +280,7 @@ abstract mixin class _$EligibilityCopyWith<$Res> implements $EligibilityCopyWith
   factory _$EligibilityCopyWith(_Eligibility value, $Res Function(_Eligibility) _then) = __$EligibilityCopyWithImpl;
 @override @useResult
 $Res call({
- String status, bool eligible,@JsonKey(unknownEnumValue: RequiredAction.none) RequiredAction requiredAction, int entryFeeMinor, String currency, List<EligibilityIssue> issues, String? paymentId
+ String status, bool eligible,@JsonKey(unknownEnumValue: RequiredAction.none) RequiredAction requiredAction, int entryFeeMinor, String currency, List<EligibilityIssue> issues, String? paymentId, String? entryId
 });
 
 
@@ -291,7 +297,7 @@ class __$EligibilityCopyWithImpl<$Res>
 
 /// Create a copy of Eligibility
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? eligible = null,Object? requiredAction = null,Object? entryFeeMinor = null,Object? currency = null,Object? issues = null,Object? paymentId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? eligible = null,Object? requiredAction = null,Object? entryFeeMinor = null,Object? currency = null,Object? issues = null,Object? paymentId = freezed,Object? entryId = freezed,}) {
   return _then(_Eligibility(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,eligible: null == eligible ? _self.eligible : eligible // ignore: cast_nullable_to_non_nullable
@@ -300,6 +306,7 @@ as RequiredAction,entryFeeMinor: null == entryFeeMinor ? _self.entryFeeMinor : e
 as int,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,issues: null == issues ? _self._issues : issues // ignore: cast_nullable_to_non_nullable
 as List<EligibilityIssue>,paymentId: freezed == paymentId ? _self.paymentId : paymentId // ignore: cast_nullable_to_non_nullable
+as String?,entryId: freezed == entryId ? _self.entryId : entryId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

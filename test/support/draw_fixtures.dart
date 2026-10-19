@@ -314,21 +314,20 @@ Map<String, http.Response Function(http.Request)> drawRoutes({
     },
   }, 200),
   // Entered, and past entering.
-  '/v1/competitions/c1/eligibility': (_) =>
-      jsonResponse(eligibilityJson(status: 'registered', action: 'none'), 200),
+  '/v1/competitions/c1/eligibility': (_) => jsonResponse(
+    eligibilityJson(
+      status: 'registered',
+      action: 'view_registration',
+      entryId: myEntryId,
+    ),
+    200,
+  ),
   '/v1/competitions/c1/bracket': (_) => jsonResponse({
     'data': {'competitionId': 'c1', 'stages': stages},
   }, 200),
   '/v1/competitions/c1/standings': (_) => jsonResponse({
     'data': {'competitionId': 'c1', 'stages': tables, 'placements': placements},
   }, 200),
-  '/v1/me/registrations': (_) => jsonResponse(
-    pageJson([
-      {'id': 'e-other', 'competitionId': 'c2', 'status': 'registered'},
-      {'id': myEntryId, 'competitionId': 'c1', 'status': 'accepted'},
-    ]),
-    200,
-  ),
 };
 
 /// Opens c1 from the Compete tab and scrolls to [text].
