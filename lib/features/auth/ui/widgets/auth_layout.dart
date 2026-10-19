@@ -28,59 +28,104 @@ class AuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
+    final p = context.palette;
     final canPop = showBack ?? Navigator.canPop(context);
+    final top = MediaQuery.paddingOf(context).top;
+    const overlap = HeroScaffold.overlap;
+
     return Scaffold(
-      appBar: canPop ? AppBar() : null,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
-                  TonitsSpace.lg,
-                  0,
-                  TonitsSpace.lg,
-                  TonitsSpace.lg,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: canPop ? TonitsSpace.sm : 40),
-                        if (!canPop) ...[
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: BrandLockup(),
-                          ),
-                          const SizedBox(height: 48),
-                        ],
-                        Semantics(
-                          header: true,
-                          child: Text(title, style: text.headlineMedium),
-                        ),
-                        if (subtitle != null) ...[
-                          const SizedBox(height: TonitsSpace.sm),
-                          Text(
-                            subtitle!,
-                            style: text.bodyLarge?.copyWith(
-                              color: context.palette.subtleForeground,
+      // The sheet's colour, so it runs on below short forms.
+      backgroundColor: p.card,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(gradient: HeroScaffold.wash(p)),
+                    padding: EdgeInsets.fromLTRB(
+                      TonitsSpace.lg,
+                      top + TonitsSpace.md,
+                      TonitsSpace.lg,
+                      TonitsSpace.xl + overlap,
+                    ),
+                    child: _Centred(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (canPop)
+                            RoundIconButton(
+                              icon: Icons.arrow_back,
+                              tooltip: 'Back',
+                              background: p.card.withValues(alpha: 0.85),
+                              onPressed: () => Navigator.of(context).maybePop(),
+                            )
+                          else
+                            const BrandLockup(),
+                          SizedBox(height: canPop ? 28 : 48),
+                          Semantics(
+                            header: true,
+                            child: Text(
+                              title,
+                              style: const TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.9,
+                                height: 1.12,
+                              ),
                             ),
                           ),
+                          if (subtitle != null) ...[
+                            const SizedBox(height: 10),
+                            Text(
+                              subtitle!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                height: 1.45,
+                                color: p.subtleForeground,
+                              ),
+                            ),
+                          ],
                         ],
-                        const SizedBox(height: TonitsSpace.xl),
-                        ...children,
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  Transform.translate(
+                    offset: const Offset(0, -overlap),
+                    child: Material(
+                      color: p.card,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(TonitsRadius.sheet),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          TonitsSpace.lg,
+                          28,
+                          TonitsSpace.lg,
+                          0,
+                        ),
+                        child: _Centred(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: children,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            // Pinned below the scrolling form.
-            if (footer != null)
-              Padding(
+          ),
+          // Pinned below the scrolling form.
+          if (footer != null)
+            SafeArea(
+              top: false,
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(
                   TonitsSpace.lg,
                   TonitsSpace.sm,
@@ -89,11 +134,26 @@ class AuthLayout extends StatelessWidget {
                 ),
                 child: footer,
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
+}
+
+/// Keeps forms a readable width on tablets.
+class _Centred extends StatelessWidget {
+  const _Centred({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 420),
+      child: child,
+    ),
+  );
 }
 
 /// A centred "Question? Action" line, as at the bottom of sign in.

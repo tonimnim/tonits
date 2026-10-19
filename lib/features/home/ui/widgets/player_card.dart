@@ -42,10 +42,10 @@ class _Shell extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: p.primary,
-        borderRadius: BorderRadius.circular(TonitsRadius.card + 4),
+        borderRadius: BorderRadius.circular(TonitsRadius.panel),
       ),
       child: DefaultTextStyle.merge(
         style: TextStyle(color: p.onPrimary),

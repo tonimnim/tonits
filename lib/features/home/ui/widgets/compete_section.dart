@@ -18,7 +18,7 @@ class CompeteSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final open = ref.watch(closingSoonProvider);
     return Padding(
-      padding: const EdgeInsets.only(top: TonitsSpace.xl),
+      padding: const EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

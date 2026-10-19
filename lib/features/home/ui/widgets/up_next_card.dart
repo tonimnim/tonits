@@ -22,7 +22,7 @@ class UpNextCard extends ConsumerWidget {
     final when = _when(match);
 
     return Padding(
-      padding: const EdgeInsets.only(top: TonitsSpace.xl),
+      padding: const EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

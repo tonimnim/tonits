@@ -27,52 +27,42 @@ class ProfileScreen extends ConsumerWidget {
       authControllerProvider.select((s) => s.pendingCountryCode),
     );
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          TonitsSpace.md,
-          TonitsSpace.sm,
-          TonitsSpace.md,
-          TonitsSpace.xl,
-        ),
-        children: [
-          ProfileHeader(player: player),
-          const SizedBox(height: TonitsSpace.xl),
-          if (player.status != 'active') ...[
-            const Notice(
-              'Your account is restricted. Contact Tonits support to find '
-              'out why.',
-            ),
-            _gap,
-          ],
-          if (pendingCountry != null) ...[
-            Notice(
-              "Your country wasn't saved.",
-              action: TextButton(
-                onPressed: () => ref
-                    .read(authControllerProvider.notifier)
-                    .savePendingCountry(),
-                child: const Text('Retry'),
-              ),
-            ),
-            _gap,
-          ],
-          if (SetupChecklist.isNeeded(player)) ...[
-            SetupChecklist(player: player),
-            _gap,
-          ],
-          AccountSection(player: player),
+    return HeroScaffold(
+      hero: ProfileHeader(player: player),
+      children: [
+        if (player.status != 'active') ...[
+          const Notice(
+            'Your account is restricted. Contact Tonits support to find '
+            'out why.',
+          ),
           _gap,
-          ContactSection(player: player),
-          _gap,
-          SecuritySection(player: player),
-          _gap,
-          const AboutSection(),
-          _gap,
-          const SignOutRow(),
         ],
-      ),
+        if (pendingCountry != null) ...[
+          Notice(
+            "Your country wasn't saved.",
+            action: TextButton(
+              onPressed: () => ref
+                  .read(authControllerProvider.notifier)
+                  .savePendingCountry(),
+              child: const Text('Retry'),
+            ),
+          ),
+          _gap,
+        ],
+        if (SetupChecklist.isNeeded(player)) ...[
+          SetupChecklist(player: player),
+          _gap,
+        ],
+        AccountSection(player: player),
+        _gap,
+        ContactSection(player: player),
+        _gap,
+        SecuritySection(player: player),
+        _gap,
+        const AboutSection(),
+        _gap,
+        const SignOutRow(),
+      ],
     );
   }
 }

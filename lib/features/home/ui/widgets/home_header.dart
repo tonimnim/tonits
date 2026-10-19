@@ -23,15 +23,19 @@ class HomeHeader extends StatelessWidget {
         : 'Good evening';
     return Row(
       children: [
-        InitialsAvatar(name: name, size: 44),
-        const SizedBox(width: 12),
+        Container(
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(color: p.card, shape: BoxShape.circle),
+          child: InitialsAvatar(name: name, size: 46),
+        ),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 greeting,
-                style: TextStyle(fontSize: 13, color: p.subtleForeground),
+                style: TextStyle(fontSize: 14, color: p.subtleForeground),
               ),
               Semantics(
                 header: true,

@@ -21,6 +21,8 @@ void main() {
 
       await tester.pageBack();
       await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Forgot password?'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Forgot password?'));
       await tester.pumpAndSettle();
       expect(find.text('Reset password'), findsOneWidget);

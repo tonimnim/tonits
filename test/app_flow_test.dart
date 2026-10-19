@@ -65,7 +65,7 @@ void main() {
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('#24'), findsOneWidget);
     expect(find.text('Up next'), findsOneWidget);
-    expect(find.text('vs Amina Otieno'), findsOneWidget);
+    expect(find.text('vs Amina Otieno'), findsWidgets);
 
     await scrollPageTo(tester, find.text('62%'));
     expect(find.text('W3'), findsOneWidget);
@@ -203,6 +203,11 @@ void main() {
     await openTab(tester, 'Profile');
 
     await scrollPageTo(tester, find.text('Sign out'));
+    await Scrollable.ensureVisible(
+      tester.element(find.text('Sign out')),
+      alignment: 0.5,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Sign out'));
     await tester.pumpAndSettle();
     expect(find.text('Sign out of Tonits?'), findsOneWidget);

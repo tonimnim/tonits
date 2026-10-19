@@ -28,7 +28,7 @@ class RankNeighbourhoodSection extends ConsumerWidget {
     final country = _countryName(player.countryCode);
 
     return Padding(
-      padding: const EdgeInsets.only(top: TonitsSpace.xl),
+      padding: const EdgeInsets.only(bottom: 28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

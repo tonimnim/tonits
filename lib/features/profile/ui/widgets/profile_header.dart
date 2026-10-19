@@ -29,14 +29,22 @@ class ProfileHeader extends ConsumerWidget {
 
     return Column(
       children: [
-        InitialsAvatar(name: player.displayName, size: 76),
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(color: p.card, shape: BoxShape.circle),
+          child: InitialsAvatar(name: player.displayName, size: 80),
+        ),
         const SizedBox(height: TonitsSpace.md),
         Text(
           player.displayName,
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: const TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.6,
+          ),
         ),
         const SizedBox(height: 4),
         Text(

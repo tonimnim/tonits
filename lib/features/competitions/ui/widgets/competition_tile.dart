@@ -47,27 +47,26 @@ class CompetitionTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // One line: each badge shrinks rather than wrapping.
               Row(
                 children: [
-                  Flexible(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: StatusBadge(
-                        free
-                            ? 'Free'
-                            : Format.money(c.entryFeeMinor, c.currency),
-                        tone: free ? StatusTone.good : StatusTone.info,
+                  for (final (i, badge) in [
+                    StatusBadge(
+                      free ? 'Free' : Format.money(c.entryFeeMinor, c.currency),
+                      tone: free ? StatusTone.good : StatusTone.info,
+                    ),
+                    if (c.isPaid) KenyaOnlyBadge(competition: c),
+                    if (left > 0 && left <= _scarce)
+                      StatusBadge('$left left', tone: StatusTone.warn),
+                  ].indexed) ...[
+                    if (i > 0) const SizedBox(width: 6),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: badge,
                       ),
                     ),
-                  ),
-                  if (c.isPaid) ...[
-                    const SizedBox(width: 8),
-                    KenyaOnlyBadge(competition: c),
-                  ],
-                  if (left > 0 && left <= _scarce) ...[
-                    const SizedBox(width: 8),
-                    StatusBadge('$left left', tone: StatusTone.warn),
                   ],
                 ],
               ),

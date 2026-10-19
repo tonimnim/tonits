@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
+import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../../matches/application/matches_providers.dart';
@@ -27,38 +28,31 @@ class HomeScreen extends ConsumerWidget {
     final player = ref.watch(currentPlayerProvider);
     if (player == null) return const SizedBox.shrink();
 
-    return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: RefreshIndicator(
-          onRefresh: () => Future.wait([
-            ref.refresh(myProfileProvider.future),
-            ref.refresh(myRecentMatchesProvider.future),
-            ref.refresh(myRankNeighbourhoodProvider.future),
-            ref.refresh(nextMatchProvider.future),
-            ref.refresh(closingSoonProvider.future),
-          ]),
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              TonitsSpace.lg,
-              TonitsSpace.md,
-              TonitsSpace.lg,
-              TonitsSpace.xl,
-            ),
-            children: [
-              HomeHeader(name: player.displayName),
-              const SizedBox(height: TonitsSpace.lg),
-              const PlayerCard(),
-              const UpNextCard(),
-              const StatsOverview(),
-              const RankNeighbourhoodSection(),
-              const RecentMatchesSection(),
-              const CompeteSection(),
-            ],
-          ),
-        ),
+    return HeroScaffold(
+      onRefresh: () async {
+        await Future.wait([
+          ref.refresh(myProfileProvider.future),
+          ref.refresh(myRecentMatchesProvider.future),
+          ref.refresh(myRankNeighbourhoodProvider.future),
+          ref.refresh(nextMatchProvider.future),
+          ref.refresh(closingSoonProvider.future),
+        ]);
+      },
+      hero: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          HomeHeader(name: player.displayName),
+          const SizedBox(height: TonitsSpace.lg),
+          const PlayerCard(),
+        ],
       ),
+      children: const [
+        UpNextCard(),
+        StatsOverview(),
+        RankNeighbourhoodSection(),
+        RecentMatchesSection(),
+        CompeteSection(),
+      ],
     );
   }
 }

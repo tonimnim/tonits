@@ -101,12 +101,14 @@ class _EntryBarState extends ConsumerState<EntryBar> {
     return Container(
       decoration: BoxDecoration(
         color: p.card,
-        border: Border(top: BorderSide(color: p.border)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(TonitsRadius.panel),
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(
-        TonitsSpace.lg,
         TonitsSpace.md,
-        TonitsSpace.lg,
+        20,
+        TonitsSpace.md,
         TonitsSpace.md,
       ),
       child: Column(
@@ -183,10 +185,10 @@ class _Registered extends StatelessWidget {
     final p = context.palette;
     final (text, _) = p.good;
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
-      constraints: const BoxConstraints(minHeight: 52),
+      padding: const EdgeInsets.fromLTRB(18, 6, 8, 6),
+      constraints: const BoxConstraints(minHeight: 54),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+        borderRadius: BorderRadius.circular(999),
         border: Border.all(color: p.input),
       ),
       child: Row(
@@ -221,9 +223,9 @@ class _Message extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+        borderRadius: BorderRadius.circular(999),
         border: Border.all(color: p.input),
       ),
       child: Row(
