@@ -25,32 +25,6 @@ abstract final class AuthValidators {
     return null;
   }
 
-  /// For registration and new passwords. [username] and [konamiId] are
-  /// compared the way the API compares them.
-  static String? newPassword(
-    String? value, {
-    String? username,
-    String? konamiId,
-  }) {
-    final v = value ?? '';
-    final length = v.runes.length;
-    if (length < 8) return 'Use at least 8 characters';
-    if (length > 128) return 'Use at most 128 characters';
-    final lower = v.toLowerCase();
-    if (username != null && lower == username.trim().toLowerCase()) {
-      return "Your password can't be your username";
-    }
-    if (konamiId != null &&
-        normalizeKonamiId(v) == normalizeKonamiId(konamiId) &&
-        normalizeKonamiId(v).isNotEmpty) {
-      return "Your password can't be your Konami ID";
-    }
-    return null;
-  }
-
-  static String? password(String? value) =>
-      (value ?? '').isEmpty ? 'Enter your password' : null;
-
   /// A 6-digit code, such as an email verification code.
   static String? resetCode(String? value) =>
       _code.hasMatch(value?.trim() ?? '') ? null : 'Enter the 6-digit code';

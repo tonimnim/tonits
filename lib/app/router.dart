@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +7,6 @@ import '../features/account/ui/edit_name_screen.dart';
 import '../features/account/ui/email_screen.dart';
 import '../features/account/ui/phone_screen.dart';
 import '../features/auth/application/auth_controller.dart';
-import '../features/auth/ui/dev_sign_in_screen.dart';
 import '../features/auth/ui/session_screens.dart';
 import '../features/auth/ui/welcome_screen.dart';
 import '../features/onboarding/ui/onboarding_screen.dart';
@@ -46,17 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: Routes.splash, builder: (_, _) => const SplashScreen()),
       GoRoute(path: Routes.offline, builder: (_, _) => const OfflineScreen()),
-      GoRoute(
-        path: Routes.welcome,
-        builder: (_, _) => const WelcomeScreen(),
-        routes: [
-          if (kDebugMode)
-            GoRoute(
-              path: 'developer',
-              builder: (_, _) => const DevSignInScreen(),
-            ),
-        ],
-      ),
+      GoRoute(path: Routes.welcome, builder: (_, _) => const WelcomeScreen()),
       GoRoute(
         path: Routes.onboarding,
         builder: (_, _) => const OnboardingScreen(),

@@ -7,9 +7,6 @@ abstract final class Routes {
   /// Continue with Google or Apple.
   static const welcome = '/welcome';
 
-  /// Konami ID and password, for local test accounts in debug builds.
-  static const devSignIn = '/welcome/developer';
-
   /// Username, Konami ID, country and phone after a first sign-in.
   static const onboarding = '/onboarding';
 

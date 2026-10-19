@@ -16,7 +16,6 @@ void main() {
       redirectFor(AuthStatus.signedOut, Routes.onboarding),
       Routes.welcome,
     );
-    expect(redirectFor(AuthStatus.signedOut, Routes.devSignIn), isNull);
   });
 
   test('signed in players leave welcome, splash and offline for Home', () {

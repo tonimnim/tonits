@@ -112,8 +112,6 @@ void main() {
     testWidgets('welcome ($suffix)', skip: skip, (tester) async {
       await _pump(tester, brightness: brightness);
       await _shoot(tester, 'welcome-$suffix');
-      await tester.tap(find.text('Developer sign-in'));
-      await _shoot(tester, 'dev-sign-in-$suffix');
     });
 
     testWidgets('onboarding ($suffix)', skip: skip, (tester) async {

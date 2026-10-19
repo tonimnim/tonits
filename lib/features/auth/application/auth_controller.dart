@@ -143,32 +143,6 @@ class AuthController extends Notifier<AuthState> {
     return true;
   }
 
-  /// A local test account (debug builds only).
-  Future<void> devSignIn({
-    required String konamiId,
-    required String password,
-  }) async => _adopt(
-    await _repository.devSignIn(
-      konamiId: konamiId,
-      password: password,
-      deviceName: ref.read(deviceNameProvider),
-    ),
-  );
-
-  /// Creates a local test account (debug builds only).
-  Future<void> devRegister({
-    required String username,
-    required String konamiId,
-    required String password,
-  }) async => _adopt(
-    await _repository.devRegister(
-      username: username,
-      konamiId: konamiId,
-      password: password,
-      deviceName: ref.read(deviceNameProvider),
-    ),
-  );
-
   /// Adds the Konami ID, phone and country after a first sign-in; the
   /// router then lets the player in.
   Future<void> completeOnboarding({

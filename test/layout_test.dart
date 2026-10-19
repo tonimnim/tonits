@@ -14,15 +14,6 @@ void main() {
     testWidgets('signed-out screens fit at text scale $scale', (tester) async {
       await pumpTonits(tester, size: small, textScale: scale);
       expect(find.text('Your game, ranked.'), findsOneWidget);
-
-      // Developer sign-in, in debug builds.
-      await tester.ensureVisible(find.text('Developer sign-in'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Developer sign-in'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Create'));
-      await tester.pumpAndSettle();
-      expect(find.text('Create test account'), findsOneWidget);
     });
 
     testWidgets('onboarding fits at text scale $scale', (tester) async {

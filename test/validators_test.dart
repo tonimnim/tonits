@@ -36,25 +36,6 @@ void main() {
     });
   });
 
-  group('newPassword', () {
-    test('enforces length', () {
-      expect(AuthValidators.newPassword('short'), isNotNull);
-      expect(AuthValidators.newPassword('long enough'), isNull);
-      expect(AuthValidators.newPassword('x' * 129), isNotNull);
-    });
-
-    test('rejects the username or Konami ID', () {
-      expect(
-        AuthValidators.newPassword('Striker.9x', username: 'striker.9x'),
-        isNotNull,
-      );
-      expect(
-        AuthValidators.newPassword('abcd-1234-efgh', konamiId: 'ABCD1234EFGH'),
-        isNotNull,
-      );
-    });
-  });
-
   test('reset code is six digits', () {
     expect(AuthValidators.resetCode('123456'), isNull);
     expect(AuthValidators.resetCode('12345'), isNotNull);

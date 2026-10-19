@@ -1,11 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/api/error_text.dart';
-import '../../../core/routes.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../account/application/legal_links.dart';
@@ -122,11 +119,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       ],
                       const SizedBox(height: TonitsSpace.md),
                       const _FinePrint(),
-                      if (kDebugMode)
-                        TextButton(
-                          onPressed: () => context.push(Routes.devSignIn),
-                          child: const Text('Developer sign-in'),
-                        ),
                     ],
                   ),
                 ),

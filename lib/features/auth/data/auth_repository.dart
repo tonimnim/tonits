@@ -2,8 +2,8 @@ import '../../../core/api/api_client.dart';
 import 'identity_providers.dart';
 import 'models.dart';
 
-/// The authentication routes of the Tonits API. Players sign in with Google
-/// or Apple; Konami ID and password exist only for local test accounts.
+/// The authentication routes of the API. Players sign in with Google or
+/// Apple.
 class AuthRepository {
   AuthRepository(this._api);
 
@@ -24,31 +24,6 @@ class AuthRepository {
   }) => _session('/v1/auth/apple', {
     'identityToken': token.token,
     'nonce': token.nonce ?? '',
-    'deviceName': ?deviceName,
-  });
-
-  /// A local test account. Production answers 403.
-  Future<AuthSession> devSignIn({
-    required String konamiId,
-    required String password,
-    String? deviceName,
-  }) => _session('/v1/auth/login', {
-    'konamiId': konamiId,
-    'password': password,
-    'deviceName': ?deviceName,
-  });
-
-  /// Creates a local test account, already onboarded. Production answers
-  /// 403 password_registration_disabled.
-  Future<AuthSession> devRegister({
-    required String username,
-    required String konamiId,
-    required String password,
-    String? deviceName,
-  }) => _session('/v1/auth/register', {
-    'username': username,
-    'konamiId': konamiId,
-    'password': password,
     'deviceName': ?deviceName,
   });
 
