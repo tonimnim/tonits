@@ -1738,12 +1738,6 @@ abstract class AppLocalizations {
   /// **'Your opponent'**
   String get matchYourOpponentStart;
 
-  /// Stands in for a reported score mid-sentence when it isn't known.
-  ///
-  /// In en, this message translates to:
-  /// **'the score'**
-  String get matchTheScore;
-
   /// A score with a penalty shootout, from the player's side.
   ///
   /// In en, this message translates to:
@@ -1797,216 +1791,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report the score'**
   String get matchReportScore;
-
-  /// No description provided for @matchStepOpponentFromEarlierRound.
-  ///
-  /// In en, this message translates to:
-  /// **'Your opponent comes from an earlier round.'**
-  String get matchStepOpponentFromEarlierRound;
-
-  /// No description provided for @matchStepCheckInOpens.
-  ///
-  /// In en, this message translates to:
-  /// **'Check-in opens {when}.'**
-  String matchStepCheckInOpens(String when);
-
-  /// No description provided for @matchStepKickOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Kick-off {when}.'**
-  String matchStepKickOff(String when);
-
-  /// No description provided for @matchStepWeWillLetYouKnow.
-  ///
-  /// In en, this message translates to:
-  /// **'We\'ll let you know when it\'s time to play.'**
-  String get matchStepWeWillLetYouKnow;
-
-  /// No description provided for @matchStepCheckInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Time to check in'**
-  String get matchStepCheckInTitle;
-
-  /// No description provided for @matchStepCheckInMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Check in to say you\'re ready. If only one player checks in, that player wins.'**
-  String get matchStepCheckInMessage;
-
-  /// No description provided for @matchStepCheckedInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re checked in'**
-  String get matchStepCheckedInTitle;
-
-  /// No description provided for @matchStepCheckedInMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for {opponent} to check in.'**
-  String matchStepCheckedInMessage(String opponent);
-
-  /// No description provided for @matchStepPlayTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Play your match'**
-  String get matchStepPlayTitle;
-
-  /// No description provided for @matchStepPlayMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Play a Friend Match with {opponent} in eFootball. When it ends, either of you reports the score.'**
-  String matchStepPlayMessage(String opponent);
-
-  /// No description provided for @matchStepPlayDeadlineNote.
-  ///
-  /// In en, this message translates to:
-  /// **'If nobody reports in time, you are both removed.'**
-  String get matchStepPlayDeadlineNote;
-
-  /// No description provided for @matchStepAwaitingConfirmationTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for {opponent} to confirm'**
-  String matchStepAwaitingConfirmationTitle(String opponent);
-
-  /// No description provided for @matchStepAwaitingConfirmationMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'You reported {score}. If {opponent} doesn\'t answer in time, your result stands.'**
-  String matchStepAwaitingConfirmationMessage(String score, String opponent);
-
-  /// No description provided for @matchStepConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm the result'**
-  String get matchStepConfirmTitle;
-
-  /// No description provided for @matchStepConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'{opponent} reported the score above. Is it right? If you don\'t answer in time, it stands.'**
-  String matchStepConfirmMessage(String opponent);
-
-  /// No description provided for @matchStepScreenshotTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send your screenshot'**
-  String get matchStepScreenshotTitle;
-
-  /// No description provided for @matchStepScreenshotMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The result was rejected. Send one screenshot of the Full Time screen; Ozone compares both players\' screenshots.'**
-  String get matchStepScreenshotMessage;
-
-  /// No description provided for @matchStepScreenshotDeadlineNote.
-  ///
-  /// In en, this message translates to:
-  /// **'If you don\'t send one in time, you\'re removed from the competition.'**
-  String get matchStepScreenshotDeadlineNote;
-
-  /// No description provided for @matchStepScreenshotSentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Screenshot sent'**
-  String get matchStepScreenshotSentTitle;
-
-  /// No description provided for @matchStepBothScreenshotsIn.
-  ///
-  /// In en, this message translates to:
-  /// **'Both screenshots are in. Ozone will review them.'**
-  String get matchStepBothScreenshotsIn;
-
-  /// No description provided for @matchStepWaitingForScreenshot.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting for {opponent}\'s screenshot. Ozone then checks both.'**
-  String matchStepWaitingForScreenshot(String opponent);
-
-  /// No description provided for @matchStepSettlingTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settling the result'**
-  String get matchStepSettlingTitle;
-
-  /// No description provided for @matchStepSettlingMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'A deadline just passed. This takes a few seconds.'**
-  String get matchStepSettlingMessage;
-
-  /// No description provided for @matchStepUnderReviewMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Ozone is checking both screenshots against the reported score. You\'ll be notified of the decision.'**
-  String get matchStepUnderReviewMessage;
-
-  /// No description provided for @matchStepOpponentConfirmedYours.
-  ///
-  /// In en, this message translates to:
-  /// **'{opponent} confirmed your result.'**
-  String matchStepOpponentConfirmedYours(String opponent);
-
-  /// No description provided for @matchStepYouConfirmed.
-  ///
-  /// In en, this message translates to:
-  /// **'You confirmed the result.'**
-  String get matchStepYouConfirmed;
-
-  /// No description provided for @matchStepBothAgreed.
-  ///
-  /// In en, this message translates to:
-  /// **'Both players agreed on the result.'**
-  String get matchStepBothAgreed;
-
-  /// No description provided for @matchStepOpponentUnanswered.
-  ///
-  /// In en, this message translates to:
-  /// **'{opponent} didn\'t answer in time, so your result stood.'**
-  String matchStepOpponentUnanswered(String opponent);
-
-  /// No description provided for @matchStepUnanswered.
-  ///
-  /// In en, this message translates to:
-  /// **'The result wasn\'t answered in time, so it stood.'**
-  String get matchStepUnanswered;
-
-  /// No description provided for @matchStepDecidedByReview.
-  ///
-  /// In en, this message translates to:
-  /// **'Ozone decided the result after a review.'**
-  String get matchStepDecidedByReview;
-
-  /// No description provided for @matchStepResultConfirmed.
-  ///
-  /// In en, this message translates to:
-  /// **'The result is confirmed.'**
-  String get matchStepResultConfirmed;
-
-  /// No description provided for @matchStepOutTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re out of this competition'**
-  String get matchStepOutTitle;
-
-  /// No description provided for @matchStepOutMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This match will be settled without you.'**
-  String get matchStepOutMessage;
-
-  /// No description provided for @matchStepUnknownTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Match'**
-  String get matchStepUnknownTitle;
-
-  /// No description provided for @matchStepUnknownMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Update Ozone to see where this match stands.'**
-  String get matchStepUnknownMessage;
 
   /// No description provided for @matchCancelledNoResultReported.
   ///
@@ -2188,12 +1972,6 @@ abstract class AppLocalizations {
   /// **'{minutes, plural, =1{Score sent. {opponent} has 1 minute to confirm it.} other{Score sent. {opponent} has {minutes} minutes to confirm it.}}'**
   String matchScoreSent(String opponent, int minutes);
 
-  /// No description provided for @matchReportIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes, plural, =1{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don\'t answer within 1 minute, it stands.} other{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don\'t answer within {minutes} minutes, it stands.}}'**
-  String matchReportIntro(String opponent, int minutes);
-
   /// No description provided for @matchPenaltyShootout.
   ///
   /// In en, this message translates to:
@@ -2211,12 +1989,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send score'**
   String get matchSendScore;
-
-  /// No description provided for @matchDeclaration.
-  ///
-  /// In en, this message translates to:
-  /// **'This is the real score. Reporting a false score can get me removed from the competition.'**
-  String get matchDeclaration;
 
   /// No description provided for @matchListActive.
   ///
@@ -2289,12 +2061,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'They haven\'t added their User ID, so search for their in-game name.'**
   String get matchNoUserId;
-
-  /// No description provided for @matchAddByUserId.
-  ///
-  /// In en, this message translates to:
-  /// **'Add them as a friend in eFootball with their User ID.'**
-  String get matchAddByUserId;
 
   /// No description provided for @matchUserId.
   ///
@@ -2470,30 +2236,6 @@ abstract class AppLocalizations {
   /// **'{minutes, plural, =1{You and {opponent} will each have 1 minute to send a screenshot of the Full Time screen. If you don\'t send one, you\'re removed from the competition.} other{You and {opponent} will each have {minutes} minutes to send a screenshot of the Full Time screen. If you don\'t send one, you\'re removed from the competition.}}'**
   String matchRejectMessage(String opponent, int minutes);
 
-  /// No description provided for @matchReject.
-  ///
-  /// In en, this message translates to:
-  /// **'Reject'**
-  String get matchReject;
-
-  /// No description provided for @matchToneYourMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Your move'**
-  String get matchToneYourMove;
-
-  /// No description provided for @matchToneWaiting.
-  ///
-  /// In en, this message translates to:
-  /// **'Waiting'**
-  String get matchToneWaiting;
-
-  /// No description provided for @matchToneFinal.
-  ///
-  /// In en, this message translates to:
-  /// **'Final'**
-  String get matchToneFinal;
-
   /// No description provided for @matchUploadingScreenshot.
   ///
   /// In en, this message translates to:
@@ -2505,24 +2247,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Checking your screenshot…'**
   String get matchCheckingScreenshot;
-
-  /// No description provided for @matchConfirmYes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes, that\'s right'**
-  String get matchConfirmYes;
-
-  /// No description provided for @matchConfirmNo.
-  ///
-  /// In en, this message translates to:
-  /// **'No, it\'s wrong'**
-  String get matchConfirmNo;
-
-  /// No description provided for @matchChooseScreenshot.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose screenshot'**
-  String get matchChooseScreenshot;
 
   /// No description provided for @matchReported.
   ///
@@ -2590,6 +2314,186 @@ abstract class AppLocalizations {
   /// **'Checking the screenshot is taking longer than usual. Try again.'**
   String get matchScreenshotSlow;
 
+  /// No description provided for @roomScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get roomScheduled;
+
+  /// No description provided for @roomOpponentTbd.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponent comes from an earlier round'**
+  String get roomOpponentTbd;
+
+  /// No description provided for @roomCheckInOpens.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in opens {when}'**
+  String roomCheckInOpens(String when);
+
+  /// No description provided for @roomKickOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick-off {when}'**
+  String roomKickOff(String when);
+
+  /// No description provided for @roomCheckInNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in to play'**
+  String get roomCheckInNow;
+
+  /// No description provided for @roomWaitingCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {opponent} to check in'**
+  String roomWaitingCheckIn(String opponent);
+
+  /// No description provided for @roomPlayThenReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Play, then report the score'**
+  String get roomPlayThenReport;
+
+  /// No description provided for @roomPlayThenReportSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'Play, then report games won'**
+  String get roomPlayThenReportSeries;
+
+  /// No description provided for @roomWaitingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {opponent} to confirm'**
+  String roomWaitingConfirm(String opponent);
+
+  /// No description provided for @roomOpponentReported.
+  ///
+  /// In en, this message translates to:
+  /// **'{opponent} reported this score'**
+  String roomOpponentReported(String opponent);
+
+  /// No description provided for @roomSendScreenshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Send your Full Time screenshot'**
+  String get roomSendScreenshot;
+
+  /// No description provided for @roomSendScreenshots.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a screenshot of each game'**
+  String get roomSendScreenshots;
+
+  /// No description provided for @roomScreenshotNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Send in time, or you\'re removed.'**
+  String get roomScreenshotNote;
+
+  /// No description provided for @roomWaitingScreenshots.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {opponent}\'s screenshots'**
+  String roomWaitingScreenshots(String opponent);
+
+  /// No description provided for @roomBothScreenshotsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Both screenshots are in'**
+  String get roomBothScreenshotsIn;
+
+  /// No description provided for @roomSettling.
+  ///
+  /// In en, this message translates to:
+  /// **'Settling the result…'**
+  String get roomSettling;
+
+  /// No description provided for @roomUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Ozone is reviewing the screenshots'**
+  String get roomUnderReview;
+
+  /// No description provided for @roomConfirmedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed by {opponent}'**
+  String roomConfirmedBy(String opponent);
+
+  /// No description provided for @roomYouConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'You confirmed it'**
+  String get roomYouConfirmed;
+
+  /// No description provided for @roomUnansweredYours.
+  ///
+  /// In en, this message translates to:
+  /// **'{opponent} didn\'t answer, so your score stood'**
+  String roomUnansweredYours(String opponent);
+
+  /// No description provided for @roomUnanswered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not answered in time, so it stood'**
+  String get roomUnanswered;
+
+  /// No description provided for @roomDecidedByReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Decided by Ozone'**
+  String get roomDecidedByReview;
+
+  /// No description provided for @roomOut.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re out of this competition'**
+  String get roomOut;
+
+  /// No description provided for @roomUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Ozone to see this match'**
+  String get roomUpdate;
+
+  /// No description provided for @roomAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get roomAccept;
+
+  /// No description provided for @roomDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get roomDecline;
+
+  /// No description provided for @roomSendScreenshotButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send screenshot'**
+  String get roomSendScreenshotButton;
+
+  /// No description provided for @roomSendScreenshotsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send screenshots'**
+  String get roomSendScreenshotsButton;
+
+  /// No description provided for @roomScreenshotsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your screenshots'**
+  String get roomScreenshotsTitle;
+
+  /// No description provided for @roomDeclaration.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm this is the real score.'**
+  String get roomDeclaration;
+
   /// A match format: how many games a match is.
   ///
   /// In en, this message translates to:
@@ -2614,12 +2518,6 @@ abstract class AppLocalizations {
   /// **'Game {number}'**
   String seriesGame(int number);
 
-  /// No description provided for @seriesGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Games'**
-  String get seriesGames;
-
   /// No description provided for @seriesLevel.
   ///
   /// In en, this message translates to:
@@ -2638,12 +2536,6 @@ abstract class AppLocalizations {
   /// **'{opponent} wins the series {theirs}–{mine}'**
   String seriesTheyWin(String opponent, int theirs, int mine);
 
-  /// No description provided for @seriesReportIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'{minutes, plural, =1{Enter how many games each of you won. {opponent} confirms it, and if they don\'t answer within 1 minute, it stands.} other{Enter how many games each of you won. {opponent} confirms it, and if they don\'t answer within {minutes} minutes, it stands.}}'**
-  String seriesReportIntro(String opponent, int minutes);
-
   /// No description provided for @seriesNeedsWinner.
   ///
   /// In en, this message translates to:
@@ -2653,43 +2545,8 @@ abstract class AppLocalizations {
   /// No description provided for @seriesScreenshotReminder.
   ///
   /// In en, this message translates to:
-  /// **'Screenshot every Full Time screen as you play. If the result is disputed, you\'ll need one for each game.'**
+  /// **'Screenshot every game\'s Full Time screen. You\'ll need them if the result is disputed.'**
   String get seriesScreenshotReminder;
-
-  /// No description provided for @seriesStepPlayMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports the games won, like {example}.'**
-  String seriesStepPlayMessage(
-    int count,
-    String opponent,
-    int wins,
-    String example,
-  );
-
-  /// No description provided for @seriesStepScreenshotTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Send your screenshots'**
-  String get seriesStepScreenshotTitle;
-
-  /// No description provided for @seriesStepScreenshotMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'The result was rejected. Send each game\'s Full Time screen; Ozone compares both players\' screenshots game by game.'**
-  String get seriesStepScreenshotMessage;
-
-  /// No description provided for @seriesStepScreenshotNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Send at least one in time, or you\'re removed from the competition. A missing game counts against you in review.'**
-  String get seriesStepScreenshotNote;
-
-  /// No description provided for @seriesStepScreenshotsSentTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Screenshots sent'**
-  String get seriesStepScreenshotsSentTitle;
 
   /// No description provided for @seriesChoose.
   ///

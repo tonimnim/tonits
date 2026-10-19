@@ -74,11 +74,15 @@ class SecondaryButton extends StatelessWidget {
     this.icon,
     this.destructive = false,
     this.pill = true,
+    this.background,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
+
+  /// A fill behind the outline, such as the card colour on a tinted hero.
+  final Color? background;
 
   /// Red text, for actions such as signing out.
   final bool destructive;
@@ -92,7 +96,7 @@ class SecondaryButton extends StatelessWidget {
     final style = OutlinedButton.styleFrom(
       minimumSize: const Size.fromHeight(54),
       // A plain outline on the page, flat in every state.
-      backgroundColor: Colors.transparent,
+      backgroundColor: background ?? Colors.transparent,
       elevation: 0,
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,

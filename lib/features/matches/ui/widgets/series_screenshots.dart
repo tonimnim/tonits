@@ -13,9 +13,12 @@ import '../../data/match_room.dart';
 /// After a series result is rejected: one slot per game played for its
 /// Full Time screenshot, all sent together. Any one counts as responding.
 class SeriesScreenshots extends ConsumerStatefulWidget {
-  const SeriesScreenshots({super.key, required this.room});
+  const SeriesScreenshots({super.key, required this.room, this.onSent});
 
   final MatchRoom room;
+
+  /// Called once the screenshots are sent, such as to close the sheet.
+  final VoidCallback? onSent;
 
   @override
   ConsumerState<SeriesScreenshots> createState() => _SeriesScreenshotsState();
@@ -48,7 +51,7 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
   }
 
   Future<void> _send() async {
-    await runForMessage(
+    final sent = await runForMessage(
       () => ref
           .read(matchRoomProvider(room.id).notifier)
           .sendScreenshots(
@@ -58,7 +61,9 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
             },
           ),
     );
-    if (mounted) setState(() => _progress = null);
+    if (!mounted) return;
+    setState(() => _progress = null);
+    if (sent) widget.onSent?.call();
   }
 
   @override

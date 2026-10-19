@@ -36,7 +36,6 @@
       }
     }
   },
-  "seriesGames": "Games",
   "seriesLevel": "Level {mine}–{theirs}",
   "@seriesLevel": {
     "placeholders": {
@@ -73,17 +72,6 @@
       }
     }
   },
-  "seriesReportIntro": "{minutes, plural, =1{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within 1 minute, it stands.} other{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within {minutes} minutes, it stands.}}",
-  "@seriesReportIntro": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      },
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "seriesNeedsWinner": "{wins, plural, =1{One of you needs 1 win.} other{One of you needs {wins} wins.}}",
   "@seriesNeedsWinner": {
     "placeholders": {
@@ -92,29 +80,7 @@
       }
     }
   },
-  "seriesScreenshotReminder": "Screenshot every Full Time screen as you play. If the result is disputed, you'll need one for each game.",
-  "seriesStepPlayMessage": "Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports the games won, like {example}.",
-  "@seriesStepPlayMessage": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "opponent": {
-        "type": "String"
-      },
-      "wins": {
-        "type": "int"
-      },
-      "example": {
-        "type": "String",
-        "example": "2–1"
-      }
-    }
-  },
-  "seriesStepScreenshotTitle": "Send your screenshots",
-  "seriesStepScreenshotMessage": "The result was rejected. Send each game's Full Time screen; Ozone compares both players' screenshots game by game.",
-  "seriesStepScreenshotNote": "Send at least one in time, or you're removed from the competition. A missing game counts against you in review.",
-  "seriesStepScreenshotsSentTitle": "Screenshots sent",
+  "seriesScreenshotReminder": "Screenshot every game's Full Time screen. You'll need them if the result is disputed.",
   "seriesChoose": "Choose",
   "seriesChange": "Change",
   "seriesSendScreenshots": "{count, plural, =0{Send screenshots} =1{Send 1 screenshot} other{Send {count} screenshots}}",

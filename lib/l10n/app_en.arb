@@ -789,10 +789,6 @@
   "@matchYourOpponentStart": {
     "description": "Stands in for the opponent's name at the start of a sentence."
   },
-  "matchTheScore": "the score",
-  "@matchTheScore": {
-    "description": "Stands in for a reported score mid-sentence when it isn't known."
-  },
   "matchScoreWithPens": "{mine}–{theirs} ({penMine}–{penTheirs} pens)",
   "@matchScoreWithPens": {
     "description": "A score with a penalty shootout, from the player's side.",
@@ -819,117 +815,6 @@
   "matchFinished": "Finished",
   "matchFullTime": "Full time",
   "matchReportScore": "Report the score",
-  "matchStepOpponentFromEarlierRound": "Your opponent comes from an earlier round.",
-  "matchStepCheckInOpens": "Check-in opens {when}.",
-  "@matchStepCheckInOpens": {
-    "placeholders": {
-      "when": {
-        "type": "String",
-        "example": "Today, 18:30"
-      }
-    }
-  },
-  "matchStepKickOff": "Kick-off {when}.",
-  "@matchStepKickOff": {
-    "placeholders": {
-      "when": {
-        "type": "String",
-        "example": "Today, 18:30"
-      }
-    }
-  },
-  "matchStepWeWillLetYouKnow": "We'll let you know when it's time to play.",
-  "matchStepCheckInTitle": "Time to check in",
-  "matchStepCheckInMessage": "Check in to say you're ready. If only one player checks in, that player wins.",
-  "matchStepCheckedInTitle": "You're checked in",
-  "matchStepCheckedInMessage": "Waiting for {opponent} to check in.",
-  "@matchStepCheckedInMessage": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepPlayTitle": "Play your match",
-  "matchStepPlayMessage": "Play a Friend Match with {opponent} in eFootball. When it ends, either of you reports the score.",
-  "@matchStepPlayMessage": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepPlayDeadlineNote": "If nobody reports in time, you are both removed.",
-  "matchStepAwaitingConfirmationTitle": "Waiting for {opponent} to confirm",
-  "@matchStepAwaitingConfirmationTitle": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepAwaitingConfirmationMessage": "You reported {score}. If {opponent} doesn't answer in time, your result stands.",
-  "@matchStepAwaitingConfirmationMessage": {
-    "placeholders": {
-      "score": {
-        "type": "String",
-        "example": "2–1"
-      },
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepConfirmTitle": "Confirm the result",
-  "matchStepConfirmMessage": "{opponent} reported the score above. Is it right? If you don't answer in time, it stands.",
-  "@matchStepConfirmMessage": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepScreenshotTitle": "Send your screenshot",
-  "matchStepScreenshotMessage": "The result was rejected. Send one screenshot of the Full Time screen; Ozone compares both players' screenshots.",
-  "matchStepScreenshotDeadlineNote": "If you don't send one in time, you're removed from the competition.",
-  "matchStepScreenshotSentTitle": "Screenshot sent",
-  "matchStepBothScreenshotsIn": "Both screenshots are in. Ozone will review them.",
-  "matchStepWaitingForScreenshot": "Waiting for {opponent}'s screenshot. Ozone then checks both.",
-  "@matchStepWaitingForScreenshot": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepSettlingTitle": "Settling the result",
-  "matchStepSettlingMessage": "A deadline just passed. This takes a few seconds.",
-  "matchStepUnderReviewMessage": "Ozone is checking both screenshots against the reported score. You'll be notified of the decision.",
-  "matchStepOpponentConfirmedYours": "{opponent} confirmed your result.",
-  "@matchStepOpponentConfirmedYours": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepYouConfirmed": "You confirmed the result.",
-  "matchStepBothAgreed": "Both players agreed on the result.",
-  "matchStepOpponentUnanswered": "{opponent} didn't answer in time, so your result stood.",
-  "@matchStepOpponentUnanswered": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      }
-    }
-  },
-  "matchStepUnanswered": "The result wasn't answered in time, so it stood.",
-  "matchStepDecidedByReview": "Ozone decided the result after a review.",
-  "matchStepResultConfirmed": "The result is confirmed.",
-  "matchStepOutTitle": "You're out of this competition",
-  "matchStepOutMessage": "This match will be settled without you.",
-  "matchStepUnknownTitle": "Match",
-  "matchStepUnknownMessage": "Update Ozone to see where this match stands.",
   "matchCancelledNoResultReported": "Nobody reported a score in time, so both players were removed.",
   "matchCancelledResponseTimeout": "Neither player sent a screenshot, so both were removed.",
   "matchCancelledDoubleNoShow": "Neither player checked in.",
@@ -991,21 +876,9 @@
       }
     }
   },
-  "matchReportIntro": "{minutes, plural, =1{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don't answer within 1 minute, it stands.} other{Enter the final score from the Full Time screen. {opponent} confirms it, and if they don't answer within {minutes} minutes, it stands.}}",
-  "@matchReportIntro": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      },
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "matchPenaltyShootout": "Penalty shootout",
   "matchLevelKnockoutNote": "A level knockout match is decided on penalties.",
   "matchSendScore": "Send score",
-  "matchDeclaration": "This is the real score. Reporting a false score can get me removed from the competition.",
   "matchListActive": "Active",
   "matchListHistory": "History",
   "matchNoActiveTitle": "No active matches",
@@ -1033,7 +906,6 @@
   },
   "matchNoGameAccount": "They haven't linked an eFootball account yet.",
   "matchNoUserId": "They haven't added their User ID, so search for their in-game name.",
-  "matchAddByUserId": "Add them as a friend in eFootball with their User ID.",
   "matchUserId": "User ID",
   "matchInGameName": "In-game name",
   "matchCopyLabel": "Copy {label}",
@@ -1106,15 +978,8 @@
       }
     }
   },
-  "matchReject": "Reject",
-  "matchToneYourMove": "Your move",
-  "matchToneWaiting": "Waiting",
-  "matchToneFinal": "Final",
   "matchUploadingScreenshot": "Uploading your screenshot…",
   "matchCheckingScreenshot": "Checking your screenshot…",
-  "matchConfirmYes": "Yes, that's right",
-  "matchConfirmNo": "No, it's wrong",
-  "matchChooseScreenshot": "Choose screenshot",
   "matchReported": "Reported",
   "matchToBeDecided": "To be decided",
   "matchVs": "VS",
@@ -1150,6 +1015,94 @@
   "matchScreenshotUploadFailed": "The upload didn't go through. Try again.",
   "matchScreenshotUnusable": "That image couldn't be used. Choose the original screenshot of the Full Time screen.",
   "matchScreenshotSlow": "Checking the screenshot is taking longer than usual. Try again.",
+  "roomScheduled": "Scheduled",
+  "roomOpponentTbd": "Opponent comes from an earlier round",
+  "roomCheckInOpens": "Check-in opens {when}",
+  "@roomCheckInOpens": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "roomKickOff": "Kick-off {when}",
+  "@roomKickOff": {
+    "placeholders": {
+      "when": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
+  "roomCheckInNow": "Check in to play",
+  "roomWaitingCheckIn": "Waiting for {opponent} to check in",
+  "@roomWaitingCheckIn": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomPlayThenReport": "Play, then report the score",
+  "roomPlayThenReportSeries": "Play, then report games won",
+  "roomWaitingConfirm": "Waiting for {opponent} to confirm",
+  "@roomWaitingConfirm": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomOpponentReported": "{opponent} reported this score",
+  "@roomOpponentReported": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomSendScreenshot": "Send your Full Time screenshot",
+  "roomSendScreenshots": "Send a screenshot of each game",
+  "roomScreenshotNote": "Send in time, or you're removed.",
+  "roomWaitingScreenshots": "Waiting for {opponent}'s screenshots",
+  "@roomWaitingScreenshots": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomBothScreenshotsIn": "Both screenshots are in",
+  "roomSettling": "Settling the result…",
+  "roomUnderReview": "Ozone is reviewing the screenshots",
+  "roomConfirmedBy": "Confirmed by {opponent}",
+  "@roomConfirmedBy": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomYouConfirmed": "You confirmed it",
+  "roomUnansweredYours": "{opponent} didn't answer, so your score stood",
+  "@roomUnansweredYours": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      }
+    }
+  },
+  "roomUnanswered": "Not answered in time, so it stood",
+  "roomDecidedByReview": "Decided by Ozone",
+  "roomOut": "You're out of this competition",
+  "roomUpdate": "Update Ozone to see this match",
+  "roomAccept": "Accept",
+  "roomDecline": "Decline",
+  "roomSendScreenshotButton": "Send screenshot",
+  "roomSendScreenshotsButton": "Send screenshots",
+  "roomScreenshotsTitle": "Your screenshots",
+  "roomDeclaration": "I confirm this is the real score.",
   "seriesBestOf": "Best of {count}",
   "@seriesBestOf": {
     "description": "A match format: how many games a match is.",
@@ -1187,7 +1140,6 @@
       }
     }
   },
-  "seriesGames": "Games",
   "seriesLevel": "Level {mine}–{theirs}",
   "@seriesLevel": {
     "placeholders": {
@@ -1224,17 +1176,6 @@
       }
     }
   },
-  "seriesReportIntro": "{minutes, plural, =1{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within 1 minute, it stands.} other{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within {minutes} minutes, it stands.}}",
-  "@seriesReportIntro": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      },
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
   "seriesNeedsWinner": "{wins, plural, =1{One of you needs 1 win.} other{One of you needs {wins} wins.}}",
   "@seriesNeedsWinner": {
     "placeholders": {
@@ -1243,29 +1184,7 @@
       }
     }
   },
-  "seriesScreenshotReminder": "Screenshot every Full Time screen as you play. If the result is disputed, you'll need one for each game.",
-  "seriesStepPlayMessage": "Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports the games won, like {example}.",
-  "@seriesStepPlayMessage": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "opponent": {
-        "type": "String"
-      },
-      "wins": {
-        "type": "int"
-      },
-      "example": {
-        "type": "String",
-        "example": "2–1"
-      }
-    }
-  },
-  "seriesStepScreenshotTitle": "Send your screenshots",
-  "seriesStepScreenshotMessage": "The result was rejected. Send each game's Full Time screen; Ozone compares both players' screenshots game by game.",
-  "seriesStepScreenshotNote": "Send at least one in time, or you're removed from the competition. A missing game counts against you in review.",
-  "seriesStepScreenshotsSentTitle": "Screenshots sent",
+  "seriesScreenshotReminder": "Screenshot every game's Full Time screen. You'll need them if the result is disputed.",
   "seriesChoose": "Choose",
   "seriesChange": "Change",
   "seriesSendScreenshots": "{count, plural, =0{Send screenshots} =1{Send 1 screenshot} other{Send {count} screenshots}}",

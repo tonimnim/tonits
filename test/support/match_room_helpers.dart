@@ -54,8 +54,13 @@ Future<FakeApi> openRoom(
   return api;
 }
 
+/// Jumps the page back to the top. A drag would pull to refresh, and the
+/// fake API would answer with the room as it started.
 Future<void> scrollToTop(WidgetTester tester) async {
-  await tester.drag(find.byType(Scrollable).first, const Offset(0, 2000));
+  tester
+      .state<ScrollableState>(find.byType(Scrollable).first)
+      .position
+      .jumpTo(0);
   await tester.pumpAndSettle();
 }
 

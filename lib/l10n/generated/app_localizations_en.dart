@@ -1029,9 +1029,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get matchYourOpponentStart => 'Your opponent';
 
   @override
-  String get matchTheScore => 'the score';
-
-  @override
   String matchScoreWithPens(int mine, int theirs, int penMine, int penTheirs) {
     return '$mine–$theirs ($penMine–$penTheirs pens)';
   }
@@ -1059,143 +1056,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchReportScore => 'Report the score';
-
-  @override
-  String get matchStepOpponentFromEarlierRound =>
-      'Your opponent comes from an earlier round.';
-
-  @override
-  String matchStepCheckInOpens(String when) {
-    return 'Check-in opens $when.';
-  }
-
-  @override
-  String matchStepKickOff(String when) {
-    return 'Kick-off $when.';
-  }
-
-  @override
-  String get matchStepWeWillLetYouKnow =>
-      'We\'ll let you know when it\'s time to play.';
-
-  @override
-  String get matchStepCheckInTitle => 'Time to check in';
-
-  @override
-  String get matchStepCheckInMessage =>
-      'Check in to say you\'re ready. If only one player checks in, that player wins.';
-
-  @override
-  String get matchStepCheckedInTitle => 'You\'re checked in';
-
-  @override
-  String matchStepCheckedInMessage(String opponent) {
-    return 'Waiting for $opponent to check in.';
-  }
-
-  @override
-  String get matchStepPlayTitle => 'Play your match';
-
-  @override
-  String matchStepPlayMessage(String opponent) {
-    return 'Play a Friend Match with $opponent in eFootball. When it ends, either of you reports the score.';
-  }
-
-  @override
-  String get matchStepPlayDeadlineNote =>
-      'If nobody reports in time, you are both removed.';
-
-  @override
-  String matchStepAwaitingConfirmationTitle(String opponent) {
-    return 'Waiting for $opponent to confirm';
-  }
-
-  @override
-  String matchStepAwaitingConfirmationMessage(String score, String opponent) {
-    return 'You reported $score. If $opponent doesn\'t answer in time, your result stands.';
-  }
-
-  @override
-  String get matchStepConfirmTitle => 'Confirm the result';
-
-  @override
-  String matchStepConfirmMessage(String opponent) {
-    return '$opponent reported the score above. Is it right? If you don\'t answer in time, it stands.';
-  }
-
-  @override
-  String get matchStepScreenshotTitle => 'Send your screenshot';
-
-  @override
-  String get matchStepScreenshotMessage =>
-      'The result was rejected. Send one screenshot of the Full Time screen; Ozone compares both players\' screenshots.';
-
-  @override
-  String get matchStepScreenshotDeadlineNote =>
-      'If you don\'t send one in time, you\'re removed from the competition.';
-
-  @override
-  String get matchStepScreenshotSentTitle => 'Screenshot sent';
-
-  @override
-  String get matchStepBothScreenshotsIn =>
-      'Both screenshots are in. Ozone will review them.';
-
-  @override
-  String matchStepWaitingForScreenshot(String opponent) {
-    return 'Waiting for $opponent\'s screenshot. Ozone then checks both.';
-  }
-
-  @override
-  String get matchStepSettlingTitle => 'Settling the result';
-
-  @override
-  String get matchStepSettlingMessage =>
-      'A deadline just passed. This takes a few seconds.';
-
-  @override
-  String get matchStepUnderReviewMessage =>
-      'Ozone is checking both screenshots against the reported score. You\'ll be notified of the decision.';
-
-  @override
-  String matchStepOpponentConfirmedYours(String opponent) {
-    return '$opponent confirmed your result.';
-  }
-
-  @override
-  String get matchStepYouConfirmed => 'You confirmed the result.';
-
-  @override
-  String get matchStepBothAgreed => 'Both players agreed on the result.';
-
-  @override
-  String matchStepOpponentUnanswered(String opponent) {
-    return '$opponent didn\'t answer in time, so your result stood.';
-  }
-
-  @override
-  String get matchStepUnanswered =>
-      'The result wasn\'t answered in time, so it stood.';
-
-  @override
-  String get matchStepDecidedByReview =>
-      'Ozone decided the result after a review.';
-
-  @override
-  String get matchStepResultConfirmed => 'The result is confirmed.';
-
-  @override
-  String get matchStepOutTitle => 'You\'re out of this competition';
-
-  @override
-  String get matchStepOutMessage => 'This match will be settled without you.';
-
-  @override
-  String get matchStepUnknownTitle => 'Match';
-
-  @override
-  String get matchStepUnknownMessage =>
-      'Update Ozone to see where this match stands.';
 
   @override
   String get matchCancelledNoResultReported =>
@@ -1317,19 +1177,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String matchReportIntro(String opponent, int minutes) {
-    String _temp0 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other:
-          'Enter the final score from the Full Time screen. $opponent confirms it, and if they don\'t answer within $minutes minutes, it stands.',
-      one:
-          'Enter the final score from the Full Time screen. $opponent confirms it, and if they don\'t answer within 1 minute, it stands.',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get matchPenaltyShootout => 'Penalty shootout';
 
   @override
@@ -1338,10 +1185,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchSendScore => 'Send score';
-
-  @override
-  String get matchDeclaration =>
-      'This is the real score. Reporting a false score can get me removed from the competition.';
 
   @override
   String get matchListActive => 'Active';
@@ -1386,10 +1229,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get matchNoUserId =>
       'They haven\'t added their User ID, so search for their in-game name.';
-
-  @override
-  String get matchAddByUserId =>
-      'Add them as a friend in eFootball with their User ID.';
 
   @override
   String get matchUserId => 'User ID';
@@ -1497,31 +1336,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get matchReject => 'Reject';
-
-  @override
-  String get matchToneYourMove => 'Your move';
-
-  @override
-  String get matchToneWaiting => 'Waiting';
-
-  @override
-  String get matchToneFinal => 'Final';
-
-  @override
   String get matchUploadingScreenshot => 'Uploading your screenshot…';
 
   @override
   String get matchCheckingScreenshot => 'Checking your screenshot…';
-
-  @override
-  String get matchConfirmYes => 'Yes, that\'s right';
-
-  @override
-  String get matchConfirmNo => 'No, it\'s wrong';
-
-  @override
-  String get matchChooseScreenshot => 'Choose screenshot';
 
   @override
   String get matchReported => 'Reported';
@@ -1568,6 +1386,112 @@ class AppLocalizationsEn extends AppLocalizations {
       'Checking the screenshot is taking longer than usual. Try again.';
 
   @override
+  String get roomScheduled => 'Scheduled';
+
+  @override
+  String get roomOpponentTbd => 'Opponent comes from an earlier round';
+
+  @override
+  String roomCheckInOpens(String when) {
+    return 'Check-in opens $when';
+  }
+
+  @override
+  String roomKickOff(String when) {
+    return 'Kick-off $when';
+  }
+
+  @override
+  String get roomCheckInNow => 'Check in to play';
+
+  @override
+  String roomWaitingCheckIn(String opponent) {
+    return 'Waiting for $opponent to check in';
+  }
+
+  @override
+  String get roomPlayThenReport => 'Play, then report the score';
+
+  @override
+  String get roomPlayThenReportSeries => 'Play, then report games won';
+
+  @override
+  String roomWaitingConfirm(String opponent) {
+    return 'Waiting for $opponent to confirm';
+  }
+
+  @override
+  String roomOpponentReported(String opponent) {
+    return '$opponent reported this score';
+  }
+
+  @override
+  String get roomSendScreenshot => 'Send your Full Time screenshot';
+
+  @override
+  String get roomSendScreenshots => 'Send a screenshot of each game';
+
+  @override
+  String get roomScreenshotNote => 'Send in time, or you\'re removed.';
+
+  @override
+  String roomWaitingScreenshots(String opponent) {
+    return 'Waiting for $opponent\'s screenshots';
+  }
+
+  @override
+  String get roomBothScreenshotsIn => 'Both screenshots are in';
+
+  @override
+  String get roomSettling => 'Settling the result…';
+
+  @override
+  String get roomUnderReview => 'Ozone is reviewing the screenshots';
+
+  @override
+  String roomConfirmedBy(String opponent) {
+    return 'Confirmed by $opponent';
+  }
+
+  @override
+  String get roomYouConfirmed => 'You confirmed it';
+
+  @override
+  String roomUnansweredYours(String opponent) {
+    return '$opponent didn\'t answer, so your score stood';
+  }
+
+  @override
+  String get roomUnanswered => 'Not answered in time, so it stood';
+
+  @override
+  String get roomDecidedByReview => 'Decided by Ozone';
+
+  @override
+  String get roomOut => 'You\'re out of this competition';
+
+  @override
+  String get roomUpdate => 'Update Ozone to see this match';
+
+  @override
+  String get roomAccept => 'Accept';
+
+  @override
+  String get roomDecline => 'Decline';
+
+  @override
+  String get roomSendScreenshotButton => 'Send screenshot';
+
+  @override
+  String get roomSendScreenshotsButton => 'Send screenshots';
+
+  @override
+  String get roomScreenshotsTitle => 'Your screenshots';
+
+  @override
+  String get roomDeclaration => 'I confirm this is the real score.';
+
+  @override
   String seriesBestOf(int count) {
     return 'Best of $count';
   }
@@ -1594,9 +1518,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get seriesGames => 'Games';
-
-  @override
   String seriesLevel(int mine, int theirs) {
     return 'Level $mine–$theirs';
   }
@@ -1612,19 +1533,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String seriesReportIntro(String opponent, int minutes) {
-    String _temp0 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other:
-          'Enter how many games each of you won. $opponent confirms it, and if they don\'t answer within $minutes minutes, it stands.',
-      one:
-          'Enter how many games each of you won. $opponent confirms it, and if they don\'t answer within 1 minute, it stands.',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String seriesNeedsWinner(int wins) {
     String _temp0 = intl.Intl.pluralLogic(
       wins,
@@ -1637,31 +1545,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seriesScreenshotReminder =>
-      'Screenshot every Full Time screen as you play. If the result is disputed, you\'ll need one for each game.';
-
-  @override
-  String seriesStepPlayMessage(
-    int count,
-    String opponent,
-    int wins,
-    String example,
-  ) {
-    return 'Play a best of $count with $opponent in eFootball, first to $wins wins. When it ends, either of you reports the games won, like $example.';
-  }
-
-  @override
-  String get seriesStepScreenshotTitle => 'Send your screenshots';
-
-  @override
-  String get seriesStepScreenshotMessage =>
-      'The result was rejected. Send each game\'s Full Time screen; Ozone compares both players\' screenshots game by game.';
-
-  @override
-  String get seriesStepScreenshotNote =>
-      'Send at least one in time, or you\'re removed from the competition. A missing game counts against you in review.';
-
-  @override
-  String get seriesStepScreenshotsSentTitle => 'Screenshots sent';
+      'Screenshot every game\'s Full Time screen. You\'ll need them if the result is disputed.';
 
   @override
   String get seriesChoose => 'Choose';

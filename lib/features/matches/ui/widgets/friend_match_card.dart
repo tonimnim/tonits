@@ -55,15 +55,14 @@ class FriendMatchCard extends StatelessWidget {
               ],
             ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            account == null
-                ? l.matchNoGameAccount
-                : account.userId == null
-                ? l.matchNoUserId
-                : l.matchAddByUserId,
-            style: TextStyle(fontSize: 14, color: p.subtleForeground),
-          ),
+          // Only what the player can't see for themselves.
+          if (account == null || account.userId == null) ...[
+            const SizedBox(height: 4),
+            Text(
+              account == null ? l.matchNoGameAccount : l.matchNoUserId,
+              style: TextStyle(fontSize: 14, color: p.subtleForeground),
+            ),
+          ],
           if (account != null) ...[
             const SizedBox(height: 16),
             if (account.userId case final id?) ...[

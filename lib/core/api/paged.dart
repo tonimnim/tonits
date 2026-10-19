@@ -32,6 +32,15 @@ class Paged<T> {
     hasMore: page.hasMore,
   );
 
+  /// The same page with its items changed, such as one marked read.
+  Paged<T> withItems(List<T> items) => Paged(
+    items: items,
+    nextCursor: nextCursor,
+    hasMore: hasMore,
+    loadingMore: loadingMore,
+    loadMoreError: loadMoreError,
+  );
+
   Paged<T> copyWith({bool? loadingMore, Object? Function()? loadMoreError}) =>
       Paged(
         items: items,

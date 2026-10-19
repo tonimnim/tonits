@@ -67,7 +67,6 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
     final draft = _draft ??= ScoreDraft.of(room);
     final opponent = room.summary.opponent?.displayName ?? l.matchOpponent;
     final me = room.summary.me?.displayName ?? l.matchYou;
-    final minutes = room.windows.confirm.inMinutes;
 
     return Scaffold(
       appBar: AppBar(title: Text(l.matchReportScore)),
@@ -81,20 +80,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             TonitsSpace.xl,
           ),
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Text(
-                draft.isSeries
-                    ? l.seriesReportIntro(opponent, minutes)
-                    : l.matchReportIntro(opponent, minutes),
-                style: TextStyle(
-                  fontSize: 15,
-                  height: 1.45,
-                  color: p.subtleForeground,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: TonitsSpace.sm),
             _ScorePanel(
               title: draft.isSeries ? l.seriesGamesWon : l.matchFullTime,
               caption: draft.isSeries
@@ -244,7 +230,7 @@ class _Declaration extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: Text(
-                  context.l10n.matchDeclaration,
+                  context.l10n.roomDeclaration,
                   style: TextStyle(height: 1.4, color: p.subtleForeground),
                 ),
               ),

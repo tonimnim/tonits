@@ -24,13 +24,7 @@ void main() {
       },
     );
 
-    expect(
-      find.text(
-        'Check in to say you\'re ready. If only one player '
-        'checks in, that player wins.',
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('Check in to play'), findsOneWidget);
     expect(find.textContaining('12:00 left'), findsOneWidget);
     // How to find the opponent in eFootball.
     await scrollPageTo(tester, find.text('8F3K-2P9Q-LM4R'));
@@ -40,8 +34,7 @@ void main() {
     await tapText(tester, 'Check in');
     await scrollToTop(tester);
 
-    expect(find.text("You're checked in"), findsOneWidget);
-    expect(find.text('Waiting for Amina Otieno to check in.'), findsOneWidget);
+    expect(find.text('Waiting for Amina Otieno to check in'), findsOneWidget);
     final checkIn = api.requests.singleWhere(
       (r) => r.url.path.endsWith('/check-ins'),
     );
@@ -64,7 +57,7 @@ void main() {
         ),
       },
     );
-    expect(find.text('Play your match'), findsOneWidget);
+    expect(find.text('Play, then report the score'), findsOneWidget);
 
     await tapText(tester, 'Report the score');
     // Level scores open the penalty shootout below; these are the score.
@@ -74,11 +67,7 @@ void main() {
     // Nothing is sent until the player vouches for the score.
     await tapText(tester, 'Send score');
     expect(api.requests.where((r) => r.method == 'POST'), hasLength(1));
-    await tapText(
-      tester,
-      'This is the real score. Reporting a false score can get me removed '
-      'from the competition.',
-    );
+    await tapText(tester, 'I confirm this is the real score.');
     await tapText(tester, 'Send score');
 
     expect(
@@ -113,11 +102,7 @@ void main() {
     );
     await tapText(tester, 'Report the score');
     expect(find.text('Penalty shootout'), findsOneWidget);
-    await tapText(
-      tester,
-      'This is the real score. Reporting a false score can get me removed '
-      'from the competition.',
-    );
+    await tapText(tester, 'I confirm this is the real score.');
     await tapText(tester, 'Send score');
     expect(find.text('A penalty shootout needs a winner.'), findsOneWidget);
 
@@ -170,10 +155,10 @@ void main() {
     expect(find.text('Reported'), findsOneWidget);
     expect(find.textContaining('8:00 left'), findsOneWidget);
 
-    await tapText(tester, "Yes, that's right");
+    await tapText(tester, 'Accept');
 
     expect(find.text('You lost'), findsOneWidget);
-    expect(find.text('You confirmed the result.'), findsOneWidget);
+    expect(find.text('You confirmed it'), findsOneWidget);
     expect(find.text('Full time'), findsOneWidget);
     final answer = api.requests.lastWhere(
       (r) => r.url.path.endsWith('/confirmation'),
@@ -230,22 +215,17 @@ void main() {
       },
     );
 
-    await tapText(tester, "No, it's wrong");
+    await tapText(tester, 'Decline');
     expect(find.text('Reject this result?'), findsOneWidget);
-    await tester.tap(find.widgetWithText(TextButton, 'Reject'));
+    await tester.tap(find.widgetWithText(TextButton, 'Decline'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Send your screenshot'), findsOneWidget);
-    expect(
-      find.text(
-        "If you don't send one in time, you're removed from the competition.",
-      ),
-      findsOneWidget,
-    );
-    await tapText(tester, 'Choose screenshot');
+    expect(find.text('Send your Full Time screenshot'), findsOneWidget);
+    expect(find.text("Send in time, or you're removed."), findsOneWidget);
+    await tapText(tester, 'Send screenshot');
     await scrollToTop(tester);
 
-    expect(find.text('Screenshot sent'), findsOneWidget);
+    expect(find.text("Waiting for Amina Otieno's screenshots"), findsOneWidget);
     final upload = api.requests.singleWhere((r) => r.method == 'PUT');
     expect(upload.bodyBytes, pngBytes);
     expect(upload.headers['If-None-Match'], '*');
@@ -281,7 +261,7 @@ void main() {
       find.text('The match changed. Check the latest and try again.'),
       findsOneWidget,
     );
-    expect(find.text("You're checked in"), findsOneWidget);
+    expect(find.text('Waiting for Amina Otieno to check in'), findsOneWidget);
   });
 
   test('only JPEG and PNG screenshots are accepted', () {

@@ -39,11 +39,7 @@ void main() {
     // Won 2 of 3; a third tap can't go past the 2 a best of 3 needs.
     await tapTimes(tester, myPlus(0), 3);
     await tapTimes(tester, theirPlus(0), 2);
-    await tapText(
-      tester,
-      'This is the real score. Reporting a false score can get me removed '
-      'from the competition.',
-    );
+    await tapText(tester, 'I confirm this is the real score.');
     await tapText(tester, 'Send score');
 
     final report = api.requests.lastWhere(
@@ -64,11 +60,7 @@ void main() {
     await tapText(tester, 'Report the score');
     await tapTimes(tester, myPlus(0), 1);
     await tapTimes(tester, theirPlus(0), 1);
-    await tapText(
-      tester,
-      'This is the real score. Reporting a false score can get me removed '
-      'from the competition.',
-    );
+    await tapText(tester, 'I confirm this is the real score.');
     await tapText(tester, 'Send score');
 
     expect(find.text('One of you needs 2 wins.'), findsOneWidget);
@@ -114,15 +106,22 @@ void main() {
         ),
       },
     );
-    expect(find.text('Send your screenshots'), findsOneWidget);
+    expect(find.text('Send a screenshot of each game'), findsOneWidget);
+    await tapText(tester, 'Send screenshots');
+    expect(find.text('Your screenshots'), findsOneWidget);
     expect(find.text('Choose'), findsNWidgets(3));
 
     // Games 1 and 3 only: one is enough to count as responding.
-    await tapFound(tester, find.text('Choose').first);
-    await tapFound(tester, find.text('Choose').last);
-    await tapText(tester, 'Send 2 screenshots');
+    await tester.tap(find.text('Choose').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Send 2 screenshots'));
+    await tester.pumpAndSettle();
 
-    expect(find.text('Screenshots sent'), findsOneWidget);
+    // The sheet closes, and the room shows the wait.
+    expect(find.text('Your screenshots'), findsNothing);
+    expect(find.text("Waiting for Amina Otieno's screenshots"), findsOneWidget);
     final sent = api.requests.lastWhere(
       (r) => r.url.path.endsWith('/screenshot'),
     );
