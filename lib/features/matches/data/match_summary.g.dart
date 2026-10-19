@@ -57,6 +57,7 @@ _MatchSummary _$MatchSummaryFromJson(
           (v as List<dynamic>?)?.map((e) => e as String).toSet() ??
           const <String>{},
     ),
+    bestOf: $checkedConvert('bestOf', (v) => (v as num?)?.toInt() ?? 1),
   );
   return val;
 });

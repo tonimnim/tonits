@@ -182,4 +182,21 @@ void main() {
     expect(find.textContaining('Best of'), findsNothing);
     expect(find.textContaining('Screenshot every'), findsNothing);
   });
+
+  testWidgets('a series match card says how many games', (tester) async {
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/me/matches': (_) =>
+              jsonResponse(pageJson([matchJson()..['bestOf'] = 3]), 200),
+        },
+      ),
+    );
+    expect(
+      find.text('Nairobi Weekend Cup · Round of 32 · Best of 3'),
+      findsOneWidget,
+    );
+  });
 }

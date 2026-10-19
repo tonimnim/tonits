@@ -27,6 +27,9 @@ abstract class MatchSummary with _$MatchSummary {
     MatchParticipant? home,
     MatchParticipant? away,
     @Default(<String>{}) Set<String> allowedActions,
+
+    /// 1, 3 or 5 games.
+    @Default(1) int bestOf,
   }) = _MatchSummary;
 
   factory MatchSummary.fromJson(Map<String, dynamic> json) =>
@@ -38,6 +41,13 @@ abstract class MatchSummary with _$MatchSummary {
   MatchParticipant? get me => isHome ? home : away;
 
   bool get isHome => currentPlayerSide == 'home';
+
+  /// "Nairobi Weekend Cup · Round of 32", with "· Best of 3" for a series.
+  String place(String Function(int bestOf) bestOfLabel) => [
+    competitionName,
+    roundName,
+    if (bestOf > 1) bestOfLabel(bestOf),
+  ].join(' · ');
 }
 
 @freezed

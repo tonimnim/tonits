@@ -17,7 +17,8 @@ T _$identity<T>(T value) => value;
 mixin _$MatchSummary {
 
  String get id; String get competitionId; String get competitionName; String get roundName; DateTime? get scheduledAt; DateTime? get checkInClosesAt;@JsonKey(unknownEnumValue: MatchLifecycle.unknown) MatchLifecycle get lifecycle;@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) MatchOutcome? get outcome;/// `home` or `away`: which side the signed-in player is on.
- String get currentPlayerSide; MatchParticipant? get home; MatchParticipant? get away; Set<String> get allowedActions;
+ String get currentPlayerSide; MatchParticipant? get home; MatchParticipant? get away; Set<String> get allowedActions;/// 1, 3 or 5 games.
+ int get bestOf;
 /// Create a copy of MatchSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,20 +30,20 @@ $MatchSummaryCopyWith<MatchSummary> get copyWith => _$MatchSummaryCopyWithImpl<M
 @override
 bool operator ==(Object other) {
   final _this = this as MatchSummary;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchSummary&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.competitionId, _this.competitionId) || other.competitionId == _this.competitionId)&&(identical(other.competitionName, _this.competitionName) || other.competitionName == _this.competitionName)&&(identical(other.roundName, _this.roundName) || other.roundName == _this.roundName)&&(identical(other.scheduledAt, _this.scheduledAt) || other.scheduledAt == _this.scheduledAt)&&(identical(other.checkInClosesAt, _this.checkInClosesAt) || other.checkInClosesAt == _this.checkInClosesAt)&&(identical(other.lifecycle, _this.lifecycle) || other.lifecycle == _this.lifecycle)&&(identical(other.outcome, _this.outcome) || other.outcome == _this.outcome)&&(identical(other.currentPlayerSide, _this.currentPlayerSide) || other.currentPlayerSide == _this.currentPlayerSide)&&(identical(other.home, _this.home) || other.home == _this.home)&&(identical(other.away, _this.away) || other.away == _this.away)&&const DeepCollectionEquality().equals(other.allowedActions, _this.allowedActions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchSummary&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.competitionId, _this.competitionId) || other.competitionId == _this.competitionId)&&(identical(other.competitionName, _this.competitionName) || other.competitionName == _this.competitionName)&&(identical(other.roundName, _this.roundName) || other.roundName == _this.roundName)&&(identical(other.scheduledAt, _this.scheduledAt) || other.scheduledAt == _this.scheduledAt)&&(identical(other.checkInClosesAt, _this.checkInClosesAt) || other.checkInClosesAt == _this.checkInClosesAt)&&(identical(other.lifecycle, _this.lifecycle) || other.lifecycle == _this.lifecycle)&&(identical(other.outcome, _this.outcome) || other.outcome == _this.outcome)&&(identical(other.currentPlayerSide, _this.currentPlayerSide) || other.currentPlayerSide == _this.currentPlayerSide)&&(identical(other.home, _this.home) || other.home == _this.home)&&(identical(other.away, _this.away) || other.away == _this.away)&&const DeepCollectionEquality().equals(other.allowedActions, _this.allowedActions)&&(identical(other.bestOf, _this.bestOf) || other.bestOf == _this.bestOf));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as MatchSummary;
-  return Object.hash(runtimeType,_this.id,_this.competitionId,_this.competitionName,_this.roundName,_this.scheduledAt,_this.checkInClosesAt,_this.lifecycle,_this.outcome,_this.currentPlayerSide,_this.home,_this.away,const DeepCollectionEquality().hash(_this.allowedActions));
+  return Object.hash(runtimeType,_this.id,_this.competitionId,_this.competitionName,_this.roundName,_this.scheduledAt,_this.checkInClosesAt,_this.lifecycle,_this.outcome,_this.currentPlayerSide,_this.home,_this.away,const DeepCollectionEquality().hash(_this.allowedActions),_this.bestOf);
 }
 
 @override
 String toString() {
   final _this = this as MatchSummary;
-  return 'MatchSummary(id: ${_this.id}, competitionId: ${_this.competitionId}, competitionName: ${_this.competitionName}, roundName: ${_this.roundName}, scheduledAt: ${_this.scheduledAt}, checkInClosesAt: ${_this.checkInClosesAt}, lifecycle: ${_this.lifecycle}, outcome: ${_this.outcome}, currentPlayerSide: ${_this.currentPlayerSide}, home: ${_this.home}, away: ${_this.away}, allowedActions: ${_this.allowedActions})';
+  return 'MatchSummary(id: ${_this.id}, competitionId: ${_this.competitionId}, competitionName: ${_this.competitionName}, roundName: ${_this.roundName}, scheduledAt: ${_this.scheduledAt}, checkInClosesAt: ${_this.checkInClosesAt}, lifecycle: ${_this.lifecycle}, outcome: ${_this.outcome}, currentPlayerSide: ${_this.currentPlayerSide}, home: ${_this.home}, away: ${_this.away}, allowedActions: ${_this.allowedActions}, bestOf: ${_this.bestOf})';
 }
 
 
@@ -53,7 +54,7 @@ abstract mixin class $MatchSummaryCopyWith<$Res>  {
   factory $MatchSummaryCopyWith(MatchSummary value, $Res Function(MatchSummary) _then) = _$MatchSummaryCopyWithImpl;
 @useResult
 $Res call({
- String id, String competitionId, String competitionName, String roundName, DateTime? scheduledAt, DateTime? checkInClosesAt,@JsonKey(unknownEnumValue: MatchLifecycle.unknown) MatchLifecycle lifecycle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) MatchOutcome? outcome, String currentPlayerSide, MatchParticipant? home, MatchParticipant? away, Set<String> allowedActions
+ String id, String competitionId, String competitionName, String roundName, DateTime? scheduledAt, DateTime? checkInClosesAt,@JsonKey(unknownEnumValue: MatchLifecycle.unknown) MatchLifecycle lifecycle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) MatchOutcome? outcome, String currentPlayerSide, MatchParticipant? home, MatchParticipant? away, Set<String> allowedActions, int bestOf
 });
 
 
@@ -70,7 +71,7 @@ class _$MatchSummaryCopyWithImpl<$Res>
 
 /// Create a copy of MatchSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? competitionId = null,Object? competitionName = null,Object? roundName = null,Object? scheduledAt = freezed,Object? checkInClosesAt = freezed,Object? lifecycle = null,Object? outcome = freezed,Object? currentPlayerSide = null,Object? home = freezed,Object? away = freezed,Object? allowedActions = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? competitionId = null,Object? competitionName = null,Object? roundName = null,Object? scheduledAt = freezed,Object? checkInClosesAt = freezed,Object? lifecycle = null,Object? outcome = freezed,Object? currentPlayerSide = null,Object? home = freezed,Object? away = freezed,Object? allowedActions = null,Object? bestOf = null,}) {
   return _then(MatchSummary(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,competitionId: null == competitionId ? _self.competitionId : competitionId // ignore: cast_nullable_to_non_nullable
@@ -84,7 +85,8 @@ as MatchOutcome?,currentPlayerSide: null == currentPlayerSide ? _self.currentPla
 as String,home: freezed == home ? _self.home : home // ignore: cast_nullable_to_non_nullable
 as MatchParticipant?,away: freezed == away ? _self.away : away // ignore: cast_nullable_to_non_nullable
 as MatchParticipant?,allowedActions: null == allowedActions ? _self.allowedActions : allowedActions // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,bestOf: null == bestOf ? _self.bestOf : bestOf // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 /// Create a copy of MatchSummary
@@ -193,10 +195,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions,  int bestOf)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MatchSummary() when $default != null:
-return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions);case _:
+return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions,_that.bestOf);case _:
   return orElse();
 
 }
@@ -214,10 +216,10 @@ return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundNa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions,  int bestOf)  $default,) {final _that = this;
 switch (_that) {
 case _MatchSummary():
-return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions);case _:
+return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions,_that.bestOf);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -234,10 +236,10 @@ return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundNa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String competitionId,  String competitionName,  String roundName,  DateTime? scheduledAt,  DateTime? checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown)  MatchLifecycle lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue)  MatchOutcome? outcome,  String currentPlayerSide,  MatchParticipant? home,  MatchParticipant? away,  Set<String> allowedActions,  int bestOf)?  $default,) {final _that = this;
 switch (_that) {
 case _MatchSummary() when $default != null:
-return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions);case _:
+return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundName,_that.scheduledAt,_that.checkInClosesAt,_that.lifecycle,_that.outcome,_that.currentPlayerSide,_that.home,_that.away,_that.allowedActions,_that.bestOf);case _:
   return null;
 
 }
@@ -249,7 +251,7 @@ return $default(_that.id,_that.competitionId,_that.competitionName,_that.roundNa
 @JsonSerializable(createToJson: false)
 
 class _MatchSummary extends MatchSummary {
-  const _MatchSummary({required this.id, this.competitionId = '', required this.competitionName, required this.roundName, this.scheduledAt, this.checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown) required this.lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.outcome, required this.currentPlayerSide, this.home, this.away,  Set<String> allowedActions = const <String>{}}): _allowedActions = allowedActions,super._();
+  const _MatchSummary({required this.id, this.competitionId = '', required this.competitionName, required this.roundName, this.scheduledAt, this.checkInClosesAt, @JsonKey(unknownEnumValue: MatchLifecycle.unknown) required this.lifecycle, @JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) this.outcome, required this.currentPlayerSide, this.home, this.away,  Set<String> allowedActions = const <String>{}, this.bestOf = 1}): _allowedActions = allowedActions,super._();
   factory _MatchSummary.fromJson(Map<String, dynamic> json) => _$MatchSummaryFromJson(json);
 
 @override final  String id;
@@ -271,6 +273,8 @@ class _MatchSummary extends MatchSummary {
   return EqualUnmodifiableSetView(_allowedActions);
 }
 
+/// 1, 3 or 5 games.
+@override@JsonKey() final  int bestOf;
 
 /// Create a copy of MatchSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -282,18 +286,18 @@ _$MatchSummaryCopyWith<_MatchSummary> get copyWith => __$MatchSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.competitionId, competitionId) || other.competitionId == competitionId)&&(identical(other.competitionName, competitionName) || other.competitionName == competitionName)&&(identical(other.roundName, roundName) || other.roundName == roundName)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.checkInClosesAt, checkInClosesAt) || other.checkInClosesAt == checkInClosesAt)&&(identical(other.lifecycle, lifecycle) || other.lifecycle == lifecycle)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.currentPlayerSide, currentPlayerSide) || other.currentPlayerSide == currentPlayerSide)&&(identical(other.home, home) || other.home == home)&&(identical(other.away, away) || other.away == away)&&const DeepCollectionEquality().equals(other.allowedActions, _allowedActions));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.competitionId, competitionId) || other.competitionId == competitionId)&&(identical(other.competitionName, competitionName) || other.competitionName == competitionName)&&(identical(other.roundName, roundName) || other.roundName == roundName)&&(identical(other.scheduledAt, scheduledAt) || other.scheduledAt == scheduledAt)&&(identical(other.checkInClosesAt, checkInClosesAt) || other.checkInClosesAt == checkInClosesAt)&&(identical(other.lifecycle, lifecycle) || other.lifecycle == lifecycle)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.currentPlayerSide, currentPlayerSide) || other.currentPlayerSide == currentPlayerSide)&&(identical(other.home, home) || other.home == home)&&(identical(other.away, away) || other.away == away)&&const DeepCollectionEquality().equals(other.allowedActions, _allowedActions)&&(identical(other.bestOf, bestOf) || other.bestOf == bestOf));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,competitionId,competitionName,roundName,scheduledAt,checkInClosesAt,lifecycle,outcome,currentPlayerSide,home,away,const DeepCollectionEquality().hash(_allowedActions));
+    return Object.hash(runtimeType,id,competitionId,competitionName,roundName,scheduledAt,checkInClosesAt,lifecycle,outcome,currentPlayerSide,home,away,const DeepCollectionEquality().hash(_allowedActions),bestOf);
 }
 
 @override
 String toString() {
-    return 'MatchSummary(id: $id, competitionId: $competitionId, competitionName: $competitionName, roundName: $roundName, scheduledAt: $scheduledAt, checkInClosesAt: $checkInClosesAt, lifecycle: $lifecycle, outcome: $outcome, currentPlayerSide: $currentPlayerSide, home: $home, away: $away, allowedActions: $allowedActions)';
+    return 'MatchSummary(id: $id, competitionId: $competitionId, competitionName: $competitionName, roundName: $roundName, scheduledAt: $scheduledAt, checkInClosesAt: $checkInClosesAt, lifecycle: $lifecycle, outcome: $outcome, currentPlayerSide: $currentPlayerSide, home: $home, away: $away, allowedActions: $allowedActions, bestOf: $bestOf)';
 }
 
 
@@ -304,7 +308,7 @@ abstract mixin class _$MatchSummaryCopyWith<$Res> implements $MatchSummaryCopyWi
   factory _$MatchSummaryCopyWith(_MatchSummary value, $Res Function(_MatchSummary) _then) = __$MatchSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String competitionId, String competitionName, String roundName, DateTime? scheduledAt, DateTime? checkInClosesAt,@JsonKey(unknownEnumValue: MatchLifecycle.unknown) MatchLifecycle lifecycle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) MatchOutcome? outcome, String currentPlayerSide, MatchParticipant? home, MatchParticipant? away, Set<String> allowedActions
+ String id, String competitionId, String competitionName, String roundName, DateTime? scheduledAt, DateTime? checkInClosesAt,@JsonKey(unknownEnumValue: MatchLifecycle.unknown) MatchLifecycle lifecycle,@JsonKey(unknownEnumValue: JsonKey.nullForUndefinedEnumValue) MatchOutcome? outcome, String currentPlayerSide, MatchParticipant? home, MatchParticipant? away, Set<String> allowedActions, int bestOf
 });
 
 
@@ -321,7 +325,7 @@ class __$MatchSummaryCopyWithImpl<$Res>
 
 /// Create a copy of MatchSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? competitionId = null,Object? competitionName = null,Object? roundName = null,Object? scheduledAt = freezed,Object? checkInClosesAt = freezed,Object? lifecycle = null,Object? outcome = freezed,Object? currentPlayerSide = null,Object? home = freezed,Object? away = freezed,Object? allowedActions = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? competitionId = null,Object? competitionName = null,Object? roundName = null,Object? scheduledAt = freezed,Object? checkInClosesAt = freezed,Object? lifecycle = null,Object? outcome = freezed,Object? currentPlayerSide = null,Object? home = freezed,Object? away = freezed,Object? allowedActions = null,Object? bestOf = null,}) {
   return _then(_MatchSummary(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,competitionId: null == competitionId ? _self.competitionId : competitionId // ignore: cast_nullable_to_non_nullable
@@ -335,7 +339,8 @@ as MatchOutcome?,currentPlayerSide: null == currentPlayerSide ? _self.currentPla
 as String,home: freezed == home ? _self.home : home // ignore: cast_nullable_to_non_nullable
 as MatchParticipant?,away: freezed == away ? _self.away : away // ignore: cast_nullable_to_non_nullable
 as MatchParticipant?,allowedActions: null == allowedActions ? _self._allowedActions : allowedActions // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as Set<String>,bestOf: null == bestOf ? _self.bestOf : bestOf // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

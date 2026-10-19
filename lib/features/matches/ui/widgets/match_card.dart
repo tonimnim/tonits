@@ -42,7 +42,7 @@ class MatchCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      '${match.competitionName} · ${match.roundName}',
+                      match.place(context.l10n.seriesBestOf),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 13, color: p.subtleForeground),

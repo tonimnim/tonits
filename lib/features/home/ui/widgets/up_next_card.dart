@@ -71,7 +71,7 @@ class UpNextCard extends ConsumerWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            '${match.competitionName} · ${match.roundName}',
+                            match.place(context.l10n.seriesBestOf),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
