@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../notifications/ui/widgets/notification_bell.dart';
 
 /// The player's avatar beside a time-of-day greeting and their name.
 class HomeHeader extends StatelessWidget {
@@ -51,6 +52,8 @@ class HomeHeader extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(width: 12),
+        const NotificationBell(),
       ],
     );
   }

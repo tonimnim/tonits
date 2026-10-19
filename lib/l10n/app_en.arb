@@ -1015,6 +1015,43 @@
   "matchScreenshotUploadFailed": "The upload didn't go through. Try again.",
   "matchScreenshotUnusable": "That image couldn't be used. Choose the original screenshot of the Full Time screen.",
   "matchScreenshotSlow": "Checking the screenshot is taking longer than usual. Try again.",
+  "notifTitle": "Notifications",
+  "notifAll": "All",
+  "notifUnread": "Unread",
+  "notifMarkAllRead": "Mark all read",
+  "notifEmptyTitle": "No notifications yet",
+  "notifEmptyUnreadTitle": "You're all caught up",
+  "notifEmptyMessage": "Match, result and competition updates appear here.",
+  "notifBellLabel": "{count, plural, =0{Notifications} =1{Notifications, 1 unread} other{Notifications, {count} unread}}",
+  "@notifBellLabel": {
+    "description": "Screen-reader label for the bell on Home.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notifUnreadLabel": "Unread",
+  "notifJustNow": "Now",
+  "notifMinutesAgo": "{minutes} min",
+  "@notifMinutesAgo": {
+    "description": "How long ago, shortly: '5 min'.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "notifHoursAgo": "{hours} h",
+  "@notifHoursAgo": {
+    "description": "How long ago, shortly: '3 h'.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "notifYesterday": "Yesterday",
   "roomScheduled": "Scheduled",
   "roomOpponentTbd": "Opponent comes from an earlier round",
   "roomCheckInOpens": "Check-in opens {when}",

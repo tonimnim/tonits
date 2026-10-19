@@ -1386,6 +1386,59 @@ class AppLocalizationsEn extends AppLocalizations {
       'Checking the screenshot is taking longer than usual. Try again.';
 
   @override
+  String get notifTitle => 'Notifications';
+
+  @override
+  String get notifAll => 'All';
+
+  @override
+  String get notifUnread => 'Unread';
+
+  @override
+  String get notifMarkAllRead => 'Mark all read';
+
+  @override
+  String get notifEmptyTitle => 'No notifications yet';
+
+  @override
+  String get notifEmptyUnreadTitle => 'You\'re all caught up';
+
+  @override
+  String get notifEmptyMessage =>
+      'Match, result and competition updates appear here.';
+
+  @override
+  String notifBellLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Notifications, $count unread',
+      one: 'Notifications, 1 unread',
+      zero: 'Notifications',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notifUnreadLabel => 'Unread';
+
+  @override
+  String get notifJustNow => 'Now';
+
+  @override
+  String notifMinutesAgo(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String notifHoursAgo(int hours) {
+    return '$hours h';
+  }
+
+  @override
+  String get notifYesterday => 'Yesterday';
+
+  @override
   String get roomScheduled => 'Scheduled';
 
   @override

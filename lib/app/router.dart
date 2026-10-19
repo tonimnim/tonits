@@ -16,6 +16,7 @@ import '../features/home/ui/home_screen.dart';
 import '../features/matches/ui/match_room_screen.dart';
 import '../features/matches/ui/matches_screen.dart';
 import '../features/matches/ui/report_score_screen.dart';
+import '../features/notifications/ui/notifications_screen.dart';
 import '../features/onboarding/ui/onboarding_screen.dart';
 import '../features/payments/ui/checkout_screen.dart';
 import '../features/profile/ui/profile_screen.dart';
@@ -85,6 +86,12 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
               CheckoutScreen(competitionId: state.pathParameters['id']!),
         ),
       ],
+    ),
+  ],
+  AppTab.home => [
+    GoRoute(
+      path: 'notifications',
+      builder: (_, _) => const NotificationsScreen(),
     ),
   ],
   AppTab.matches => [

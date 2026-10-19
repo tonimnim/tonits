@@ -2314,6 +2314,84 @@ abstract class AppLocalizations {
   /// **'Checking the screenshot is taking longer than usual. Try again.'**
   String get matchScreenshotSlow;
 
+  /// No description provided for @notifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifTitle;
+
+  /// No description provided for @notifAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get notifAll;
+
+  /// No description provided for @notifUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get notifUnread;
+
+  /// No description provided for @notifMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notifMarkAllRead;
+
+  /// No description provided for @notifEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notifEmptyTitle;
+
+  /// No description provided for @notifEmptyUnreadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up'**
+  String get notifEmptyUnreadTitle;
+
+  /// No description provided for @notifEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Match, result and competition updates appear here.'**
+  String get notifEmptyMessage;
+
+  /// Screen-reader label for the bell on Home.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Notifications} =1{Notifications, 1 unread} other{Notifications, {count} unread}}'**
+  String notifBellLabel(int count);
+
+  /// No description provided for @notifUnreadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get notifUnreadLabel;
+
+  /// No description provided for @notifJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get notifJustNow;
+
+  /// How long ago, shortly: '5 min'.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String notifMinutesAgo(int minutes);
+
+  /// How long ago, shortly: '3 h'.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h'**
+  String notifHoursAgo(int hours);
+
+  /// No description provided for @notifYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get notifYesterday;
+
   /// No description provided for @roomScheduled.
   ///
   /// In en, this message translates to:

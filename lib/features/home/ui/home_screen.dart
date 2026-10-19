@@ -6,6 +6,7 @@ import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../../matches/application/matches_providers.dart';
+import '../../notifications/application/notifications_providers.dart';
 import '../../players/application/players_providers.dart';
 import 'widgets/compete_section.dart';
 import 'widgets/home_header.dart';
@@ -35,6 +36,7 @@ class HomeScreen extends ConsumerWidget {
           ref.refresh(myRankNeighbourhoodProvider.future),
           ref.refresh(nextMatchProvider.future),
           ref.refresh(closingSoonProvider.future),
+          ref.refresh(unreadCountProvider.future),
         ]);
       },
       hero: Column(

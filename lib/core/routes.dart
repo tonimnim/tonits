@@ -23,6 +23,9 @@ abstract final class Routes {
   /// Paying a competition's entry fee with M-Pesa.
   static String checkout(String id) => '$competitions/$id/pay';
 
+  /// The notification inbox, opened from Home's bell.
+  static const notifications = '$home/notifications';
+
   /// A match room, under the Matches tab.
   static String match(String id) => '$matches/$id';
 

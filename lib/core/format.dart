@@ -30,6 +30,19 @@ abstract final class Format {
         : DateFormat('d MMM y').format(local);
   }
 
+  /// How long ago, briefly: "Now", "5 min", "3 h", "Yesterday", then the
+  /// date.
+  static String ago(DateTime value, AppLocalizations l, {DateTime? now}) {
+    final current = now ?? DateTime.now();
+    final passed = current.difference(value);
+    if (passed.inMinutes < 1) return l.notifJustNow;
+    if (passed.inMinutes < 60) return l.notifMinutesAgo(passed.inMinutes);
+    final days = _day(current).difference(_day(value.toLocal())).inDays;
+    if (days == 0) return l.notifHoursAgo(passed.inHours);
+    if (days == 1) return l.notifYesterday;
+    return date(value, now: current);
+  }
+
   /// "March 2026".
   static String monthYear(DateTime value) =>
       DateFormat('MMMM y').format(value.toLocal());
