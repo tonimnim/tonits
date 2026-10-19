@@ -28,9 +28,18 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
 
   MatchRoom get room => widget.room;
 
-  /// The games the reported result has, or every possible game.
+  /// The games the reported result has, when it lists them.
   List<Score> get _games => room.verification.submitted?.games ?? const [];
-  int get _slots => _games.isEmpty ? room.bestOf : _games.length;
+
+  /// One slot per game played: the games won in a knockout series (2–1 is
+  /// three games). A round-robin series can have drawn games, so it offers
+  /// every game.
+  int get _slots {
+    if (_games.isNotEmpty) return _games.length;
+    final reported = room.verification.submitted?.score;
+    if (room.drawAllowed || reported == null) return room.bestOf;
+    return (reported.home + reported.away).clamp(1, room.bestOf);
+  }
 
   Future<void> _pick(int game) async {
     final bytes = await ref.read(screenshotPickerProvider)();

@@ -2614,35 +2614,11 @@ abstract class AppLocalizations {
   /// **'Game {number}'**
   String seriesGame(int number);
 
-  /// No description provided for @seriesAddGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Add game {number}'**
-  String seriesAddGame(int number);
-
-  /// No description provided for @seriesRemoveGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove game {number}'**
-  String seriesRemoveGame(int number);
-
   /// No description provided for @seriesGames.
   ///
   /// In en, this message translates to:
   /// **'Games'**
   String get seriesGames;
-
-  /// No description provided for @seriesYouLead.
-  ///
-  /// In en, this message translates to:
-  /// **'You lead {mine}–{theirs}'**
-  String seriesYouLead(int mine, int theirs);
-
-  /// No description provided for @seriesTheyLead.
-  ///
-  /// In en, this message translates to:
-  /// **'{opponent} leads {theirs}–{mine}'**
-  String seriesTheyLead(String opponent, int theirs, int mine);
 
   /// No description provided for @seriesLevel.
   ///
@@ -2665,20 +2641,14 @@ abstract class AppLocalizations {
   /// No description provided for @seriesReportIntro.
   ///
   /// In en, this message translates to:
-  /// **'{minutes, plural, =1{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don\'t answer within 1 minute, they stand.} other{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don\'t answer within {minutes} minutes, they stand.}}'**
+  /// **'{minutes, plural, =1{Enter how many games each of you won. {opponent} confirms it, and if they don\'t answer within 1 minute, it stands.} other{Enter how many games each of you won. {opponent} confirms it, and if they don\'t answer within {minutes} minutes, it stands.}}'**
   String seriesReportIntro(String opponent, int minutes);
 
   /// No description provided for @seriesNeedsWinner.
   ///
   /// In en, this message translates to:
-  /// **'{wins, plural, =1{Add games until one side has 1 win.} other{Add games until one side has {wins} wins.}}'**
+  /// **'{wins, plural, =1{One of you needs 1 win.} other{One of you needs {wins} wins.}}'**
   String seriesNeedsWinner(int wins);
-
-  /// No description provided for @seriesNeedsAllGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Add all {count} games, or until one side has {wins} wins.'**
-  String seriesNeedsAllGames(int count, int wins);
 
   /// No description provided for @seriesScreenshotReminder.
   ///
@@ -2689,8 +2659,13 @@ abstract class AppLocalizations {
   /// No description provided for @seriesStepPlayMessage.
   ///
   /// In en, this message translates to:
-  /// **'Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports every game.'**
-  String seriesStepPlayMessage(int count, String opponent, int wins);
+  /// **'Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports the games won, like {example}.'**
+  String seriesStepPlayMessage(
+    int count,
+    String opponent,
+    int wins,
+    String example,
+  );
 
   /// No description provided for @seriesStepScreenshotTitle.
   ///
@@ -2812,11 +2787,11 @@ abstract class AppLocalizations {
   /// **'Losers\' final'**
   String get seriesRoundLosersFinal;
 
-  /// No description provided for @seriesLevelGameNote.
+  /// No description provided for @seriesGamesWon.
   ///
   /// In en, this message translates to:
-  /// **'A level game is decided on penalties.'**
-  String get seriesLevelGameNote;
+  /// **'Games won'**
+  String get seriesGamesWon;
 }
 
 class _AppLocalizationsDelegate

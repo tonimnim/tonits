@@ -399,15 +399,7 @@ void main() {
         matchRoomJson(
           lifecycle: 'confirmation_required',
           bestOf: 3,
-          submitted: submittedJson(
-            1,
-            2,
-            games: [
-              gameJson(2, 1),
-              gameJson(1, 1, pens: (3, 4)),
-              gameJson(0, 2),
-            ],
-          ),
+          submitted: submittedJson(1, 2),
         ),
       ),
       (
@@ -415,15 +407,7 @@ void main() {
         matchRoomJson(
           lifecycle: 'screenshot_required',
           bestOf: 3,
-          submitted: submittedJson(
-            1,
-            2,
-            games: [
-              gameJson(2, 1),
-              gameJson(1, 1, pens: (3, 4)),
-              gameJson(0, 2),
-            ],
-          ),
+          submitted: submittedJson(1, 2),
         ),
       ),
     ]) {
@@ -459,10 +443,6 @@ void main() {
 
           await tapN(plus('You', 0), 2);
           await tapN(plus('Amina Otieno', 0), 1);
-          await tester.tap(find.text('Add game 2'));
-          await tester.pumpAndSettle();
-          await tapN(plus('You', 1), 1);
-          await tapN(plus('Amina Otieno', 1), 1);
           await _shoot(tester, 'match-series-report-$suffix');
         }
       });

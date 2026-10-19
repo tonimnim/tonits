@@ -65,7 +65,12 @@ class NextStep {
         title: l.matchStepPlayTitle,
         tone: StepTone.action,
         message: room.isSeries
-            ? l.seriesStepPlayMessage(room.bestOf, opp, room.gamesToWin)
+            ? l.seriesStepPlayMessage(
+                room.bestOf,
+                opp,
+                room.gamesToWin,
+                '${room.gamesToWin}\u2060–\u2060${room.gamesToWin - 1}',
+              )
             : l.matchStepPlayMessage(opp),
         deadline: room.resultDueAt,
         deadlineNote: l.matchStepPlayDeadlineNote,

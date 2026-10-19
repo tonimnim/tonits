@@ -73,11 +73,10 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     (key) => _repository.checkIn(matchId, key: key),
   );
 
-  /// [games] is every game of a series, in order.
-  Future<String?> reportScore(Score score, {List<Score>? games}) => _act(
+  /// Goals for a best of 1, games won for a series.
+  Future<String?> reportScore(Score score) => _act(
     MatchAction.reportScore,
-    (key) =>
-        _repository.reportScore(matchId, score: score, games: games, key: key),
+    (key) => _repository.reportScore(matchId, score: score, key: key),
   );
 
   Future<String?> answer({required bool confirm}) => _act(

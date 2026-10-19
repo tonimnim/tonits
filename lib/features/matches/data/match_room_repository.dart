@@ -25,35 +25,23 @@ class MatchRoomRepository {
     return MatchRoom.fromJson(json!['data'] as Map<String, dynamic>);
   }
 
-  /// Submits the result. A best of 1 sends its score, with penalties for a
-  /// level knockout match; a series sends games won and every game, each
-  /// level knockout game with its own penalties.
+  /// Submits the result: the score in goals for a best of 1, with
+  /// penalties for a level knockout match, or games won for a series.
   Future<MatchRoom> reportScore(
     String matchId, {
     required Score score,
-    List<Score>? games,
     required String key,
   }) => _action(matchId, 'score-reports', key, {
     'homeScore': score.home,
     'awayScore': score.away,
-    if (games != null)
-      'games': [for (final g in games) _gameJson(g)]
-    else if (score.penalties case final p?)
-      'tiebreak': _penaltiesJson(p),
+    if (score.penalties case final p?)
+      'tiebreak': {
+        'type': 'penalties',
+        'homeScore': p.home,
+        'awayScore': p.away,
+      },
     'declarationAccepted': true,
   });
-
-  static Map<String, Object> _gameJson(Score g) => {
-    'homeScore': g.home,
-    'awayScore': g.away,
-    if (g.penalties case final p?) 'tiebreak': _penaltiesJson(p),
-  };
-
-  static Map<String, Object> _penaltiesJson(Score p) => {
-    'type': 'penalties',
-    'homeScore': p.home,
-    'awayScore': p.away,
-  };
 
   Future<MatchRoom> answer(
     String matchId, {

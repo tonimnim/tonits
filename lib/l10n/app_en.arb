@@ -1187,48 +1187,7 @@
       }
     }
   },
-  "seriesAddGame": "Add game {number}",
-  "@seriesAddGame": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
-  "seriesRemoveGame": "Remove game {number}",
-  "@seriesRemoveGame": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
   "seriesGames": "Games",
-  "seriesYouLead": "You lead {mine}–{theirs}",
-  "@seriesYouLead": {
-    "placeholders": {
-      "mine": {
-        "type": "int"
-      },
-      "theirs": {
-        "type": "int"
-      }
-    }
-  },
-  "seriesTheyLead": "{opponent} leads {theirs}–{mine}",
-  "@seriesTheyLead": {
-    "placeholders": {
-      "opponent": {
-        "type": "String"
-      },
-      "theirs": {
-        "type": "int"
-      },
-      "mine": {
-        "type": "int"
-      }
-    }
-  },
   "seriesLevel": "Level {mine}–{theirs}",
   "@seriesLevel": {
     "placeholders": {
@@ -1265,7 +1224,7 @@
       }
     }
   },
-  "seriesReportIntro": "{minutes, plural, =1{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don't answer within 1 minute, they stand.} other{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don't answer within {minutes} minutes, they stand.}}",
+  "seriesReportIntro": "{minutes, plural, =1{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within 1 minute, it stands.} other{Enter how many games each of you won. {opponent} confirms it, and if they don't answer within {minutes} minutes, it stands.}}",
   "@seriesReportIntro": {
     "placeholders": {
       "opponent": {
@@ -1276,7 +1235,7 @@
       }
     }
   },
-  "seriesNeedsWinner": "{wins, plural, =1{Add games until one side has 1 win.} other{Add games until one side has {wins} wins.}}",
+  "seriesNeedsWinner": "{wins, plural, =1{One of you needs 1 win.} other{One of you needs {wins} wins.}}",
   "@seriesNeedsWinner": {
     "placeholders": {
       "wins": {
@@ -1284,19 +1243,8 @@
       }
     }
   },
-  "seriesNeedsAllGames": "Add all {count} games, or until one side has {wins} wins.",
-  "@seriesNeedsAllGames": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "wins": {
-        "type": "int"
-      }
-    }
-  },
   "seriesScreenshotReminder": "Screenshot every Full Time screen as you play. If the result is disputed, you'll need one for each game.",
-  "seriesStepPlayMessage": "Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports every game.",
+  "seriesStepPlayMessage": "Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports the games won, like {example}.",
   "@seriesStepPlayMessage": {
     "placeholders": {
       "count": {
@@ -1307,6 +1255,10 @@
       },
       "wins": {
         "type": "int"
+      },
+      "example": {
+        "type": "String",
+        "example": "2–1"
       }
     }
   },
@@ -1376,5 +1328,5 @@
   "seriesRoundThirdPlace": "Third-place match",
   "seriesRoundWinnersFinal": "Winners' final",
   "seriesRoundLosersFinal": "Losers' final",
-  "seriesLevelGameNote": "A level game is decided on penalties."
+  "seriesGamesWon": "Games won"
 }

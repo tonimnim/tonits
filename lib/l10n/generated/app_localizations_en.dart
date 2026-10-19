@@ -1594,27 +1594,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String seriesAddGame(int number) {
-    return 'Add game $number';
-  }
-
-  @override
-  String seriesRemoveGame(int number) {
-    return 'Remove game $number';
-  }
-
-  @override
   String get seriesGames => 'Games';
-
-  @override
-  String seriesYouLead(int mine, int theirs) {
-    return 'You lead $mine–$theirs';
-  }
-
-  @override
-  String seriesTheyLead(String opponent, int theirs, int mine) {
-    return '$opponent leads $theirs–$mine';
-  }
 
   @override
   String seriesLevel(int mine, int theirs) {
@@ -1637,9 +1617,9 @@ class AppLocalizationsEn extends AppLocalizations {
       minutes,
       locale: localeName,
       other:
-          'Enter every game from its Full Time screen, in order. $opponent confirms them, and if they don\'t answer within $minutes minutes, they stand.',
+          'Enter how many games each of you won. $opponent confirms it, and if they don\'t answer within $minutes minutes, it stands.',
       one:
-          'Enter every game from its Full Time screen, in order. $opponent confirms them, and if they don\'t answer within 1 minute, they stand.',
+          'Enter how many games each of you won. $opponent confirms it, and if they don\'t answer within 1 minute, it stands.',
     );
     return '$_temp0';
   }
@@ -1649,15 +1629,10 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       wins,
       locale: localeName,
-      other: 'Add games until one side has $wins wins.',
-      one: 'Add games until one side has 1 win.',
+      other: 'One of you needs $wins wins.',
+      one: 'One of you needs 1 win.',
     );
     return '$_temp0';
-  }
-
-  @override
-  String seriesNeedsAllGames(int count, int wins) {
-    return 'Add all $count games, or until one side has $wins wins.';
   }
 
   @override
@@ -1665,8 +1640,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Screenshot every Full Time screen as you play. If the result is disputed, you\'ll need one for each game.';
 
   @override
-  String seriesStepPlayMessage(int count, String opponent, int wins) {
-    return 'Play a best of $count with $opponent in eFootball, first to $wins wins. When it ends, either of you reports every game.';
+  String seriesStepPlayMessage(
+    int count,
+    String opponent,
+    int wins,
+    String example,
+  ) {
+    return 'Play a best of $count with $opponent in eFootball, first to $wins wins. When it ends, either of you reports the games won, like $example.';
   }
 
   @override
@@ -1749,5 +1729,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get seriesRoundLosersFinal => 'Losers\' final';
 
   @override
-  String get seriesLevelGameNote => 'A level game is decided on penalties.';
+  String get seriesGamesWon => 'Games won';
 }

@@ -11,9 +11,7 @@ Finder myPlus(int index) => stepper('One more for You').at(index);
 Finder theirPlus(int index) => stepper('One more for Amina Otieno').at(index);
 
 void main() {
-  testWidgets('a best of 3 is reported game by game, penalties and all', (
-    tester,
-  ) async {
+  testWidgets('a best of 3 is reported as games won', (tester) async {
     final api = await openRoom(
       tester,
       room: matchRoomJson(lifecycle: 'report_required', bestOf: 3),
@@ -35,28 +33,12 @@ void main() {
 
     await scrollToTop(tester);
     await tapText(tester, 'Report the score');
-    expect(find.text('Game 1'), findsOneWidget);
+    expect(find.text('Games won'), findsOneWidget);
+    expect(find.text('Penalty shootout'), findsNothing);
 
-    // Game 1: 2–1 to the player.
-    await tapTimes(tester, myPlus(0), 2);
-    await tapTimes(tester, theirPlus(0), 1);
-    await scrollToTop(tester);
-    expect(find.text('You lead 1–0'), findsOneWidget);
-    await tapText(tester, 'Add game 2');
-
-    // Game 2: 1–1, so penalties decide it, and no game 3 until they do.
-    await tapTimes(tester, myPlus(1), 1);
-    await tapTimes(tester, theirPlus(1), 1);
-    expect(find.text('Penalty shootout'), findsOneWidget);
-    expect(find.text('Add game 3'), findsNothing);
-    await tapTimes(tester, myPlus(2), 4);
-    await tapTimes(tester, theirPlus(2), 3);
-
-    // 2–0 in games: decided, so there's no third game to add.
-    await scrollToTop(tester);
-    expect(find.text('You win the series 2–0'), findsOneWidget);
-    expect(find.text('Add game 3'), findsNothing);
-
+    // Won 2 of 3; a third tap can't go past the 2 a best of 3 needs.
+    await tapTimes(tester, myPlus(0), 3);
+    await tapTimes(tester, theirPlus(0), 2);
     await tapText(
       tester,
       'This is the real score. Reporting a false score can get me removed '
@@ -69,26 +51,19 @@ void main() {
     );
     expect(bodyOf(report), {
       'homeScore': 2,
-      'awayScore': 0,
-      'games': [
-        {'homeScore': 2, 'awayScore': 1},
-        {
-          'homeScore': 1,
-          'awayScore': 1,
-          'tiebreak': {'type': 'penalties', 'homeScore': 4, 'awayScore': 3},
-        },
-      ],
+      'awayScore': 1,
       'declarationAccepted': true,
     });
   });
 
-  testWidgets('an undecided series is not sent', (tester) async {
+  testWidgets('an undecided knockout series is not sent', (tester) async {
     final api = await openRoom(
       tester,
       room: matchRoomJson(lifecycle: 'report_required', bestOf: 3),
     );
     await tapText(tester, 'Report the score');
     await tapTimes(tester, myPlus(0), 1);
+    await tapTimes(tester, theirPlus(0), 1);
     await tapText(
       tester,
       'This is the real score. Reporting a false score can get me removed '
@@ -96,31 +71,26 @@ void main() {
     );
     await tapText(tester, 'Send score');
 
-    expect(find.text('Add games until one side has 2 wins.'), findsOneWidget);
+    expect(find.text('One of you needs 2 wins.'), findsOneWidget);
     expect(
       api.requests.where((r) => r.url.path.endsWith('/score-reports')),
       isEmpty,
     );
   });
 
-  testWidgets('confirming a series shows every game', (tester) async {
+  testWidgets('confirming a series shows the games won', (tester) async {
     await openRoom(
       tester,
       room: matchRoomJson(
         lifecycle: 'confirmation_required',
         bestOf: 3,
-        submitted: submittedJson(
-          2,
-          1,
-          games: [gameJson(1, 2), gameJson(2, 0), gameJson(3, 1)],
-        ),
+        submitted: submittedJson(2, 1),
       ),
     );
 
-    expect(find.text('Game 1'), findsOneWidget);
-    expect(find.text('1–2'), findsOneWidget);
-    expect(find.text('Game 3'), findsOneWidget);
-    expect(find.text('You win the series 2–1'), findsOneWidget);
+    expect(find.text('2 – 1'), findsOneWidget);
+    expect(find.text('Reported'), findsOneWidget);
+    expect(find.text('Game 1'), findsNothing);
   });
 
   testWidgets('a disputed series sends one screenshot per game, together', (
@@ -131,11 +101,8 @@ void main() {
       room: matchRoomJson(
         lifecycle: 'screenshot_required',
         bestOf: 3,
-        submitted: submittedJson(
-          2,
-          1,
-          games: [gameJson(1, 2), gameJson(2, 0), gameJson(3, 1)],
-        ),
+        // 2–1 in games won: three games were played.
+        submitted: submittedJson(2, 1),
       ),
       routes: {
         ...evidenceRoutes(),
