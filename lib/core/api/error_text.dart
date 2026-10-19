@@ -20,6 +20,20 @@ String describeError(Object error) {
       return 'That code is wrong or has expired.';
     case 'invalid_recovery_code':
       return "That Konami ID and recovery code don't match.";
+    case 'sign_in_unavailable':
+      return "That sign-in option isn't available yet. Try again later.";
+    case 'invalid_identity_token':
+      return "Sign-in didn't go through. Try again.";
+    case 'identity_provider_unavailable':
+      return "Can't reach the sign-in service right now. Try again shortly.";
+    case 'invalid_konami_id':
+      return 'Enter the Konami ID exactly as eFootball shows it.';
+    case 'invalid_username':
+      return 'Use 3 to 24 letters, numbers, underscores or dots.';
+    case 'invalid_country':
+      return 'Choose your country.';
+    case 'profile_incomplete':
+      return 'Finish setting up your account first.';
     case 'email_taken':
       return 'That email belongs to another account.';
     case 'email_already_verified':

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/providers.dart';
 import '../data/auth_repository.dart';
+import '../data/identity_providers.dart';
 import '../data/models.dart';
 import '../data/token_store.dart';
 
@@ -12,6 +13,30 @@ final tokenStoreProvider = Provider<TokenStore>((ref) => SecureTokenStore());
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(ref.watch(apiClientProvider)),
 );
+
+/// Google's client IDs come from the build:
+/// `--dart-define=GOOGLE_SERVER_CLIENT_ID=…` (the Web client, required on
+/// Android) and `--dart-define=GOOGLE_IOS_CLIENT_ID=…`.
+final googleIdentityProvider = Provider<IdentityProvider>(
+  (ref) => GoogleIdentity(
+    clientId: _define(const String.fromEnvironment('GOOGLE_IOS_CLIENT_ID')),
+    serverClientId: _define(
+      const String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID'),
+    ),
+  ),
+);
+
+final appleIdentityProvider = Provider<IdentityProvider>(
+  (ref) => AppleIdentity(),
+);
+
+/// Sign in with Apple is offered on iOS, where the App Store requires it
+/// next to Google.
+final appleSignInOfferedProvider = Provider<bool>(
+  (ref) => defaultTargetPlatform == TargetPlatform.iOS,
+);
+
+String? _define(String value) => value.isEmpty ? null : value;
 
 final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,
@@ -33,47 +58,20 @@ enum AuthStatus {
   signedIn,
 }
 
+enum IdentityMethod { google, apple }
+
 @immutable
 class AuthState {
-  const AuthState({
-    required this.status,
-    this.player,
-    this.pendingCountryCode,
-    this.pendingRecoveryCode,
-    this.recoveryCodeReplacesOld = false,
-  });
+  const AuthState({required this.status, this.player});
 
   const AuthState.restoring() : this(status: AuthStatus.restoring);
 
   final AuthStatus status;
   final Player? player;
 
-  /// The country picked at registration, when saving it failed.
-  final String? pendingCountryCode;
-
-  /// A recovery code the player hasn't confirmed saving yet. While set, the
-  /// router keeps them on the screen that shows it. Held in memory only.
-  final String? pendingRecoveryCode;
-
-  /// Whether [pendingRecoveryCode] replaces a code that was just spent (a
-  /// reset), rather than being the player's first.
-  final bool recoveryCodeReplacesOld;
-
-  AuthState copyWith({
-    Player? player,
-    String? Function()? pendingCountryCode,
-    String? Function()? pendingRecoveryCode,
-  }) => AuthState(
-    status: status,
-    player: player ?? this.player,
-    pendingCountryCode: pendingCountryCode == null
-        ? this.pendingCountryCode
-        : pendingCountryCode(),
-    pendingRecoveryCode: pendingRecoveryCode == null
-        ? this.pendingRecoveryCode
-        : pendingRecoveryCode(),
-    recoveryCodeReplacesOld: recoveryCodeReplacesOld,
-  );
+  /// Signed in, but the Konami ID, phone and country are still to come.
+  bool get needsOnboarding =>
+      status == AuthStatus.signedIn && player?.onboardingCompleted == false;
 }
 
 /// Owns the session: resumes it at launch, signs in and out, and rotates the
@@ -113,94 +111,86 @@ class AuthController extends Notifier<AuthState> {
     }
   }
 
-  Future<void> signIn({
-    required String konamiId,
-    required String password,
-  }) async {
-    await _adopt(
-      await _repository.signIn(
-        konamiId: konamiId,
-        password: password,
-        deviceName: ref.read(deviceNameProvider),
+  /// Signs in (or up) with Google or Apple. Returns false when the player
+  /// closed the account picker.
+  Future<bool> signInWith(IdentityMethod method) async {
+    final provider = ref.read(switch (method) {
+      IdentityMethod.google => googleIdentityProvider,
+      IdentityMethod.apple => appleIdentityProvider,
+    });
+    final token = await provider.obtain();
+    if (token == null) return false;
+    final deviceName = ref.read(deviceNameProvider);
+    Future<AuthSession> send() => switch (method) {
+      IdentityMethod.google => _repository.signInWithGoogle(
+        token,
+        deviceName: deviceName,
       ),
-    );
+      IdentityMethod.apple => _repository.signInWithApple(
+        token,
+        deviceName: deviceName,
+      ),
+    };
+    AuthSession session;
+    try {
+      session = await send();
+    } on ApiException catch (e) {
+      // Two first sign-ins raced; the second attempt finds the account.
+      if (e.code != 'sign_in_conflict') rethrow;
+      session = await send();
+    }
+    await _adopt(session);
+    return true;
   }
 
-  /// The country is sent with registration, which records it as chosen
-  /// (the API accepts `countryCode` from the backend change of 2026-10-18;
-  /// earlier APIs reject the field). If the account somehow comes back with
-  /// another country, it is saved with `PATCH /v1/me` right after; the
-  /// player is signed in either way.
-  Future<void> register({
+  /// A local test account (debug builds only).
+  Future<void> devSignIn({
+    required String konamiId,
+    required String password,
+  }) async => _adopt(
+    await _repository.devSignIn(
+      konamiId: konamiId,
+      password: password,
+      deviceName: ref.read(deviceNameProvider),
+    ),
+  );
+
+  /// Creates a local test account (debug builds only).
+  Future<void> devRegister({
     required String username,
     required String konamiId,
     required String password,
-    required String countryCode,
-  }) async {
-    final session = await _repository.register(
+  }) async => _adopt(
+    await _repository.devRegister(
       username: username,
       konamiId: konamiId,
       password: password,
-      countryCode: countryCode,
       deviceName: ref.read(deviceNameProvider),
-    );
-    await _adopt(session);
-    if (session.player.countryCode == countryCode) return;
-    state = state.copyWith(pendingCountryCode: () => countryCode);
-    await savePendingCountry();
-  }
+    ),
+  );
 
-  /// Returns whether the country is saved.
-  Future<bool> savePendingCountry() async {
-    final code = state.pendingCountryCode;
-    if (code == null) return true;
-    try {
-      final player = await _repository.updateCountry(code);
-      state = state.copyWith(player: player, pendingCountryCode: () => null);
-      return true;
-    } on Exception {
-      return false;
-    }
-  }
-
-  /// Resets a forgotten password with the recovery code and signs in. The
-  /// new code that replaces the spent one must then be shown.
-  Future<void> resetWithRecoveryCode({
+  /// Adds the Konami ID, phone and country after a first sign-in; the
+  /// router then lets the player in.
+  Future<void> completeOnboarding({
+    String? username,
     required String konamiId,
-    required String recoveryCode,
-    required String newPassword,
+    required String phoneNumber,
+    required String countryCode,
   }) async {
-    await _adopt(
-      await _repository.resetWithRecoveryCode(
+    replacePlayer(
+      await _repository.completeOnboarding(
+        username: username,
         konamiId: konamiId,
-        recoveryCode: recoveryCode,
-        newPassword: newPassword,
-        deviceName: ref.read(deviceNameProvider),
+        phoneNumber: phoneNumber,
+        countryCode: countryCode,
       ),
-      replacesRecoveryCode: true,
     );
-  }
-
-  /// The player has saved the code they were shown.
-  void acknowledgeRecoveryCode() {
-    state = state.copyWith(pendingRecoveryCode: () => null);
-  }
-
-  /// Issues a new recovery code (the old one stops working) and returns it
-  /// for the caller to show.
-  Future<String> createRecoveryCode({required String password}) async {
-    final issued = await _repository.newRecoveryCode(password);
-    final player = state.player;
-    if (player != null) {
-      state = state.copyWith(player: player.withRecoveryCode(issued.createdAt));
-    }
-    return issued.code;
   }
 
   /// Takes the player as the API returned it after a change to the account.
   void replacePlayer(Player player) {
     if (state.status != AuthStatus.signedIn) return;
-    state = state.copyWith(player: player);
+    state = AuthState(status: AuthStatus.signedIn, player: player);
   }
 
   Future<void> signOut() async {
@@ -209,25 +199,20 @@ class AuthController extends Notifier<AuthState> {
     } on Exception {
       // The local session ends regardless; the server one expires on its own.
     }
+    for (final provider in [googleIdentityProvider, appleIdentityProvider]) {
+      try {
+        await ref.read(provider).signOut();
+      } on Exception {
+        // Forgetting the picked account is a convenience, not a must.
+      }
+    }
     await _end();
   }
 
-  Future<void> _adopt(
-    AuthSession session, {
-    bool replacesRecoveryCode = false,
-  }) async {
+  Future<void> _adopt(AuthSession session) async {
     await _tokens.writeRefreshToken(session.refreshToken);
     _api.accessToken = session.accessToken;
-    final newCode = session.recoveryCode;
-    state = AuthState(
-      status: AuthStatus.signedIn,
-      player: session.player,
-      pendingCountryCode: state.pendingCountryCode,
-      pendingRecoveryCode: newCode ?? state.pendingRecoveryCode,
-      recoveryCodeReplacesOld: newCode == null
-          ? state.recoveryCodeReplacesOld
-          : replacesRecoveryCode,
-    );
+    state = AuthState(status: AuthStatus.signedIn, player: session.player);
   }
 
   Future<void> _end() async {

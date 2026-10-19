@@ -48,16 +48,6 @@ class AccountRepository {
 
   Future<void> removePhone() => _api.send('DELETE', '/v1/me/phone', auth: true);
 
-  /// Keeps this device signed in and signs every other device out.
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-  }) => _api.post(
-    '/v1/me/password',
-    body: {'currentPassword': currentPassword, 'newPassword': newPassword},
-    auth: true,
-  );
-
   Future<Player> currentPlayer() async {
     final json = await _api.get('/v1/me', auth: true);
     return Player.fromJson(json!);

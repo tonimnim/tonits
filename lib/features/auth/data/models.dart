@@ -11,8 +11,9 @@ class Player {
     required this.phoneNumber,
     required this.countryCode,
     required this.status,
-    this.recoveryCodeSet = false,
-    this.recoveryCodeCreatedAt,
+    this.onboardingCompleted = true,
+    this.phoneVerified = false,
+    this.signInMethods = const {},
   });
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
@@ -23,12 +24,15 @@ class Player {
     email: json['email'] as String?,
     emailVerified: json['emailVerified'] as bool? ?? false,
     phoneNumber: json['phoneNumber'] as String?,
-    countryCode: json['countryCode'] as String,
+    // Empty until onboarding for a new Google or Apple player.
+    countryCode: json['countryCode'] as String? ?? '',
     status: json['status'] as String,
-    recoveryCodeSet: json['recoveryCodeSet'] as bool? ?? false,
-    recoveryCodeCreatedAt: json['recoveryCodeCreatedAt'] is String
-        ? DateTime.parse(json['recoveryCodeCreatedAt'] as String)
-        : null,
+    // Accounts from before onboarding existed are complete.
+    onboardingCompleted: json['onboardingCompleted'] as bool? ?? true,
+    phoneVerified: json['phoneVerified'] as bool? ?? false,
+    signInMethods: {
+      for (final m in json['signInMethods'] as List? ?? const []) m as String,
+    },
   );
 
   final String id;
@@ -41,27 +45,15 @@ class Player {
   final String countryCode;
   final String status;
 
-  /// Whether the player has a recovery code; the code itself is never sent.
-  final bool recoveryCodeSet;
-  final DateTime? recoveryCodeCreatedAt;
+  /// False after a first Google or Apple sign-in, until the player adds
+  /// their Konami ID, phone and country.
+  final bool onboardingCompleted;
 
-  /// With neither a recovery code nor a verified email, a forgotten
-  /// password can't be reset without support.
-  bool get canRecoverAccount => recoveryCodeSet || emailVerified;
+  /// Proven by a successful M-Pesa payment from the number.
+  final bool phoneVerified;
 
-  Player withRecoveryCode(DateTime createdAt) => Player(
-    id: id,
-    username: username,
-    konamiId: konamiId,
-    displayName: displayName,
-    email: email,
-    emailVerified: emailVerified,
-    phoneNumber: phoneNumber,
-    countryCode: countryCode,
-    status: status,
-    recoveryCodeSet: true,
-    recoveryCodeCreatedAt: createdAt,
-  );
+  /// `google`, `apple` and, for test accounts, `password`.
+  final Set<String> signInMethods;
 }
 
 class AuthSession {
@@ -70,7 +62,6 @@ class AuthSession {
     required this.refreshToken,
     required this.expiresIn,
     required this.player,
-    this.recoveryCode,
   });
 
   factory AuthSession.fromJson(Map<String, dynamic> json) => AuthSession(
@@ -78,31 +69,12 @@ class AuthSession {
     refreshToken: json['refreshToken'] as String,
     expiresIn: Duration(seconds: json['expiresInSeconds'] as int),
     player: Player.fromJson(json['player'] as Map<String, dynamic>),
-    recoveryCode: json['recoveryCode'] as String?,
   );
 
   final String accessToken;
   final String refreshToken;
   final Duration expiresIn;
   final Player player;
-
-  /// Sent once, by registration and by a recovery-code reset: the server
-  /// keeps only its hash, so this is the only chance to show it.
-  final String? recoveryCode;
-}
-
-/// A recovery code issued from the signed-in account.
-class IssuedRecoveryCode {
-  const IssuedRecoveryCode({required this.code, required this.createdAt});
-
-  factory IssuedRecoveryCode.fromJson(Map<String, dynamic> json) =>
-      IssuedRecoveryCode(
-        code: json['recoveryCode'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-      );
-
-  final String code;
-  final DateTime createdAt;
 }
 
 enum LegalDocumentType { terms, privacy }

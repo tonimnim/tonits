@@ -44,14 +44,6 @@ class AccountService {
     _adopt(await _repository.currentPlayer());
   }
 
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-  }) => _repository.changePassword(
-    currentPassword: currentPassword,
-    newPassword: newPassword,
-  );
-
   void _adopt(Player player) {
     _ref.read(authControllerProvider.notifier).replacePlayer(player);
     _ref.invalidate(myProfileProvider);

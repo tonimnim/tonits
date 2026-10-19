@@ -140,7 +140,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
               validator: (value) => PhoneNumber.validate(value, _country),
               decoration: InputDecoration(
                 hintText: kenya ? '0712 345 678' : 'Phone number',
-                prefixIcon: _CallingCode(
+                prefixIcon: CallingCodePrefix(
                   country: _country,
                   onTap: _busy ? null : _pickCountry,
                 ),
@@ -162,47 +162,6 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
           ),
         ],
       ],
-    );
-  }
-}
-
-/// The flag and calling code inside the field; tapping changes country.
-class _CallingCode extends StatelessWidget {
-  const _CallingCode({required this.country, required this.onTap});
-
-  final Country country;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    return Semantics(
-      button: true,
-      label: 'Calling code +${country.dialCode}, ${country.name}. Change',
-      excludeSemantics: true,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: const BorderRadius.horizontal(
-          left: Radius.circular(TonitsRadius.control),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 0, 10, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(country.flag, style: const TextStyle(fontSize: 18)),
-              const SizedBox(width: 6),
-              Text(
-                '+${country.dialCode}',
-                style: monoFont.copyWith(color: p.foreground),
-              ),
-              Icon(Icons.expand_more, size: 18, color: p.mutedForeground),
-              const SizedBox(width: 6),
-              Container(width: 1, height: 22, color: p.border),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

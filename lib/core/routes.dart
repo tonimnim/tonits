@@ -4,12 +4,14 @@ abstract final class Routes {
   static const splash = '/';
   static const offline = '/offline';
 
-  static const signIn = '/sign-in';
-  static const register = '/sign-in/register';
-  static const forgotPassword = '/sign-in/forgot-password';
+  /// Continue with Google or Apple.
+  static const welcome = '/welcome';
 
-  /// Shows a just-issued recovery code until the player confirms saving it.
-  static const recoveryCode = '/recovery-code';
+  /// Konami ID and password, for local test accounts in debug builds.
+  static const devSignIn = '/welcome/developer';
+
+  /// Username, Konami ID, country and phone after a first sign-in.
+  static const onboarding = '/onboarding';
 
   // Bottom navigation tabs.
   static const home = '/home';
@@ -34,8 +36,7 @@ abstract final class Routes {
   static const editName = '$profile/name';
   static const email = '$profile/email';
   static const phone = '$profile/phone';
-  static const password = '$profile/password';
 
   /// Paths reachable while signed out.
-  static bool isSignedOut(String path) => path.startsWith(signIn);
+  static bool isSignedOut(String path) => path.startsWith(welcome);
 }

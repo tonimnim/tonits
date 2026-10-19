@@ -1,117 +1,78 @@
 import '../../../core/api/api_client.dart';
+import 'identity_providers.dart';
 import 'models.dart';
 
-/// The authentication routes of the Tonits API.
+/// The authentication routes of the Tonits API. Players sign in with Google
+/// or Apple; Konami ID and password exist only for local test accounts.
 class AuthRepository {
   AuthRepository(this._api);
 
   final ApiClient _api;
 
-  Future<AuthSession> register({
+  Future<AuthSession> signInWithGoogle(
+    IdentityToken token, {
+    String? deviceName,
+  }) => _session('/v1/auth/google', {
+    'idToken': token.token,
+    'nonce': ?token.nonce,
+    'deviceName': ?deviceName,
+  });
+
+  Future<AuthSession> signInWithApple(
+    IdentityToken token, {
+    String? deviceName,
+  }) => _session('/v1/auth/apple', {
+    'identityToken': token.token,
+    'nonce': token.nonce ?? '',
+    'deviceName': ?deviceName,
+  });
+
+  /// A local test account. Production answers 403.
+  Future<AuthSession> devSignIn({
+    required String konamiId,
+    required String password,
+    String? deviceName,
+  }) => _session('/v1/auth/login', {
+    'konamiId': konamiId,
+    'password': password,
+    'deviceName': ?deviceName,
+  });
+
+  /// Creates a local test account, already onboarded. Production answers
+  /// 403 password_registration_disabled.
+  Future<AuthSession> devRegister({
     required String username,
     required String konamiId,
     required String password,
-    String? countryCode,
     String? deviceName,
-  }) async {
-    final json = await _api.post(
-      '/v1/auth/register',
-      body: {
-        'username': username,
-        'konamiId': konamiId,
-        'password': password,
-        'countryCode': ?countryCode,
-        'deviceName': ?deviceName,
-      },
-    );
-    return AuthSession.fromJson(json!);
-  }
+  }) => _session('/v1/auth/register', {
+    'username': username,
+    'konamiId': konamiId,
+    'password': password,
+    'deviceName': ?deviceName,
+  });
 
-  Future<AuthSession> signIn({
-    required String konamiId,
-    required String password,
-    String? deviceName,
-  }) async {
-    final json = await _api.post(
-      '/v1/auth/login',
-      body: {
-        'konamiId': konamiId,
-        'password': password,
-        'deviceName': ?deviceName,
-      },
-    );
-    return AuthSession.fromJson(json!);
-  }
-
-  Future<AuthSession> refresh(String refreshToken) async {
-    final json = await _api.post(
-      '/v1/auth/refresh',
-      body: {'refreshToken': refreshToken},
-    );
-    return AuthSession.fromJson(json!);
-  }
+  Future<AuthSession> refresh(String refreshToken) =>
+      _session('/v1/auth/refresh', {'refreshToken': refreshToken});
 
   Future<void> logout() => _api.post('/v1/auth/logout', auth: true);
 
-  /// Always succeeds for a well-formed Konami ID; a code is emailed only if
-  /// the account has a verified email.
-  Future<void> requestPasswordReset(String konamiId) => _api.post(
-    '/v1/auth/password-reset/request',
-    body: {'konamiId': konamiId},
-  );
-
-  Future<void> confirmPasswordReset({
+  /// The one step after a first Google or Apple sign-in. Also records the
+  /// current Terms and Privacy Notice as accepted.
+  Future<Player> completeOnboarding({
+    String? username,
     required String konamiId,
-    required String code,
-    required String newPassword,
-  }) => _api.post(
-    '/v1/auth/password-reset/confirm',
-    body: {'konamiId': konamiId, 'code': code, 'newPassword': newPassword},
-  );
-
-  /// Resets a forgotten password with the recovery code and signs in. The
-  /// session carries a new code, which replaces the spent one.
-  Future<AuthSession> resetWithRecoveryCode({
-    required String konamiId,
-    required String recoveryCode,
-    required String newPassword,
-    String? deviceName,
+    required String phoneNumber,
+    required String countryCode,
   }) async {
     final json = await _api.post(
-      '/v1/auth/password-reset/recovery-code',
+      '/v1/me/onboarding',
       body: {
+        'username': ?username,
         'konamiId': konamiId,
-        'recoveryCode': recoveryCode,
-        'newPassword': newPassword,
-        'deviceName': ?deviceName,
+        'phoneNumber': phoneNumber,
+        'countryCode': countryCode,
       },
-    );
-    return AuthSession.fromJson(json!);
-  }
-
-  /// Issues a new recovery code after the player confirms their password.
-  /// The previous code stops working.
-  Future<IssuedRecoveryCode> newRecoveryCode(String password) async {
-    final json = await _api.post(
-      '/v1/me/recovery-code',
-      body: {'password': password},
-      auth: true,
-    );
-    return IssuedRecoveryCode.fromJson(json!);
-  }
-
-  Future<Player> currentPlayer() async {
-    final json = await _api.get('/v1/me', auth: true);
-    return Player.fromJson(json!);
-  }
-
-  /// Sets the player's country. A chosen country is kept when a phone number
-  /// is saved later.
-  Future<Player> updateCountry(String countryCode) async {
-    final json = await _api.send(
-      'PATCH',
-      '/v1/me',
-      body: {'countryCode': countryCode},
       auth: true,
     );
     return Player.fromJson(json!);
@@ -126,4 +87,9 @@ class AuthRepository {
   }
 
   Uri resolve(String reference) => _api.resolve(reference);
+
+  Future<AuthSession> _session(String path, Map<String, Object> body) async {
+    final json = await _api.post(path, body: body);
+    return AuthSession.fromJson(json!);
+  }
 }

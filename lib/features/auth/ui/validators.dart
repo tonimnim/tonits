@@ -4,7 +4,7 @@ abstract final class AuthValidators {
   static final _username = RegExp(r'^[A-Za-z0-9][A-Za-z0-9_.]{2,23}$');
   static final _konamiId = RegExp(r'^[A-Za-z0-9][A-Za-z0-9 _.\-]{5,63}$');
   static final _alphanumeric = RegExp(r'[A-Za-z0-9]');
-  static final _resetCode = RegExp(r'^[0-9]{6}$');
+  static final _code = RegExp(r'^[0-9]{6}$');
 
   static String? username(String? value) {
     final v = value?.trim() ?? '';
@@ -51,22 +51,9 @@ abstract final class AuthValidators {
   static String? password(String? value) =>
       (value ?? '').isEmpty ? 'Enter your password' : null;
 
+  /// A 6-digit code, such as an email verification code.
   static String? resetCode(String? value) =>
-      _resetCode.hasMatch(value?.trim() ?? '')
-      ? null
-      : 'Enter the 6-digit code';
-
-  /// A recovery code is 20 letters and digits; case, spaces and dashes
-  /// don't count, as on the server.
-  static String? recoveryCode(String? value) {
-    final n = normalizeRecoveryCode(value ?? '').length;
-    if (n == 0) return 'Enter your recovery code';
-    if (n != 20) return 'Enter all 20 characters of your recovery code';
-    return null;
-  }
-
-  static String normalizeRecoveryCode(String value) =>
-      value.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
+      _code.hasMatch(value?.trim() ?? '') ? null : 'Enter the 6-digit code';
 
   /// Case, spaces, dots, dashes and underscores don't count.
   static String normalizeKonamiId(String value) =>
