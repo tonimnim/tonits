@@ -1,35 +1,58 @@
 {
   "welcomeHeadline": "Your game, ranked.",
-  "welcomePitch": "Enter eFootball competitions, play your matches and climb your country's ladder.",
+  "welcomePitch": "Compete in eFootball. Climb your country's ladder.",
   "welcomeSheetTitle": "Sign up or sign in",
-  "welcomeSheetBody": "New to Ozone? Continue with Google to create your account. Already playing? The same button signs you in.",
-  "welcomeSheetBodyWithApple": "New to Ozone? Continue with Google or Apple to create your account. Already playing? The same button signs you in.",
   "welcomeContinueWithGoogle": "Continue with Google",
   "welcomeContinueWithApple": "Continue with Apple",
   "welcomeProviderWorking": "{label}, working",
-  "@welcomeProviderWorking": {"description": "Screen-reader label for a sign-in button while it waits.", "placeholders": {"label": {"type": "String", "example": "Continue with Google"}}},
+  "@welcomeProviderWorking": {
+    "description": "Screen-reader label for a sign-in button while it waits.",
+    "placeholders": {
+      "label": {
+        "type": "String",
+        "example": "Continue with Google"
+      }
+    }
+  },
   "welcomeAgreeBefore": "By continuing you agree to the ",
-  "@welcomeAgreeBefore": {"description": "Start of: By continuing you agree to the [Terms] and [Privacy Notice]. Keep the trailing space."},
+  "@welcomeAgreeBefore": {
+    "description": "Start of: By continuing you agree to the [Terms] and [Privacy Notice]. Keep the trailing space."
+  },
   "welcomeAgreeBetween": " and ",
-  "@welcomeAgreeBetween": {"description": "Between the Terms and Privacy Notice links on the welcome screen. Keep the spaces."},
+  "@welcomeAgreeBetween": {
+    "description": "Between the Terms and Privacy Notice links on the welcome screen. Keep the spaces."
+  },
   "welcomeAgreeAfter": ".",
-  "@welcomeAgreeAfter": {"description": "End of the welcome screen's agreement sentence, after the Privacy Notice link."},
+  "@welcomeAgreeAfter": {
+    "description": "End of the welcome screen's agreement sentence, after the Privacy Notice link."
+  },
   "welcomeOfflineTitle": "Can't reach Ozone",
   "welcomeOfflineBody": "Check your connection. You're still signed in.",
-
   "accountLegalTerms": "Terms",
-  "@accountLegalTerms": {"description": "Link to the Terms, inside a sentence."},
+  "@accountLegalTerms": {
+    "description": "Link to the Terms, inside a sentence."
+  },
   "accountLegalPrivacy": "Privacy Notice",
-  "@accountLegalPrivacy": {"description": "Link to or name of the Privacy Notice."},
+  "@accountLegalPrivacy": {
+    "description": "Link to or name of the Privacy Notice."
+  },
   "accountKonamiIdLabel": "Konami ID",
   "accountMpesaNumberLabel": "M-Pesa number",
   "accountPhoneNumberLabel": "Phone number",
   "accountDisplayName": "Display name",
   "accountEmailTitle": "Email",
   "accountSave": "Save",
-
   "onboardingStepOf": "Step {step} of {steps}",
-  "@onboardingStepOf": {"placeholders": {"step": {"type": "int"}, "steps": {"type": "int"}}},
+  "@onboardingStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "steps": {
+        "type": "int"
+      }
+    }
+  },
   "onboardingUsernameTitle": "Pick your username",
   "onboardingUsernameSubtitle": "It's how players see you in matches and on the ladder.",
   "onboardingKonamiIdTitle": "Link eFootball",
@@ -42,34 +65,67 @@
   "onboardingFinish": "Finish",
   "onboardingContinue": "Continue",
   "onboardingAcceptBefore": "By finishing you accept the ",
-  "@onboardingAcceptBefore": {"description": "Start of: By finishing you accept the [Terms] and the [Privacy Notice]. Keep the trailing space."},
+  "@onboardingAcceptBefore": {
+    "description": "Start of: By finishing you accept the [Terms] and the [Privacy Notice]. Keep the trailing space."
+  },
   "onboardingAcceptBetween": " and the ",
-  "@onboardingAcceptBetween": {"description": "Between the Terms and Privacy Notice links on the last onboarding step. Keep the spaces."},
+  "@onboardingAcceptBetween": {
+    "description": "Between the Terms and Privacy Notice links on the last onboarding step. Keep the spaces."
+  },
   "onboardingAcceptAfter": ".",
-  "@onboardingAcceptAfter": {"description": "End of the onboarding acceptance sentence, after the Privacy Notice link."},
+  "@onboardingAcceptAfter": {
+    "description": "End of the onboarding acceptance sentence, after the Privacy Notice link."
+  },
   "onboardingUsernameLabel": "Username",
   "onboardingUsernameAvailable": "Available",
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
-
   "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
   "profileAboutTitle": "About",
   "profileTermsOfService": "Terms of Service",
   "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
-  "@profileCouldNotOpen": {"placeholders": {"document": {"type": "String", "example": "Privacy Notice"}}},
+  "@profileCouldNotOpen": {
+    "placeholders": {
+      "document": {
+        "type": "String",
+        "example": "Privacy Notice"
+      }
+    }
+  },
   "profileAccountTitle": "Account",
   "profileNotLinked": "Not linked",
   "profileChangeCountryTitle": "Change your country to {country}?",
-  "@profileChangeCountryTitle": {"placeholders": {"country": {"type": "String", "example": "Kenya"}}},
+  "@profileChangeCountryTitle": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
   "profileChangeCountryMessage": "Your country ranking and the competitions open to you follow your country.",
   "profileChangeCountryConfirm": "Change",
   "profileCountryChanged": "Country changed to {country}",
-  "@profileCountryChanged": {"placeholders": {"country": {"type": "String", "example": "Kenya"}}},
+  "@profileCountryChanged": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
   "profileContactTitle": "Contact",
   "profilePhone": "Phone",
   "profileAdd": "Add",
   "profileMemberSince": "Member since {date}",
-  "@profileMemberSince": {"placeholders": {"date": {"type": "String", "example": "October 2026"}}},
+  "@profileMemberSince": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "October 2026"
+      }
+    }
+  },
   "profileSignInTitle": "Sign-in",
   "profileLinked": "Linked",
   "profileKonamiIdAndPassword": "Konami ID and password",
@@ -77,34 +133,59 @@
   "profileSignOut": "Sign out",
   "profileSignOutTitle": "Sign out of Ozone?",
   "profileSignOutMessage": "You can sign back in any time with the same Google or Apple account.",
-
   "accountEditNameIntro": "The name opponents see in matches, rankings and on your profile. Your username stays the same.",
   "accountEnterDisplayName": "Enter a display name",
   "accountDisplayNameLength": "Use 2 to 80 characters",
   "accountYourNameHint": "Your name",
   "accountDisplayNameUpdated": "Display name updated",
-
   "accountEnterEmail": "Enter your email",
   "accountEmailInvalid": "Enter a valid email address",
   "accountNewCodeSent": "New code sent to {email}",
-  "@accountNewCodeSent": {"placeholders": {"email": {"type": "String"}}},
+  "@accountNewCodeSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "accountEmailVerified": "Email verified",
   "accountEmailIntroAdd": "With a verified email you can reset a forgotten password. We'll send a code to confirm it.",
   "accountEmailIntroChange": "Your email is {email}. Enter a new address and it replaces this one once confirmed.",
-  "@accountEmailIntroChange": {"placeholders": {"email": {"type": "String"}}},
+  "@accountEmailIntroChange": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "accountNewEmailLabel": "New email",
   "accountSendCode": "Send code",
   "accountCodeExpiresSoon": "It expires soon.",
   "accountCodeExpiresIn": "{minutes, plural, =1{It expires in 1 minute.} other{It expires in {minutes} minutes.}}",
-  "@accountCodeExpiresIn": {"placeholders": {"minutes": {"type": "int"}}},
+  "@accountCodeExpiresIn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "accountCheckEmailTitle": "Check your email",
   "accountCodeSentIntro": "We sent a 6-digit code to {email}. {expiry}",
-  "@accountCodeSentIntro": {"placeholders": {"email": {"type": "String"}, "expiry": {"type": "String", "example": "It expires in 10 minutes."}}},
+  "@accountCodeSentIntro": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      },
+      "expiry": {
+        "type": "String",
+        "example": "It expires in 10 minutes."
+      }
+    }
+  },
   "accountCodeLabel": "Code",
   "accountVerify": "Verify",
   "accountSendNewCode": "Send a new code",
   "accountUseAnotherEmail": "Use another email",
-
   "accountPhoneSaved": "Phone number saved",
   "accountRemovePhoneTitle": "Remove your phone number?",
   "accountRemovePhoneMessage": "You'll enter a number each time you pay an entry fee.",

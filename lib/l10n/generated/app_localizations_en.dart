@@ -14,18 +14,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomePitch =>
-      'Enter eFootball competitions, play your matches and climb your country\'s ladder.';
+      'Compete in eFootball. Climb your country\'s ladder.';
 
   @override
   String get welcomeSheetTitle => 'Sign up or sign in';
-
-  @override
-  String get welcomeSheetBody =>
-      'New to Ozone? Continue with Google to create your account. Already playing? The same button signs you in.';
-
-  @override
-  String get welcomeSheetBodyWithApple =>
-      'New to Ozone? Continue with Google or Apple to create your account. Already playing? The same button signs you in.';
 
   @override
   String get welcomeContinueWithGoogle => 'Continue with Google';

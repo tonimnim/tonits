@@ -88,18 +88,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           letterSpacing: -0.3,
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        apple
-                            ? l.welcomeSheetBodyWithApple
-                            : l.welcomeSheetBody,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          height: 1.45,
-                          color: p.subtleForeground,
-                        ),
-                      ),
                       const SizedBox(height: 20),
                       if (_error != null) ...[
                         Notice(_error!),

@@ -1,10 +1,8 @@
 {
   "@@locale": "en",
   "welcomeHeadline": "Your game, ranked.",
-  "welcomePitch": "Enter eFootball competitions, play your matches and climb your country's ladder.",
+  "welcomePitch": "Compete in eFootball. Climb your country's ladder.",
   "welcomeSheetTitle": "Sign up or sign in",
-  "welcomeSheetBody": "New to Ozone? Continue with Google to create your account. Already playing? The same button signs you in.",
-  "welcomeSheetBodyWithApple": "New to Ozone? Continue with Google or Apple to create your account. Already playing? The same button signs you in.",
   "welcomeContinueWithGoogle": "Continue with Google",
   "welcomeContinueWithApple": "Continue with Apple",
   "welcomeProviderWorking": "{label}, working",

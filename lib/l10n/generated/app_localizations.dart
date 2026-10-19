@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomePitch.
   ///
   /// In en, this message translates to:
-  /// **'Enter eFootball competitions, play your matches and climb your country\'s ladder.'**
+  /// **'Compete in eFootball. Climb your country\'s ladder.'**
   String get welcomePitch;
 
   /// No description provided for @welcomeSheetTitle.
@@ -111,18 +111,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign up or sign in'**
   String get welcomeSheetTitle;
-
-  /// No description provided for @welcomeSheetBody.
-  ///
-  /// In en, this message translates to:
-  /// **'New to Ozone? Continue with Google to create your account. Already playing? The same button signs you in.'**
-  String get welcomeSheetBody;
-
-  /// No description provided for @welcomeSheetBodyWithApple.
-  ///
-  /// In en, this message translates to:
-  /// **'New to Ozone? Continue with Google or Apple to create your account. Already playing? The same button signs you in.'**
-  String get welcomeSheetBodyWithApple;
 
   /// No description provided for @welcomeContinueWithGoogle.
   ///
