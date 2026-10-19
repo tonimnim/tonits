@@ -51,8 +51,8 @@ void main() {
     );
   });
 
-  testWidgets('signing in opens Home with the next match and open '
-      'competitions', (tester) async {
+  testWidgets('signing in opens Home with the next match and recent '
+      'results', (tester) async {
     await pumpTonits(tester);
     await signIn(tester);
 
@@ -65,10 +65,8 @@ void main() {
 
     await scrollPageTo(tester, find.text('62%'));
     expect(find.text('W3'), findsOneWidget);
-    await scrollPageTo(tester, find.text('Kenya ladder'));
     await scrollPageTo(tester, find.text('Recent matches'));
-    await scrollPageTo(tester, find.text('Closing soon'));
-    expect(find.text('Mombasa Masters'), findsOneWidget);
+    expect(find.text('vs Coast Ace'), findsOneWidget);
   });
 
   testWidgets('a stored session resumes straight to Home', (tester) async {
@@ -104,15 +102,12 @@ void main() {
           '/v1/players/$myPlayerId/matches': (_) =>
               jsonResponse(pageJson([]), 200),
           '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
-          '/v1/rankings': rankingsRoute(ranked: false),
         },
       ),
     );
 
     expect(find.text('Unranked'), findsOneWidget);
     expect(find.text('Overview'), findsNothing);
-    await scrollPageTo(tester, find.text('Top in Kenya'));
-    expect(find.text('striker.9 (you)'), findsNothing);
     expect(find.text('Recent matches'), findsNothing);
 
     await tester.ensureVisible(find.text('Find a competition'));
@@ -142,15 +137,15 @@ void main() {
       refreshToken: 'stored',
       api: FakeApi(
         routes: {
-          '/v1/competitions': (_) => fail
+          '/v1/players/$myPlayerId': (_) => fail
               ? errorResponse(503, 'database_unavailable')
-              : jsonResponse(pageJson([competitionJson()]), 200),
+              : jsonResponse(profileJson(), 200),
         },
       ),
     );
 
-    expect(find.text('1,542'), findsOneWidget);
-    await scrollPageTo(tester, find.text("Couldn't load this"));
+    expect(find.text("Couldn't load this"), findsOneWidget);
+    expect(find.text('Up next'), findsOneWidget);
 
     fail = false;
     await tester.ensureVisible(find.text('Try again'));
@@ -158,7 +153,7 @@ void main() {
     await tester.tap(find.text('Try again'));
     await tester.pumpAndSettle();
     expect(find.text("Couldn't load this"), findsNothing);
-    expect(find.text('Nairobi Weekend Cup'), findsOneWidget);
+    expect(find.text('1,542'), findsOneWidget);
   });
 
   testWidgets('the bottom bar switches between all five tabs', (tester) async {

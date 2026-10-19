@@ -2,12 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
 import '../../auth/application/auth_providers.dart';
-import '../../rankings/application/rankings_providers.dart';
 import '../data/played_match.dart';
 import '../data/player_profile.dart';
 import '../data/players_repository.dart';
 import 'player_stats.dart';
-import 'rank_neighbourhood.dart';
 
 final playersRepositoryProvider = Provider<PlayersRepository>(
   (ref) => PlayersRepository(ref.watch(apiClientProvider)),
@@ -44,23 +42,3 @@ final myStatsProvider = FutureProvider.autoDispose<PlayerStats>((ref) async {
   ).wait;
   return PlayerStats.from(profile.record, recent);
 });
-
-/// The player's slice of their country ladder: up to two places above and
-/// below them. A player without a country rank (new, or provisional) gets
-/// the top three instead, something to aim for.
-/// The player's slice of their country ladder: two places either side of
-/// them, at any rank. A player without a rank yet (new, or provisional)
-/// gets the top three instead, something to aim for.
-final myRankNeighbourhoodProvider =
-    FutureProvider.autoDispose<RankNeighbourhood>((ref) async {
-      final player = ref.watch(currentPlayerProvider);
-      if (player == null) return const RankNeighbourhood([], ranked: false);
-      final rankings = ref.watch(rankingsRepositoryProvider);
-      final around = await rankings.aroundMe(countryCode: player.countryCode);
-      if (around.isNotEmpty) return RankNeighbourhood(around, ranked: true);
-      final top = await rankings.list(
-        countryCode: player.countryCode,
-        limit: 3,
-      );
-      return RankNeighbourhood(top.items, ranked: false);
-    });

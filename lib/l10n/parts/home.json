@@ -6,9 +6,6 @@
   "@homeSeeAll": {
     "description": "Action on a Home section header that opens the full list."
   },
-  "homeClosingSoon": "Closing soon",
-  "homeNothingOpenTitle": "Nothing open right now",
-  "homeNothingOpenMessage": "New competitions open for registration regularly.",
   "homeRating": "Rating",
   "homeRatingSemantics": "Rating {rating}",
   "@homeRatingSemantics": {
@@ -45,24 +42,6 @@
     "placeholders": {
       "places": {
         "type": "int"
-      }
-    }
-  },
-  "homeCountryLadder": "{country} ladder",
-  "@homeCountryLadder": {
-    "placeholders": {
-      "country": {
-        "type": "String",
-        "example": "Kenya"
-      }
-    }
-  },
-  "homeTopInCountry": "Top in {country}",
-  "@homeTopInCountry": {
-    "placeholders": {
-      "country": {
-        "type": "String",
-        "example": "Kenya"
       }
     }
   },

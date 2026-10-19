@@ -1462,24 +1462,6 @@ abstract class AppLocalizations {
   /// **'See all'**
   String get homeSeeAll;
 
-  /// No description provided for @homeClosingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Closing soon'**
-  String get homeClosingSoon;
-
-  /// No description provided for @homeNothingOpenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing open right now'**
-  String get homeNothingOpenTitle;
-
-  /// No description provided for @homeNothingOpenMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'New competitions open for registration regularly.'**
-  String get homeNothingOpenMessage;
-
   /// No description provided for @homeRating.
   ///
   /// In en, this message translates to:
@@ -1527,18 +1509,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{places, plural, =1{1 place} other{{places} places}}'**
   String homePlaces(int places);
-
-  /// No description provided for @homeCountryLadder.
-  ///
-  /// In en, this message translates to:
-  /// **'{country} ladder'**
-  String homeCountryLadder(String country);
-
-  /// No description provided for @homeTopInCountry.
-  ///
-  /// In en, this message translates to:
-  /// **'Top in {country}'**
-  String homeTopInCountry(String country);
 
   /// No description provided for @homeRecentMatches.
   ///

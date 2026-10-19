@@ -14,22 +14,6 @@ final competitionsRepositoryProvider = Provider<CompetitionsRepository>(
   (ref) => CompetitionsRepository(ref.watch(apiClientProvider)),
 );
 
-/// Competitions taking entries, the ones closing soonest first, for Home.
-final closingSoonProvider = FutureProvider.autoDispose<List<Competition>>((
-  ref,
-) async {
-  final page = await ref
-      .watch(competitionsRepositoryProvider)
-      .list(status: CompetitionStatus.registrationOpen, limit: 10);
-  final far = DateTime.utc(9999);
-  // Leave out any the API still lists as open after their deadline.
-  return page.items.where((c) => !c.registrationEnded).toList()..sort(
-    (a, b) => (a.registrationClosesAt ?? far).compareTo(
-      b.registrationClosesAt ?? far,
-    ),
-  );
-});
-
 final competitionsProvider = AsyncNotifierProvider.autoDispose
     .family<CompetitionsNotifier, Paged<Competition>, CompetitionFilter>(
       CompetitionsNotifier.new,

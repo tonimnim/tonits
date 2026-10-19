@@ -20,8 +20,6 @@ class AccountService {
 
   Future<void> updateCountry(String countryCode) async {
     _adopt(await _repository.updateCountry(countryCode));
-    // The country ladder and ranks shown on Home depend on it.
-    _ref.invalidate(myRankNeighbourhoodProvider);
   }
 
   Future<Duration?> requestEmailCode(String email) =>

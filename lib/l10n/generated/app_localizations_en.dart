@@ -842,16 +842,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSeeAll => 'See all';
 
   @override
-  String get homeClosingSoon => 'Closing soon';
-
-  @override
-  String get homeNothingOpenTitle => 'Nothing open right now';
-
-  @override
-  String get homeNothingOpenMessage =>
-      'New competitions open for registration regularly.';
-
-  @override
   String get homeRating => 'Rating';
 
   @override
@@ -900,16 +890,6 @@ class AppLocalizationsEn extends AppLocalizations {
       one: '1 place',
     );
     return '$_temp0';
-  }
-
-  @override
-  String homeCountryLadder(String country) {
-    return '$country ladder';
-  }
-
-  @override
-  String homeTopInCountry(String country) {
-    return 'Top in $country';
   }
 
   @override

@@ -54,7 +54,7 @@ void main() {
       );
       expect(find.text('1,542'), findsOneWidget);
       // Build the whole Home page, not just what's on screen.
-      await scrollPageTo(tester, find.text('Closing soon'));
+      await scrollPageTo(tester, find.text('Recent matches'));
 
       for (final tab in ['Compete', 'Matches', 'Rankings', 'Profile']) {
         await tester.tap(

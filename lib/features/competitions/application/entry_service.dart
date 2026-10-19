@@ -47,7 +47,6 @@ class EntryService {
       ..invalidate(eligibilityProvider(competitionId))
       ..invalidate(competitionProvider(competitionId))
       ..invalidate(competitionsProvider)
-      ..invalidate(closingSoonProvider)
       ..invalidate(nextMatchProvider);
   }
 }
