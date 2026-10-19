@@ -49,7 +49,7 @@ class _RankingsScreenState extends ConsumerState<RankingsScreen> {
         },
         onLoadMore: () => ref.read(provider.notifier).loadMore(),
         errorText: (e) => describeError(e, l),
-        separator: const SizedBox(height: TonitsSpace.sm),
+        separator: const Divider(height: 1),
         header: Padding(
           padding: const EdgeInsets.only(bottom: TonitsSpace.md),
           child: SegmentedTabs(

@@ -43,7 +43,7 @@ class RankNeighbourhoodSection extends ConsumerWidget {
           ),
           const SizedBox(height: TonitsSpace.sm),
           for (final (i, row) in rows.indexed) ...[
-            if (i > 0) const SizedBox(height: 6),
+            if (i > 0) const Divider(height: 1),
             RankingRow(player: row, isMe: row.playerId == player.id),
           ],
         ],

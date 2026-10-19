@@ -6,8 +6,9 @@ import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../data/ranked_player.dart';
 
-/// One ladder row: rank, player, rating and movement. The signed-in player's
-/// own row is tinted.
+/// One ladder row: rank, player, rating and movement, straight on the page
+/// (lists put hairlines between rows). The signed-in player's own row is
+/// tinted so they can spot it.
 class RankingRow extends StatelessWidget {
   const RankingRow({super.key, required this.player, this.isMe = false});
 
@@ -20,11 +21,13 @@ class RankingRow extends StatelessWidget {
     final flag = Country.byCode(player.countryCode)?.flag ?? '';
     return MergeSemantics(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: isMe ? p.soft : p.card,
-          borderRadius: BorderRadius.circular(TonitsRadius.control),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: isMe
+            ? BoxDecoration(
+                color: p.soft,
+                borderRadius: BorderRadius.circular(TonitsRadius.control),
+              )
+            : null,
         child: Row(
           children: [
             SizedBox(
