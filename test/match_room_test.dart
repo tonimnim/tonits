@@ -4,86 +4,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:tonits/app/shell/tonits_navigation_bar.dart';
-import 'package:tonits/features/evidence/application/evidence_providers.dart';
 import 'package:tonits/features/evidence/application/screenshot_uploader.dart';
-import 'package:tonits/features/matches/application/matches_providers.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
-
-Map<String, dynamic> bodyOf(http.Request request) =>
-    jsonDecode(request.body) as Map<String, dynamic>;
-
-/// Opens match m1 from the Matches tab, with [room] as its current state
-/// and [routes] answering the actions.
-Future<FakeApi> openRoom(
-  WidgetTester tester, {
-  required Map<String, dynamic> room,
-  Map<String, http.Response Function(http.Request)> routes = const {},
-}) async {
-  final api = FakeApi(
-    routes: {
-      '/v1/matches/m1': (_) => jsonResponse({'data': room}, 200),
-      ...routes,
-    },
-  );
-  await pumpTonits(
-    tester,
-    api: api,
-    refreshToken: 'stored',
-    overrides: [
-      // Long enough that no background read happens during a test.
-      matchRoomPollIntervalsProvider.overrideWithValue((
-        fast: const Duration(hours: 1),
-        slow: const Duration(hours: 1),
-      )),
-      evidencePollDelayProvider.overrideWithValue((_) => Duration.zero),
-      screenshotPickerProvider.overrideWithValue(() async => pngBytes),
-    ],
-  );
-  await tester.tap(
-    find.descendant(
-      of: find.byType(TonitsNavigationBar),
-      matching: find.text('Matches'),
-    ),
-  );
-  await tester.pumpAndSettle();
-  await tester.tap(find.text('vs Amina Otieno'));
-  await tester.pumpAndSettle();
-  return api;
-}
-
-Future<void> scrollToTop(WidgetTester tester) async {
-  await tester.drag(find.byType(Scrollable).first, const Offset(0, 2000));
-  await tester.pumpAndSettle();
-}
-
-/// A score stepper's button, by its tooltip.
-Finder stepper(String tooltip) =>
-    find.byWidgetPredicate((w) => w is Tooltip && w.message == tooltip);
-
-/// Taps [finder] [times] times, a frame apart as a player would.
-Future<void> tapTimes(WidgetTester tester, Finder finder, int times) async {
-  for (var i = 0; i < times; i++) {
-    await tester.tap(finder);
-    await tester.pump();
-  }
-}
-
-Future<void> tapText(WidgetTester tester, String text) async {
-  if (find.text(text).evaluate().isEmpty) {
-    await scrollPageTo(tester, find.text(text));
-  }
-  // Centred, clear of the app bar and the bottom bar.
-  await Scrollable.ensureVisible(
-    tester.element(find.text(text).last),
-    alignment: 0.5,
-  );
-  await tester.pumpAndSettle();
-  await tester.tap(find.text(text).last);
-  await tester.pumpAndSettle();
-}
+import 'support/match_room_helpers.dart';
 
 void main() {
   testWidgets('checking in sends one keyed request and shows the wait', (
@@ -373,16 +298,3 @@ void main() {
     );
   });
 }
-
-Map<String, dynamic> evidenceJson({required bool ready}) => {
-  'id': 'ev1',
-  'status': ready ? 'completed' : 'processing',
-  'mediaKind': 'image',
-  'mediaType': 'image/png',
-  'byteSize': 12,
-  'ready': ready,
-  'processingStatus': ready ? 'succeeded' : 'running',
-  'processingErrorCode': null,
-  'completedAt': null,
-  'processedAt': null,
-};

@@ -134,6 +134,22 @@ void main() {
           ),
         ),
         matchRoomJson(lifecycle: 'screenshot_required'),
+        matchRoomJson(lifecycle: 'report_required', bestOf: 5),
+        matchRoomJson(
+          lifecycle: 'screenshot_required',
+          bestOf: 5,
+          submitted: submittedJson(
+            3,
+            2,
+            games: [
+              gameJson(1, 0),
+              gameJson(0, 2),
+              gameJson(1, 1, pens: (5, 4)),
+              gameJson(0, 1),
+              gameJson(3, 2),
+            ],
+          ),
+        ),
         matchRoomJson(
           lifecycle: 'forfeited',
           outcome: 'won',

@@ -113,8 +113,10 @@ Map<String, dynamic> competitionJson({
   int maxEntries = 32,
   int prizeAmountMinor = 500000,
   String startsAt = '2027-01-14T16:00:00Z',
+  Map<String, dynamic> matchFormat = const {'bestOf': 1},
 }) => {
   'id': id,
+  'matchFormat': matchFormat,
   'slug': id,
   'name': name,
   'description': '',
@@ -374,6 +376,7 @@ Map<String, dynamic> matchRoomJson({
   String? completionReason,
   bool entryRemoved = false,
   String? opponentUserId = '8F3K-2P9Q-LM4R',
+  int bestOf = 1,
 }) {
   String inMinutes(int minutes) =>
       testNow.add(Duration(minutes: minutes)).toIso8601String();
@@ -419,7 +422,8 @@ Map<String, dynamic> matchRoomJson({
     'roundNumber': 1,
     'matchNumber': 1,
     'bracket': 'main',
-    'bestOf': 1,
+    'bestOf': bestOf,
+    'gamesToWin': bestOf ~/ 2 + 1,
     'drawAllowed': drawAllowed,
     'checkInOpensAt': inMinutes(-10),
     'resultDueAt': inMinutes(55),
@@ -439,10 +443,11 @@ Map<String, dynamic> matchRoomJson({
     'verificationPolicy': {
       'reportWindowSeconds': 600,
       'reminderBeforeDeadlineSeconds': 180,
-      'responseWindowSeconds': 600,
+      'responseWindowSeconds': bestOf > 1 ? 900 : 600,
       'screenshotEvidence': {
         'minItems': 1,
-        'maxItems': 1,
+        'maxItems': bestOf,
+        'perGame': bestOf > 1,
         'mediaTypes': ['image/jpeg', 'image/png'],
       },
     },
@@ -473,6 +478,7 @@ Map<String, dynamic> submittedJson(
   int away, {
   bool byMe = false,
   Map<String, dynamic>? penalties,
+  List<Map<String, dynamic>> games = const [],
 }) => {
   'id': 'sr1',
   'side': byMe ? 'home' : 'away',
@@ -480,7 +486,7 @@ Map<String, dynamic> submittedJson(
   'homeScore': home,
   'awayScore': away,
   'tiebreak': penalties,
-  'games': <Object>[],
+  'games': games,
   'submittedAt': testNow.subtract(const Duration(minutes: 2)).toIso8601String(),
 };
 
@@ -496,3 +502,12 @@ final pngBytes = Uint8List.fromList([
 
 /// The English text, for tests of code that takes [AppLocalizations].
 final en = lookupAppLocalizations(const Locale('en'));
+
+/// One game of a series, home–away, with penalties for a level knockout
+/// game.
+Map<String, dynamic> gameJson(int home, int away, {(int, int)? pens}) => {
+  'homeScore': home,
+  'awayScore': away,
+  if (pens case (final h, final a))
+    'tiebreak': {'type': 'penalties', 'homeScore': h, 'awayScore': a},
+};

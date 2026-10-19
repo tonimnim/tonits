@@ -392,6 +392,108 @@ void main() {
       });
     }
 
+    for (final (name, room) in [
+      ('series-play', matchRoomJson(lifecycle: 'report_required', bestOf: 3)),
+      (
+        'series-confirm',
+        matchRoomJson(
+          lifecycle: 'confirmation_required',
+          bestOf: 3,
+          submitted: submittedJson(
+            1,
+            2,
+            games: [
+              gameJson(2, 1),
+              gameJson(1, 1, pens: (3, 4)),
+              gameJson(0, 2),
+            ],
+          ),
+        ),
+      ),
+      (
+        'series-screenshots',
+        matchRoomJson(
+          lifecycle: 'screenshot_required',
+          bestOf: 3,
+          submitted: submittedJson(
+            1,
+            2,
+            games: [
+              gameJson(2, 1),
+              gameJson(1, 1, pens: (3, 4)),
+              gameJson(0, 2),
+            ],
+          ),
+        ),
+      ),
+    ]) {
+      testWidgets('match room, $name ($suffix)', skip: skip, (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          refreshToken: 'stored',
+          height: 1400,
+          api: FakeApi(
+            routes: {
+              '/v1/matches/m1': (_) => jsonResponse({'data': room}, 200),
+            },
+          ),
+        );
+        await _openTab(tester, 'Matches');
+        await tester.tap(find.text('vs Amina Otieno'));
+        await _shoot(tester, 'match-$name-$suffix');
+        if (name == 'series-play') {
+          await tester.tap(find.text('Report the score'));
+          await tester.pumpAndSettle();
+          Finder plus(String who, int i) => find
+              .byWidgetPredicate(
+                (w) => w is Tooltip && w.message == 'One more for $who',
+              )
+              .at(i);
+          Future<void> tapN(Finder f, int n) async {
+            for (var i = 0; i < n; i++) {
+              await tester.tap(f);
+              await tester.pump();
+            }
+          }
+
+          await tapN(plus('You', 0), 2);
+          await tapN(plus('Amina Otieno', 0), 1);
+          await tester.tap(find.text('Add game 2'));
+          await tester.pumpAndSettle();
+          await tapN(plus('You', 1), 1);
+          await tapN(plus('Amina Otieno', 1), 1);
+          await _shoot(tester, 'match-series-report-$suffix');
+        }
+      });
+    }
+
+    testWidgets('competition, series format ($suffix)', skip: skip, (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        height: 1400,
+        api: FakeApi(
+          routes: {
+            '/v1/competitions/c1': (_) => jsonResponse({
+              'data': competitionJson(
+                matchFormat: {
+                  'bestOf': 1,
+                  'rounds': {'semifinal': 3, 'final': 5},
+                },
+              ),
+            }, 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Compete');
+      await tester.tap(find.text('Nairobi Weekend Cup'));
+      await _shoot(tester, 'competition-series-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,
