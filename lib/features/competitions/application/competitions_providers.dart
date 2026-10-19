@@ -28,11 +28,11 @@ final closingSoonProvider = FutureProvider.autoDispose<List<Competition>>((
   );
 });
 
-/// The filters on the Competitions tab.
+/// The filters on the Competitions tab. There is no "live" filter: the app
+/// can't know that matches are being played right now.
 enum CompetitionFilter {
   open('Open', CompetitionStatus.registrationOpen),
   upcoming('Upcoming', CompetitionStatus.published),
-  live('Live', CompetitionStatus.running),
   finished('Finished', CompetitionStatus.completed);
 
   const CompetitionFilter(this.label, this.status);

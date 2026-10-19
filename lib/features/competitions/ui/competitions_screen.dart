@@ -47,7 +47,6 @@ class _CompetitionsScreenState extends ConsumerState<CompetitionsScreen> {
           title: switch (_filter) {
             CompetitionFilter.open => 'Nothing open right now',
             CompetitionFilter.upcoming => 'Nothing announced yet',
-            CompetitionFilter.live => 'Nothing live right now',
             CompetitionFilter.finished => 'No finished competitions',
           },
           message: _filter == CompetitionFilter.open

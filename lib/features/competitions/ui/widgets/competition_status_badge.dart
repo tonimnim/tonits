@@ -25,7 +25,7 @@ class CompetitionStatusBadge extends StatelessWidget {
       CompetitionStatus.registrationOpen => ('Open', StatusTone.good),
       CompetitionStatus.published => ('Upcoming', StatusTone.info),
       CompetitionStatus.checkIn => ('Check-in', StatusTone.warn),
-      CompetitionStatus.running => ('Live', StatusTone.info),
+      CompetitionStatus.running => ('In progress', StatusTone.info),
       CompetitionStatus.completed => ('Finished', StatusTone.muted),
       CompetitionStatus.cancelled => ('Cancelled', StatusTone.bad),
       CompetitionStatus.unknown => ('—', StatusTone.muted),
