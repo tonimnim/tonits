@@ -5,28 +5,16 @@ import '../../../../core/widgets/widgets.dart';
 import '../../data/match_room.dart';
 import '../../data/match_summary.dart';
 
-/// The room's tinted top: the round, and the two players
-/// face to face, the player always on the left, with the score between
-/// them once there is one. Leaves room at the bottom for the sheet laid
-/// over it.
+/// The room's tinted top: the round, and the two players face to face,
+/// the player always on the left, with the score between them once there
+/// is one.
 class RoomHero extends StatelessWidget {
-  const RoomHero({super.key, required this.room, required this.overlap});
+  const RoomHero({super.key, required this.room});
 
   final MatchRoom room;
 
-  /// How far the sheet below reaches up into the hero.
-  final double overlap;
-
-  /// The hero's wash: a deeper tint at the top fading to the soft tint.
-  static Gradient wash(TonitsPalette p) => LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Color.lerp(p.soft, p.primary, 0.16)!, p.soft],
-  );
-
   @override
   Widget build(BuildContext context) {
-    final p = context.palette;
     final match = room.summary;
     final confirmed = room.result?.score;
     final reported = room.verification.submitted?.score;
@@ -37,63 +25,53 @@ class RoomHero extends StatelessWidget {
       _ => false,
     };
 
-    return Container(
-      decoration: BoxDecoration(gradient: wash(p)),
-      padding: EdgeInsets.fromLTRB(
-        TonitsSpace.md,
-        // The app bar above carries the competition's name.
-        MediaQuery.paddingOf(context).top + kToolbarHeight - 20,
-        TonitsSpace.md,
-        TonitsSpace.xl + overlap,
-      ),
-      child: Column(
-        children: [
-          Text(
-            match.roundName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.4,
+    return Column(
+      children: [
+        Text(
+          match.roundName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.4,
+          ),
+        ),
+        const SizedBox(height: TonitsSpace.lg),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _Side(
+                player: match.me,
+                caption: 'You',
+                showCheckIn: preMatch,
+              ),
             ),
-          ),
-          const SizedBox(height: TonitsSpace.lg),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: _Side(
-                  player: match.me,
-                  caption: 'You',
-                  showCheckIn: preMatch,
+            SizedBox(
+              width: 96,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 18),
+                child: _Centre(
+                  score: confirmed ?? reported,
+                  home: match.isHome,
+                  label: confirmed != null
+                      ? 'Full time'
+                      : reported != null
+                      ? 'Reported'
+                      : null,
                 ),
               ),
-              SizedBox(
-                width: 96,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 18),
-                  child: _Centre(
-                    score: confirmed ?? reported,
-                    home: match.isHome,
-                    label: confirmed != null
-                        ? 'Full time'
-                        : reported != null
-                        ? 'Reported'
-                        : null,
-                  ),
-                ),
+            ),
+            Expanded(
+              child: _Side(
+                player: match.opponent,
+                caption: match.opponent == null ? 'To be decided' : null,
+                showCheckIn: preMatch,
               ),
-              Expanded(
-                child: _Side(
-                  player: match.opponent,
-                  caption: match.opponent == null ? 'To be decided' : null,
-                  showCheckIn: preMatch,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

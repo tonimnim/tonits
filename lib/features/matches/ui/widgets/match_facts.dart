@@ -22,48 +22,37 @@ class MatchFacts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: _FactTile(
-                  icon: Icons.sports_soccer_outlined,
-                  label: 'Format',
-                  value: room.bestOf == 1 ? '1 game' : 'Best of ${room.bestOf}',
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _FactTile(
-                  icon: Icons.schedule,
-                  label: kickOff == null
-                      ? 'Kick-off'
-                      : DateFormat('d MMM').format(kickOff),
-                  value: kickOff == null
-                      ? 'Not set'
-                      : DateFormat.Hm().format(kickOff),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _FactTile(
-                  icon: Icons.tag,
-                  label: 'Code',
-                  value: room.code.isEmpty ? '—' : room.code,
-                  mono: true,
-                  onTap: room.code.isEmpty
-                      ? null
-                      : () {
-                          Clipboard.setData(ClipboardData(text: room.code));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Match code copied')),
-                          );
-                        },
-                ),
-              ),
-            ],
-          ),
+        FactRow(
+          children: [
+            FactTile(
+              icon: Icons.sports_soccer_outlined,
+              label: 'Format',
+              value: room.bestOf == 1 ? '1 game' : 'Best of ${room.bestOf}',
+            ),
+            FactTile(
+              icon: Icons.schedule,
+              label: kickOff == null
+                  ? 'Kick-off'
+                  : DateFormat('d MMM').format(kickOff),
+              value: kickOff == null
+                  ? 'Not set'
+                  : DateFormat.Hm().format(kickOff),
+            ),
+            FactTile(
+              icon: Icons.tag,
+              label: 'Code',
+              value: room.code.isEmpty ? '—' : room.code,
+              mono: true,
+              onTap: room.code.isEmpty
+                  ? null
+                  : () {
+                      Clipboard.setData(ClipboardData(text: room.code));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Match code copied')),
+                      );
+                    },
+            ),
+          ],
         ),
         const SizedBox(height: 10),
         Panel(
@@ -72,7 +61,7 @@ class MatchFacts extends StatelessWidget {
           onTap: () => context.go(Routes.competition(match.competitionId)),
           child: Row(
             children: [
-              _IconDot(icon: Icons.emoji_events_outlined),
+              const IconDot(icon: Icons.emoji_events_outlined),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -96,81 +85,6 @@ class MatchFacts extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _FactTile extends StatelessWidget {
-  const _FactTile({
-    required this.icon,
-    required this.label,
-    required this.value,
-    this.mono = false,
-    this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final bool mono;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700);
-    return Semantics(
-      button: onTap != null,
-      label: '$label: $value',
-      excludeSemantics: true,
-      child: Panel(
-        radius: TonitsRadius.tile,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-        onTap: onTap,
-        child: Column(
-          children: [
-            _IconDot(icon: icon),
-            const SizedBox(height: 12),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, color: p.mutedForeground),
-            ),
-            const SizedBox(height: 2),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                value,
-                maxLines: 1,
-                style: mono
-                    ? monoFont
-                          .merge(valueStyle)
-                          .copyWith(fontWeight: FontWeight.w600)
-                    : valueStyle,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// An icon in a soft circle.
-class _IconDot extends StatelessWidget {
-  const _IconDot({required this.icon});
-
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
-      child: Icon(icon, size: 18, color: p.onSoft),
     );
   }
 }

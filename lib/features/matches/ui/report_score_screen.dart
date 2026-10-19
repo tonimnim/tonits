@@ -179,7 +179,6 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
             ],
             PrimaryButton(
               label: 'Send score',
-              pill: true,
               busy: _busy,
               onPressed: _declared ? () => _submit(room) : null,
             ),

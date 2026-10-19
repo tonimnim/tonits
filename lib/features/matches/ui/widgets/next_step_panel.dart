@@ -166,7 +166,6 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
-          pill: true,
           label: 'Check in',
           busy: _busy,
           onPressed: () => _run(_controller.checkIn),
@@ -177,7 +176,6 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
-          pill: true,
           label: 'Report the score',
           onPressed: () => context.push(Routes.reportScore(room.id)),
         ),
@@ -187,7 +185,6 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
-          pill: true,
           label: "Yes, that's right",
           busy: _busy,
           onPressed: () => _run(() => _controller.answer(confirm: true)),
@@ -195,7 +192,6 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
         if (room.can(MatchAction.rejectResult)) ...[
           const SizedBox(height: TonitsSpace.sm),
           SecondaryButton(
-            pill: true,
             label: "No, it's wrong",
             onPressed: _busy ? null : _reject,
           ),
@@ -206,7 +202,6 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
-          pill: true,
           label: 'Choose screenshot',
           busy: _busy,
           onPressed: _sendScreenshot,
