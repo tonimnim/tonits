@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme.dart';
+import '../../../../core/widgets/widgets.dart';
 
-/// One side's goals: a name and a number with minus and plus buttons.
+/// One side's goals: who, and a big number between round minus and plus
+/// buttons.
 class ScoreStepper extends StatelessWidget {
   const ScoreStepper({
     super.key,
     required this.label,
     required this.value,
     required this.onChanged,
-    this.caption,
+    this.avatarName,
     this.max = 99,
   });
 
   final String label;
-  final String? caption;
+
+  /// Whose initials to show beside the label.
+  final String? avatarName;
   final int value;
   final int max;
   final ValueChanged<int> onChanged;
@@ -23,85 +27,52 @@ class ScoreStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
+          InitialsAvatar(name: avatarName ?? label, size: 40),
+          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                if (caption != null)
-                  Text(
-                    caption!,
-                    style: TextStyle(fontSize: 13, color: p.mutedForeground),
-                  ),
-              ],
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
-          _StepButton(
+          RoundIconButton(
             icon: Icons.remove,
             tooltip: 'One less for $label',
+            size: 44,
             onPressed: value > 0 ? () => onChanged(value - 1) : null,
           ),
           SizedBox(
-            width: 52,
+            width: 56,
             child: Semantics(
               label: '$label: $value',
               excludeSemantics: true,
               child: Text(
                 '$value',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 28,
+                style: TextStyle(
+                  fontSize: 32,
                   fontWeight: FontWeight.w700,
-                  fontFeatures: [FontFeature.tabularFigures()],
+                  letterSpacing: -0.5,
+                  color: p.foreground,
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ),
           ),
-          _StepButton(
+          RoundIconButton(
             icon: Icons.add,
             tooltip: 'One more for $label',
+            size: 44,
+            background: p.soft,
+            foreground: p.onSoft,
             onPressed: value < max ? () => onChanged(value + 1) : null,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StepButton extends StatelessWidget {
-  const _StepButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onPressed,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    return IconButton(
-      tooltip: tooltip,
-      onPressed: onPressed,
-      icon: Icon(icon, size: 20),
-      style: IconButton.styleFrom(
-        fixedSize: const Size(44, 44),
-        foregroundColor: p.foreground,
-        disabledForegroundColor: p.mutedForeground.withValues(alpha: 0.5),
-        side: BorderSide(color: p.input),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(TonitsRadius.control),
-        ),
       ),
     );
   }

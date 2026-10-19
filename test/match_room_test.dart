@@ -75,7 +75,11 @@ Future<void> tapText(WidgetTester tester, String text) async {
   if (find.text(text).evaluate().isEmpty) {
     await scrollPageTo(tester, find.text(text));
   }
-  await tester.ensureVisible(find.text(text).last);
+  // Centred, clear of the app bar and the bottom bar.
+  await Scrollable.ensureVisible(
+    tester.element(find.text(text).last),
+    alignment: 0.5,
+  );
   await tester.pumpAndSettle();
   await tester.tap(find.text(text).last);
   await tester.pumpAndSettle();

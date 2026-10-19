@@ -23,91 +23,118 @@ class FriendMatchCard extends StatelessWidget {
     final p = context.palette;
     final account = opponent.gameAccount;
 
-    void copy(String what, String value) {
-      Clipboard.setData(ClipboardData(text: value));
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('$what copied')));
-    }
-
-    final copyIcon = Icon(
-      Icons.copy_rounded,
-      size: 18,
-      color: p.mutedForeground,
-    );
-    final mono = monoFont.copyWith(color: p.subtleForeground, fontSize: 14);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SettingsGroup(
-          title: 'Find ${opponent.displayName} in eFootball',
-          rows: account == null
-              ? [
-                  const SettingsRow(
-                    icon: Icons.sports_esports_outlined,
-                    label: 'No eFootball account linked',
+    return Panel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Find ${opponent.displayName}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.3,
                   ),
-                ]
-              : [
-                  if (account.userId case final id?)
-                    SettingsRow(
-                      icon: Icons.tag,
-                      label: 'User ID',
-                      value: id,
-                      valueStyle: mono,
-                      trailing: copyIcon,
-                      onTap: () => copy('User ID', id),
-                    ),
-                  SettingsRow(
-                    icon: Icons.person_search_outlined,
-                    label: 'In-game name',
-                    value: account.inGameName,
-                    trailing: copyIcon,
-                    onTap: () => copy('In-game name', account.inGameName),
-                  ),
-                  SettingsRow(
-                    icon: account.platform == 'ios'
-                        ? Icons.phone_iphone
-                        : Icons.phone_android,
-                    label: 'Plays on',
-                    value: account.platform == 'ios' ? 'iPhone' : 'Android',
-                  ),
-                ],
-        ),
-        if (account != null && account.userId == null) ...[
-          const SizedBox(height: TonitsSpace.sm),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              "They haven't added their User ID, so search for their "
-              'in-game name.',
-              style: TextStyle(fontSize: 13, color: p.mutedForeground),
-            ),
-          ),
-        ],
-        if (instructions.isNotEmpty) ...[
-          const SizedBox(height: TonitsSpace.lg),
-          Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: const SectionLabel('Setting up the Friend Match'),
-          ),
-          const SizedBox(height: TonitsSpace.sm),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(TonitsSpace.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (final (i, step) in instructions.indexed) ...[
-                    if (i > 0) const SizedBox(height: TonitsSpace.md),
-                    _Instruction(number: i + 1, step: step),
-                  ],
-                ],
+                ),
               ),
+              if (account != null) ...[
+                const SizedBox(width: 8),
+                Pill(
+                  account.platform == 'ios' ? 'iPhone' : 'Android',
+                  icon: account.platform == 'ios'
+                      ? Icons.phone_iphone
+                      : Icons.phone_android,
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            account == null
+                ? "They haven't linked an eFootball account yet."
+                : account.userId == null
+                ? "They haven't added their User ID, so search for their "
+                      'in-game name.'
+                : 'Add them as a friend in eFootball with their User ID.',
+            style: TextStyle(fontSize: 14, color: p.subtleForeground),
+          ),
+          if (account != null) ...[
+            const SizedBox(height: 16),
+            if (account.userId case final id?) ...[
+              _CopyField(label: 'User ID', value: id, mono: true),
+              const SizedBox(height: 10),
+            ],
+            _CopyField(label: 'In-game name', value: account.inGameName),
+          ],
+          if (instructions.isNotEmpty) ...[
+            const SizedBox(height: 22),
+            for (final (i, step) in instructions.indexed) ...[
+              if (i > 0) const SizedBox(height: 16),
+              _Instruction(number: i + 1, step: step),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// A value on a soft field with a round copy button.
+class _CopyField extends StatelessWidget {
+  const _CopyField({
+    required this.label,
+    required this.value,
+    this.mono = false,
+  });
+
+  final String label;
+  final String value;
+  final bool mono;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
+      decoration: BoxDecoration(
+        color: p.muted,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(fontSize: 12, color: p.mutedForeground),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: mono ? monoFont.merge(valueStyle) : valueStyle,
+                ),
+              ],
             ),
           ),
+          RoundIconButton(
+            icon: Icons.copy_rounded,
+            tooltip: 'Copy $label',
+            background: p.card,
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('$label copied')));
+            },
+          ),
         ],
-      ],
+      ),
     );
   }
 }
@@ -125,20 +152,20 @@ class _Instruction extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 24,
-          height: 24,
+          width: 28,
+          height: 28,
           alignment: Alignment.center,
           decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
           child: Text(
             '$number',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: p.onSoft,
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +177,11 @@ class _Instruction extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 step.detail,
-                style: TextStyle(fontSize: 13, color: p.subtleForeground),
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.4,
+                  color: p.subtleForeground,
+                ),
               ),
             ],
           ),

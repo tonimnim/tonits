@@ -83,79 +83,82 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
     final opponent = room.summary.opponent?.displayName ?? 'Opponent';
     final penalties = _needsPenalties(room);
 
+    final me = room.summary.me?.displayName ?? 'You';
+
+    Widget scorePanel({
+      required String title,
+      required int mine,
+      required int theirs,
+      required ValueChanged<int> onMine,
+      required ValueChanged<int> onTheirs,
+    }) => Panel(
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: p.mutedForeground,
+            ),
+          ),
+          ScoreStepper(
+            label: 'You',
+            avatarName: me,
+            value: mine,
+            onChanged: onMine,
+          ),
+          const Divider(height: 1),
+          ScoreStepper(label: opponent, value: theirs, onChanged: onTheirs),
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text('Report the score')),
       body: SafeArea(
         top: false,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
-            TonitsSpace.lg,
+            TonitsSpace.md,
             TonitsSpace.sm,
-            TonitsSpace.lg,
+            TonitsSpace.md,
             TonitsSpace.xl,
           ),
           children: [
-            Text(
-              'Enter the final score from the Full Time screen. $opponent '
-              'confirms it, and if they don\'t answer within '
-              '${room.windows.confirm.inMinutes} minutes, it stands.',
-              style: TextStyle(color: p.subtleForeground),
-            ),
-            const SizedBox(height: TonitsSpace.lg),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: TonitsSpace.md,
-                  vertical: 6,
-                ),
-                child: Column(
-                  children: [
-                    ScoreStepper(
-                      label: 'You',
-                      value: _mine,
-                      onChanged: (v) => setState(() => _mine = v),
-                    ),
-                    const Divider(),
-                    ScoreStepper(
-                      label: opponent,
-                      value: _theirs,
-                      onChanged: (v) => setState(() => _theirs = v),
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                'Enter the final score from the Full Time screen. $opponent '
+                'confirms it, and if they don\'t answer within '
+                '${room.windows.confirm.inMinutes} minutes, it stands.',
+                style: TextStyle(
+                  fontSize: 15,
+                  height: 1.45,
+                  color: p.subtleForeground,
                 ),
               ),
+            ),
+            const SizedBox(height: 20),
+            scorePanel(
+              title: 'Full time',
+              mine: _mine,
+              theirs: _theirs,
+              onMine: (v) => setState(() => _mine = v),
+              onTheirs: (v) => setState(() => _theirs = v),
             ),
             if (penalties) ...[
-              const SizedBox(height: TonitsSpace.lg),
-              const Padding(
-                padding: EdgeInsets.only(left: 4),
-                child: SectionLabel('Penalty shootout'),
+              const SizedBox(height: TonitsSpace.md),
+              scorePanel(
+                title: 'Penalty shootout',
+                mine: _penMine,
+                theirs: _penTheirs,
+                onMine: (v) => setState(() => _penMine = v),
+                onTheirs: (v) => setState(() => _penTheirs = v),
               ),
-              const SizedBox(height: TonitsSpace.sm),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: TonitsSpace.md,
-                    vertical: 6,
-                  ),
-                  child: Column(
-                    children: [
-                      ScoreStepper(
-                        label: 'You',
-                        value: _penMine,
-                        onChanged: (v) => setState(() => _penMine = v),
-                      ),
-                      const Divider(),
-                      ScoreStepper(
-                        label: opponent,
-                        value: _penTheirs,
-                        onChanged: (v) => setState(() => _penTheirs = v),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: TonitsSpace.sm),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Text(
@@ -164,7 +167,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
                 ),
               ),
             ],
-            const SizedBox(height: TonitsSpace.lg),
+            const SizedBox(height: TonitsSpace.md),
             _Declaration(
               value: _declared,
               onChanged: (v) => setState(() => _declared = v),
@@ -176,6 +179,7 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
             ],
             PrimaryButton(
               label: 'Send score',
+              pill: true,
               busy: _busy,
               onPressed: _declared ? () => _submit(room) : null,
             ),
@@ -197,28 +201,26 @@ class _Declaration extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return MergeSemantics(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+      child: Panel(
+        radius: TonitsRadius.tile,
+        padding: const EdgeInsets.fromLTRB(8, 8, 16, 12),
         onTap: () => onChanged(!value),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Checkbox(value: value, onChanged: (v) => onChanged(v ?? false)),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(
-                    'This is the real score. Reporting a false score can get '
-                    'me removed from the competition.',
-                    style: TextStyle(color: p.subtleForeground),
-                  ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Checkbox(value: value, onChanged: (v) => onChanged(v ?? false)),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Text(
+                  'This is the real score. Reporting a false score can get '
+                  'me removed from the competition.',
+                  style: TextStyle(height: 1.4, color: p.subtleForeground),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -145,14 +145,17 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.text('vs Amina Otieno'));
         await tester.pumpAndSettle();
-        await scrollPageTo(tester, find.text('Match code'));
+        await scrollPageTo(tester, find.text('Match info'));
         if (room['lifecycle'] == 'report_required') {
           await tester.drag(
             find.byType(Scrollable).first,
             const Offset(0, 2000),
           );
           await tester.pumpAndSettle();
-          await tester.ensureVisible(find.text('Report the score'));
+          await Scrollable.ensureVisible(
+            tester.element(find.text('Report the score')),
+            alignment: 0.5,
+          );
           await tester.pumpAndSettle();
           await tester.tap(find.text('Report the score'));
           await tester.pumpAndSettle();

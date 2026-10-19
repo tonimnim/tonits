@@ -10,7 +10,7 @@ import '../../application/match_room_controller.dart';
 import '../../application/screenshot_picker.dart';
 import '../../data/match_room.dart';
 import '../next_step.dart';
-import 'deadline_line.dart';
+import 'deadline_pill.dart';
 
 /// The room's main panel: where the match stands, what's next and by when,
 /// and the action the server allows now.
@@ -91,81 +91,82 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
   Widget build(BuildContext context) {
     final p = context.palette;
     final step = NextStep.of(room);
-    final (icon, color) = switch (step.tone) {
-      StepTone.action => (Icons.arrow_forward_rounded, p.primary),
-      StepTone.waiting => (Icons.hourglass_top_rounded, p.info.$1),
-      StepTone.won => (Icons.emoji_events_outlined, p.good.$1),
-      StepTone.neutral => (Icons.flag_outlined, p.subtleForeground),
-      StepTone.bad => (Icons.block_rounded, p.destructive),
+    final (label, color) = switch (step.tone) {
+      StepTone.action => ('Your move', p.primary),
+      StepTone.waiting => ('Waiting', p.info.$1),
+      StepTone.won => ('Final', p.good.$1),
+      StepTone.neutral => ('Final', p.subtleForeground),
+      StepTone.bad => ('Final', p.destructive),
     };
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(TonitsSpace.md),
-        child: Semantics(
-          liveRegion: true,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, size: 20, color: color),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      step.title,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
+    return Panel(
+      child: Semantics(
+        liveRegion: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Pill(label, color: color),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              step.title,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.4,
+                height: 1.2,
               ),
-              const SizedBox(height: 6),
-              Text(step.message, style: TextStyle(color: p.subtleForeground)),
-              if (step.deadline != null) ...[
-                const SizedBox(height: TonitsSpace.md),
-                DeadlineLine(deadline: step.deadline!),
-                if (step.deadlineNote != null) ...[
-                  const SizedBox(height: 4),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 22),
-                    child: Text(
-                      step.deadlineNote!,
-                      style: TextStyle(fontSize: 13, color: p.mutedForeground),
-                    ),
-                  ),
-                ],
-              ],
-              ..._actions(),
-              if (_stage != null) ...[
-                const SizedBox(height: TonitsSpace.sm),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              step.message,
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.45,
+                color: p.subtleForeground,
+              ),
+            ),
+            if (step.deadline != null) ...[
+              const SizedBox(height: 18),
+              DeadlinePill(deadline: step.deadline!),
+              if (step.deadlineNote != null) ...[
+                const SizedBox(height: 10),
                 Text(
-                  _stage == UploadStage.uploading
-                      ? 'Uploading your screenshot…'
-                      : 'Checking your screenshot…',
-                  textAlign: TextAlign.center,
+                  step.deadlineNote!,
                   style: TextStyle(fontSize: 13, color: p.mutedForeground),
                 ),
               ],
-              if (_error != null) ...[
-                const SizedBox(height: TonitsSpace.md),
-                Notice(_error!),
-              ],
             ],
-          ),
+            ..._actions(),
+            if (_stage != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                _stage == UploadStage.uploading
+                    ? 'Uploading your screenshot…'
+                    : 'Checking your screenshot…',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, color: p.mutedForeground),
+              ),
+            ],
+            if (_error != null) ...[
+              const SizedBox(height: TonitsSpace.md),
+              Notice(_error!),
+            ],
+          ],
         ),
       ),
     );
   }
 
   List<Widget> _actions() {
-    const gap = SizedBox(height: TonitsSpace.lg);
+    const gap = SizedBox(height: 22);
     if (room.can(MatchAction.checkIn)) {
       return [
         gap,
         PrimaryButton(
+          pill: true,
           label: 'Check in',
           busy: _busy,
           onPressed: () => _run(_controller.checkIn),
@@ -176,6 +177,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
+          pill: true,
           label: 'Report the score',
           onPressed: () => context.push(Routes.reportScore(room.id)),
         ),
@@ -185,6 +187,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
+          pill: true,
           label: "Yes, that's right",
           busy: _busy,
           onPressed: () => _run(() => _controller.answer(confirm: true)),
@@ -192,6 +195,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
         if (room.can(MatchAction.rejectResult)) ...[
           const SizedBox(height: TonitsSpace.sm),
           SecondaryButton(
+            pill: true,
             label: "No, it's wrong",
             onPressed: _busy ? null : _reject,
           ),
@@ -202,6 +206,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
       return [
         gap,
         PrimaryButton(
+          pill: true,
           label: 'Choose screenshot',
           busy: _busy,
           onPressed: _sendScreenshot,
