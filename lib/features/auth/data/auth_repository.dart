@@ -53,6 +53,17 @@ class AuthRepository {
     return Player.fromJson(json!);
   }
 
+  /// Whether [username] is free. The player's own current handle counts as
+  /// available. Submitting can still lose a race, so `username_taken`
+  /// stays possible.
+  Future<bool> usernameAvailable(String username) async {
+    final json = await _api.get(
+      '/v1/usernames/${Uri.encodeComponent(username)}/availability',
+      auth: true,
+    );
+    return json!['available'] as bool;
+  }
+
   Future<List<LegalDocument>> currentLegalDocuments() async {
     final json = await _api.get('/v1/legal/documents/current');
     return (json!['data'] as List)

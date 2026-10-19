@@ -14,6 +14,7 @@ import '../../auth/data/models.dart';
 import '../../auth/ui/validators.dart';
 import '../../auth/ui/widgets/auth_fields.dart';
 import 'widgets/onboarding_frame.dart';
+import 'widgets/username_field.dart';
 
 /// After a first Google or Apple sign-in: the username, the Konami ID, the
 /// country, then the phone, one step at a time, sent together at the end.
@@ -120,21 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       _Step.username => (
         'Pick your username',
         "It's how players see you in matches and on the ladder.",
-        LabeledField(
-          label: 'Username',
-          child: TextFormField(
-            controller: _username,
-            autofocus: true,
-            autocorrect: false,
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (_) => _next(),
-            validator: AuthValidators.username,
-            decoration: const InputDecoration(
-              hintText: 'striker.9',
-              helperText: 'Letters, numbers, _ and .',
-            ),
-          ),
-        ),
+        UsernameField(controller: _username, onSubmitted: _next),
       ),
       _Step.konamiId => (
         'Link eFootball',

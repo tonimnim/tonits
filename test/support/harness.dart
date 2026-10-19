@@ -35,6 +35,10 @@ class FakeApi {
     '/v1/auth/google': (_) => jsonResponse(sessionJson(), 200),
     '/v1/auth/apple': (_) => jsonResponse(sessionJson(), 200),
     '/v1/me/onboarding': (_) => jsonResponse(playerJson(), 200),
+    '/v1/usernames/striker.9/availability': (_) =>
+        jsonResponse({'username': 'striker.9', 'available': true}, 200),
+    '/v1/usernames/$newPlayerHandle/availability': (_) =>
+        jsonResponse({'username': newPlayerHandle, 'available': true}, 200),
     '/v1/auth/logout': (_) => http.Response('', 204),
     '/v1/me': (_) => jsonResponse(playerJson(), 200),
     '/v1/legal/documents/current': (_) => jsonResponse({

@@ -119,4 +119,28 @@ void main() {
     );
     expect(jsonDecode(sent.body), isNot(contains('username')));
   });
+
+  testWidgets('a taken username shows before continuing', (tester) async {
+    final api = FakeApi(
+      routes: {
+        '/v1/auth/google': (_) =>
+            jsonResponse(sessionJson(onboarded: false), 201),
+        '/v1/usernames/amina.o/availability': (_) => jsonResponse({
+          'username': 'amina.o',
+          'available': false,
+          'reason': 'taken',
+        }, 200),
+      },
+    );
+    await pumpTonits(tester, api: api);
+    await tapText(tester, 'Continue with Google');
+    expect(find.text('Available'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), 'amina.o');
+    await tester.pumpAndSettle();
+
+    expect(find.text('That username is taken. Try another.'), findsOneWidget);
+    await tapText(tester, 'Continue');
+    expect(find.text('Pick your username'), findsOneWidget);
+  });
 }
