@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/api/error_text.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_controller.dart';
@@ -20,7 +19,7 @@ class EmailScreen extends ConsumerStatefulWidget {
   ConsumerState<EmailScreen> createState() => _EmailScreenState();
 }
 
-class _EmailScreenState extends ConsumerState<EmailScreen> {
+class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
   final _emailForm = GlobalKey<FormState>();
   final _codeForm = GlobalKey<FormState>();
   final _email = TextEditingController();
@@ -31,8 +30,6 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
 
   /// How long the last code lasts, when the API says.
   Duration? _expiresIn;
-  bool _busy = false;
-  String? _error;
 
   @override
   void dispose() {
@@ -49,25 +46,10 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
     return _emailPattern.hasMatch(v) ? null : 'Enter a valid email address';
   }
 
-  Future<void> _run(Future<void> Function() action) async {
-    if (_busy) return;
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    try {
-      await action();
-    } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
   void _send() {
     if (!_emailForm.currentState!.validate()) return;
     final email = _email.text.trim();
-    _run(() async {
+    run(() async {
       final expiresIn = await ref
           .read(accountServiceProvider)
           .requestEmailCode(email);
@@ -80,19 +62,18 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
     });
   }
 
-  void _resend() => _run(() async {
+  void _resend() => run(() async {
     final expiresIn = await ref
         .read(accountServiceProvider)
         .requestEmailCode(_sentTo!);
     if (!mounted) return;
     setState(() => _expiresIn = expiresIn);
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('New code sent to $_sentTo')));
+    showMessage(context, 'New code sent to $_sentTo');
   });
 
   void _verify() {
     if (!_codeForm.currentState!.validate()) return;
-    _run(() async {
+    run(() async {
       await ref.read(accountServiceProvider).verifyEmail(_code.text.trim());
       if (mounted) popWithMessage(context, 'Email verified');
     });
@@ -101,7 +82,7 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
   void _changeAddress() => setState(() {
     _sentTo = null;
     _code.clear();
-    _error = null;
+    error = null;
   });
 
   @override
@@ -135,8 +116,8 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
           ),
         ),
         const SizedBox(height: TonitsSpace.lg),
-        FormError(_error),
-        PrimaryButton(label: 'Send code', busy: _busy, onPressed: _send),
+        FormError(error),
+        PrimaryButton(label: 'Send code', busy: busy, onPressed: _send),
       ],
     );
   }
@@ -174,19 +155,19 @@ class _EmailScreenState extends ConsumerState<EmailScreen> {
           ),
         ),
         const SizedBox(height: TonitsSpace.lg),
-        FormError(_error),
-        PrimaryButton(label: 'Verify', busy: _busy, onPressed: _verify),
+        FormError(error),
+        PrimaryButton(label: 'Verify', busy: busy, onPressed: _verify),
         const SizedBox(height: TonitsSpace.md),
         Wrap(
           alignment: WrapAlignment.center,
           spacing: TonitsSpace.sm,
           children: [
             TextButton(
-              onPressed: _busy ? null : _resend,
+              onPressed: busy ? null : _resend,
               child: const Text('Send a new code'),
             ),
             TextButton(
-              onPressed: _busy ? null : _changeAddress,
+              onPressed: busy ? null : _changeAddress,
               child: const Text('Use another email'),
             ),
           ],

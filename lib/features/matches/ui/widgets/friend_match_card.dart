@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -127,11 +126,7 @@ class _CopyField extends StatelessWidget {
             icon: Icons.copy_rounded,
             tooltip: 'Copy $label',
             background: p.card,
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: value));
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('$label copied')));
-            },
+            onPressed: () => copyToClipboard(context, value, what: label),
           ),
         ],
       ),

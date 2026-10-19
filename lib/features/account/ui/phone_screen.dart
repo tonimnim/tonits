@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/api/error_text.dart';
 import '../../../core/countries.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
@@ -19,7 +18,7 @@ class PhoneScreen extends ConsumerStatefulWidget {
   ConsumerState<PhoneScreen> createState() => _PhoneScreenState();
 }
 
-class _PhoneScreenState extends ConsumerState<PhoneScreen> {
+class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
   final _form = GlobalKey<FormState>();
   late final String? _saved = ref.read(currentPlayerProvider)?.phoneNumber;
 
@@ -28,8 +27,6 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
   late final _phone = TextEditingController(
     text: _saved == null ? '' : PhoneNumber.local(_saved, _country),
   );
-  bool _busy = false;
-  String? _error;
 
   Country get _accountCountry =>
       Country.byCode(ref.read(currentPlayerProvider)?.countryCode) ??
@@ -55,21 +52,6 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
     super.dispose();
   }
 
-  Future<void> _run(Future<void> Function() action) async {
-    if (_busy) return;
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    try {
-      await action();
-    } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
   void _save() {
     if (!_form.currentState!.validate()) return;
     final number = PhoneNumber.normalize(_phone.text, _country)!;
@@ -77,34 +59,21 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
       Navigator.of(context).pop();
       return;
     }
-    _run(() async {
+    run(() async {
       await ref.read(accountServiceProvider).savePhone(number);
       if (mounted) popWithMessage(context, 'Phone number saved');
     });
   }
 
   Future<void> _remove() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Remove your phone number?'),
-        content: const Text(
-          "You'll enter a number each time you pay an entry fee.",
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remove'),
-          ),
-        ],
-      ),
+    final confirmed = await confirmAction(
+      context,
+      title: 'Remove your phone number?',
+      message: "You'll enter a number each time you pay an entry fee.",
+      confirmLabel: 'Remove',
     );
-    if (confirmed != true || !mounted) return;
-    await _run(() async {
+    if (!confirmed || !mounted) return;
+    await run(() async {
       await ref.read(accountServiceProvider).removePhone();
       if (mounted) popWithMessage(context, 'Phone number removed');
     });
@@ -142,20 +111,20 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                 hintText: kenya ? '0712 345 678' : 'Phone number',
                 prefixIcon: CallingCodePrefix(
                   country: _country,
-                  onTap: _busy ? null : _pickCountry,
+                  onTap: busy ? null : _pickCountry,
                 ),
               ),
             ),
           ),
         ),
         const SizedBox(height: TonitsSpace.lg),
-        FormError(_error),
-        PrimaryButton(label: 'Save', busy: _busy, onPressed: _save),
+        FormError(error),
+        PrimaryButton(label: 'Save', busy: busy, onPressed: _save),
         if (_saved != null) ...[
           const SizedBox(height: TonitsSpace.md),
           Center(
             child: TextButton(
-              onPressed: _busy ? null : _remove,
+              onPressed: busy ? null : _remove,
               style: TextButton.styleFrom(foregroundColor: p.destructive),
               child: const Text('Remove phone number'),
             ),

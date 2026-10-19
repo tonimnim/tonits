@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/api/error_text.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_controller.dart';
@@ -17,13 +16,12 @@ class EditNameScreen extends ConsumerStatefulWidget {
   ConsumerState<EditNameScreen> createState() => _EditNameScreenState();
 }
 
-class _EditNameScreenState extends ConsumerState<EditNameScreen> {
+class _EditNameScreenState extends ConsumerState<EditNameScreen>
+    with BusyState {
   final _form = GlobalKey<FormState>();
   late final _name = TextEditingController(
     text: ref.read(currentPlayerProvider)?.displayName ?? '',
   );
-  bool _busy = false;
-  String? _error;
 
   @override
   void dispose() {
@@ -39,24 +37,16 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen> {
   }
 
   Future<void> _save() async {
-    if (_busy || !_form.currentState!.validate()) return;
+    if (busy || !_form.currentState!.validate()) return;
     final name = _name.text.trim();
     if (name == ref.read(currentPlayerProvider)?.displayName) {
       Navigator.of(context).pop();
       return;
     }
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    try {
+    await run(() async {
       await ref.read(accountServiceProvider).updateDisplayName(name);
       if (mounted) popWithMessage(context, 'Display name updated');
-    } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+    });
   }
 
   @override
@@ -87,8 +77,8 @@ class _EditNameScreenState extends ConsumerState<EditNameScreen> {
           ),
         ),
         const SizedBox(height: TonitsSpace.lg),
-        FormError(_error),
-        PrimaryButton(label: 'Save', busy: _busy, onPressed: _save),
+        FormError(error),
+        PrimaryButton(label: 'Save', busy: busy, onPressed: _save),
       ],
     );
   }

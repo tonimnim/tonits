@@ -18,26 +18,15 @@ class SignOutRow extends ConsumerWidget {
           destructive: true,
           chevron: false,
           onTap: () async {
-            final confirmed = await showDialog<bool>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Sign out of Ozone?'),
-                content: const Text(
-                  'You can sign back in any time with your Konami ID.',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Sign out'),
-                  ),
-                ],
-              ),
+            final confirmed = await confirmAction(
+              context,
+              title: 'Sign out of Ozone?',
+              message:
+                  'You can sign back in any time with the same Google or Apple '
+                  'account.',
+              confirmLabel: 'Sign out',
             );
-            if (confirmed == true) {
+            if (confirmed) {
               await ref.read(authControllerProvider.notifier).signOut();
             }
           },

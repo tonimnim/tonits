@@ -19,14 +19,13 @@ class DevSignInScreen extends ConsumerStatefulWidget {
   ConsumerState<DevSignInScreen> createState() => _DevSignInScreenState();
 }
 
-class _DevSignInScreenState extends ConsumerState<DevSignInScreen> {
+class _DevSignInScreenState extends ConsumerState<DevSignInScreen>
+    with BusyState {
   final _form = GlobalKey<FormState>();
   final _username = TextEditingController();
   final _konamiId = TextEditingController();
   final _password = TextEditingController();
   bool _create = false;
-  bool _busy = false;
-  String? _error;
 
   @override
   void dispose() {
@@ -37,10 +36,10 @@ class _DevSignInScreenState extends ConsumerState<DevSignInScreen> {
   }
 
   Future<void> _submit() async {
-    if (_busy || !_form.currentState!.validate()) return;
+    if (busy || !_form.currentState!.validate()) return;
     setState(() {
-      _busy = true;
-      _error = null;
+      busy = true;
+      error = null;
     });
     final auth = ref.read(authControllerProvider.notifier);
     try {
@@ -57,9 +56,9 @@ class _DevSignInScreenState extends ConsumerState<DevSignInScreen> {
         );
       }
     } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
+      if (mounted) setState(() => error = describeError(e));
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) setState(() => busy = false);
     }
   }
 
@@ -108,10 +107,10 @@ class _DevSignInScreenState extends ConsumerState<DevSignInScreen> {
                 onSubmitted: _submit,
               ),
               const SizedBox(height: TonitsSpace.lg),
-              FormError(_error),
+              FormError(error),
               PrimaryButton(
                 label: _create ? 'Create test account' : 'Sign in',
-                busy: _busy,
+                busy: busy,
                 onPressed: _submit,
               ),
             ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -45,12 +44,8 @@ class MatchFacts extends StatelessWidget {
               mono: true,
               onTap: room.code.isEmpty
                   ? null
-                  : () {
-                      Clipboard.setData(ClipboardData(text: room.code));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Match code copied')),
-                      );
-                    },
+                  : () =>
+                        copyToClipboard(context, room.code, what: 'Match code'),
             ),
           ],
         ),

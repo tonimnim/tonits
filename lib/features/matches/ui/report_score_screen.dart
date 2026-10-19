@@ -18,19 +18,18 @@ class ReportScoreScreen extends ConsumerStatefulWidget {
   ConsumerState<ReportScoreScreen> createState() => _ReportScoreScreenState();
 }
 
-class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
+class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
+    with BusyState {
   int _mine = 0;
   int _theirs = 0;
   int _penMine = 0;
   int _penTheirs = 0;
   bool _declared = false;
-  bool _busy = false;
-  String? _error;
 
   Future<void> _submit(MatchRoom room) async {
     final penalties = _needsPenalties(room);
     if (penalties && _penMine == _penTheirs) {
-      setState(() => _error = 'A penalty shootout needs a winner.');
+      setState(() => error = 'A penalty shootout needs a winner.');
       return;
     }
     final home = room.summary.isHome;
@@ -43,31 +42,17 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
       penalties: penalties ? fromMySide(_penMine, _penTheirs) : null,
     );
 
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    final error = await ref
-        .read(matchRoomProvider(widget.matchId).notifier)
-        .reportScore(score);
-    if (!mounted) return;
-    if (error != null) {
-      setState(() {
-        _busy = false;
-        _error = error;
-      });
-      return;
-    }
+    final sent = await runForMessage(
+      () => ref
+          .read(matchRoomProvider(widget.matchId).notifier)
+          .reportScore(score),
+    );
+    if (!sent || !mounted) return;
     final opponent = room.summary.opponent?.displayName ?? 'Your opponent';
-    final messenger = ScaffoldMessenger.of(context);
-    Navigator.of(context).pop();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          'Score sent. $opponent has ${room.windows.confirm.inMinutes} '
-          'minutes to confirm it.',
-        ),
-      ),
+    popWithMessage(
+      context,
+      'Score sent. $opponent has ${room.windows.confirm.inMinutes} '
+      'minutes to confirm it.',
     );
   }
 
@@ -173,13 +158,13 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen> {
               onChanged: (v) => setState(() => _declared = v),
             ),
             const SizedBox(height: TonitsSpace.lg),
-            if (_error != null) ...[
-              Notice(_error!),
+            if (error != null) ...[
+              Notice(error!),
               const SizedBox(height: TonitsSpace.md),
             ],
             PrimaryButton(
               label: 'Send score',
-              busy: _busy,
+              busy: busy,
               onPressed: _declared ? () => _submit(room) : null,
             ),
           ],

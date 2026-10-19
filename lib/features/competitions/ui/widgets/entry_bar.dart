@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/api/api_client.dart';
-import '../../../../core/api/error_text.dart';
 import '../../../../core/format.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
@@ -25,56 +24,32 @@ class EntryBar extends ConsumerStatefulWidget {
   ConsumerState<EntryBar> createState() => _EntryBarState();
 }
 
-class _EntryBarState extends ConsumerState<EntryBar> {
-  bool _busy = false;
-  String? _error;
-
+class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
   String get _id => widget.competition.id;
 
-  Future<void> _run(Future<void> Function() action) async {
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
+  /// Runs an entry action; an entry that turns out to need a fee goes to
+  /// checkout instead of showing an error.
+  Future<void> _act(Future<void> Function() action) => run(() async {
     try {
       await action();
     } on ApiException catch (e) {
-      if (!mounted) return;
-      if (e.code == 'payment_required') {
-        await context.push(Routes.checkout(_id));
-      } else {
-        setState(() => _error = describeError(e));
-      }
-    } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
-    } finally {
-      if (mounted) setState(() => _busy = false);
+      if (e.code != 'payment_required') rethrow;
+      if (mounted) await context.push(Routes.checkout(_id));
     }
-  }
+  });
 
   Future<void> _withdraw() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Withdraw from this competition?'),
-        content: const Text(
+    final confirmed = await confirmAction(
+      context,
+      title: 'Withdraw from this competition?',
+      message:
           'Your place goes back to the pool. You can enter again while '
           'registration is open.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Stay in'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Withdraw'),
-          ),
-        ],
-      ),
+      confirmLabel: 'Withdraw',
+      cancelLabel: 'Stay in',
     );
-    if (confirmed == true) {
-      await _run(() => ref.read(entryServiceProvider).withdraw(_id));
+    if (confirmed) {
+      await _act(() => ref.read(entryServiceProvider).withdraw(_id));
     }
   }
 
@@ -115,8 +90,8 @@ class _EntryBarState extends ConsumerState<EntryBar> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (_error != null) ...[
-            Notice(_error!),
+          if (error != null) ...[
+            Notice(error!),
             const SizedBox(height: TonitsSpace.md),
           ],
           content,
@@ -138,16 +113,16 @@ class _EntryBarState extends ConsumerState<EntryBar> {
         canWithdraw:
             !widget.competition.isPaid &&
             widget.competition.status == CompetitionStatus.registrationOpen,
-        busy: _busy,
+        busy: busy,
         onWithdraw: _withdraw,
       );
     }
     return switch (e.requiredAction) {
       RequiredAction.submitRegistration => PrimaryButton(
         label: 'Enter for free',
-        busy: _busy,
+        busy: busy,
         onPressed: () =>
-            _run(() => ref.read(entryServiceProvider).enterFree(_id)),
+            _act(() => ref.read(entryServiceProvider).enterFree(_id)),
       ),
       RequiredAction.startPayment => PrimaryButton(
         label: 'Pay $fee with M-Pesa',

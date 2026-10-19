@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,13 +49,7 @@ class AccountSection extends ConsumerWidget {
               : Icon(Icons.copy_rounded, size: 18, color: p.mutedForeground),
           onTap: konamiId == null
               ? null
-              : () async {
-                  await Clipboard.setData(ClipboardData(text: konamiId));
-                  if (!context.mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Konami ID copied')),
-                  );
-                },
+              : () => copyToClipboard(context, konamiId, what: 'Konami ID'),
         ),
       ],
     );

@@ -16,9 +16,7 @@ class AboutSection extends ConsumerWidget {
     Future<void> open(LegalDocumentType type, String name) async {
       final opened = await openLegalDocument(ref, type);
       if (opened || !context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Couldn't open the $name. Try again.")),
-      );
+      showMessage(context, "Couldn't open the $name. Try again.");
     }
 
     final external = Icon(

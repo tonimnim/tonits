@@ -28,7 +28,8 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 enum _Step { username, konamiId, country, phone }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
+    with BusyState {
   final _forms = {for (final s in _Step.values) s: GlobalKey<FormState>()};
   late final Player _player = ref.read(currentPlayerProvider)!;
   late final _username = TextEditingController(text: _player.username ?? '');
@@ -41,8 +42,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       );
 
   var _step = _Step.username;
-  bool _busy = false;
-  String? _error;
 
   @override
   void dispose() {
@@ -54,11 +53,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   void _go(_Step step) => setState(() {
     _step = step;
-    _error = null;
+    error = null;
   });
 
   Future<void> _next() async {
-    if (_busy || !_forms[_step]!.currentState!.validate()) return;
+    if (busy || !_forms[_step]!.currentState!.validate()) return;
     if (_step != _Step.phone) return _go(_Step.values[_step.index + 1]);
     await _finish();
   }
@@ -66,8 +65,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Future<void> _finish() async {
     final country = _country!;
     setState(() {
-      _busy = true;
-      _error = null;
+      busy = true;
+      error = null;
     });
     final username = _username.text.trim();
     try {
@@ -96,12 +95,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       };
       setState(() {
         _step = step;
-        _error = _message(e);
+        error = _message(e);
       });
     } catch (e) {
-      if (mounted) setState(() => _error = describeError(e));
+      if (mounted) setState(() => error = describeError(e));
     } finally {
-      if (mounted) setState(() => _busy = false);
+      if (mounted) setState(() => busy = false);
     }
   }
 
@@ -196,13 +195,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         action: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (_error != null) ...[
-              Notice(_error!),
+            if (error != null) ...[
+              Notice(error!),
               const SizedBox(height: TonitsSpace.md),
             ],
             PrimaryButton(
               label: last ? 'Finish' : 'Continue',
-              busy: _busy,
+              busy: busy,
               onPressed: _next,
             ),
             if (last) ...[const SizedBox(height: 12), const _Acceptance()],

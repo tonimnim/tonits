@@ -13,27 +13,15 @@ Future<void> changeCountry(BuildContext context, WidgetRef ref) async {
   final picked = await showCountryPicker(context);
   if (picked == null || picked.code == current || !context.mounted) return;
 
-  final confirmed = await showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Change your country to ${picked.name}?'),
-      content: const Text(
+  final confirmed = await confirmAction(
+    context,
+    title: 'Change your country to ${picked.name}?',
+    message:
         'Your country ranking and the competitions open to you follow your '
         'country.',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: const Text('Change'),
-        ),
-      ],
-    ),
+    confirmLabel: 'Change',
   );
-  if (confirmed != true || !context.mounted) return;
+  if (!confirmed || !context.mounted) return;
 
   final messenger = ScaffoldMessenger.of(context);
   try {

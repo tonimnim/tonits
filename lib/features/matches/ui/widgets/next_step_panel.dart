@@ -23,10 +23,8 @@ class NextStepPanel extends ConsumerStatefulWidget {
   ConsumerState<NextStepPanel> createState() => _NextStepPanelState();
 }
 
-class _NextStepPanelState extends ConsumerState<NextStepPanel> {
-  bool _busy = false;
+class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
   UploadStage? _stage;
-  String? _error;
 
   MatchRoom get room => widget.room;
   MatchRoomController get _controller =>
@@ -34,44 +32,22 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
   String get _opponent => room.summary.opponent?.displayName ?? 'your opponent';
 
   Future<void> _run(Future<String?> Function() action) async {
-    if (_busy) return;
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    final error = await action();
-    if (!mounted) return;
-    setState(() {
-      _busy = false;
-      _stage = null;
-      _error = error;
-    });
+    await runForMessage(action);
+    if (mounted) setState(() => _stage = null);
   }
 
   Future<void> _reject() async {
     final minutes = room.windows.screenshot.inMinutes;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Reject this result?'),
-        content: Text(
+    final confirmed = await confirmAction(
+      context,
+      title: 'Reject this result?',
+      message:
           'You and $_opponent will each have $minutes minutes to send a '
           "screenshot of the Full Time screen. If you don't send one, you're "
           'removed from the competition.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Reject'),
-          ),
-        ],
-      ),
+      confirmLabel: 'Reject',
     );
-    if (confirmed == true) await _run(() => _controller.answer(confirm: false));
+    if (confirmed) await _run(() => _controller.answer(confirm: false));
   }
 
   Future<void> _sendScreenshot() async {
@@ -150,9 +126,9 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
                 style: TextStyle(fontSize: 13, color: p.mutedForeground),
               ),
             ],
-            if (_error != null) ...[
+            if (error != null) ...[
               const SizedBox(height: TonitsSpace.md),
-              Notice(_error!),
+              Notice(error!),
             ],
           ],
         ),
@@ -167,7 +143,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
         gap,
         PrimaryButton(
           label: 'Check in',
-          busy: _busy,
+          busy: busy,
           onPressed: () => _run(_controller.checkIn),
         ),
       ];
@@ -186,14 +162,14 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
         gap,
         PrimaryButton(
           label: "Yes, that's right",
-          busy: _busy,
+          busy: busy,
           onPressed: () => _run(() => _controller.answer(confirm: true)),
         ),
         if (room.can(MatchAction.rejectResult)) ...[
           const SizedBox(height: TonitsSpace.sm),
           SecondaryButton(
             label: "No, it's wrong",
-            onPressed: _busy ? null : _reject,
+            onPressed: busy ? null : _reject,
           ),
         ],
       ];
@@ -203,7 +179,7 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> {
         gap,
         PrimaryButton(
           label: 'Choose screenshot',
-          busy: _busy,
+          busy: busy,
           onPressed: _sendScreenshot,
         ),
       ];

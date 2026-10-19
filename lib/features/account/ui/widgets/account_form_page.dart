@@ -42,10 +42,3 @@ class AccountFormPage extends StatelessWidget {
     );
   }
 }
-
-/// Leaves an edit screen and confirms the change on the screen below.
-void popWithMessage(BuildContext context, String message) {
-  final messenger = ScaffoldMessenger.of(context);
-  Navigator.of(context).pop();
-  messenger.showSnackBar(SnackBar(content: Text(message)));
-}
