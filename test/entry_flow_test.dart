@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/payments/application/payments_providers.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
-
-import 'package:tonits/features/payments/application/payments_providers.dart';
 
 Future<void> openCompete(WidgetTester tester) async {
   await tester.tap(
@@ -200,10 +199,8 @@ void main() {
             ),
             200,
           ),
-          '/v1/payments/pay1': (_) => jsonResponse(
-            paymentJson(status: 'review', registrationStatus: 'pending'),
-            200,
-          ),
+          '/v1/payments/pay1': (_) =>
+              jsonResponse(paymentJson(status: 'review'), 200),
         },
       ),
     );

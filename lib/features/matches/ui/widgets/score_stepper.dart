@@ -30,7 +30,7 @@ class ScoreStepper extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          InitialsAvatar(name: avatarName ?? label, size: 40),
+          InitialsAvatar(name: avatarName ?? label),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

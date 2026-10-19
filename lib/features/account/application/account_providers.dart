@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
+import '../../auth/application/auth_providers.dart';
 import '../../auth/data/models.dart';
 import '../data/account_repository.dart';
 import 'account_service.dart';
-import '../../auth/application/auth_providers.dart';
 
 final accountRepositoryProvider = Provider<AccountRepository>(
   (ref) => AccountRepository(ref.watch(apiClientProvider)),

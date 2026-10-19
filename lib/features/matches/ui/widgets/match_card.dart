@@ -53,7 +53,7 @@ class MatchCard extends StatelessWidget {
               const SizedBox(height: TonitsSpace.md),
               Row(
                 children: [
-                  InitialsAvatar(name: opponent?.displayName ?? '?', size: 40),
+                  InitialsAvatar(name: opponent?.displayName ?? '?'),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

@@ -6,12 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
+import '../../evidence/application/evidence_providers.dart';
 import '../../evidence/application/screenshot_uploader.dart';
 import '../data/match_room.dart';
 import '../data/match_room_repository.dart';
 import '../data/match_summary.dart';
 import 'matches_providers.dart';
-import '../../evidence/application/evidence_providers.dart';
 
 /// One match room: reads it, runs the player's actions, and keeps it fresh
 /// while the match is live. What the player may do always comes from the
@@ -43,7 +43,7 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     _lifecycle ??= AppLifecycleListener(
       onShow: () {
         _foreground = true;
-        refresh();
+        unawaited(refresh());
       },
       onHide: () {
         _foreground = false;

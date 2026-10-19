@@ -7,10 +7,10 @@ import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../evidence/application/screenshot_uploader.dart';
 import '../../application/match_room_controller.dart';
+import '../../application/matches_providers.dart';
 import '../../data/match_room.dart';
 import '../next_step.dart';
 import 'deadline_pill.dart';
-import '../../application/matches_providers.dart';
 
 /// The room's main panel: where the match stands, what's next and by when,
 /// and the action the server allows now.

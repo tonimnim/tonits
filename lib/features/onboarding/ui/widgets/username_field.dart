@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../auth/ui/validators.dart';
 import '../../../auth/application/auth_providers.dart';
+import '../../../auth/ui/validators.dart';
 
 /// The username, checked with the server as the player types (after a
 /// short pause), so a taken name shows before they continue.
@@ -36,7 +36,7 @@ class _UsernameFieldState extends ConsumerState<UsernameField> {
   @override
   void initState() {
     super.initState();
-    _check(widget.controller.text);
+    unawaited(_check(widget.controller.text));
   }
 
   @override

@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../auth/application/auth_providers.dart';
 import '../../auth/data/models.dart';
 import 'account_providers.dart';
-import '../../auth/application/auth_providers.dart';
 
 /// Opens the current version of a legal document in the browser. Returns
 /// false when it couldn't be found or opened.

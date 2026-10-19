@@ -1,8 +1,8 @@
 import '../../../core/api/cursor_page.dart';
 import '../../../core/api/paged.dart';
 import '../data/competition.dart';
-import 'competitions_providers.dart';
 import 'competition_filter.dart';
+import 'competitions_providers.dart';
 
 class CompetitionsNotifier extends PagedNotifier<Competition> {
   CompetitionsNotifier(this.filter);

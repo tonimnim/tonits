@@ -6,9 +6,9 @@ import '../../../../core/countries.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../auth/application/auth_providers.dart';
 import '../../../players/application/players_providers.dart';
 import '../../../rankings/ui/widgets/ranking_row.dart';
-import '../../../auth/application/auth_providers.dart';
 
 String _countryName(String code) => Country.byCode(code)?.name ?? code;
 

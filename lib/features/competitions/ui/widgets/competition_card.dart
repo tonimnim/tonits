@@ -4,8 +4,8 @@ import '../../../../core/format.dart';
 import '../../../../core/theme.dart';
 import '../../data/competition.dart';
 import 'capacity_bar.dart';
-import 'kenya_only_badge.dart';
 import 'competition_status_badge.dart';
+import 'kenya_only_badge.dart';
 
 /// A competition in a list: name and status, format and start, then the
 /// entry fee, prize and how full it is.

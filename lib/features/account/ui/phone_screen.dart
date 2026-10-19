@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/countries.dart';
+import '../../../core/phone_number.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/ui/widgets/form_error.dart';
-import '../../../core/phone_number.dart';
-import 'widgets/account_form_page.dart';
 import '../../auth/application/auth_providers.dart';
+import '../../auth/ui/widgets/form_error.dart';
 import '../application/account_providers.dart';
+import 'widgets/account_form_page.dart';
 
 /// Adds, changes or removes the phone number used for payments.
 class PhoneScreen extends ConsumerStatefulWidget {
@@ -52,14 +52,14 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> with BusyState {
     super.dispose();
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
     final number = PhoneNumber.normalize(_phone.text, _country)!;
     if (number == _saved) {
       Navigator.of(context).pop();
       return;
     }
-    run(() async {
+    await run(() async {
       await ref.read(accountServiceProvider).savePhone(number);
       if (mounted) popWithMessage(context, 'Phone number saved');
     });

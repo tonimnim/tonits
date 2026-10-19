@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/evidence/application/evidence_providers.dart';
 import 'package:tonits/features/evidence/application/screenshot_uploader.dart';
+import 'package:tonits/features/matches/application/matches_providers.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
-
-import 'package:tonits/features/matches/application/matches_providers.dart';
-import 'package:tonits/features/evidence/application/evidence_providers.dart';
 
 Map<String, dynamic> bodyOf(http.Request request) =>
     jsonDecode(request.body) as Map<String, dynamic>;

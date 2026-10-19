@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../auth/application/auth_providers.dart';
 import 'widgets/about_section.dart';
 import 'widgets/account_section.dart';
 import 'widgets/contact_section.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/sign_in_section.dart';
 import 'widgets/sign_out_row.dart';
-import '../../auth/application/auth_providers.dart';
 
 /// Tab 5: who the player is and every account setting, each one a row
 /// that opens where it's changed.

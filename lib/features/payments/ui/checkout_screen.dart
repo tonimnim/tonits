@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,13 +8,13 @@ import '../../../core/api/error_text.dart';
 import '../../../core/format.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../auth/application/auth_providers.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../application/checkout_controller.dart';
+import '../application/payments_providers.dart';
 import 'widgets/mpesa_form.dart';
 import 'widgets/payment_outcome.dart';
 import 'widgets/payment_waiting.dart';
-import '../application/payments_providers.dart';
-import '../../auth/application/auth_providers.dart';
 
 /// Pays a competition's entry fee with M-Pesa. Opening it picks up an
 /// unfinished payment instead of starting a second charge.
@@ -32,7 +34,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(_controller.resumeIfPending);
+    unawaited(Future.microtask(_controller.resumeIfPending));
   }
 
   @override

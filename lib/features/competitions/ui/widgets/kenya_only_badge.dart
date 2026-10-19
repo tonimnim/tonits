@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/widgets.dart';
-import '../../data/competition.dart';
 import '../../../auth/application/auth_providers.dart';
+import '../../data/competition.dart';
 
 /// Paid entry is collected with M-Pesa, which only serves Kenya, so paid
 /// competitions are open to players in Kenya alone. This marks them for

@@ -1,7 +1,7 @@
-import 'dart:typed_data';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
@@ -168,7 +168,9 @@ class ApiClient {
     }
     if (ok) return json is Map<String, dynamic> ? json : null;
 
-    final error = json is Map<String, dynamic> ? json : const {};
+    final error = json is Map<String, dynamic>
+        ? json
+        : const <String, dynamic>{};
     final retryAfter = int.tryParse(response.headers['retry-after'] ?? '');
     throw ApiException(
       status: response.statusCode,
@@ -178,7 +180,7 @@ class ApiClient {
           'Request failed with status ${response.statusCode}',
       requestId: response.headers['x-request-id'],
       retryAfter: retryAfter == null ? null : Duration(seconds: retryAfter),
-      details: error is Map<String, dynamic> ? error : const {},
+      details: error,
     );
   }
 }

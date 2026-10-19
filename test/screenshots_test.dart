@@ -13,11 +13,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/payments/application/payments_providers.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
-
-import 'package:tonits/features/payments/application/payments_providers.dart';
 
 const _outDir = String.fromEnvironment('SCREENSHOTS');
 const _key = Key('screenshot');

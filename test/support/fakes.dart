@@ -168,7 +168,9 @@ Map<String, dynamic> matchJson({
   'currentPlayerSide': 'home',
   'home': participantJson('striker.9', 'striker.9'),
   'away': opponent ?? participantJson('Amina Otieno', 'amina.o'),
-  'allowedActions': lifecycle == 'ready_for_check_in' ? ['check_in'] : [],
+  'allowedActions': lifecycle == 'ready_for_check_in'
+      ? ['check_in']
+      : <String>[],
 };
 
 Map<String, dynamic> rankedJson(int rank, String name, {int rating = 1500}) => {
@@ -224,7 +226,7 @@ Map<String, dynamic> profileJson({
         'lastMatchAt': '2026-10-08T19:00:00Z',
       },
   ],
-  'gameAccounts': [],
+  'gameAccounts': <Object>[],
 };
 
 Map<String, dynamic> playedJson(
@@ -257,7 +259,7 @@ Map<String, dynamic> playedJson(
 
 /// Newest first: three wins in a row, then a loss, a draw and a win.
 List<Map<String, dynamic>> recentJson() => [
-  playedJson('win', 3, 1, 'Coast Ace', playedAt: '2026-10-08T19:00:00Z'),
+  playedJson('win', 3, 1, 'Coast Ace'),
   playedJson('win', 2, 0, 'Amina Otieno', playedAt: '2026-10-06T18:30:00Z'),
   playedJson('win', 4, 2, 'Lake Striker', playedAt: '2026-10-04T20:00:00Z'),
   playedJson('loss', 1, 2, 'Kibera Maestro', playedAt: '2026-10-01T19:00:00Z'),

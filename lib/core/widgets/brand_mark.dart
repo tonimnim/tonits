@@ -43,7 +43,6 @@ class BrandLockup extends StatelessWidget {
       excludeSemantics: true,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BrandMark(size: size * 1.08),
           SizedBox(width: size * 0.06),

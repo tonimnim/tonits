@@ -7,10 +7,9 @@ import 'package:http/testing.dart';
 import 'package:tonits/core/api/api_client.dart';
 import 'package:tonits/core/providers.dart';
 import 'package:tonits/features/auth/application/auth_controller.dart';
+import 'package:tonits/features/auth/application/auth_providers.dart';
 
 import 'support/fakes.dart';
-
-import 'package:tonits/features/auth/application/auth_providers.dart';
 
 typedef Handler = Future<http.Response> Function(http.Request request);
 
@@ -66,7 +65,7 @@ void main() {
     final auth = Auth((request) async {
       expect(request.url.path, '/v1/auth/refresh');
       expect(jsonDecode(request.body), {'refreshToken': 'refresh-0'});
-      return jsonResponse(sessionJson(refresh: 'refresh-1'), 200);
+      return jsonResponse(sessionJson(), 200);
     }, store);
 
     await auth.notifier.restore();

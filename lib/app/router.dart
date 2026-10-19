@@ -7,21 +7,21 @@ import '../features/account/ui/edit_name_screen.dart';
 import '../features/account/ui/email_screen.dart';
 import '../features/account/ui/phone_screen.dart';
 import '../features/auth/application/auth_controller.dart';
+import '../features/auth/application/auth_providers.dart';
 import '../features/auth/ui/session_screens.dart';
 import '../features/auth/ui/welcome_screen.dart';
-import '../features/onboarding/ui/onboarding_screen.dart';
 import '../features/competitions/ui/competition_screen.dart';
 import '../features/competitions/ui/competitions_screen.dart';
 import '../features/home/ui/home_screen.dart';
 import '../features/matches/ui/match_room_screen.dart';
 import '../features/matches/ui/matches_screen.dart';
 import '../features/matches/ui/report_score_screen.dart';
+import '../features/onboarding/ui/onboarding_screen.dart';
 import '../features/payments/ui/checkout_screen.dart';
 import '../features/profile/ui/profile_screen.dart';
 import '../features/rankings/ui/rankings_screen.dart';
 import 'shell/app_shell.dart';
 import 'shell/app_tab.dart';
-import '../features/auth/application/auth_providers.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // The router is built once; this notifier re-runs its redirect whenever the

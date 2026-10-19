@@ -6,9 +6,9 @@ import '../../players/application/players_providers.dart';
 import '../data/competition.dart';
 import '../data/competitions_repository.dart';
 import '../data/eligibility.dart';
-import 'entry_service.dart';
-import 'competitions_notifier.dart';
 import 'competition_filter.dart';
+import 'competitions_notifier.dart';
+import 'entry_service.dart';
 
 final competitionsRepositoryProvider = Provider<CompetitionsRepository>(
   (ref) => CompetitionsRepository(ref.watch(apiClientProvider)),

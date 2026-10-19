@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../../auth/application/auth_providers.dart';
 import '../../auth/ui/validators.dart';
 import '../../auth/ui/widgets/form_error.dart';
-import 'widgets/account_form_page.dart';
 import '../application/account_providers.dart';
-import '../../auth/application/auth_providers.dart';
+import 'widgets/account_form_page.dart';
 
 /// Adds or changes the account email in two steps: send a code to the new
 /// address, then enter it. The address is only saved once verified.
@@ -46,10 +46,10 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
     return _emailPattern.hasMatch(v) ? null : 'Enter a valid email address';
   }
 
-  void _send() {
+  Future<void> _send() async {
     if (!_emailForm.currentState!.validate()) return;
     final email = _email.text.trim();
-    run(() async {
+    await run(() async {
       final expiresIn = await ref
           .read(accountServiceProvider)
           .requestEmailCode(email);
@@ -71,9 +71,9 @@ class _EmailScreenState extends ConsumerState<EmailScreen> with BusyState {
     showMessage(context, 'New code sent to $_sentTo');
   });
 
-  void _verify() {
+  Future<void> _verify() async {
     if (!_codeForm.currentState!.validate()) return;
-    run(() async {
+    await run(() async {
       await ref.read(accountServiceProvider).verifyEmail(_code.text.trim());
       if (mounted) popWithMessage(context, 'Email verified');
     });

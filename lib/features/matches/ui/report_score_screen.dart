@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
+import '../application/matches_providers.dart';
 import '../data/match_room.dart';
 import 'widgets/score_stepper.dart';
-import '../application/matches_providers.dart';
 
 /// Reports the final score from the Full Time screen. The opponent is then
 /// asked to confirm it.

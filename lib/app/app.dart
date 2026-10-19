@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme.dart';
-import 'router.dart';
 import '../features/auth/application/auth_providers.dart';
+import 'router.dart';
 
 class TonitsApp extends ConsumerStatefulWidget {
   const TonitsApp({super.key});
@@ -17,7 +19,11 @@ class _TonitsAppState extends ConsumerState<TonitsApp> {
   void initState() {
     super.initState();
     // Resume a stored session; the router shows the splash meanwhile.
-    Future.microtask(() => ref.read(authControllerProvider.notifier).restore());
+    unawaited(
+      Future.microtask(
+        () => ref.read(authControllerProvider.notifier).restore(),
+      ),
+    );
   }
 
   @override

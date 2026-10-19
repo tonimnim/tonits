@@ -5,16 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
 import '../../../core/countries.dart';
+import '../../../core/phone_number.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../account/application/legal_links.dart';
-import '../../../core/phone_number.dart';
+import '../../auth/application/auth_providers.dart';
 import '../../auth/data/models.dart';
 import '../../auth/ui/validators.dart';
 import '../../auth/ui/widgets/auth_fields.dart';
 import 'widgets/onboarding_frame.dart';
 import 'widgets/username_field.dart';
-import '../../auth/application/auth_providers.dart';
 
 /// After a first Google or Apple sign-in: the username, the Konami ID, the
 /// country, then the phone, one step at a time, sent together at the end.

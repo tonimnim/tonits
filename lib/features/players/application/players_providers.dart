@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
+import '../../auth/application/auth_providers.dart';
 import '../../rankings/application/rankings_providers.dart';
 import '../../rankings/data/ranked_player.dart';
 import '../data/played_match.dart';
 import '../data/player_profile.dart';
 import '../data/players_repository.dart';
 import 'player_stats.dart';
-import '../../auth/application/auth_providers.dart';
 import 'rank_neighbourhood.dart';
 
 final playersRepositoryProvider = Provider<PlayersRepository>(
@@ -34,9 +34,7 @@ final myProfileProvider = FutureProvider.autoDispose<PlayerProfile>(
 final myRecentMatchesProvider = FutureProvider.autoDispose<List<PlayedMatch>>((
   ref,
 ) async {
-  final page = await ref
-      .watch(playersRepositoryProvider)
-      .matches(_myId(ref), limit: 20);
+  final page = await ref.watch(playersRepositoryProvider).matches(_myId(ref));
   return page.items;
 });
 

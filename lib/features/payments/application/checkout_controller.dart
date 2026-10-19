@@ -190,7 +190,7 @@ class CheckoutController extends Notifier<CheckoutState> {
       return;
     }
     state = CheckoutState(phase: CheckoutPhase.waiting, payment: payment);
-    _poll(payment.id, ++_generation, DateTime.now());
+    unawaited(_poll(payment.id, ++_generation, DateTime.now()));
   }
 
   void _settle(Payment payment) {

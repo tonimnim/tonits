@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/api/error_text.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../../../auth/application/auth_providers.dart';
 import '../../../account/application/account_providers.dart';
+import '../../../auth/application/auth_providers.dart';
 
 /// Picks a new country and saves it after the player confirms, since it
 /// moves them to another country ladder.
