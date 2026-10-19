@@ -32,16 +32,11 @@ class RecentMatchesSection extends ConsumerWidget {
             onAction: () => context.go(Routes.matches),
           ),
           const SizedBox(height: TonitsSpace.sm),
-          Card(
-            child: Column(
-              children: [
-                for (final (i, match) in rows.indexed) ...[
-                  if (i > 0) const Divider(indent: TonitsSpace.md),
-                  MatchResultRow(match: match),
-                ],
-              ],
-            ),
-          ),
+          // On the page with hairlines, like the ladder above.
+          for (final (i, match) in rows.indexed) ...[
+            if (i > 0) const Divider(height: 1),
+            MatchResultRow(match: match),
+          ],
         ],
       ),
     );

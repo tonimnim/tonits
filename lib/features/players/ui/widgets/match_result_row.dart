@@ -18,10 +18,7 @@ class MatchResultRow extends StatelessWidget {
     final l = context.l10n;
     return MergeSemantics(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: TonitsSpace.md,
-          vertical: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: Row(
           children: [
             ResultChip(match.result),
