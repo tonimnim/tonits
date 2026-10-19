@@ -16,11 +16,15 @@ class PrimaryButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.busy = false,
+    this.pill = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool busy;
+
+  /// Fully rounded ends, for feature screens.
+  final bool pill;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +42,11 @@ class PrimaryButton extends StatelessWidget {
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(TonitsRadius.control),
-        ),
+        shape: pill
+            ? const StadiumBorder()
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(TonitsRadius.control),
+              ),
         textStyle: _label,
       ),
       child: busy
@@ -67,6 +73,7 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.destructive = false,
+    this.pill = false,
   });
 
   final String label;
@@ -75,6 +82,9 @@ class SecondaryButton extends StatelessWidget {
 
   /// Red text, for actions such as signing out.
   final bool destructive;
+
+  /// Fully rounded ends, for feature screens.
+  final bool pill;
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +98,11 @@ class SecondaryButton extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       foregroundColor: destructive ? palette.destructive : palette.foreground,
       side: BorderSide(color: palette.input),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
-      ),
+      shape: pill
+          ? const StadiumBorder()
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(TonitsRadius.control),
+            ),
       textStyle: _label,
     );
     return icon == null

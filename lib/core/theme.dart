@@ -114,6 +114,15 @@ abstract final class TonitsRadius {
 
   /// Cards and sheets.
   static const card = 16.0;
+
+  /// Small tiles, such as a fact with its icon.
+  static const tile = 20.0;
+
+  /// Feature cards, such as the match room's main panel.
+  static const panel = 28.0;
+
+  /// The top of a sheet laid over a tinted hero.
+  static const sheet = 32.0;
 }
 
 /// The wordmark face: Alexandria ExtraBold.
