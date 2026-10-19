@@ -79,6 +79,32 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      const Text(
+                        'Sign up or sign in',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        apple
+                            ? 'New to Ozone? Continue with Google or Apple to '
+                                  'create your account. Already playing? The '
+                                  'same button signs you in.'
+                            : 'New to Ozone? Continue with Google to create '
+                                  'your account. Already playing? The same '
+                                  'button signs you in.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.45,
+                          color: p.subtleForeground,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       if (_error != null) ...[
                         Notice(_error!),
                         const SizedBox(height: TonitsSpace.md),
