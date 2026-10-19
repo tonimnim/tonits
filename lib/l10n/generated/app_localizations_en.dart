@@ -830,6 +830,120 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validatePhoneInvalid => 'Enter a valid phone number';
 
   @override
+  String get drawBracket => 'Bracket';
+
+  @override
+  String get drawStandings => 'Standings';
+
+  @override
+  String get drawMatches => 'Matches';
+
+  @override
+  String get drawFinalStandings => 'Final standings';
+
+  @override
+  String drawGroup(String letter) {
+    return 'Group $letter';
+  }
+
+  @override
+  String drawMatchday(int number) {
+    return 'Matchday $number';
+  }
+
+  @override
+  String drawWinnersRound(int number) {
+    return 'Winners round $number';
+  }
+
+  @override
+  String drawLosersRound(int number) {
+    return 'Losers round $number';
+  }
+
+  @override
+  String get drawGrandFinal => 'Grand final';
+
+  @override
+  String get drawGrandFinalReset => 'Grand final reset';
+
+  @override
+  String get drawToBeDecided => 'To be decided';
+
+  @override
+  String get drawNoOpponent => 'No opponent';
+
+  @override
+  String drawPenalties(int home, int away) {
+    return '$home–$away on penalties';
+  }
+
+  @override
+  String get drawWalkover => 'Walkover';
+
+  @override
+  String get drawNoShow => 'Neither player showed';
+
+  @override
+  String get drawForfeit => 'Forfeit';
+
+  @override
+  String get drawDecidedOnReview => 'Decided on review';
+
+  @override
+  String get drawDisputed => 'Disputed';
+
+  @override
+  String get drawCancelled => 'Cancelled';
+
+  @override
+  String get drawRemoved => 'Removed';
+
+  @override
+  String get drawPlayedShort => 'P';
+
+  @override
+  String get drawPlayed => 'Played';
+
+  @override
+  String get drawWonShort => 'W';
+
+  @override
+  String get drawWon => 'Won';
+
+  @override
+  String get drawDrawnShort => 'D';
+
+  @override
+  String get drawDrawn => 'Drawn';
+
+  @override
+  String get drawLostShort => 'L';
+
+  @override
+  String get drawLost => 'Lost';
+
+  @override
+  String get drawDifferenceShort => '+/-';
+
+  @override
+  String get drawGoalDifference => 'Goal difference';
+
+  @override
+  String get drawGameDifference => 'Game difference';
+
+  @override
+  String get drawPointsShort => 'Pts';
+
+  @override
+  String get drawPoints => 'Points';
+
+  @override
+  String drawPlacing(int place) {
+    return 'Place $place';
+  }
+
+  @override
   String get homeGoodMorning => 'Good morning';
 
   @override

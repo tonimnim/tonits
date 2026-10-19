@@ -1,0 +1,68 @@
+{
+  "drawBracket": "Bracket",
+  "@drawBracket": {"description": "Section title over a knockout competition's rounds."},
+  "drawStandings": "Standings",
+  "@drawStandings": {"description": "Section title over a round-robin table."},
+  "drawMatches": "Matches",
+  "@drawMatches": {"description": "Section title over a round robin's matchdays."},
+  "drawFinalStandings": "Final standings",
+  "@drawFinalStandings": {"description": "Section title over a finished competition's placings."},
+  "drawGroup": "Group {letter}",
+  "@drawGroup": {
+    "description": "A round-robin group.",
+    "placeholders": {"letter": {"type": "String", "example": "A"}}
+  },
+  "drawMatchday": "Matchday {number}",
+  "@drawMatchday": {
+    "description": "A round of a round robin.",
+    "placeholders": {"number": {"type": "int"}}
+  },
+  "drawWinnersRound": "Winners round {number}",
+  "@drawWinnersRound": {
+    "description": "A round of a double elimination's winners bracket.",
+    "placeholders": {"number": {"type": "int"}}
+  },
+  "drawLosersRound": "Losers round {number}",
+  "@drawLosersRound": {
+    "description": "A round of a double elimination's losers bracket.",
+    "placeholders": {"number": {"type": "int"}}
+  },
+  "drawGrandFinal": "Grand final",
+  "drawGrandFinalReset": "Grand final reset",
+  "@drawGrandFinalReset": {"description": "The deciding grand final, played when the losers' finalist wins the first."},
+  "drawToBeDecided": "To be decided",
+  "@drawToBeDecided": {"description": "A bracket slot whose player isn't known yet."},
+  "drawNoOpponent": "No opponent",
+  "@drawNoOpponent": {"description": "A bracket slot no one will fill: the match that fed it ended without a winner."},
+  "drawPenalties": "{home}–{away} on penalties",
+  "@drawPenalties": {
+    "description": "A level knockout match's shootout, home first.",
+    "placeholders": {"home": {"type": "int"}, "away": {"type": "int"}}
+  },
+  "drawWalkover": "Walkover",
+  "drawNoShow": "Neither player showed",
+  "drawForfeit": "Forfeit",
+  "drawDecidedOnReview": "Decided on review",
+  "drawDisputed": "Disputed",
+  "drawCancelled": "Cancelled",
+  "drawRemoved": "Removed",
+  "@drawRemoved": {"description": "A player disqualified or withdrawn after the draw; their results stand, unranked."},
+  "drawPlayedShort": "P",
+  "drawPlayed": "Played",
+  "drawWonShort": "W",
+  "drawWon": "Won",
+  "drawDrawnShort": "D",
+  "drawDrawn": "Drawn",
+  "drawLostShort": "L",
+  "drawLost": "Lost",
+  "drawDifferenceShort": "+/-",
+  "drawGoalDifference": "Goal difference",
+  "drawGameDifference": "Game difference",
+  "drawPointsShort": "Pts",
+  "drawPoints": "Points",
+  "drawPlacing": "Place {place}",
+  "@drawPlacing": {
+    "description": "Screen reader label for a final placing's number.",
+    "placeholders": {"place": {"type": "int"}}
+  }
+}

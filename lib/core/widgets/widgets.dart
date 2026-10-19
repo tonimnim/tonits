@@ -5,6 +5,7 @@ export 'brand_mark.dart';
 export 'busy_state.dart';
 export 'buttons.dart';
 export 'calling_code_prefix.dart';
+export 'choice_chips.dart';
 export 'country_field.dart';
 export 'fact_tile.dart';
 export 'feedback.dart';

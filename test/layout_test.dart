@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
+import 'support/draw_fixtures.dart';
 import 'support/fakes.dart';
 import 'support/harness.dart';
 
@@ -44,6 +45,39 @@ void main() {
         await tester.pumpAndSettle();
       }
     });
+
+    for (final (kind, draw) in [
+      (
+        'knockout',
+        () =>
+            (stages: [knockoutJson()], tables: const <Map<String, dynamic>>[]),
+      ),
+      (
+        'round robin',
+        () {
+          final groups = roundRobinJson(bestOf: 3);
+          return (stages: [groups.stage], tables: [groups.tables]);
+        },
+      ),
+    ]) {
+      testWidgets('a $kind draw fits at text scale $scale', (tester) async {
+        final (:stages, :tables) = draw();
+        await pumpTonits(
+          tester,
+          size: small,
+          textScale: scale,
+          refreshToken: 'stored',
+          api: FakeApi(
+            routes: drawRoutes(
+              status: 'running',
+              stages: stages,
+              tables: tables,
+            ),
+          ),
+        );
+        await openCompetition(tester, 'Entry');
+      });
+    }
 
     testWidgets('every tab fits at text scale $scale', (tester) async {
       await pumpTonits(

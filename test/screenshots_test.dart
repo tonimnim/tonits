@@ -17,6 +17,7 @@ import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
 import 'package:tonits/features/payments/application/payments_providers.dart';
 
+import 'support/draw_fixtures.dart';
 import 'support/fakes.dart';
 import 'support/harness.dart';
 
@@ -512,6 +513,60 @@ void main() {
       );
       await _openTab(tester, 'Rankings');
       await _shoot(tester, 'rankings-pinned-$suffix');
+    });
+
+    for (final (name, status, placements) in [
+      ('bracket', 'running', const <Map<String, dynamic>>[]),
+      (
+        'finished',
+        'completed',
+        [
+          {'placement': 1, 'entryId': lake.$1, 'displayName': lake.$2},
+          {'placement': 2, 'entryId': amina.$1, 'displayName': amina.$2},
+          {'placement': 3, 'entryId': kibera.$1, 'displayName': kibera.$2},
+          {'placement': 3, 'entryId': coast.$1, 'displayName': coast.$2},
+          {'placement': 5, 'entryId': myEntryId, 'displayName': 'striker.9'},
+        ],
+      ),
+    ]) {
+      testWidgets('competition, $name ($suffix)', skip: skip, (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          refreshToken: 'stored',
+          height: 1500,
+          api: FakeApi(
+            routes: drawRoutes(
+              status: status,
+              stages: [knockoutJson()],
+              placements: placements,
+            ),
+          ),
+        );
+        await _openTab(tester, 'Compete');
+        await tester.tap(find.text('Nairobi Weekend Cup'));
+        await _shoot(tester, 'competition-$name-$suffix');
+      });
+    }
+
+    testWidgets('competition, groups ($suffix)', skip: skip, (tester) async {
+      final groups = roundRobinJson();
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        height: 1500,
+        api: FakeApi(
+          routes: drawRoutes(
+            status: 'running',
+            stages: [groups.stage],
+            tables: [groups.tables],
+          ),
+        ),
+      );
+      await _openTab(tester, 'Compete');
+      await tester.tap(find.text('Nairobi Weekend Cup'));
+      await _shoot(tester, 'competition-groups-$suffix');
     });
 
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {

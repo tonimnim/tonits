@@ -9,12 +9,14 @@ import '../../../core/widgets/widgets.dart';
 import '../application/competitions_providers.dart';
 import '../data/competition.dart';
 import 'widgets/capacity_bar.dart';
+import 'widgets/competition_draw.dart';
 import 'widgets/competition_status_badge.dart';
 import 'widgets/entry_bar.dart';
 import 'widgets/kenya_only_badge.dart';
 import 'widgets/match_format_panel.dart';
 
-/// One competition: what it is, its facts, and how to enter.
+/// One competition: what it is, its facts, and how to enter. Once the draw
+/// is made, its bracket or tables come first.
 class CompetitionScreen extends ConsumerWidget {
   const CompetitionScreen({super.key, required this.competitionId});
 
@@ -28,8 +30,11 @@ class CompetitionScreen extends ConsumerWidget {
         title: c.gameName,
         hero: _Hero(competition: c),
         onRefresh: () async {
-          ref.invalidate(competitionProvider(competitionId));
-          ref.invalidate(eligibilityProvider(competitionId));
+          ref
+            ..invalidate(competitionProvider(competitionId))
+            ..invalidate(eligibilityProvider(competitionId))
+            ..invalidate(bracketProvider(competitionId))
+            ..invalidate(standingsProvider(competitionId));
           await ref.read(competitionProvider(competitionId).future);
         },
         bottom: SafeArea(top: false, child: EntryBar(competition: c)),
@@ -51,6 +56,7 @@ class CompetitionScreen extends ConsumerWidget {
     final l = context.l10n;
     final closes = c.registrationClosesAt;
     return [
+      if (_drawn.contains(c.status)) CompetitionDraw(competitionId: c.id),
       FactRow(
         children: [
           FactTile(
@@ -137,6 +143,15 @@ class CompetitionScreen extends ConsumerWidget {
       ],
     ];
   }
+
+  /// Statuses a draw can exist in. A competition cancelled before its draw
+  /// has none, and the section stays away.
+  static const _drawn = {
+    CompetitionStatus.checkIn,
+    CompetitionStatus.running,
+    CompetitionStatus.completed,
+    CompetitionStatus.cancelled,
+  };
 
   /// The countdown when it's close, the date when it isn't.
   static String _closing(DateTime closes, AppLocalizations l) {

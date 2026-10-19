@@ -1438,6 +1438,210 @@ abstract class AppLocalizations {
   /// **'Enter a valid phone number'**
   String get validatePhoneInvalid;
 
+  /// Section title over a knockout competition's rounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Bracket'**
+  String get drawBracket;
+
+  /// Section title over a round-robin table.
+  ///
+  /// In en, this message translates to:
+  /// **'Standings'**
+  String get drawStandings;
+
+  /// Section title over a round robin's matchdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get drawMatches;
+
+  /// Section title over a finished competition's placings.
+  ///
+  /// In en, this message translates to:
+  /// **'Final standings'**
+  String get drawFinalStandings;
+
+  /// A round-robin group.
+  ///
+  /// In en, this message translates to:
+  /// **'Group {letter}'**
+  String drawGroup(String letter);
+
+  /// A round of a round robin.
+  ///
+  /// In en, this message translates to:
+  /// **'Matchday {number}'**
+  String drawMatchday(int number);
+
+  /// A round of a double elimination's winners bracket.
+  ///
+  /// In en, this message translates to:
+  /// **'Winners round {number}'**
+  String drawWinnersRound(int number);
+
+  /// A round of a double elimination's losers bracket.
+  ///
+  /// In en, this message translates to:
+  /// **'Losers round {number}'**
+  String drawLosersRound(int number);
+
+  /// No description provided for @drawGrandFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Grand final'**
+  String get drawGrandFinal;
+
+  /// The deciding grand final, played when the losers' finalist wins the first.
+  ///
+  /// In en, this message translates to:
+  /// **'Grand final reset'**
+  String get drawGrandFinalReset;
+
+  /// A bracket slot whose player isn't known yet.
+  ///
+  /// In en, this message translates to:
+  /// **'To be decided'**
+  String get drawToBeDecided;
+
+  /// A bracket slot no one will fill: the match that fed it ended without a winner.
+  ///
+  /// In en, this message translates to:
+  /// **'No opponent'**
+  String get drawNoOpponent;
+
+  /// A level knockout match's shootout, home first.
+  ///
+  /// In en, this message translates to:
+  /// **'{home}–{away} on penalties'**
+  String drawPenalties(int home, int away);
+
+  /// No description provided for @drawWalkover.
+  ///
+  /// In en, this message translates to:
+  /// **'Walkover'**
+  String get drawWalkover;
+
+  /// No description provided for @drawNoShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Neither player showed'**
+  String get drawNoShow;
+
+  /// No description provided for @drawForfeit.
+  ///
+  /// In en, this message translates to:
+  /// **'Forfeit'**
+  String get drawForfeit;
+
+  /// No description provided for @drawDecidedOnReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Decided on review'**
+  String get drawDecidedOnReview;
+
+  /// No description provided for @drawDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disputed'**
+  String get drawDisputed;
+
+  /// No description provided for @drawCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get drawCancelled;
+
+  /// A player disqualified or withdrawn after the draw; their results stand, unranked.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed'**
+  String get drawRemoved;
+
+  /// No description provided for @drawPlayedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'P'**
+  String get drawPlayedShort;
+
+  /// No description provided for @drawPlayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Played'**
+  String get drawPlayed;
+
+  /// No description provided for @drawWonShort.
+  ///
+  /// In en, this message translates to:
+  /// **'W'**
+  String get drawWonShort;
+
+  /// No description provided for @drawWon.
+  ///
+  /// In en, this message translates to:
+  /// **'Won'**
+  String get drawWon;
+
+  /// No description provided for @drawDrawnShort.
+  ///
+  /// In en, this message translates to:
+  /// **'D'**
+  String get drawDrawnShort;
+
+  /// No description provided for @drawDrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Drawn'**
+  String get drawDrawn;
+
+  /// No description provided for @drawLostShort.
+  ///
+  /// In en, this message translates to:
+  /// **'L'**
+  String get drawLostShort;
+
+  /// No description provided for @drawLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get drawLost;
+
+  /// No description provided for @drawDifferenceShort.
+  ///
+  /// In en, this message translates to:
+  /// **'+/-'**
+  String get drawDifferenceShort;
+
+  /// No description provided for @drawGoalDifference.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal difference'**
+  String get drawGoalDifference;
+
+  /// No description provided for @drawGameDifference.
+  ///
+  /// In en, this message translates to:
+  /// **'Game difference'**
+  String get drawGameDifference;
+
+  /// No description provided for @drawPointsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Pts'**
+  String get drawPointsShort;
+
+  /// No description provided for @drawPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get drawPoints;
+
+  /// Screen reader label for a final placing's number.
+  ///
+  /// In en, this message translates to:
+  /// **'Place {place}'**
+  String drawPlacing(int place);
+
   /// No description provided for @homeGoodMorning.
   ///
   /// In en, this message translates to:
