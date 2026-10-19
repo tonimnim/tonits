@@ -30,61 +30,60 @@ class UpNextCard extends ConsumerWidget {
         children: [
           SectionHeader(title: l.homeUpNext),
           const SizedBox(height: TonitsSpace.sm),
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: () => context.go(Routes.match(match.id)),
-              child: Padding(
-                padding: const EdgeInsets.all(TonitsSpace.md),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              LifecycleBadge(match: match),
-                              if (when != null) ...[
-                                const SizedBox(width: 8),
-                                Flexible(
-                                  child: Text(
-                                    when,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: p.subtleForeground,
-                                    ),
+          // On the page like the rows below; the whole row opens the match.
+          InkWell(
+            borderRadius: BorderRadius.circular(TonitsRadius.control),
+            onTap: () => context.go(Routes.match(match.id)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            LifecycleBadge(match: match),
+                            if (when != null) ...[
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  when,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: p.subtleForeground,
                                   ),
                                 ),
-                              ],
+                              ),
                             ],
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          match.opponent == null
+                              ? l.homeOpponentToBeDecided
+                              : l.playerVersus(match.opponent!.displayName),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Text(
+                          match.place(context.l10n.seriesBestOf),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: p.mutedForeground,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            match.opponent == null
-                                ? l.homeOpponentToBeDecided
-                                : l.playerVersus(match.opponent!.displayName),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Text(
-                            match.place(context.l10n.seriesBestOf),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: p.mutedForeground,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Icon(Icons.chevron_right, color: p.mutedForeground),
-                  ],
-                ),
+                  ),
+                  Icon(Icons.chevron_right, color: p.mutedForeground),
+                ],
               ),
             ),
           ),
