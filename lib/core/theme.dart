@@ -109,11 +109,11 @@ abstract final class TonitsSpace {
 }
 
 abstract final class TonitsRadius {
-  /// Inputs and buttons.
-  static const control = 12.0;
+  /// Inputs and small controls.
+  static const control = 16.0;
 
-  /// Cards and sheets.
-  static const card = 16.0;
+  /// Cards.
+  static const card = 24.0;
 
   /// Small tiles, such as a fact with its icon.
   static const tile = 20.0;
@@ -245,7 +245,24 @@ ThemeData buildTheme(Brightness brightness) {
       showDragHandle: true,
       dragHandleColor: p.input,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(TonitsRadius.sheet),
+        ),
+      ),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: p.card,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(TonitsRadius.panel),
+      ),
+      titleTextStyle: TextStyle(
+        fontFamily: 'Geist',
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.3,
+        color: p.foreground,
       ),
     ),
     popupMenuTheme: PopupMenuThemeData(
@@ -273,7 +290,7 @@ ThemeData buildTheme(Brightness brightness) {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: p.card,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
       border: outline(p.input),
       enabledBorder: outline(p.input),
       disabledBorder: outline(p.border),

@@ -23,10 +23,10 @@ class StatTile extends StatelessWidget {
     final p = context.palette;
     return MergeSemantics(
       child: Container(
-        padding: const EdgeInsets.all(TonitsSpace.md),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: p.card,
-          borderRadius: BorderRadius.circular(TonitsRadius.card),
+          borderRadius: BorderRadius.circular(TonitsRadius.tile),
           border: Border.all(color: p.border),
         ),
         child: Column(

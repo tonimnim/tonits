@@ -4,6 +4,8 @@ library;
 export 'brand_mark.dart';
 export 'buttons.dart';
 export 'country_field.dart';
+export 'fact_tile.dart';
+export 'hero_scaffold.dart';
 export 'initials_avatar.dart';
 export 'labeled_field.dart';
 export 'notice.dart';

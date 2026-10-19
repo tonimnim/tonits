@@ -26,7 +26,7 @@ class SegmentedTabs<T> extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: track,
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         children: [
@@ -40,11 +40,11 @@ class SegmentedTabs<T> extends StatelessWidget {
                   onTap: () => onChanged(value),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    height: 36,
+                    height: 40,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: value == selected ? thumb : Colors.transparent,
-                      borderRadius: BorderRadius.circular(9),
+                      borderRadius: BorderRadius.circular(999),
                       // A hairline, not a shadow, marks the selection.
                       border: Border.all(
                         color: value == selected ? p.input : Colors.transparent,

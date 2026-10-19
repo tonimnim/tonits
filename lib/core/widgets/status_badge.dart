@@ -22,10 +22,10 @@ class StatusBadge extends StatelessWidget {
       StatusTone.muted => (p.mutedForeground, p.muted),
     };
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: fill,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(999),
         border: Border.all(color: text.withValues(alpha: 0.35)),
       ),
       child: Text(

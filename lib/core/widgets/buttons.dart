@@ -16,14 +16,14 @@ class PrimaryButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.busy = false,
-    this.pill = false,
+    this.pill = true,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final bool busy;
 
-  /// Fully rounded ends, for feature screens.
+  /// Fully rounded ends (the default); false for a 16px corner.
   final bool pill;
 
   @override
@@ -33,7 +33,7 @@ class PrimaryButton extends StatelessWidget {
       // Stays enabled-looking while busy so the button doesn't flash grey.
       onPressed: busy ? () {} : onPressed,
       style: FilledButton.styleFrom(
-        minimumSize: const Size.fromHeight(52),
+        minimumSize: const Size.fromHeight(54),
         backgroundColor: palette.primary,
         foregroundColor: palette.onPrimary,
         disabledBackgroundColor: palette.primary.withValues(alpha: 0.45),
@@ -73,7 +73,7 @@ class SecondaryButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.destructive = false,
-    this.pill = false,
+    this.pill = true,
   });
 
   final String label;
@@ -83,14 +83,14 @@ class SecondaryButton extends StatelessWidget {
   /// Red text, for actions such as signing out.
   final bool destructive;
 
-  /// Fully rounded ends, for feature screens.
+  /// Fully rounded ends (the default); false for a 16px corner.
   final bool pill;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
     final style = OutlinedButton.styleFrom(
-      minimumSize: const Size.fromHeight(52),
+      minimumSize: const Size.fromHeight(54),
       // A plain outline on the page, flat in every state.
       backgroundColor: Colors.transparent,
       elevation: 0,
