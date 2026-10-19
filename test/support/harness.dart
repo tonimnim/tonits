@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:tonits/app/app.dart';
 import 'package:tonits/core/api/api_client.dart';
+import 'package:tonits/core/clock.dart';
 import 'package:tonits/core/providers.dart';
 import 'package:tonits/features/auth/application/auth_controller.dart';
 
@@ -89,6 +90,7 @@ class FakeApi {
       ),
       200,
     ),
+    '/v1/matches/m1': (_) => jsonResponse({'data': matchRoomJson()}, 200),
     '/v1/rankings': (_) => jsonResponse({
       ...pageJson(ladderJson()),
       'snapshotAt': '2026-10-09T00:00:00Z',
@@ -127,6 +129,8 @@ Future<FakeApi> pumpTonits(
     overrides: [
       apiClientProvider.overrideWithValue(fake.api()),
       tokenStoreProvider.overrideWithValue(MemoryTokenStore(refreshToken)),
+      // A fixed time, so countdowns don't keep the screen from settling.
+      clockProvider.overrideWith((ref) => Stream.value(testNow)),
       ...overrides,
     ],
     // Fail fast in tests instead of backing off and retrying.

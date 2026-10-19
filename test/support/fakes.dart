@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:tonits/features/auth/data/token_store.dart';
@@ -339,3 +340,141 @@ Map<String, dynamic> paidCompetitionJson() => competitionJson(
   maxEntries: 16,
   prizeAmountMinor: 800000,
 );
+
+/// The fixed "now" the test clock reports; deadlines in fakes count from it.
+final testNow = DateTime.now().toUtc();
+
+/// A match room ([matchJson] plus the room's fields) at [lifecycle], with
+/// the actions that stage allows. Deadlines count from [testNow].
+Map<String, dynamic> matchRoomJson({
+  String id = 'm1',
+  String lifecycle = 'ready_for_check_in',
+  List<String>? allowedActions,
+  String? outcome,
+  bool drawAllowed = false,
+  bool meCheckedIn = false,
+  bool opponentCheckedIn = false,
+  Map<String, dynamic>? submitted,
+  Map<String, dynamic>? result,
+  String? completionReason,
+  bool entryRemoved = false,
+  String? opponentUserId = '8F3K-2P9Q-LM4R',
+}) {
+  String inMinutes(int minutes) =>
+      testNow.add(Duration(minutes: minutes)).toIso8601String();
+  final phase = switch (lifecycle) {
+    'awaiting_opponent_confirmation' ||
+    'confirmation_required' => 'awaiting_confirmation',
+    'screenshot_required' ||
+    'awaiting_opponent_screenshot' => 'awaiting_screenshots',
+    'under_review' => 'in_review',
+    'completed' || 'forfeited' || 'cancelled' => 'resolved',
+    _ => 'not_started',
+  };
+  final home = participantJson('striker.9', 'striker.9')
+    ..['checkedInAt'] = meCheckedIn ? inMinutes(-5) : null
+    ..['gameAccount'] = {
+      'inGameName': 'striker.9',
+      'platform': 'android',
+      'publisherPlayerId': 'ABCD-1234-EFGH',
+    };
+  final away = participantJson('Amina Otieno', 'amina.o')
+    ..['checkedInAt'] = opponentCheckedIn ? inMinutes(-3) : null
+    ..['gameAccount'] = {
+      'inGameName': 'AminaFC',
+      'platform': 'ios',
+      'publisherPlayerId': opponentUserId,
+    };
+  return {
+    ...matchJson(id: id, lifecycle: lifecycle, outcome: outcome),
+    'home': home,
+    'away': away,
+    'checkInClosesAt': inMinutes(12),
+    'allowedActions':
+        allowedActions ??
+        switch (lifecycle) {
+          'ready_for_check_in' => ['check_in'],
+          'report_required' => ['report_score'],
+          'confirmation_required' => ['confirm_result', 'reject_result'],
+          'screenshot_required' => ['submit_screenshot'],
+          _ => <String>[],
+        },
+    'stageId': 's1',
+    'stageName': 'Knockout',
+    'roundNumber': 1,
+    'matchNumber': 1,
+    'bracket': 'main',
+    'bestOf': 1,
+    'drawAllowed': drawAllowed,
+    'checkInOpensAt': inMinutes(-10),
+    'resultDueAt': inMinutes(55),
+    'completedAt': null,
+    'currentPlayerId': myPlayerId,
+    'friendMatchInstructions': [
+      {
+        'title': 'Add your opponent',
+        'detail': 'In eFootball, open Friends and search for their User ID.',
+      },
+      {
+        'title': 'Start a Friend Match',
+        'detail': 'Use the competition settings: 10 minutes, no extra time.',
+      },
+    ],
+    'completionReason': completionReason,
+    'verificationPolicy': {
+      'reportWindowSeconds': 600,
+      'reminderBeforeDeadlineSeconds': 180,
+      'responseWindowSeconds': 600,
+      'screenshotEvidence': {
+        'minItems': 1,
+        'maxItems': 1,
+        'mediaTypes': ['image/jpeg', 'image/png'],
+      },
+    },
+    'resultVerification': {
+      'phase': phase,
+      'submittedResult': submitted,
+      'myScreenshot': lifecycle == 'awaiting_opponent_screenshot'
+          ? {'id': 'rs1', 'evidenceId': 'ev1', 'submittedAt': inMinutes(-1)}
+          : null,
+      'opponentScreenshotSubmitted': false,
+      'confirmationDeadline': phase == 'awaiting_confirmation'
+          ? inMinutes(8)
+          : null,
+      'screenshotDeadline': phase == 'awaiting_screenshots'
+          ? inMinutes(9)
+          : null,
+      'resolution': null,
+      'entryRemoved': entryRemoved,
+    },
+    'result': result,
+    'removals': <Object>[],
+  };
+}
+
+/// A result one side submitted: [home]–[away], by this player or not.
+Map<String, dynamic> submittedJson(
+  int home,
+  int away, {
+  bool byMe = false,
+  Map<String, dynamic>? penalties,
+}) => {
+  'id': 'sr1',
+  'side': byMe ? 'home' : 'away',
+  'submittedByMe': byMe,
+  'homeScore': home,
+  'awayScore': away,
+  'tiebreak': penalties,
+  'games': <Object>[],
+  'submittedAt': testNow.subtract(const Duration(minutes: 2)).toIso8601String(),
+};
+
+/// Wraps a room the way action responses do.
+Map<String, dynamic> roomActionJson(Map<String, dynamic> room) => {
+  'data': {'match': room},
+};
+
+/// The smallest valid PNG header, enough to be recognised as PNG.
+final pngBytes = Uint8List.fromList([
+  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0, 0, 0, 13, //
+]);

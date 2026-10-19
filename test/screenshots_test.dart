@@ -323,6 +323,73 @@ void main() {
       await _shoot(tester, 'account-email-code-$suffix');
     });
 
+    for (final (name, room) in [
+      ('check-in', matchRoomJson(opponentCheckedIn: true)),
+      ('play', matchRoomJson(lifecycle: 'report_required')),
+      (
+        'confirm',
+        matchRoomJson(
+          lifecycle: 'confirmation_required',
+          submitted: submittedJson(1, 2),
+        ),
+      ),
+      (
+        'screenshot',
+        matchRoomJson(
+          lifecycle: 'screenshot_required',
+          submitted: submittedJson(1, 2),
+        ),
+      ),
+      (
+        'won',
+        matchRoomJson(
+          lifecycle: 'completed',
+          outcome: 'won',
+          completionReason: 'played',
+          submitted: submittedJson(3, 1, byMe: true),
+          result: {
+            'homeScore': 3,
+            'awayScore': 1,
+            'tiebreak': null,
+            'origin': 'agreed_reports',
+            'confirmedAt': '2026-10-14T19:00:00Z',
+          },
+        ),
+      ),
+    ]) {
+      testWidgets('match room, $name ($suffix)', skip: skip, (tester) async {
+        await _pump(
+          tester,
+          brightness: brightness,
+          refreshToken: 'stored',
+          height: name == 'won' ? 844 : 1240,
+          api: FakeApi(
+            routes: {
+              '/v1/matches/m1': (_) => jsonResponse({'data': room}, 200),
+            },
+          ),
+        );
+        await _openTab(tester, 'Matches');
+        await tester.tap(find.text('vs Amina Otieno'));
+        await _shoot(tester, 'match-$name-$suffix');
+        if (name == 'play') {
+          await tester.tap(find.text('Report the score'));
+          await tester.pumpAndSettle();
+          for (var i = 0; i < 2; i++) {
+            await tester.tap(
+              find
+                  .byWidgetPredicate(
+                    (w) => w is Tooltip && w.message == 'One more for You',
+                  )
+                  .first,
+            );
+            await tester.pump();
+          }
+          await _shoot(tester, 'match-report-$suffix');
+        }
+      });
+    }
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,

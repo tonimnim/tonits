@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
+import 'support/fakes.dart';
 import 'support/harness.dart';
 
 /// Every screen must fit a small phone, including with enlarged text. Any
@@ -99,6 +100,64 @@ void main() {
         expect(find.widgetWithText(AppBar, title), findsOneWidget);
         await tester.pageBack();
         await tester.pumpAndSettle();
+      }
+    });
+
+    testWidgets('the match room fits at text scale $scale', (tester) async {
+      final rooms = [
+        matchRoomJson(opponentCheckedIn: true),
+        matchRoomJson(lifecycle: 'report_required'),
+        matchRoomJson(
+          lifecycle: 'confirmation_required',
+          submitted: submittedJson(
+            1,
+            1,
+            penalties: {'type': 'penalties', 'homeScore': 4, 'awayScore': 5},
+          ),
+        ),
+        matchRoomJson(lifecycle: 'screenshot_required'),
+        matchRoomJson(
+          lifecycle: 'forfeited',
+          outcome: 'won',
+          completionReason: 'response_timeout',
+        ),
+      ];
+      for (final room in rooms) {
+        // A fresh app for each room.
+        await tester.pumpWidget(const SizedBox());
+        await pumpTonits(
+          tester,
+          size: small,
+          textScale: scale,
+          refreshToken: 'stored',
+          api: FakeApi(
+            routes: {
+              '/v1/matches/m1': (_) => jsonResponse({'data': room}, 200),
+            },
+          ),
+        );
+        await tester.tap(
+          find.descendant(
+            of: find.byType(TonitsNavigationBar),
+            matching: find.text('Matches'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('vs Amina Otieno'));
+        await tester.pumpAndSettle();
+        await scrollPageTo(tester, find.text('Match code'));
+        if (room['lifecycle'] == 'report_required') {
+          await tester.drag(
+            find.byType(Scrollable).first,
+            const Offset(0, 2000),
+          );
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(find.text('Report the score'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text('Report the score'));
+          await tester.pumpAndSettle();
+          await scrollPageTo(tester, find.text('Send score'));
+        }
       }
     });
   }
