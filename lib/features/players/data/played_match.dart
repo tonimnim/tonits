@@ -35,13 +35,3 @@ Object? _competitionName(Map<dynamic, dynamic> json, String _) =>
     (json['competition'] as Map?)?['name'];
 
 enum MatchResult { win, draw, loss }
-
-/// A point on the player's rating line.
-@freezed
-abstract class RatingPoint with _$RatingPoint {
-  const factory RatingPoint({required DateTime at, required int rating}) =
-      _RatingPoint;
-
-  factory RatingPoint.fromJson(Map<String, dynamic> json) =>
-      _$RatingPointFromJson(json);
-}

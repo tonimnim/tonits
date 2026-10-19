@@ -47,12 +47,3 @@ const _$MatchResultEnumMap = {
   MatchResult.draw: 'draw',
   MatchResult.loss: 'loss',
 };
-
-_RatingPoint _$RatingPointFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('_RatingPoint', json, ($checkedConvert) {
-      final val = _RatingPoint(
-        at: $checkedConvert('at', (v) => DateTime.parse(v as String)),
-        rating: $checkedConvert('rating', (v) => (v as num).toInt()),
-      );
-      return val;
-    });

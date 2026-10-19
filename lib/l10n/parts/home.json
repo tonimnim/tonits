@@ -2,82 +2,188 @@
   "homeGoodMorning": "Good morning",
   "homeGoodAfternoon": "Good afternoon",
   "homeGoodEvening": "Good evening",
-
   "homeSeeAll": "See all",
-  "@homeSeeAll": {"description": "Action on a Home section header that opens the full list."},
+  "@homeSeeAll": {
+    "description": "Action on a Home section header that opens the full list."
+  },
   "homeClosingSoon": "Closing soon",
   "homeNothingOpenTitle": "Nothing open right now",
   "homeNothingOpenMessage": "New competitions open for registration regularly.",
-
   "homeRating": "Rating",
   "homeRatingSemantics": "Rating {rating}",
-  "@homeRatingSemantics": {"description": "Screen reader label for the player's rating.", "placeholders": {"rating": {"type": "int"}}},
-  "homeLast30Days": "Last 30 days",
-  "@homeLast30Days": {"description": "Caption under the rating trend line."},
-  "homeInCountry": "in {countryCode}",
-  "@homeInCountry": {"description": "Rank pill label when the country's name is unknown.", "placeholders": {"countryCode": {"type": "String", "example": "KE"}}},
+  "@homeRatingSemantics": {
+    "description": "Screen reader label for the player's rating.",
+    "placeholders": {
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
   "homeUnranked": "Unranked",
   "homeUnratedMessage": "Play your first rated match to get a rating and a place on the ladder.",
   "homeFindCompetition": "Find a competition",
   "homeMovedUp": "{places, plural, =1{Up 1 place} other{Up {places} places}}",
-  "@homeMovedUp": {"description": "Screen reader label for rank movement.", "placeholders": {"places": {"type": "int"}}},
+  "@homeMovedUp": {
+    "description": "Screen reader label for rank movement.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
   "homeMovedDown": "{places, plural, =1{Down 1 place} other{Down {places} places}}",
-  "@homeMovedDown": {"placeholders": {"places": {"type": "int"}}},
+  "@homeMovedDown": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
   "homePlaces": "{places, plural, =1{1 place} other{{places} places}}",
-  "@homePlaces": {"description": "Rank movement next to an up or down arrow.", "placeholders": {"places": {"type": "int"}}},
-
+  "@homePlaces": {
+    "description": "Rank movement next to an up or down arrow.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
   "homeCountryLadder": "{country} ladder",
-  "@homeCountryLadder": {"placeholders": {"country": {"type": "String", "example": "Kenya"}}},
+  "@homeCountryLadder": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
   "homeTopInCountry": "Top in {country}",
-  "@homeTopInCountry": {"placeholders": {"country": {"type": "String", "example": "Kenya"}}},
-
+  "@homeTopInCountry": {
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
   "homeRecentMatches": "Recent matches",
-
-  "homeOverview": "Overview",
   "homeWinRate": "Win rate",
-  "homeWinsOfPlayed": "{wins} of {played} won",
-  "@homeWinsOfPlayed": {"placeholders": {"wins": {"type": "int"}, "played": {"type": "int"}}},
   "homeMatches": "Matches",
-  "homeAllTime": "All time",
-  "homeGoalsPerMatch": "Goals per match",
-  "homeLastMatches": "{count, plural, =1{Last 1 match} other{Last {count} matches}}",
-  "@homeLastMatches": {"placeholders": {"count": {"type": "int"}}},
-  "homeCurrentStreak": "Current streak",
-  "homeWinsInARow": "Wins in a row",
-  "homeLossesInARow": "Losses in a row",
-  "homeDrawsInARow": "Draws in a row",
-
   "homeUpNext": "Up next",
   "homeOpponentToBeDecided": "Opponent to be decided",
   "homeCheckInBy": "by {time}",
-  "@homeCheckInBy": {"description": "Check-in deadline next to the match status.", "placeholders": {"time": {"type": "String", "example": "Today, 18:30"}}},
-
+  "@homeCheckInBy": {
+    "description": "Check-in deadline next to the match status.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "Today, 18:30"
+      }
+    }
+  },
   "playerVersus": "vs {opponent}",
-  "@playerVersus": {"placeholders": {"opponent": {"type": "String", "example": "striker.9"}}},
+  "@playerVersus": {
+    "placeholders": {
+      "opponent": {
+        "type": "String",
+        "example": "striker.9"
+      }
+    }
+  },
   "playerFormerPlayer": "a former player",
-  "@playerFormerPlayer": {"description": "Stands in for an opponent whose profile is no longer public, as in 'vs a former player'."},
+  "@playerFormerPlayer": {
+    "description": "Stands in for an opponent whose profile is no longer public, as in 'vs a former player'."
+  },
   "playerWins": "Wins",
   "playerDraws": "Draws",
   "playerLosses": "Losses",
   "playerRecordSemantics": "{wins} wins, {draws} draws, {losses} losses",
-  "@playerRecordSemantics": {"placeholders": {"wins": {"type": "int"}, "draws": {"type": "int"}, "losses": {"type": "int"}}},
+  "@playerRecordSemantics": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "draws": {
+        "type": "int"
+      },
+      "losses": {
+        "type": "int"
+      }
+    }
+  },
   "playerResultWin": "Win",
   "playerResultDraw": "Draw",
   "playerResultLoss": "Loss",
   "playerResultWinLetter": "W",
-  "@playerResultWinLetter": {"description": "One-letter abbreviation of a win."},
+  "@playerResultWinLetter": {
+    "description": "One-letter abbreviation of a win."
+  },
   "playerResultDrawLetter": "D",
-  "@playerResultDrawLetter": {"description": "One-letter abbreviation of a draw."},
+  "@playerResultDrawLetter": {
+    "description": "One-letter abbreviation of a draw."
+  },
   "playerResultLossLetter": "L",
-  "@playerResultLossLetter": {"description": "One-letter abbreviation of a loss."},
-
+  "@playerResultLossLetter": {
+    "description": "One-letter abbreviation of a loss."
+  },
   "rankingsGlobal": "Global",
   "rankingsEmptyTitle": "No rankings yet",
   "rankingsEmptyMessage": "Players are ranked once they finish rated matches.",
   "rankingsYou": "{name} (you)",
-  "@rankingsYou": {"description": "The signed-in player's own name on a ladder.", "placeholders": {"name": {"type": "String", "example": "striker.9"}}},
+  "@rankingsYou": {
+    "description": "The signed-in player's own name on a ladder.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "striker.9"
+      }
+    }
+  },
   "rankingsMovedUp": "Up {places}",
-  "@rankingsMovedUp": {"placeholders": {"places": {"type": "int"}}},
+  "@rankingsMovedUp": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
   "rankingsMovedDown": "Down {places}",
-  "@rankingsMovedDown": {"placeholders": {"places": {"type": "int"}}}
+  "@rankingsMovedDown": {
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "homeRankIn": "in {place}",
+  "@homeRankIn": {
+    "description": "After a rank number, as in '#24 in Kenya'.",
+    "placeholders": {
+      "place": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "homeRankGlobal": "global",
+  "@homeRankGlobal": {
+    "description": "After a rank number, as in '#310 global'."
+  },
+  "homeGoalsPerMatchShort": "Goals per match",
+  "homeStreak": "Streak",
+  "homeRecordLine": "{wins} W  ·  {draws} D  ·  {losses} L",
+  "@homeRecordLine": {
+    "description": "Wins, draws and losses under the record bar.",
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "draws": {
+        "type": "int"
+      },
+      "losses": {
+        "type": "int"
+      }
+    }
+  }
 }

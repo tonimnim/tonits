@@ -611,20 +611,6 @@
       }
     }
   },
-  "homeLast30Days": "Last 30 days",
-  "@homeLast30Days": {
-    "description": "Caption under the rating trend line."
-  },
-  "homeInCountry": "in {countryCode}",
-  "@homeInCountry": {
-    "description": "Rank pill label when the country's name is unknown.",
-    "placeholders": {
-      "countryCode": {
-        "type": "String",
-        "example": "KE"
-      }
-    }
-  },
   "homeUnranked": "Unranked",
   "homeUnratedMessage": "Play your first rated match to get a rating and a place on the ladder.",
   "homeFindCompetition": "Find a competition",
@@ -673,34 +659,8 @@
     }
   },
   "homeRecentMatches": "Recent matches",
-  "homeOverview": "Overview",
   "homeWinRate": "Win rate",
-  "homeWinsOfPlayed": "{wins} of {played} won",
-  "@homeWinsOfPlayed": {
-    "placeholders": {
-      "wins": {
-        "type": "int"
-      },
-      "played": {
-        "type": "int"
-      }
-    }
-  },
   "homeMatches": "Matches",
-  "homeAllTime": "All time",
-  "homeGoalsPerMatch": "Goals per match",
-  "homeLastMatches": "{count, plural, =1{Last 1 match} other{Last {count} matches}}",
-  "@homeLastMatches": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "homeCurrentStreak": "Current streak",
-  "homeWinsInARow": "Wins in a row",
-  "homeLossesInARow": "Losses in a row",
-  "homeDrawsInARow": "Draws in a row",
   "homeUpNext": "Up next",
   "homeOpponentToBeDecided": "Opponent to be decided",
   "homeCheckInBy": "by {time}",
@@ -783,6 +743,37 @@
   "@rankingsMovedDown": {
     "placeholders": {
       "places": {
+        "type": "int"
+      }
+    }
+  },
+  "homeRankIn": "in {place}",
+  "@homeRankIn": {
+    "description": "After a rank number, as in '#24 in Kenya'.",
+    "placeholders": {
+      "place": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "homeRankGlobal": "global",
+  "@homeRankGlobal": {
+    "description": "After a rank number, as in '#310 global'."
+  },
+  "homeGoalsPerMatchShort": "Goals per match",
+  "homeStreak": "Streak",
+  "homeRecordLine": "{wins} W  ·  {draws} D  ·  {losses} L",
+  "@homeRecordLine": {
+    "description": "Wins, draws and losses under the record bar.",
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      },
+      "draws": {
+        "type": "int"
+      },
+      "losses": {
         "type": "int"
       }
     }

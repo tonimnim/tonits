@@ -1504,18 +1504,6 @@ abstract class AppLocalizations {
   /// **'Rating {rating}'**
   String homeRatingSemantics(int rating);
 
-  /// Caption under the rating trend line.
-  ///
-  /// In en, this message translates to:
-  /// **'Last 30 days'**
-  String get homeLast30Days;
-
-  /// Rank pill label when the country's name is unknown.
-  ///
-  /// In en, this message translates to:
-  /// **'in {countryCode}'**
-  String homeInCountry(String countryCode);
-
   /// No description provided for @homeUnranked.
   ///
   /// In en, this message translates to:
@@ -1570,71 +1558,17 @@ abstract class AppLocalizations {
   /// **'Recent matches'**
   String get homeRecentMatches;
 
-  /// No description provided for @homeOverview.
-  ///
-  /// In en, this message translates to:
-  /// **'Overview'**
-  String get homeOverview;
-
   /// No description provided for @homeWinRate.
   ///
   /// In en, this message translates to:
   /// **'Win rate'**
   String get homeWinRate;
 
-  /// No description provided for @homeWinsOfPlayed.
-  ///
-  /// In en, this message translates to:
-  /// **'{wins} of {played} won'**
-  String homeWinsOfPlayed(int wins, int played);
-
   /// No description provided for @homeMatches.
   ///
   /// In en, this message translates to:
   /// **'Matches'**
   String get homeMatches;
-
-  /// No description provided for @homeAllTime.
-  ///
-  /// In en, this message translates to:
-  /// **'All time'**
-  String get homeAllTime;
-
-  /// No description provided for @homeGoalsPerMatch.
-  ///
-  /// In en, this message translates to:
-  /// **'Goals per match'**
-  String get homeGoalsPerMatch;
-
-  /// No description provided for @homeLastMatches.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{Last 1 match} other{Last {count} matches}}'**
-  String homeLastMatches(int count);
-
-  /// No description provided for @homeCurrentStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Current streak'**
-  String get homeCurrentStreak;
-
-  /// No description provided for @homeWinsInARow.
-  ///
-  /// In en, this message translates to:
-  /// **'Wins in a row'**
-  String get homeWinsInARow;
-
-  /// No description provided for @homeLossesInARow.
-  ///
-  /// In en, this message translates to:
-  /// **'Losses in a row'**
-  String get homeLossesInARow;
-
-  /// No description provided for @homeDrawsInARow.
-  ///
-  /// In en, this message translates to:
-  /// **'Draws in a row'**
-  String get homeDrawsInARow;
 
   /// No description provided for @homeUpNext.
   ///
@@ -1761,6 +1695,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Down {places}'**
   String rankingsMovedDown(int places);
+
+  /// After a rank number, as in '#24 in Kenya'.
+  ///
+  /// In en, this message translates to:
+  /// **'in {place}'**
+  String homeRankIn(String place);
+
+  /// After a rank number, as in '#310 global'.
+  ///
+  /// In en, this message translates to:
+  /// **'global'**
+  String get homeRankGlobal;
+
+  /// No description provided for @homeGoalsPerMatchShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals per match'**
+  String get homeGoalsPerMatchShort;
+
+  /// No description provided for @homeStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get homeStreak;
+
+  /// Wins, draws and losses under the record bar.
+  ///
+  /// In en, this message translates to:
+  /// **'{wins} W  ·  {draws} D  ·  {losses} L'**
+  String homeRecordLine(int wins, int draws, int losses);
 
   /// The signed-in player's own side in a match.
   ///

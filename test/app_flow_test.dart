@@ -59,7 +59,7 @@ void main() {
     expect(find.byType(TonitsNavigationBar), findsOneWidget);
     expect(find.text('striker.9'), findsWidgets);
     expect(find.text('1,542'), findsOneWidget);
-    expect(find.text('#24'), findsOneWidget);
+    expect(find.textContaining('#24 in', findRichText: true), findsOneWidget);
     expect(find.text('Up next'), findsOneWidget);
     expect(find.text('vs Amina Otieno'), findsWidgets);
 
@@ -121,22 +121,15 @@ void main() {
     expect(find.widgetWithText(AppBar, 'Competitions'), findsOneWidget);
   });
 
-  testWidgets('without rating history the card leaves out the trend', (
-    tester,
-  ) async {
-    await pumpTonits(
-      tester,
-      refreshToken: 'stored',
-      api: FakeApi(
-        routes: {
-          '/v1/players/$myPlayerId/rating-history': (_) =>
-              errorResponse(404, 'not_found'),
-        },
-      ),
-    );
+  testWidgets('the rating card carries the overview numbers', (tester) async {
+    await pumpTonits(tester, refreshToken: 'stored');
 
     expect(find.text('1,542'), findsOneWidget);
-    expect(find.text('Last 30 days'), findsNothing);
+    expect(find.text('62%'), findsOneWidget);
+    expect(find.text('W3'), findsOneWidget);
+    expect(find.text('13 W  ·  3 D  ·  5 L'), findsOneWidget);
+    // No separate overview section any more.
+    expect(find.text('Overview'), findsNothing);
   });
 
   testWidgets('a failing section offers a retry and the rest still loads', (

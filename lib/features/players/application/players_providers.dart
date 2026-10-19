@@ -46,12 +46,6 @@ final myStatsProvider = FutureProvider.autoDispose<PlayerStats>((ref) async {
   return PlayerStats.from(profile.record, recent);
 });
 
-/// The rating line for the player card, or null while the API doesn't serve
-/// rating history.
-final myRatingHistoryProvider = FutureProvider.autoDispose<List<RatingPoint>?>(
-  (ref) => ref.watch(playersRepositoryProvider).ratingHistory(_myId(ref)),
-);
-
 /// The player's slice of their country ladder: up to two places above and
 /// below them. A player without a country rank (new, or provisional) gets
 /// the top three instead, something to aim for.

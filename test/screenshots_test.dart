@@ -11,8 +11,10 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/auth/application/auth_providers.dart';
 import 'package:tonits/features/payments/application/payments_providers.dart';
 
 import 'support/fakes.dart';
@@ -77,6 +79,7 @@ Future<void> _pump(
   String? refreshToken,
   double height = 844,
   FakeApi? api,
+  List<Override> overrides = const [],
 }) async {
   await tester.runAsync(_loadFonts);
   await pumpTonits(
@@ -85,6 +88,7 @@ Future<void> _pump(
     // Long enough that a waiting payment stays waiting for the shot.
     overrides: [
       paymentPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
+      ...overrides,
     ],
     brightness: brightness,
     refreshToken: refreshToken,
@@ -108,6 +112,15 @@ void main() {
 
   for (final brightness in Brightness.values) {
     final suffix = brightness.name;
+
+    testWidgets('welcome, iPhone ($suffix)', skip: skip, (tester) async {
+      await _pump(
+        tester,
+        brightness: brightness,
+        overrides: [appleSignInOfferedProvider.overrideWithValue(true)],
+      );
+      await _shoot(tester, 'welcome-iphone-$suffix');
+    });
 
     testWidgets('welcome ($suffix)', skip: skip, (tester) async {
       await _pump(tester, brightness: brightness);

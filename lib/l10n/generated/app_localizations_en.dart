@@ -868,14 +868,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get homeLast30Days => 'Last 30 days';
-
-  @override
-  String homeInCountry(String countryCode) {
-    return 'in $countryCode';
-  }
-
-  @override
   String get homeUnranked => 'Unranked';
 
   @override
@@ -932,47 +924,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeRecentMatches => 'Recent matches';
 
   @override
-  String get homeOverview => 'Overview';
-
-  @override
   String get homeWinRate => 'Win rate';
 
   @override
-  String homeWinsOfPlayed(int wins, int played) {
-    return '$wins of $played won';
-  }
-
-  @override
   String get homeMatches => 'Matches';
-
-  @override
-  String get homeAllTime => 'All time';
-
-  @override
-  String get homeGoalsPerMatch => 'Goals per match';
-
-  @override
-  String homeLastMatches(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Last $count matches',
-      one: 'Last 1 match',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get homeCurrentStreak => 'Current streak';
-
-  @override
-  String get homeWinsInARow => 'Wins in a row';
-
-  @override
-  String get homeLossesInARow => 'Losses in a row';
-
-  @override
-  String get homeDrawsInARow => 'Draws in a row';
 
   @override
   String get homeUpNext => 'Up next';
@@ -1048,6 +1003,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String rankingsMovedDown(int places) {
     return 'Down $places';
+  }
+
+  @override
+  String homeRankIn(String place) {
+    return 'in $place';
+  }
+
+  @override
+  String get homeRankGlobal => 'global';
+
+  @override
+  String get homeGoalsPerMatchShort => 'Goals per match';
+
+  @override
+  String get homeStreak => 'Streak';
+
+  @override
+  String homeRecordLine(int wins, int draws, int losses) {
+    return '$wins W  ·  $draws D  ·  $losses L';
   }
 
   @override

@@ -269,16 +269,6 @@ List<Map<String, dynamic>> recentJson() => [
   playedJson('win', 3, 0, 'Mombasa Flyer', playedAt: '2026-09-25T19:00:00Z'),
 ];
 
-Map<String, dynamic> ratingHistoryJson() => {
-  'data': [
-    for (var i = 0; i < 30; i++)
-      {
-        'at': DateTime.utc(2026, 9, 10 + i).toIso8601String(),
-        'rating': 1490 + (i * 1.9).round() + (i % 4 == 0 ? -8 : 0),
-      },
-  ],
-};
-
 /// The Kenya ladder from 21st to 27th, with the signed-in player 24th.
 List<Map<String, dynamic>> ladderJson() => [
   for (final (rank, name, rating) in [

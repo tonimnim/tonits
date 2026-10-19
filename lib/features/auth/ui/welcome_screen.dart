@@ -105,17 +105,18 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                         Notice(_error!),
                         const SizedBox(height: TonitsSpace.md),
                       ],
-                      GoogleButton(
-                        busy: _busy == IdentityMethod.google,
-                        onPressed: () => _continue(IdentityMethod.google),
-                      ),
+                      // Apple first on iPhone, as Apple's guidelines ask.
                       if (apple) ...[
-                        const SizedBox(height: 12),
                         AppleButton(
                           busy: _busy == IdentityMethod.apple,
                           onPressed: () => _continue(IdentityMethod.apple),
                         ),
+                        const SizedBox(height: 12),
                       ],
+                      GoogleButton(
+                        busy: _busy == IdentityMethod.google,
+                        onPressed: () => _continue(IdentityMethod.google),
+                      ),
                       const SizedBox(height: TonitsSpace.md),
                       const _FinePrint(),
                     ],

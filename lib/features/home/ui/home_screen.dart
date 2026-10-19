@@ -12,7 +12,6 @@ import 'widgets/home_header.dart';
 import 'widgets/player_card.dart';
 import 'widgets/rank_neighbourhood_section.dart';
 import 'widgets/recent_matches_section.dart';
-import 'widgets/stats_overview.dart';
 import 'widgets/up_next_card.dart';
 
 /// Tab 1: the player's overview. Who they are on the ladder and how they're
@@ -48,7 +47,6 @@ class HomeScreen extends ConsumerWidget {
       ),
       children: const [
         UpNextCard(),
-        StatsOverview(),
         RankNeighbourhoodSection(),
         RecentMatchesSection(),
         CompeteSection(),

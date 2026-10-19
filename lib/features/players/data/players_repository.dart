@@ -35,32 +35,6 @@ class PlayersRepository {
     return CursorPage.fromJson(json!, PlayedMatch.fromJson);
   }
 
-  /// The player's rating over the last [days] days, oldest first.
-  ///
-  /// Proposed endpoint (see docs/backend-requests.md): returns null while the
-  /// API doesn't serve it, so the trend line is simply left out.
-  Future<List<RatingPoint>?> ratingHistory(
-    String playerId, {
-    int days = 30,
-  }) async {
-    try {
-      final json = await _api.get(
-        withQuery(
-          '/v1/players/${Uri.encodeComponent(playerId)}/rating-history',
-          {'gameId': PlayerProfile.gameId, 'days': days},
-        ),
-        auth: true,
-      );
-      return (json!['data'] as List)
-          .cast<Map<String, dynamic>>()
-          .map(RatingPoint.fromJson)
-          .toList();
-    } on ApiException catch (e) {
-      if (e.status == 404) return null;
-      rethrow;
-    }
-  }
-
   /// The signed-in player's eFootball game account ID, which entries are
   /// made with. Sign-up creates it from the Konami ID, so there is one.
   Future<String?> myGameAccountId() async {

@@ -98,8 +98,6 @@ class FakeApi {
       ...pageJson(recentJson()),
       'snapshotAt': '2026-10-09T00:00:00Z',
     }, 200),
-    '/v1/players/$myPlayerId/rating-history': (_) =>
-        jsonResponse(ratingHistoryJson(), 200),
   };
 }
 
