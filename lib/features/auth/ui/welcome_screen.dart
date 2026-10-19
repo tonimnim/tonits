@@ -10,6 +10,7 @@ import '../application/auth_controller.dart';
 import '../data/models.dart';
 import 'widgets/provider_buttons.dart';
 import 'widgets/welcome_orbit.dart';
+import '../application/auth_providers.dart';
 
 /// The first screen: what Tonits is, and one tap to continue with Google
 /// (and Apple on iPhone). New players go on to onboarding.

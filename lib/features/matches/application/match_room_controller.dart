@@ -6,29 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
-import '../../../core/providers.dart';
 import '../../evidence/application/screenshot_uploader.dart';
 import '../data/match_room.dart';
 import '../data/match_room_repository.dart';
 import '../data/match_summary.dart';
 import 'matches_providers.dart';
-
-final matchRoomRepositoryProvider = Provider<MatchRoomRepository>(
-  (ref) => MatchRoomRepository(ref.watch(apiClientProvider)),
-);
-
-/// How often a live room is read again: quickly while the other player
-/// has a deadline running, slowly otherwise. Tests lengthen both.
-final matchRoomPollIntervalsProvider =
-    Provider<({Duration fast, Duration slow})>(
-      (ref) => (
-        fast: const Duration(seconds: 10),
-        slow: const Duration(seconds: 30),
-      ),
-    );
-
-final matchRoomProvider = AsyncNotifierProvider.autoDispose
-    .family<MatchRoomController, MatchRoom, String>(MatchRoomController.new);
+import '../../evidence/application/evidence_providers.dart';
 
 /// One match room: reads it, runs the player's actions, and keeps it fresh
 /// while the match is live. What the player may do always comes from the

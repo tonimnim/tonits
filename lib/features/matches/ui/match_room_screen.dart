@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/error_text.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../application/match_room_controller.dart';
 import '../data/match_room.dart';
 import '../data/match_summary.dart';
 import 'widgets/friend_match_card.dart';
 import 'widgets/match_facts.dart';
 import 'widgets/next_step_panel.dart';
 import 'widgets/room_hero.dart';
+import '../application/matches_providers.dart';
 
 /// One match, from check-in to the final result. Everything the player can
 /// do comes from the server's lifecycle and allowed actions.

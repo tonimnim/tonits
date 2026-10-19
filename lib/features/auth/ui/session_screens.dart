@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../application/auth_controller.dart';
+import '../application/auth_providers.dart';
 
 /// Shown while a stored session is being resumed at launch.
 class SplashScreen extends StatelessWidget {

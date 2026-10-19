@@ -8,7 +8,6 @@ import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../application/competitions_providers.dart';
-import '../../application/entry_service.dart';
 import '../../data/competition.dart';
 import '../../data/eligibility.dart';
 

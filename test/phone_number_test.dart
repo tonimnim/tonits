@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/core/countries.dart';
-import 'package:tonits/features/account/ui/phone_number.dart';
+import 'package:tonits/core/phone_number.dart';
 
 void main() {
   final kenya = Country.byCode('KE')!;

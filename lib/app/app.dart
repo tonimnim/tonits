@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme.dart';
-import '../features/auth/application/auth_controller.dart';
 import 'router.dart';
+import '../features/auth/application/auth_providers.dart';
 
 class TonitsApp extends ConsumerStatefulWidget {
   const TonitsApp({super.key});

@@ -6,12 +6,13 @@ import '../../../core/api/error_text.dart';
 import '../../../core/format.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../application/checkout_controller.dart';
 import 'widgets/mpesa_form.dart';
 import 'widgets/payment_outcome.dart';
 import 'widgets/payment_waiting.dart';
+import '../application/payments_providers.dart';
+import '../../auth/application/auth_providers.dart';
 
 /// Pays a competition's entry fee with M-Pesa. Opening it picks up an
 /// unfinished payment instead of starting a second charge.

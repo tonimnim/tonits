@@ -5,9 +5,9 @@ import '../../../core/api/error_text.dart';
 import '../../../core/countries.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/application/auth_controller.dart';
 import '../application/rankings_providers.dart';
 import 'widgets/ranking_row.dart';
+import '../../auth/application/auth_providers.dart';
 
 enum _Scope { country, global }
 

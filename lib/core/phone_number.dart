@@ -1,5 +1,5 @@
-import '../../../core/countries.dart';
-import '../../payments/ui/kenyan_phone.dart';
+import 'countries.dart';
+import 'kenyan_phone.dart';
 
 /// Turns a number typed the local way into international (E.164) format
 /// for [country]. Kenyan numbers must be mobile numbers, since M-Pesa uses

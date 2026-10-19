@@ -8,13 +8,13 @@ import '../../../core/countries.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../account/application/legal_links.dart';
-import '../../account/ui/phone_number.dart';
-import '../../auth/application/auth_controller.dart';
+import '../../../core/phone_number.dart';
 import '../../auth/data/models.dart';
 import '../../auth/ui/validators.dart';
 import '../../auth/ui/widgets/auth_fields.dart';
 import 'widgets/onboarding_frame.dart';
 import 'widgets/username_field.dart';
+import '../../auth/application/auth_providers.dart';
 
 /// After a first Google or Apple sign-in: the username, the Konami ID, the
 /// country, then the phone, one step at a time, sent together at the end.

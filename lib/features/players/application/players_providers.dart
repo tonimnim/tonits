@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../rankings/application/rankings_providers.dart';
 import '../../rankings/data/ranked_player.dart';
 import '../data/played_match.dart';
 import '../data/player_profile.dart';
 import '../data/players_repository.dart';
 import 'player_stats.dart';
+import '../../auth/application/auth_providers.dart';
+import 'rank_neighbourhood.dart';
 
 final playersRepositoryProvider = Provider<PlayersRepository>(
   (ref) => PlayersRepository(ref.watch(apiClientProvider)),
@@ -78,15 +79,6 @@ final myRankNeighbourhoodProvider =
         ranked: ranked,
       );
     });
-
-class RankNeighbourhood {
-  const RankNeighbourhood(this.rows, {required this.ranked});
-
-  final List<RankedPlayer> rows;
-
-  /// Whether [rows] are around the player (true) or the top of the ladder.
-  final bool ranked;
-}
 
 /// Up to [around] rows either side of [playerId], or the top three when the
 /// player isn't in [ladder].

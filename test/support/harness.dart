@@ -8,9 +8,10 @@ import 'package:tonits/app/app.dart';
 import 'package:tonits/core/api/api_client.dart';
 import 'package:tonits/core/clock.dart';
 import 'package:tonits/core/providers.dart';
-import 'package:tonits/features/auth/application/auth_controller.dart';
 
 import 'fakes.dart';
+
+import 'package:tonits/features/auth/application/auth_providers.dart';
 
 /// A fake Tonits API: answers by path, with realistic defaults that a test
 /// can replace per route.

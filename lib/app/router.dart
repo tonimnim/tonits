@@ -21,6 +21,7 @@ import '../features/profile/ui/profile_screen.dart';
 import '../features/rankings/ui/rankings_screen.dart';
 import 'shell/app_shell.dart';
 import 'shell/app_tab.dart';
+import '../features/auth/application/auth_providers.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // The router is built once; this notifier re-runs its redirect whenever the

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
-import '../kenyan_phone.dart';
+import '../../../../core/kenyan_phone.dart';
 
 /// The amount and the M-Pesa number the prompt goes to.
 class MpesaForm extends StatefulWidget {

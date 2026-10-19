@@ -1,16 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/providers.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../auth/data/models.dart';
 import '../../players/application/players_providers.dart';
 import '../data/account_repository.dart';
-
-final accountRepositoryProvider = Provider<AccountRepository>(
-  (ref) => AccountRepository(ref.watch(apiClientProvider)),
-);
-
-final accountServiceProvider = Provider<AccountService>(AccountService.new);
+import 'account_providers.dart';
+import '../../auth/application/auth_providers.dart';
 
 /// Edits the signed-in player's account and keeps the session's copy of the
 /// player current, so every screen shows the change at once.

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/features/competitions/data/eligibility.dart';
 import 'package:tonits/features/payments/data/payment.dart';
-import 'package:tonits/features/payments/ui/kenyan_phone.dart';
+import 'package:tonits/core/kenyan_phone.dart';
 
 import 'support/fakes.dart';
 

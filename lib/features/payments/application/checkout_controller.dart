@@ -5,28 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
-import '../../../core/providers.dart';
 import '../../competitions/application/competitions_providers.dart';
-import '../../competitions/application/entry_service.dart';
 import '../../players/application/players_providers.dart';
 import '../data/payment.dart';
 import '../data/payments_repository.dart';
-
-final paymentsRepositoryProvider = Provider<PaymentsRepository>(
-  (ref) => PaymentsRepository(ref.watch(apiClientProvider)),
-);
-
-/// How often a settling payment is read again. Tests shorten it.
-final paymentPollIntervalProvider = Provider<Duration>(
-  (ref) => const Duration(seconds: 3),
-);
+import 'payments_providers.dart';
 
 /// After this long without an answer, the player is told it can take a
 /// moment and offered a manual check.
 const slowPaymentAfter = Duration(seconds: 60);
-
-final checkoutControllerProvider = NotifierProvider.autoDispose
-    .family<CheckoutController, CheckoutState, String>(CheckoutController.new);
 
 enum CheckoutPhase {
   /// Asking for the M-Pesa number.

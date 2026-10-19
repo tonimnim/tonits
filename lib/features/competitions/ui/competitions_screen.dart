@@ -8,6 +8,7 @@ import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/competitions_providers.dart';
 import 'widgets/competition_card.dart';
+import '../application/competition_filter.dart';
 
 /// Tab 2: discover competitions, filtered by where they are in their life.
 class CompetitionsScreen extends ConsumerStatefulWidget {

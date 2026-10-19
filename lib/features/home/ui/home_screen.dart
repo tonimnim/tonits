@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../competitions/application/competitions_providers.dart';
 import '../../matches/application/matches_providers.dart';
 import '../../players/application/players_providers.dart';
@@ -14,6 +13,7 @@ import 'widgets/rank_neighbourhood_section.dart';
 import 'widgets/recent_matches_section.dart';
 import 'widgets/stats_overview.dart';
 import 'widgets/up_next_card.dart';
+import '../../auth/application/auth_providers.dart';
 
 /// Tab 1: the player's overview. Who they are on the ladder and how they're
 /// playing first, then what's next and what to enter.

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
-import 'package:tonits/features/payments/application/checkout_controller.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
+
+import 'package:tonits/features/payments/application/payments_providers.dart';
 
 Future<void> openCompete(WidgetTester tester) async {
   await tester.tap(

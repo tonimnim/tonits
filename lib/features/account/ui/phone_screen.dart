@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/countries.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../auth/ui/widgets/form_error.dart';
-import '../application/account_service.dart';
-import 'phone_number.dart';
+import '../../../core/phone_number.dart';
 import 'widgets/account_form_page.dart';
+import '../../auth/application/auth_providers.dart';
+import '../application/account_providers.dart';
 
 /// Adds, changes or removes the phone number used for payments.
 class PhoneScreen extends ConsumerStatefulWidget {

@@ -1,6 +1,6 @@
-# Tonits app architecture
+# Ozone app architecture
 
-Tonits is the player app for eFootball competitions. It talks to one Go API
+Ozone (code package `tonits`) is the player app for eFootball competitions. It talks to one Go API
 (`gemics-backend/services/api`, contract in `openapi/openapi.yaml`). This
 document is the plan the code follows; change it when a decision changes.
 
@@ -33,10 +33,19 @@ lib/
     format.dart             Dates, money, counts
     widgets/                The design system (buttons, fields, cards…)
   features/<feature>/
-    data/                   Models (fromJson) and the repository (HTTP)
-    application/            Providers and notifiers: state and use cases
+    data/                   Models and the repository (HTTP); no Flutter
+    application/
+      <feature>_providers.dart  Every provider of the feature, and only those
+      *_controller.dart     Notifiers and services, one class per file
     ui/                     Screens, and widgets/ used only by them
 ```
+
+Every feature has the same shape. Providers are declared only in the
+feature's `application/<feature>_providers.dart`, so there is one place to
+look for a feature's state and one file for tests to override. Classes
+(notifiers, services, value types) live in their own files next to it.
+Screen-only features (Home, Profile, Onboarding) have just `ui/` and use
+other features' providers.
 
 A dependency points down or sideways into `core`: `ui → application → data
 → core`. A feature uses another feature through its `application` providers
@@ -50,6 +59,15 @@ Shared building blocks:
 - `core/widgets/paged_list_view.dart`: the matching list with
   pull-to-refresh, infinite scroll and loading, empty and error states.
 - `core/widgets/widgets.dart`: the design system, one component per file.
+- `core/widgets/feedback.dart`: `confirmAction`, `showMessage`,
+  `popWithMessage` and `copyToClipboard`, so every feature confirms and
+  reports the same way.
+- `core/widgets/busy_state.dart`: the `BusyState` mixin for screens that run
+  one action at a time and show its error.
+- `core/phone_number.dart` and `core/kenyan_phone.dart`: phone numbers in
+  international form, shared by onboarding, the account and M-Pesa.
+- `core/clock.dart`: a ticking clock provider for countdowns; tests freeze
+  it.
 - `core/routes.dart`: every route path; `app/shell/app_tab.dart` defines the
   tabs once for both the bar and the router.
 
@@ -75,9 +93,11 @@ turn JSON into typed models and nothing else. Hand-written `fromJson` matches
 the OpenAPI schemas. Code generation (freezed, json_serializable) is deferred
 until the model count makes it pay for itself.
 
-**Sessions.** The refresh token lives in `flutter_secure_storage`, and the
-access token only in memory. `AuthController` restores at launch, rotates on
-401 and drives the router's redirect.
+**Sessions.** Players sign in with Google or Apple (`IdentityProvider`
+fakes stand in for both in tests). The refresh token lives in
+`flutter_secure_storage`, and the access token only in memory.
+`AuthController` restores at launch, rotates on 401 and drives the router's
+redirect, including holding unfinished accounts on onboarding.
 
 **Design system.** Tokens come from the staff dashboard (`TonitsPalette`, light
 and dark). Components live one per file in `core/widgets/` and read colours
@@ -97,14 +117,18 @@ from data that exists, so it never depends on an unreleased endpoint.
 ## Navigation map
 
 ```text
-/sign-in                      Signed out (register and reset are pushed)
+/welcome                      Signed out: continue with Google or Apple
+/onboarding                   A new account's username, Konami ID, country
+                              and phone; the router keeps it here until done
 /home                         Tab 1: the player's overview (rating, stats,
                               ladder slice, recent results, up next,
                               competitions closing soon)
 /competitions                 Tab 2: discovery
 /matches                      Tab 3: active and history
+/matches/:id                  A match room; /report reports the score
 /rankings                     Tab 4: global and country ladders
-/profile                      Tab 5: account and sign-out
+/profile                      Tab 5: account and sign-out; name, email and
+                              phone edit screens nest under it
 ```
 
 Detail routes (`/competitions/:id`, `/matches/:id`) nest under their tab so

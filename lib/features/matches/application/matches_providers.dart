@@ -1,10 +1,17 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:async';
+import 'dart:typed_data';
 
-import '../../../core/api/cursor_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../../../core/api/paged.dart';
 import '../../../core/providers.dart';
+import '../data/match_room.dart';
+import '../data/match_room_repository.dart';
 import '../data/match_summary.dart';
 import '../data/matches_repository.dart';
+import 'match_room_controller.dart';
+import 'my_matches_notifier.dart';
 
 final matchesRepositoryProvider = Provider<MatchesRepository>(
   (ref) => MatchesRepository(ref.watch(apiClientProvider)),
@@ -25,12 +32,33 @@ final myMatchesProvider = AsyncNotifierProvider.autoDispose
       MyMatchesNotifier.new,
     );
 
-class MyMatchesNotifier extends PagedNotifier<MatchSummary> {
-  MyMatchesNotifier(this.kind);
+final matchRoomRepositoryProvider = Provider<MatchRoomRepository>(
+  (ref) => MatchRoomRepository(ref.watch(apiClientProvider)),
+);
 
-  final MatchListKind kind;
+/// How often a live room is read again: quickly while the other player
+/// has a deadline running, slowly otherwise. Tests lengthen both.
+final matchRoomPollIntervalsProvider =
+    Provider<({Duration fast, Duration slow})>(
+      (ref) => (
+        fast: const Duration(seconds: 10),
+        slow: const Duration(seconds: 30),
+      ),
+    );
 
-  @override
-  Future<CursorPage<MatchSummary>> fetchPage(String? cursor) =>
-      ref.read(matchesRepositoryProvider).mine(kind: kind, cursor: cursor);
-}
+final matchRoomProvider = AsyncNotifierProvider.autoDispose
+    .family<MatchRoomController, MatchRoom, String>(MatchRoomController.new);
+
+/// Lets the player choose a screenshot from their photos and returns its
+/// original bytes, or null when they cancel. Tests supply their own.
+final screenshotPickerProvider = Provider<Future<Uint8List?> Function()>(
+  (ref) => () async {
+    // No resizing or quality options: those would re-encode the image, and
+    // the screenshot reader needs the original.
+    final file = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      requestFullMetadata: false,
+    );
+    return file?.readAsBytes();
+  },
+);

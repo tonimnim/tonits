@@ -10,6 +10,8 @@ import 'package:tonits/features/auth/application/auth_controller.dart';
 
 import 'support/fakes.dart';
 
+import 'package:tonits/features/auth/application/auth_providers.dart';
+
 typedef Handler = Future<http.Response> Function(http.Request request);
 
 /// The auth controller in its own provider container, with a fake API and

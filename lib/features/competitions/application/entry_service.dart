@@ -5,8 +5,6 @@ import '../../matches/application/matches_providers.dart';
 import '../../players/application/players_providers.dart';
 import 'competitions_providers.dart';
 
-final entryServiceProvider = Provider<EntryService>(EntryService.new);
-
 /// Enters and leaves free competitions, and refreshes everything an entry
 /// changes. Paid entry goes through the M-Pesa checkout instead.
 class EntryService {

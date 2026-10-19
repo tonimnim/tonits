@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/widgets/widgets.dart';
-import '../../../auth/application/auth_controller.dart';
+import '../../../auth/application/auth_providers.dart';
 
 /// Signs out after a confirmation, since it ends the session on this device.
 class SignOutRow extends ConsumerWidget {

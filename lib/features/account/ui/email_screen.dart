@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
-import '../../auth/application/auth_controller.dart';
 import '../../auth/ui/validators.dart';
 import '../../auth/ui/widgets/form_error.dart';
-import '../application/account_service.dart';
 import 'widgets/account_form_page.dart';
+import '../application/account_providers.dart';
+import '../../auth/application/auth_providers.dart';
 
 /// Adds or changes the account email in two steps: send a code to the new
 /// address, then enter it. The address is only saved once verified.

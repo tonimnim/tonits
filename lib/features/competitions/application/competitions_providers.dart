@@ -1,12 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/api/cursor_page.dart';
 import '../../../core/api/paged.dart';
 import '../../../core/providers.dart';
 import '../../players/application/players_providers.dart';
 import '../data/competition.dart';
-import '../data/eligibility.dart';
 import '../data/competitions_repository.dart';
+import '../data/eligibility.dart';
+import 'entry_service.dart';
+import 'competitions_notifier.dart';
+import 'competition_filter.dart';
 
 final competitionsRepositoryProvider = Provider<CompetitionsRepository>(
   (ref) => CompetitionsRepository(ref.watch(apiClientProvider)),
@@ -28,34 +30,10 @@ final closingSoonProvider = FutureProvider.autoDispose<List<Competition>>((
   );
 });
 
-/// The filters on the Competitions tab. There is no "live" filter: the app
-/// can't know that matches are being played right now.
-enum CompetitionFilter {
-  open('Open', CompetitionStatus.registrationOpen),
-  upcoming('Upcoming', CompetitionStatus.published),
-  finished('Finished', CompetitionStatus.completed);
-
-  const CompetitionFilter(this.label, this.status);
-
-  final String label;
-  final CompetitionStatus status;
-}
-
 final competitionsProvider = AsyncNotifierProvider.autoDispose
     .family<CompetitionsNotifier, Paged<Competition>, CompetitionFilter>(
       CompetitionsNotifier.new,
     );
-
-class CompetitionsNotifier extends PagedNotifier<Competition> {
-  CompetitionsNotifier(this.filter);
-
-  final CompetitionFilter filter;
-
-  @override
-  Future<CursorPage<Competition>> fetchPage(String? cursor) => ref
-      .read(competitionsRepositoryProvider)
-      .list(status: filter.status, cursor: cursor);
-}
 
 /// One competition's detail.
 final competitionProvider = FutureProvider.autoDispose
@@ -73,3 +51,5 @@ final eligibilityProvider = FutureProvider.autoDispose
       final gameAccountId = await ref.watch(myGameAccountIdProvider.future);
       return repository.eligibility(id, gameAccountId: gameAccountId);
     });
+
+final entryServiceProvider = Provider<EntryService>(EntryService.new);
