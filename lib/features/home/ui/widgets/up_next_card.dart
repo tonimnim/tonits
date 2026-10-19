@@ -31,7 +31,7 @@ class UpNextCard extends ConsumerWidget {
           Card(
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () => context.go(Routes.matches),
+              onTap: () => context.go(Routes.match(match.id)),
               child: Padding(
                 padding: const EdgeInsets.all(TonitsSpace.md),
                 child: Row(

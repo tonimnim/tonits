@@ -24,6 +24,12 @@ abstract final class Routes {
   /// Paying a competition's entry fee with M-Pesa.
   static String checkout(String id) => '$competitions/$id/pay';
 
+  /// A match room, under the Matches tab.
+  static String match(String id) => '$matches/$id';
+
+  /// Reporting a match's final score.
+  static String reportScore(String id) => '$matches/$id/report';
+
   // Account settings, under the Profile tab.
   static const editName = '$profile/name';
   static const email = '$profile/email';
