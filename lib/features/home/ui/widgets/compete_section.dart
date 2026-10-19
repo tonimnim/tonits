@@ -7,13 +7,14 @@ import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../competitions/application/competitions_providers.dart';
-import '../../../competitions/ui/widgets/competition_tile.dart';
+import '../../../competitions/ui/widgets/competition_row.dart';
 import 'section_message_card.dart';
 
-/// Competitions taking entries, closing soonest first, in a row the player
-/// can swipe through.
+/// The competitions taking entries that close soonest.
 class CompeteSection extends ConsumerWidget {
   const CompeteSection({super.key});
+
+  static const _shown = 3;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,20 +38,18 @@ class CompeteSection extends ConsumerWidget {
                 title: l.homeNothingOpenTitle,
                 message: l.homeNothingOpenMessage,
               ),
-            AsyncData(value: final list) => SizedBox(
-              // Grows with the player's text size so tiles never clip.
-              height: MediaQuery.textScalerOf(context).scale(16) / 16 * 128,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                clipBehavior: Clip.none,
-                itemCount: list.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 12),
-                itemBuilder: (context, i) => CompetitionTile(
-                  competition: list[i],
-                  width: 220,
-                  onTap: () => context.go(Routes.competition(list[i].id)),
-                ),
-              ),
+            // On the page with hairlines, like the sections above.
+            AsyncData(value: final list) => Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (final (i, c) in list.take(_shown).indexed) ...[
+                  if (i > 0) const Divider(height: 1),
+                  CompetitionRow(
+                    competition: c,
+                    onTap: () => context.go(Routes.competition(c.id)),
+                  ),
+                ],
+              ],
             ),
             AsyncError(:final error) => SectionMessageCard.error(
               error: error,
