@@ -27,4 +27,23 @@ class RankingsRepository {
     );
     return CursorPage.fromJson(json!, RankedPlayer.fromJson);
   }
+
+  /// The [span] places either side of the signed-in player in the latest
+  /// snapshot, the player in the middle. Empty when they aren't ranked.
+  Future<List<RankedPlayer>> aroundMe({
+    String? countryCode,
+    int span = 2,
+  }) async {
+    final json = await _api.get(
+      withQuery('/v1/rankings', {
+        'gameId': _gameId,
+        'scope': countryCode == null ? 'global' : 'country',
+        'country': countryCode,
+        'around': 'me',
+        'span': span,
+      }),
+      auth: true,
+    );
+    return CursorPage.fromJson(json!, RankedPlayer.fromJson).items;
+  }
 }

@@ -29,15 +29,24 @@ class _RankingsScreenState extends ConsumerState<RankingsScreen> {
     if (player == null) return const SizedBox.shrink();
     final country = Country.byCode(player.countryCode);
     final l = context.l10n;
-    final provider = rankingsProvider(
-      _scope == _Scope.global ? null : player.countryCode,
-    );
+    final countryCode = _scope == _Scope.global ? null : player.countryCode;
+    final provider = rankingsProvider(countryCode);
+    final ladder = ref.watch(provider);
+    final myPlace = ref.watch(myPlaceProvider(countryCode)).value;
+    // Pinned while the player's own row isn't among those loaded.
+    final pinMe =
+        myPlace != null &&
+        !(ladder.value?.items.any((r) => r.playerId == player.id) ?? true);
 
     return Scaffold(
       appBar: AppBar(title: Text(l.tabRankings)),
       body: PagedListView(
-        value: ref.watch(provider),
-        onRefresh: () => ref.refresh(provider.future),
+        value: ladder,
+        onRefresh: () async {
+          ref.invalidate(myPlaceProvider(countryCode));
+          ref.invalidate(provider);
+          await ref.read(provider.future);
+        },
         onLoadMore: () => ref.read(provider.notifier).loadMore(),
         errorText: (e) => describeError(e, l),
         separator: const SizedBox(height: TonitsSpace.sm),
@@ -59,6 +68,44 @@ class _RankingsScreenState extends ConsumerState<RankingsScreen> {
           title: l.rankingsEmptyTitle,
           message: l.rankingsEmptyMessage,
         ),
+      ),
+      bottomNavigationBar: pinMe
+          ? _PinnedPlace(child: RankingRow(player: myPlace, isMe: true))
+          : null,
+    );
+  }
+}
+
+/// The player's own row, pinned under the ladder when they're further down
+/// than the rows loaded so far.
+class _PinnedPlace extends StatelessWidget {
+  const _PinnedPlace({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: p.background,
+        border: Border(top: BorderSide(color: p.border)),
+      ),
+      // Only as tall as the row: the bottom slot would let it fill the
+      // screen.
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              TonitsSpace.md,
+              10,
+              TonitsSpace.md,
+              10,
+            ),
+            child: child,
+          ),
+        ],
       ),
     );
   }

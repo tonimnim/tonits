@@ -4,7 +4,6 @@ import 'package:tonits/core/api/cursor_page.dart';
 import 'package:tonits/features/competitions/data/competition.dart';
 import 'package:tonits/features/matches/data/match_summary.dart';
 import 'package:tonits/features/players/application/player_stats.dart';
-import 'package:tonits/features/players/application/players_providers.dart';
 import 'package:tonits/features/players/data/played_match.dart';
 import 'package:tonits/features/players/data/player_profile.dart';
 import 'package:tonits/features/rankings/data/ranked_player.dart';
@@ -134,25 +133,6 @@ void main() {
     expect(stats.goalsPerMatch, isNull);
     expect(stats.streak, isNull);
     expect(stats.record.winRate, isNull);
-  });
-
-  group('rank neighbourhood', () {
-    final ladder = ladderJson().map(RankedPlayer.fromJson).toList();
-
-    test('shows two either side of the player', () {
-      final rows = neighbourhood(ladder, myPlayerId);
-      expect(rows.map((r) => r.rank), [22, 23, 24, 25, 26]);
-    });
-
-    test('clips at the top of the ladder', () {
-      final rows = neighbourhood(ladder, ladder.first.playerId);
-      expect(rows.map((r) => r.rank), [21, 22, 23]);
-    });
-
-    test('falls back to the top three when the player is not listed', () {
-      final rows = neighbourhood(ladder, 'someone-else');
-      expect(rows.map((r) => r.rank), [21, 22, 23]);
-    });
   });
 
   test('an open competition past its deadline reads as ended', () {

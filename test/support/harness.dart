@@ -101,10 +101,7 @@ class FakeApi {
     ),
     '/v1/me/notifications/read-all': (_) =>
         jsonResponse({'updatedCount': 2, 'unreadCount': 0}, 200),
-    '/v1/rankings': (_) => jsonResponse({
-      ...pageJson(ladderJson()),
-      'snapshotAt': '2026-10-09T00:00:00Z',
-    }, 200),
+    '/v1/rankings': rankingsRoute(),
     '/v1/players/$myPlayerId': (_) => jsonResponse(profileJson(), 200),
     '/v1/players/$myPlayerId/matches': (_) => jsonResponse({
       ...pageJson(recentJson()),
@@ -158,3 +155,30 @@ Future<FakeApi> pumpTonits(
 /// row inside it) until [finder] is built and on screen.
 Future<void> scrollPageTo(WidgetTester tester, Finder finder) => tester
     .scrollUntilVisible(finder, 200, scrollable: find.byType(Scrollable).first);
+
+/// The ladder, as `GET /v1/rankings` answers: from the top, or with
+/// `around=me` the `span` places either side of the player. [ranked] false
+/// answers `around=me` with nobody, as for an unranked player.
+http.Response Function(http.Request) rankingsRoute({
+  List<Map<String, dynamic>>? ladder,
+  bool ranked = true,
+}) => (request) {
+  final rows = ladder ?? ladderJson();
+  final q = request.url.queryParameters;
+  if (q['around'] == 'me') {
+    final span = int.parse(q['span'] ?? '2');
+    final i = rows.indexWhere((r) => r['playerId'] == myPlayerId);
+    final slice = !ranked || i < 0
+        ? <Map<String, dynamic>>[]
+        : rows.sublist(
+            (i - span).clamp(0, rows.length),
+            (i + span + 1).clamp(0, rows.length),
+          );
+    return jsonResponse(pageJson(slice), 200);
+  }
+  final limit = int.tryParse(q['limit'] ?? '') ?? rows.length;
+  return jsonResponse({
+    ...pageJson(rows.take(limit).toList()),
+    'snapshotAt': '2026-10-09T00:00:00Z',
+  }, 200);
+};

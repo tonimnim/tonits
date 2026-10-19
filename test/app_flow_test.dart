@@ -104,6 +104,7 @@ void main() {
           '/v1/players/$myPlayerId/matches': (_) =>
               jsonResponse(pageJson([]), 200),
           '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
+          '/v1/rankings': rankingsRoute(ranked: false),
         },
       ),
     );

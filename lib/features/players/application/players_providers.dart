@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../rankings/application/rankings_providers.dart';
-import '../../rankings/data/ranked_player.dart';
 import '../data/played_match.dart';
 import '../data/player_profile.dart';
 import '../data/players_repository.dart';
@@ -49,39 +48,19 @@ final myStatsProvider = FutureProvider.autoDispose<PlayerStats>((ref) async {
 /// The player's slice of their country ladder: up to two places above and
 /// below them. A player without a country rank (new, or provisional) gets
 /// the top three instead, something to aim for.
+/// The player's slice of their country ladder: two places either side of
+/// them, at any rank. A player without a rank yet (new, or provisional)
+/// gets the top three instead, something to aim for.
 final myRankNeighbourhoodProvider =
     FutureProvider.autoDispose<RankNeighbourhood>((ref) async {
       final player = ref.watch(currentPlayerProvider);
       if (player == null) return const RankNeighbourhood([], ranked: false);
-      // Dependencies first: the ref can't be used after an await once
-      // nothing listens.
       final rankings = ref.watch(rankingsRepositoryProvider);
-      final profile = await ref.watch(myProfileProvider.future);
-      // A dedicated "around me" query is requested in docs/backend-requests.md;
-      // until then, look within the first 50 places.
-      final page = await rankings.list(
+      final around = await rankings.aroundMe(countryCode: player.countryCode);
+      if (around.isNotEmpty) return RankNeighbourhood(around, ranked: true);
+      final top = await rankings.list(
         countryCode: player.countryCode,
-        limit: 50,
+        limit: 3,
       );
-      final ranked = profile.rating?.countryRank != null;
-      return RankNeighbourhood(
-        ranked
-            ? neighbourhood(page.items, player.id)
-            : page.items.take(3).toList(),
-        ranked: ranked,
-      );
+      return RankNeighbourhood(top.items, ranked: false);
     });
-
-/// Up to [around] rows either side of [playerId], or the top three when the
-/// player isn't in [ladder].
-List<RankedPlayer> neighbourhood(
-  List<RankedPlayer> ladder,
-  String playerId, {
-  int around = 2,
-}) {
-  final i = ladder.indexWhere((r) => r.playerId == playerId);
-  if (i < 0) return ladder.take(3).toList();
-  final start = (i - around).clamp(0, ladder.length);
-  final end = (i + around + 1).clamp(0, ladder.length);
-  return ladder.sublist(start, end);
-}

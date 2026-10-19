@@ -1,76 +1,46 @@
 # Backend requests from the app
 
-Features the Tonits app is designed around that the API (`gemics-backend`,
-OpenAPI 0.9.0) doesn't serve yet. Each entry says what the app shows, the
-contract it expects, and what the app does until it ships.
+What the Ozone app asked of the API (`gemics-backend`) and where each stands.
+Each open entry says what the app shows, the contract it expects, and what
+the app does until it ships.
 
-## 1. Rating history
+## 1. Rating history (built, not used)
 
-**Shown on:** Home, the player card's 30-day rating line.
+`GET /v1/players/{id}/rating-history` was built for a 30-day rating line on
+Home. Home no longer draws that line, so the app doesn't call it.
 
-```http
-GET /v1/players/{id}/rating-history?gameId=efootball-mobile&days=30
-```
-
-```json
-{
-  "data": [
-    { "at": "2026-09-10T00:00:00Z", "rating": 1490 },
-    { "at": "2026-09-11T00:00:00Z", "rating": 1496 }
-  ]
-}
-```
-
-- Oldest first. One point per day that the rating changed is enough; the app
-  draws a line through whatever points it gets.
-- `days` bounded to 7–365. Public, under the same visibility rules as
-  `GET /v1/players/{id}`.
-- Source: `player_game_ratings` changes are already written in the
-  confirmed-match transaction, so this is a projection of existing writes.
-
-**Until then:** the app treats `404` as "no history" and leaves the line out
-(`PlayersRepository.ratingHistory`).
-
-## 2. "Around me" on the ladder
-
-**Shown on:** Home, the country ladder slice (two places above and below the
-player).
+## 2. "Around me" on the ladder (done)
 
 ```http
 GET /v1/rankings?gameId=efootball-mobile&scope=country&country=KE&around=me&span=2
 ```
 
-- `around=me` (authenticated) returns the `span` rows either side of the
-  caller, in the existing `RankingPage` shape. It returns an empty `data` when
-  the caller is unranked.
+Authenticated; returns the `span` places either side of the caller, or an
+empty `data` when unranked. The app uses it for Home's ladder slice (two
+places either side, the top three when unranked) and, with `span=1`, to pin
+the player's own row under the Rankings list when they're further down than
+the rows loaded.
 
-**Until then:** the app reads the first 50 places and finds the player there
-(`myRankNeighbourhoodProvider`). Players ranked below 50th see the top three
-instead of their own slice.
+## 3. Goal totals (deferred)
 
-## 3. Goal totals
-
-**Shown on:** Home, "Goals per match".
-
-Add to `PublicGameRating` (and `PublicRecord`):
+**Shown on:** Home, "Goals per match". Wanted on `PublicGameRating`:
 
 ```json
 { "goalsFor": 54, "goalsAgainst": 31 }
 ```
 
-**Until then:** the app averages goals over the last 20 confirmed matches and
-labels the tile with the sample size ("Last 20 matches").
+Declined for now as off the launch path. **Until then:** the app averages
+goals over the last 20 confirmed matches.
 
-## 4. Country at sign-up (done)
+## 4. Series reported as games won (done)
 
-`POST /v1/auth/register` accepts an optional `countryCode`, recorded as the
-player's chosen country in the same transaction. The app sends the country
-from the sign-up picker, so it needs an API with this change: earlier APIs
-reject unknown fields with `400 invalid_request`. If the account comes back
-with another country anyway, the app falls back to `PATCH /v1/me`.
+A best of 3 or 5 is reported as games won (`homeScore`/`awayScore`, such as
+2–1), with no per-game scores. Screenshots of every game are sent only after
+the opponent rejects the result.
 
 ## Also noted
 
-- `GET /v1/legal/documents/current` returns `gamics.io` URLs; they should
-  point at Tonits.
-- The OpenAPI title and descriptions still say "Gamics".
+- The legal documents link to `tonits.com`, and player-facing API text says
+  Tonits; the app is now Ozone.
+- Push notifications reach the device through Firebase Cloud Messaging once
+  the backend moves delivery there; the inbox works without them.

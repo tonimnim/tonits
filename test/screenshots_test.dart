@@ -483,6 +483,37 @@ void main() {
       await _shoot(tester, 'inbox-details-$suffix');
     });
 
+    testWidgets('rankings, pinned place ($suffix)', skip: skip, (tester) async {
+      final ladder = [
+        for (final (i, name) in [
+          'Brian Simiyu',
+          'Amina Yusuf',
+          'George Kibet',
+          'Faith Wanjiku',
+          'Kevin Otieno',
+          'Mercy Achieng',
+          'Dennis Mwangi',
+          'Lucy Njeri',
+        ].indexed)
+          rankedJson(i + 1, name, rating: 1720 - i * 18),
+      ];
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/rankings': (request) =>
+                request.url.queryParameters['around'] == 'me'
+                ? rankingsRoute()(request)
+                : jsonResponse(pageJson(ladder), 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Rankings');
+      await _shoot(tester, 'rankings-pinned-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,
