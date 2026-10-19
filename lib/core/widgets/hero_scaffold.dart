@@ -74,7 +74,9 @@ class _HeroScaffoldState extends State<HeroScaffold> {
           decoration: BoxDecoration(gradient: HeroScaffold.wash(p)),
           padding: EdgeInsets.fromLTRB(
             TonitsSpace.md,
-            bare ? top + TonitsSpace.md : top + kToolbarHeight + 4,
+            // A bare top leaves room under the status bar, so the header
+            // doesn't crowd it.
+            bare ? top + TonitsSpace.xl : top + kToolbarHeight + 4,
             TonitsSpace.md,
             TonitsSpace.xl + HeroScaffold.overlap,
           ),
