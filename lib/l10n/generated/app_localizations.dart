@@ -2589,6 +2589,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Checking the screenshot is taking longer than usual. Try again.'**
   String get matchScreenshotSlow;
+
+  /// A match format: how many games a match is.
+  ///
+  /// In en, this message translates to:
+  /// **'Best of {count}'**
+  String seriesBestOf(int count);
+
+  /// No description provided for @seriesBestOfFirstTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Best of {count} · first to {wins}'**
+  String seriesBestOfFirstTo(int count, int wins);
+
+  /// No description provided for @seriesFirstToWins.
+  ///
+  /// In en, this message translates to:
+  /// **'{wins, plural, =1{First to 1 win} other{First to {wins} wins}}'**
+  String seriesFirstToWins(int wins);
+
+  /// No description provided for @seriesGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Game {number}'**
+  String seriesGame(int number);
+
+  /// No description provided for @seriesAddGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Add game {number}'**
+  String seriesAddGame(int number);
+
+  /// No description provided for @seriesRemoveGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove game {number}'**
+  String seriesRemoveGame(int number);
+
+  /// No description provided for @seriesGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Games'**
+  String get seriesGames;
+
+  /// No description provided for @seriesYouLead.
+  ///
+  /// In en, this message translates to:
+  /// **'You lead {mine}–{theirs}'**
+  String seriesYouLead(int mine, int theirs);
+
+  /// No description provided for @seriesTheyLead.
+  ///
+  /// In en, this message translates to:
+  /// **'{opponent} leads {theirs}–{mine}'**
+  String seriesTheyLead(String opponent, int theirs, int mine);
+
+  /// No description provided for @seriesLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {mine}–{theirs}'**
+  String seriesLevel(int mine, int theirs);
+
+  /// No description provided for @seriesYouWin.
+  ///
+  /// In en, this message translates to:
+  /// **'You win the series {mine}–{theirs}'**
+  String seriesYouWin(int mine, int theirs);
+
+  /// No description provided for @seriesTheyWin.
+  ///
+  /// In en, this message translates to:
+  /// **'{opponent} wins the series {theirs}–{mine}'**
+  String seriesTheyWin(String opponent, int theirs, int mine);
+
+  /// No description provided for @seriesReportIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, =1{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don\'t answer within 1 minute, they stand.} other{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don\'t answer within {minutes} minutes, they stand.}}'**
+  String seriesReportIntro(String opponent, int minutes);
+
+  /// No description provided for @seriesNeedsWinner.
+  ///
+  /// In en, this message translates to:
+  /// **'{wins, plural, =1{Add games until one side has 1 win.} other{Add games until one side has {wins} wins.}}'**
+  String seriesNeedsWinner(int wins);
+
+  /// No description provided for @seriesNeedsAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Add all {count} games, or until one side has {wins} wins.'**
+  String seriesNeedsAllGames(int count, int wins);
+
+  /// No description provided for @seriesScreenshotReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshot every Full Time screen as you play. If the result is disputed, you\'ll need one for each game.'**
+  String get seriesScreenshotReminder;
+
+  /// No description provided for @seriesStepPlayMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports every game.'**
+  String seriesStepPlayMessage(int count, String opponent, int wins);
+
+  /// No description provided for @seriesStepScreenshotTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send your screenshots'**
+  String get seriesStepScreenshotTitle;
+
+  /// No description provided for @seriesStepScreenshotMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The result was rejected. Send each game\'s Full Time screen; Ozone compares both players\' screenshots game by game.'**
+  String get seriesStepScreenshotMessage;
+
+  /// No description provided for @seriesStepScreenshotNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Send at least one in time, or you\'re removed from the competition. A missing game counts against you in review.'**
+  String get seriesStepScreenshotNote;
+
+  /// No description provided for @seriesStepScreenshotsSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Screenshots sent'**
+  String get seriesStepScreenshotsSentTitle;
+
+  /// No description provided for @seriesChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get seriesChoose;
+
+  /// No description provided for @seriesChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get seriesChange;
+
+  /// No description provided for @seriesSendScreenshots.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Send screenshots} =1{Send 1 screenshot} other{Send {count} screenshots}}'**
+  String seriesSendScreenshots(int count);
+
+  /// No description provided for @seriesUploadingGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading game {done} of {total}…'**
+  String seriesUploadingGame(int done, int total);
+
+  /// No description provided for @seriesCheckingGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking game {done} of {total}…'**
+  String seriesCheckingGame(int done, int total);
+
+  /// A screenshot problem, for one game of a series.
+  ///
+  /// In en, this message translates to:
+  /// **'Game {game}: {message}'**
+  String matchScreenshotProblemForGame(int game, String message);
+
+  /// No description provided for @seriesFormatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Games per match'**
+  String get seriesFormatTitle;
+
+  /// No description provided for @seriesEveryMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Every match'**
+  String get seriesEveryMatch;
+
+  /// No description provided for @seriesOtherRounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Other rounds'**
+  String get seriesOtherRounds;
+
+  /// No description provided for @seriesRoundFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Final'**
+  String get seriesRoundFinal;
+
+  /// No description provided for @seriesRoundSemifinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-finals'**
+  String get seriesRoundSemifinal;
+
+  /// No description provided for @seriesRoundQuarterfinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Quarter-finals'**
+  String get seriesRoundQuarterfinal;
+
+  /// No description provided for @seriesRoundOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Round of {count}'**
+  String seriesRoundOf(int count);
+
+  /// No description provided for @seriesRoundThirdPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-place match'**
+  String get seriesRoundThirdPlace;
+
+  /// No description provided for @seriesRoundWinnersFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Winners\' final'**
+  String get seriesRoundWinnersFinal;
+
+  /// No description provided for @seriesRoundLosersFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Losers\' final'**
+  String get seriesRoundLosersFinal;
+
+  /// No description provided for @seriesLevelGameNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A level game is decided on penalties.'**
+  String get seriesLevelGameNote;
 }
 
 class _AppLocalizationsDelegate

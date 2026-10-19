@@ -1566,4 +1566,188 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get matchScreenshotSlow =>
       'Checking the screenshot is taking longer than usual. Try again.';
+
+  @override
+  String seriesBestOf(int count) {
+    return 'Best of $count';
+  }
+
+  @override
+  String seriesBestOfFirstTo(int count, int wins) {
+    return 'Best of $count · first to $wins';
+  }
+
+  @override
+  String seriesFirstToWins(int wins) {
+    String _temp0 = intl.Intl.pluralLogic(
+      wins,
+      locale: localeName,
+      other: 'First to $wins wins',
+      one: 'First to 1 win',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seriesGame(int number) {
+    return 'Game $number';
+  }
+
+  @override
+  String seriesAddGame(int number) {
+    return 'Add game $number';
+  }
+
+  @override
+  String seriesRemoveGame(int number) {
+    return 'Remove game $number';
+  }
+
+  @override
+  String get seriesGames => 'Games';
+
+  @override
+  String seriesYouLead(int mine, int theirs) {
+    return 'You lead $mine–$theirs';
+  }
+
+  @override
+  String seriesTheyLead(String opponent, int theirs, int mine) {
+    return '$opponent leads $theirs–$mine';
+  }
+
+  @override
+  String seriesLevel(int mine, int theirs) {
+    return 'Level $mine–$theirs';
+  }
+
+  @override
+  String seriesYouWin(int mine, int theirs) {
+    return 'You win the series $mine–$theirs';
+  }
+
+  @override
+  String seriesTheyWin(String opponent, int theirs, int mine) {
+    return '$opponent wins the series $theirs–$mine';
+  }
+
+  @override
+  String seriesReportIntro(String opponent, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other:
+          'Enter every game from its Full Time screen, in order. $opponent confirms them, and if they don\'t answer within $minutes minutes, they stand.',
+      one:
+          'Enter every game from its Full Time screen, in order. $opponent confirms them, and if they don\'t answer within 1 minute, they stand.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seriesNeedsWinner(int wins) {
+    String _temp0 = intl.Intl.pluralLogic(
+      wins,
+      locale: localeName,
+      other: 'Add games until one side has $wins wins.',
+      one: 'Add games until one side has 1 win.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seriesNeedsAllGames(int count, int wins) {
+    return 'Add all $count games, or until one side has $wins wins.';
+  }
+
+  @override
+  String get seriesScreenshotReminder =>
+      'Screenshot every Full Time screen as you play. If the result is disputed, you\'ll need one for each game.';
+
+  @override
+  String seriesStepPlayMessage(int count, String opponent, int wins) {
+    return 'Play a best of $count with $opponent in eFootball, first to $wins wins. When it ends, either of you reports every game.';
+  }
+
+  @override
+  String get seriesStepScreenshotTitle => 'Send your screenshots';
+
+  @override
+  String get seriesStepScreenshotMessage =>
+      'The result was rejected. Send each game\'s Full Time screen; Ozone compares both players\' screenshots game by game.';
+
+  @override
+  String get seriesStepScreenshotNote =>
+      'Send at least one in time, or you\'re removed from the competition. A missing game counts against you in review.';
+
+  @override
+  String get seriesStepScreenshotsSentTitle => 'Screenshots sent';
+
+  @override
+  String get seriesChoose => 'Choose';
+
+  @override
+  String get seriesChange => 'Change';
+
+  @override
+  String seriesSendScreenshots(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Send $count screenshots',
+      one: 'Send 1 screenshot',
+      zero: 'Send screenshots',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String seriesUploadingGame(int done, int total) {
+    return 'Uploading game $done of $total…';
+  }
+
+  @override
+  String seriesCheckingGame(int done, int total) {
+    return 'Checking game $done of $total…';
+  }
+
+  @override
+  String matchScreenshotProblemForGame(int game, String message) {
+    return 'Game $game: $message';
+  }
+
+  @override
+  String get seriesFormatTitle => 'Games per match';
+
+  @override
+  String get seriesEveryMatch => 'Every match';
+
+  @override
+  String get seriesOtherRounds => 'Other rounds';
+
+  @override
+  String get seriesRoundFinal => 'Final';
+
+  @override
+  String get seriesRoundSemifinal => 'Semi-finals';
+
+  @override
+  String get seriesRoundQuarterfinal => 'Quarter-finals';
+
+  @override
+  String seriesRoundOf(int count) {
+    return 'Round of $count';
+  }
+
+  @override
+  String get seriesRoundThirdPlace => 'Third-place match';
+
+  @override
+  String get seriesRoundWinnersFinal => 'Winners\' final';
+
+  @override
+  String get seriesRoundLosersFinal => 'Losers\' final';
+
+  @override
+  String get seriesLevelGameNote => 'A level game is decided on penalties.';
 }

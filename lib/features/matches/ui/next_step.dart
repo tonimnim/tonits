@@ -64,7 +64,9 @@ class NextStep {
       MatchLifecycle.reportRequired => NextStep(
         title: l.matchStepPlayTitle,
         tone: StepTone.action,
-        message: l.matchStepPlayMessage(opp),
+        message: room.isSeries
+            ? l.seriesStepPlayMessage(room.bestOf, opp, room.gamesToWin)
+            : l.matchStepPlayMessage(opp),
         deadline: room.resultDueAt,
         deadlineNote: l.matchStepPlayDeadlineNote,
       ),
@@ -81,14 +83,22 @@ class NextStep {
         deadline: v.confirmationDeadline,
       ),
       MatchLifecycle.screenshotRequired => NextStep(
-        title: l.matchStepScreenshotTitle,
+        title: room.isSeries
+            ? l.seriesStepScreenshotTitle
+            : l.matchStepScreenshotTitle,
         tone: StepTone.action,
-        message: l.matchStepScreenshotMessage,
+        message: room.isSeries
+            ? l.seriesStepScreenshotMessage
+            : l.matchStepScreenshotMessage,
         deadline: v.screenshotDeadline,
-        deadlineNote: l.matchStepScreenshotDeadlineNote,
+        deadlineNote: room.isSeries
+            ? l.seriesStepScreenshotNote
+            : l.matchStepScreenshotDeadlineNote,
       ),
       MatchLifecycle.awaitingOpponentScreenshot => NextStep(
-        title: l.matchStepScreenshotSentTitle,
+        title: room.isSeries
+            ? l.seriesStepScreenshotsSentTitle
+            : l.matchStepScreenshotSentTitle,
         tone: StepTone.waiting,
         message: v.opponentScreenshotSent
             ? l.matchStepBothScreenshotsIn

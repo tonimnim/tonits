@@ -12,6 +12,7 @@ import 'widgets/capacity_bar.dart';
 import 'widgets/competition_status_badge.dart';
 import 'widgets/entry_bar.dart';
 import 'widgets/kenya_only_badge.dart';
+import 'widgets/match_format_panel.dart';
 
 /// One competition: what it is, its facts, and how to enter.
 class CompetitionScreen extends ConsumerWidget {
@@ -111,6 +112,15 @@ class CompetitionScreen extends ConsumerWidget {
           ],
         ),
       ),
+      if (c.matchFormat case final format? when format.hasSeries) ...[
+        const SizedBox(height: 28),
+        Padding(
+          padding: const EdgeInsets.only(left: 4),
+          child: SectionLabel(l.seriesFormatTitle),
+        ),
+        const SizedBox(height: 10),
+        MatchFormatPanel(format: format),
+      ],
       if (c.description.trim().isNotEmpty) ...[
         const SizedBox(height: 28),
         Padding(

@@ -13,10 +13,14 @@ class FriendMatchCard extends StatelessWidget {
     super.key,
     required this.opponent,
     required this.instructions,
+    this.series = false,
   });
 
   final MatchParticipant opponent;
   final List<FriendMatchInstruction> instructions;
+
+  /// A best of 3 or 5, whose disputes need every game's screenshot.
+  final bool series;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +71,10 @@ class FriendMatchCard extends StatelessWidget {
               const SizedBox(height: 10),
             ],
             _CopyField(label: l.matchInGameName, value: account.inGameName),
+          ],
+          if (series) ...[
+            const SizedBox(height: 18),
+            _Reminder(text: l.seriesScreenshotReminder),
           ],
           if (instructions.isNotEmpty) ...[
             const SizedBox(height: 22),
@@ -183,6 +191,38 @@ class _Instruction extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// A tip that matters later, such as screenshotting every game.
+class _Reminder extends StatelessWidget {
+  const _Reminder({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: p.soft,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.photo_camera_outlined, size: 20, color: p.onSoft),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 13, height: 1.4, color: p.onSoft),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

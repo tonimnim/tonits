@@ -38,6 +38,15 @@ class RoomHero extends StatelessWidget {
             letterSpacing: -0.4,
           ),
         ),
+        if (room.isSeries) ...[
+          const SizedBox(height: 8),
+          Pill(
+            context.l10n.seriesBestOfFirstTo(room.bestOf, room.gamesToWin),
+            icon: Icons.layers_outlined,
+            filled: context.palette.card,
+            color: context.palette.primary,
+          ),
+        ],
         const SizedBox(height: TonitsSpace.lg),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,

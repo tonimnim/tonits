@@ -1149,5 +1149,232 @@
   "matchScreenshotTooLarge": "That image is too large. Choose the screenshot itself, up to 10 MB.",
   "matchScreenshotUploadFailed": "The upload didn't go through. Try again.",
   "matchScreenshotUnusable": "That image couldn't be used. Choose the original screenshot of the Full Time screen.",
-  "matchScreenshotSlow": "Checking the screenshot is taking longer than usual. Try again."
+  "matchScreenshotSlow": "Checking the screenshot is taking longer than usual. Try again.",
+  "seriesBestOf": "Best of {count}",
+  "@seriesBestOf": {
+    "description": "A match format: how many games a match is.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "seriesBestOfFirstTo": "Best of {count} · first to {wins}",
+  "@seriesBestOfFirstTo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesFirstToWins": "{wins, plural, =1{First to 1 win} other{First to {wins} wins}}",
+  "@seriesFirstToWins": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesGame": "Game {number}",
+  "@seriesGame": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesAddGame": "Add game {number}",
+  "@seriesAddGame": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesRemoveGame": "Remove game {number}",
+  "@seriesRemoveGame": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesGames": "Games",
+  "seriesYouLead": "You lead {mine}–{theirs}",
+  "@seriesYouLead": {
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "theirs": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesTheyLead": "{opponent} leads {theirs}–{mine}",
+  "@seriesTheyLead": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "theirs": {
+        "type": "int"
+      },
+      "mine": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesLevel": "Level {mine}–{theirs}",
+  "@seriesLevel": {
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "theirs": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesYouWin": "You win the series {mine}–{theirs}",
+  "@seriesYouWin": {
+    "placeholders": {
+      "mine": {
+        "type": "int"
+      },
+      "theirs": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesTheyWin": "{opponent} wins the series {theirs}–{mine}",
+  "@seriesTheyWin": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "theirs": {
+        "type": "int"
+      },
+      "mine": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesReportIntro": "{minutes, plural, =1{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don't answer within 1 minute, they stand.} other{Enter every game from its Full Time screen, in order. {opponent} confirms them, and if they don't answer within {minutes} minutes, they stand.}}",
+  "@seriesReportIntro": {
+    "placeholders": {
+      "opponent": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNeedsWinner": "{wins, plural, =1{Add games until one side has 1 win.} other{Add games until one side has {wins} wins.}}",
+  "@seriesNeedsWinner": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesNeedsAllGames": "Add all {count} games, or until one side has {wins} wins.",
+  "@seriesNeedsAllGames": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesScreenshotReminder": "Screenshot every Full Time screen as you play. If the result is disputed, you'll need one for each game.",
+  "seriesStepPlayMessage": "Play a best of {count} with {opponent} in eFootball, first to {wins} wins. When it ends, either of you reports every game.",
+  "@seriesStepPlayMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "opponent": {
+        "type": "String"
+      },
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesStepScreenshotTitle": "Send your screenshots",
+  "seriesStepScreenshotMessage": "The result was rejected. Send each game's Full Time screen; Ozone compares both players' screenshots game by game.",
+  "seriesStepScreenshotNote": "Send at least one in time, or you're removed from the competition. A missing game counts against you in review.",
+  "seriesStepScreenshotsSentTitle": "Screenshots sent",
+  "seriesChoose": "Choose",
+  "seriesChange": "Change",
+  "seriesSendScreenshots": "{count, plural, =0{Send screenshots} =1{Send 1 screenshot} other{Send {count} screenshots}}",
+  "@seriesSendScreenshots": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesUploadingGame": "Uploading game {done} of {total}…",
+  "@seriesUploadingGame": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "seriesCheckingGame": "Checking game {done} of {total}…",
+  "@seriesCheckingGame": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "matchScreenshotProblemForGame": "Game {game}: {message}",
+  "@matchScreenshotProblemForGame": {
+    "description": "A screenshot problem, for one game of a series.",
+    "placeholders": {
+      "game": {
+        "type": "int"
+      },
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "seriesFormatTitle": "Games per match",
+  "seriesEveryMatch": "Every match",
+  "seriesOtherRounds": "Other rounds",
+  "seriesRoundFinal": "Final",
+  "seriesRoundSemifinal": "Semi-finals",
+  "seriesRoundQuarterfinal": "Quarter-finals",
+  "seriesRoundOf": "Round of {count}",
+  "@seriesRoundOf": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "16"
+      }
+    }
+  },
+  "seriesRoundThirdPlace": "Third-place match",
+  "seriesRoundWinnersFinal": "Winners' final",
+  "seriesRoundLosersFinal": "Losers' final",
+  "seriesLevelGameNote": "A level game is decided on penalties."
 }

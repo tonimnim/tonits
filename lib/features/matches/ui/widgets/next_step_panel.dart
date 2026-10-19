@@ -12,6 +12,8 @@ import '../../application/matches_providers.dart';
 import '../../data/match_room.dart';
 import '../next_step.dart';
 import 'deadline_pill.dart';
+import 'series_games.dart';
+import 'series_screenshots.dart';
 
 /// The room's main panel: where the match stands, what's next and by when,
 /// and the action the server allows now.
@@ -32,6 +34,15 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
       ref.read(matchRoomProvider(room.id).notifier);
   String get _opponent =>
       room.summary.opponent?.displayName ?? context.l10n.matchYourOpponent;
+
+  /// A series' games: the final ones once settled, else the reported ones.
+  List<Score>? get _seriesGames {
+    // While sending screenshots, each slot shows its own game.
+    if (!room.isSeries || room.can(MatchAction.submitScreenshot)) return null;
+    final result = room.result;
+    if (result != null && result.games.isNotEmpty) return result.games;
+    return room.verification.submitted?.games;
+  }
 
   Future<void> _run(Future<String?> Function() action) async {
     await runForMessage(action);
@@ -105,6 +116,14 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
                 color: p.subtleForeground,
               ),
             ),
+            if (_seriesGames case final games? when games.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              SeriesGames(
+                games: games,
+                home: room.summary.isHome,
+                opponent: _opponent,
+              ),
+            ],
             if (step.deadline != null) ...[
               const SizedBox(height: 18),
               DeadlinePill(deadline: step.deadline!),
@@ -175,6 +194,10 @@ class _NextStepPanelState extends ConsumerState<NextStepPanel> with BusyState {
           ),
         ],
       ];
+    }
+    if (room.can(MatchAction.submitScreenshot) &&
+        room.windows.perGameScreenshots) {
+      return [gap, SeriesScreenshots(room: room)];
     }
     if (room.can(MatchAction.submitScreenshot)) {
       return [

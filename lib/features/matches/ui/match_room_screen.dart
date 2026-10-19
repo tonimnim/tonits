@@ -56,7 +56,11 @@ class MatchRoomScreen extends ConsumerWidget {
       NextStepPanel(room: room),
       if (live) ...[
         const SizedBox(height: TonitsSpace.md),
-        FriendMatchCard(opponent: opponent, instructions: room.instructions),
+        FriendMatchCard(
+          opponent: opponent,
+          instructions: room.instructions,
+          series: room.isSeries,
+        ),
       ],
       const SizedBox(height: 28),
       Padding(

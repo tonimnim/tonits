@@ -5,6 +5,7 @@ import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../application/matches_providers.dart';
+import '../application/series_draft.dart';
 import '../data/match_room.dart';
 import 'widgets/score_stepper.dart';
 
@@ -21,35 +22,32 @@ class ReportScoreScreen extends ConsumerStatefulWidget {
 
 class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
     with BusyState {
-  int _mine = 0;
-  int _theirs = 0;
-  int _penMine = 0;
-  int _penTheirs = 0;
+  SeriesDraft? _draft;
   bool _declared = false;
 
-  Future<void> _submit(MatchRoom room) async {
-    final penalties = _needsPenalties(room);
-    if (penalties && _penMine == _penTheirs) {
-      setState(() => error = context.l10n.matchPenaltyNeedsWinner);
+  Future<void> _submit(MatchRoom room, SeriesDraft draft) async {
+    final l = context.l10n;
+    final problem = draft.problem;
+    if (problem != null) {
+      setState(
+        () => error = switch (problem) {
+          SeriesProblem.penaltiesNeedWinner => l.matchPenaltyNeedsWinner,
+          SeriesProblem.noWinnerYet => l.seriesNeedsWinner(draft.gamesToWin),
+          SeriesProblem.gamesMissing => l.seriesNeedsAllGames(
+            draft.bestOf,
+            draft.gamesToWin,
+          ),
+        },
+      );
       return;
     }
-    final home = room.summary.isHome;
-    Score fromMySide(int mine, int theirs, {Score? penalties}) => home
-        ? Score(mine, theirs, penalties: penalties)
-        : Score(theirs, mine, penalties: penalties);
-    final score = fromMySide(
-      _mine,
-      _theirs,
-      penalties: penalties ? fromMySide(_penMine, _penTheirs) : null,
-    );
-
+    final report = draft.toReport(home: room.summary.isHome);
     final sent = await runForMessage(
       () => ref
           .read(matchRoomProvider(widget.matchId).notifier)
-          .reportScore(score),
+          .reportScore(report.score, games: report.games),
     );
     if (!sent || !mounted) return;
-    final l = context.l10n;
     final opponent =
         room.summary.opponent?.displayName ?? l.matchYourOpponentStart;
     popWithMessage(
@@ -58,7 +56,10 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
     );
   }
 
-  bool _needsPenalties(MatchRoom room) => !room.drawAllowed && _mine == _theirs;
+  void _edit(SeriesDraft draft) => setState(() {
+    _draft = draft;
+    error = null;
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,41 +69,10 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
     }
     final p = context.palette;
     final l = context.l10n;
+    final draft = _draft ??= SeriesDraft.of(room);
     final opponent = room.summary.opponent?.displayName ?? l.matchOpponent;
-    final penalties = _needsPenalties(room);
-
     final me = room.summary.me?.displayName ?? l.matchYou;
-
-    Widget scorePanel({
-      required String title,
-      required int mine,
-      required int theirs,
-      required ValueChanged<int> onMine,
-      required ValueChanged<int> onTheirs,
-    }) => Panel(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: p.mutedForeground,
-            ),
-          ),
-          ScoreStepper(
-            label: l.matchYou,
-            avatarName: me,
-            value: mine,
-            onChanged: onMine,
-          ),
-          const Divider(height: 1),
-          ScoreStepper(label: opponent, value: theirs, onChanged: onTheirs),
-        ],
-      ),
-    );
+    final minutes = room.windows.confirm.inMinutes;
 
     return Scaffold(
       appBar: AppBar(title: Text(l.matchReportScore)),
@@ -119,7 +89,9 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                l.matchReportIntro(opponent, room.windows.confirm.inMinutes),
+                draft.isSeries
+                    ? l.seriesReportIntro(opponent, minutes)
+                    : l.matchReportIntro(opponent, minutes),
                 style: TextStyle(
                   fontSize: 15,
                   height: 1.45,
@@ -127,30 +99,40 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            scorePanel(
-              title: l.matchFullTime,
-              mine: _mine,
-              theirs: _theirs,
-              onMine: (v) => setState(() => _mine = v),
-              onTheirs: (v) => setState(() => _theirs = v),
-            ),
-            if (penalties) ...[
-              const SizedBox(height: TonitsSpace.md),
-              scorePanel(
-                title: l.matchPenaltyShootout,
-                mine: _penMine,
-                theirs: _penTheirs,
-                onMine: (v) => setState(() => _penMine = v),
-                onTheirs: (v) => setState(() => _penTheirs = v),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
-                  l.matchLevelKnockoutNote,
-                  style: TextStyle(fontSize: 13, color: p.mutedForeground),
+            if (draft.isSeries) ...[
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Pill(
+                  _standing(draft, opponent, l),
+                  icon: Icons.emoji_events_outlined,
+                  color: p.primary,
                 ),
+              ),
+            ],
+            const SizedBox(height: 16),
+            for (final (i, game) in draft.games.indexed) ...[
+              if (i > 0) const SizedBox(height: TonitsSpace.md),
+              _GameCard(
+                number: i + 1,
+                title: draft.isSeries ? l.seriesGame(i + 1) : l.matchFullTime,
+                game: game,
+                me: me,
+                opponent: opponent,
+                penalties: draft.needsPenalties(game),
+                series: draft.isSeries,
+                onChanged: (g) => _edit(draft.update(i, g)),
+                onRemove: draft.isSeries && i > 0 && i == draft.games.length - 1
+                    ? () => _edit(draft.removeLastGame())
+                    : null,
+              ),
+            ],
+            if (draft.canAddGame) ...[
+              const SizedBox(height: TonitsSpace.md),
+              SecondaryButton(
+                label: l.seriesAddGame(draft.games.length + 1),
+                icon: Icons.add,
+                onPressed: () => _edit(draft.addGame()),
               ),
             ],
             const SizedBox(height: TonitsSpace.md),
@@ -166,10 +148,131 @@ class _ReportScoreScreenState extends ConsumerState<ReportScoreScreen>
             PrimaryButton(
               label: l.matchSendScore,
               busy: busy,
-              onPressed: _declared ? () => _submit(room) : null,
+              onPressed: _declared ? () => _submit(room, draft) : null,
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  static String _standing(
+    SeriesDraft draft,
+    String opponent,
+    AppLocalizations l,
+  ) {
+    final (mine, theirs) = (draft.myWins, draft.theirWins);
+    if (draft.decided) {
+      return mine > theirs
+          ? l.seriesYouWin(mine, theirs)
+          : l.seriesTheyWin(opponent, theirs, mine);
+    }
+    if (mine > theirs) return l.seriesYouLead(mine, theirs);
+    if (theirs > mine) return l.seriesTheyLead(opponent, theirs, mine);
+    return l.seriesLevel(mine, theirs);
+  }
+}
+
+/// One game's score, with its penalty shootout when a knockout game is
+/// level.
+class _GameCard extends StatelessWidget {
+  const _GameCard({
+    required this.number,
+    required this.title,
+    required this.game,
+    required this.me,
+    required this.opponent,
+    required this.penalties,
+    required this.series,
+    required this.onChanged,
+    this.onRemove,
+  });
+
+  final int number;
+  final String title;
+  final GameDraft game;
+  final String me;
+  final String opponent;
+  final bool penalties;
+  final bool series;
+  final ValueChanged<GameDraft> onChanged;
+  final VoidCallback? onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = context.l10n;
+    final heading = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w600,
+      color: p.mutedForeground,
+    );
+    return Panel(
+      padding: const EdgeInsets.fromLTRB(20, 14, 12, 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: 32,
+            child: Row(
+              children: [
+                Expanded(child: Text(title, style: heading)),
+                if (onRemove != null)
+                  IconButton(
+                    tooltip: l.seriesRemoveGame(number),
+                    icon: Icon(Icons.close, size: 18, color: p.mutedForeground),
+                    onPressed: onRemove,
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Column(
+              children: [
+                ScoreStepper(
+                  label: l.matchYou,
+                  avatarName: me,
+                  value: game.mine,
+                  onChanged: (v) => onChanged(game.copyWith(mine: v)),
+                ),
+                const Divider(height: 1),
+                ScoreStepper(
+                  label: opponent,
+                  value: game.theirs,
+                  onChanged: (v) => onChanged(game.copyWith(theirs: v)),
+                ),
+                if (penalties) ...[
+                  const Divider(height: 1),
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(l.matchPenaltyShootout, style: heading),
+                  ),
+                  ScoreStepper(
+                    label: l.matchYou,
+                    avatarName: me,
+                    value: game.penMine,
+                    onChanged: (v) => onChanged(game.copyWith(penMine: v)),
+                  ),
+                  const Divider(height: 1),
+                  ScoreStepper(
+                    label: opponent,
+                    value: game.penTheirs,
+                    onChanged: (v) => onChanged(game.copyWith(penTheirs: v)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      series ? l.seriesLevelGameNote : l.matchLevelKnockoutNote,
+                      style: TextStyle(fontSize: 13, color: p.mutedForeground),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
