@@ -32,9 +32,12 @@ Future<bool> confirmAction(
   return confirmed ?? false;
 }
 
-/// A short confirmation at the bottom of the screen.
+/// A short confirmation at the bottom of the screen. It replaces any
+/// still showing, so the latest one is never stuck in a queue.
 void showMessage(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(SnackBar(content: Text(message)));
 }
 
 /// Leaves the current screen and confirms what it did on the one below.

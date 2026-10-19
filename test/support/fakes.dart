@@ -53,8 +53,9 @@ http.Response errorResponse(
   int status,
   String code, {
   Map<String, String>? headers,
+  String? message,
 }) => jsonResponse(
-  {'error': code, 'message': 'Server says $code'},
+  {'error': code, 'message': message ?? 'Server says $code'},
   status,
   headers: headers,
 );

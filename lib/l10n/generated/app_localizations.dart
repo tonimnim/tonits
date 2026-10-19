@@ -2914,6 +2914,156 @@ abstract class AppLocalizations {
   /// **'I confirm this is the real score.'**
   String get roomDeclaration;
 
+  /// Profile row and screen listing the devices signed in to the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed-in devices'**
+  String get devicesTitle;
+
+  /// No description provided for @devicesThisDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'This device'**
+  String get devicesThisDevice;
+
+  /// No description provided for @devicesUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown device'**
+  String get devicesUnknown;
+
+  /// No description provided for @devicesActiveNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Active now'**
+  String get devicesActiveNow;
+
+  /// No description provided for @devicesActiveMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Active {minutes} min ago'**
+  String devicesActiveMinutes(int minutes);
+
+  /// No description provided for @devicesActiveHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Active {hours} h ago'**
+  String devicesActiveHours(int hours);
+
+  /// No description provided for @devicesActiveYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Active yesterday'**
+  String get devicesActiveYesterday;
+
+  /// No description provided for @devicesActiveOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Active {date}'**
+  String devicesActiveOn(String date);
+
+  /// No description provided for @devicesSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get devicesSignOut;
+
+  /// No description provided for @devicesSignOutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out {device}?'**
+  String devicesSignOutTitle(String device);
+
+  /// No description provided for @devicesSignOutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'It will need to sign in again.'**
+  String get devicesSignOutMessage;
+
+  /// No description provided for @devicesSignedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out {device}'**
+  String devicesSignedOut(String device);
+
+  /// No description provided for @deleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteTitle;
+
+  /// No description provided for @deleteIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile, contact details and devices are removed. Match and payment records stay, without your name.'**
+  String get deleteIntro;
+
+  /// No description provided for @deleteWaitNote.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s a 24-hour wait first, and you can cancel during it.'**
+  String get deleteWaitNote;
+
+  /// No description provided for @deleteRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Request deletion'**
+  String get deleteRequest;
+
+  /// No description provided for @deleteRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteRequestTitle;
+
+  /// No description provided for @deleteRequestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You can finish deleting it after 24 hours, or cancel before then.'**
+  String get deleteRequestMessage;
+
+  /// No description provided for @deleteRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion requested'**
+  String get deleteRequested;
+
+  /// Label over the date and time the 24-hour wait ends.
+  ///
+  /// In en, this message translates to:
+  /// **'You can delete it from'**
+  String get deleteAvailableFrom;
+
+  /// DELETE is the literal word the player types; keep it in English capitals.
+  ///
+  /// In en, this message translates to:
+  /// **'Type DELETE to delete your account for good.'**
+  String get deleteReady;
+
+  /// No description provided for @deleteConfirmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation'**
+  String get deleteConfirmLabel;
+
+  /// No description provided for @deleteForGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteForGood;
+
+  /// No description provided for @deleteCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get deleteCancel;
+
+  /// No description provided for @deleteCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion cancelled'**
+  String get deleteCancelled;
+
   /// A match format: how many games a match is.
   ///
   /// In en, this message translates to:

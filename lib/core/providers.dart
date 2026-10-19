@@ -13,5 +13,9 @@ final apiClientProvider = Provider<ApiClient>(
 /// Sent with sign-in so the player can recognise this device in their
 /// session list.
 final deviceNameProvider = Provider<String>(
-  (ref) => 'Ozone on ${defaultTargetPlatform.name}',
+  (ref) => switch (defaultTargetPlatform) {
+    TargetPlatform.android => 'Ozone on Android',
+    TargetPlatform.iOS => 'Ozone on iOS',
+    final platform => 'Ozone on ${platform.name}',
+  },
 );

@@ -635,6 +635,62 @@ void main() {
       await _shoot(tester, 'my-entries-$suffix');
     });
 
+    testWidgets('devices and deletion ($suffix)', skip: skip, (tester) async {
+      Map<String, dynamic> session(
+        String id,
+        String name,
+        Duration ago, {
+        bool current = false,
+      }) => {
+        'id': id,
+        'deviceName': name,
+        'userAgent': '',
+        'createdAt': testNow
+            .subtract(const Duration(days: 30))
+            .toIso8601String(),
+        'lastUsedAt': testNow.subtract(ago).toIso8601String(),
+        'revokedAt': null,
+        'current': current,
+      };
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/sessions': (_) => jsonResponse({
+              'data': [
+                session('a', 'Ozone on android', Duration.zero, current: true),
+                session('b', 'Ozone on iOS', const Duration(hours: 3)),
+                session('c', '', const Duration(days: 4)),
+              ],
+            }, 200),
+            '/v1/me/account-deletion': (_) => jsonResponse({
+              'data': {
+                'id': 'del1',
+                'status': 'pending',
+                'requestedAt': testNow.toIso8601String(),
+                'executeAfter': testNow
+                    .add(const Duration(hours: 20))
+                    .toIso8601String(),
+              },
+            }, 200),
+          },
+        ),
+      );
+      await _openTab(tester, 'Profile');
+      await tester.ensureVisible(find.text('Signed-in devices'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Signed-in devices'));
+      await _shoot(tester, 'devices-$suffix');
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Delete account'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete account'));
+      await _shoot(tester, 'delete-waiting-$suffix');
+    });
+
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(
         tester,

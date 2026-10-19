@@ -90,6 +90,29 @@ class AccountService {
     _ref.invalidate(myAvatarProvider);
   }
 
+  /// Signs another device out of the account.
+  Future<void> signOutDevice(String sessionId) async {
+    await _repository.revokeSession(sessionId);
+    _ref.invalidate(mySessionsProvider);
+  }
+
+  Future<void> requestDeletion() async {
+    await _repository.requestDeletion();
+    _ref.invalidate(deletionRequestProvider);
+  }
+
+  Future<void> cancelDeletion() async {
+    await _repository.cancelDeletion();
+    _ref.invalidate(deletionRequestProvider);
+  }
+
+  /// Deletes the account for good, then signs this device out too: the
+  /// server has already ended every session.
+  Future<void> deleteAccount(String requestId) async {
+    await _repository.executeDeletion(requestId);
+    await _ref.read(authControllerProvider.notifier).signOut();
+  }
+
   void _adopt(Player player) {
     _ref.read(authControllerProvider.notifier).replacePlayer(player);
     _ref.invalidate(myProfileProvider);

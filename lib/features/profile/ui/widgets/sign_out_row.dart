@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n.dart';
+import '../../../../core/routes.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/application/auth_providers.dart';
 
-/// Signs out after a confirmation, since it ends the session on this device.
+/// Signs out after a confirmation, since it ends the session on this
+/// device. Deleting the account starts from here too.
 class SignOutRow extends ConsumerWidget {
   const SignOutRow({super.key});
 
@@ -30,6 +33,12 @@ class SignOutRow extends ConsumerWidget {
               await ref.read(authControllerProvider.notifier).signOut();
             }
           },
+        ),
+        SettingsRow(
+          icon: Icons.delete_outline,
+          label: l.deleteTitle,
+          destructive: true,
+          onTap: () => context.push(Routes.deleteAccount),
         ),
       ],
     );

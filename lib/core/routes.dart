@@ -38,6 +38,12 @@ abstract final class Routes {
   static const email = '$profile/email';
   static const phone = '$profile/phone';
 
+  /// The devices signed in to the account.
+  static const devices = '$profile/devices';
+
+  /// Requesting, finishing or cancelling the account's deletion.
+  static const deleteAccount = '$profile/delete';
+
   /// The competitions the player has entered.
   static const myEntries = '$profile/entries';
 

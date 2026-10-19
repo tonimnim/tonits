@@ -1728,6 +1728,94 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomDeclaration => 'I confirm this is the real score.';
 
   @override
+  String get devicesTitle => 'Signed-in devices';
+
+  @override
+  String get devicesThisDevice => 'This device';
+
+  @override
+  String get devicesUnknown => 'Unknown device';
+
+  @override
+  String get devicesActiveNow => 'Active now';
+
+  @override
+  String devicesActiveMinutes(int minutes) {
+    return 'Active $minutes min ago';
+  }
+
+  @override
+  String devicesActiveHours(int hours) {
+    return 'Active $hours h ago';
+  }
+
+  @override
+  String get devicesActiveYesterday => 'Active yesterday';
+
+  @override
+  String devicesActiveOn(String date) {
+    return 'Active $date';
+  }
+
+  @override
+  String get devicesSignOut => 'Sign out';
+
+  @override
+  String devicesSignOutTitle(String device) {
+    return 'Sign out $device?';
+  }
+
+  @override
+  String get devicesSignOutMessage => 'It will need to sign in again.';
+
+  @override
+  String devicesSignedOut(String device) {
+    return 'Signed out $device';
+  }
+
+  @override
+  String get deleteTitle => 'Delete account';
+
+  @override
+  String get deleteIntro =>
+      'Your profile, contact details and devices are removed. Match and payment records stay, without your name.';
+
+  @override
+  String get deleteWaitNote =>
+      'There\'s a 24-hour wait first, and you can cancel during it.';
+
+  @override
+  String get deleteRequest => 'Request deletion';
+
+  @override
+  String get deleteRequestTitle => 'Delete your account?';
+
+  @override
+  String get deleteRequestMessage =>
+      'You can finish deleting it after 24 hours, or cancel before then.';
+
+  @override
+  String get deleteRequested => 'Deletion requested';
+
+  @override
+  String get deleteAvailableFrom => 'You can delete it from';
+
+  @override
+  String get deleteReady => 'Type DELETE to delete your account for good.';
+
+  @override
+  String get deleteConfirmLabel => 'Confirmation';
+
+  @override
+  String get deleteForGood => 'Delete account';
+
+  @override
+  String get deleteCancel => 'Cancel request';
+
+  @override
+  String get deleteCancelled => 'Deletion cancelled';
+
+  @override
   String seriesBestOf(int count) {
     return 'Best of $count';
   }

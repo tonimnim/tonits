@@ -7,6 +7,7 @@ import '../../../core/providers.dart';
 import '../../auth/application/auth_providers.dart';
 import '../../auth/data/models.dart';
 import '../data/account_repository.dart';
+import '../data/security.dart';
 import 'account_service.dart';
 
 final accountRepositoryProvider = Provider<AccountRepository>(
@@ -39,4 +40,22 @@ final photoPickerProvider = Provider<Future<Uint8List?> Function()>(
     );
     return file?.readAsBytes();
   },
+);
+
+/// The devices signed in to the account, this one first, most recently
+/// used next. Signed-out ones are left out.
+final mySessionsProvider = FutureProvider.autoDispose<List<DeviceSession>>((
+  ref,
+) async {
+  final sessions = await ref.watch(accountRepositoryProvider).sessions();
+  return sessions.where((s) => s.active).toList()..sort(
+    (a, b) => a.current != b.current
+        ? (a.current ? -1 : 1)
+        : b.lastUsedAt.compareTo(a.lastUsedAt),
+  );
+});
+
+/// The latest request to delete the account, or null.
+final deletionRequestProvider = FutureProvider.autoDispose<DeletionRequest?>(
+  (ref) => ref.watch(accountRepositoryProvider).deletionRequest(),
 );

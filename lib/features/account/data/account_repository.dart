@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import '../../../core/api/api_client.dart';
 import '../../auth/data/models.dart';
 import '../../evidence/data/evidence.dart';
+import 'security.dart';
 
 /// Changes to the signed-in player's own account. Every change that
 /// returns the player gives back the updated one.
@@ -123,6 +124,48 @@ class AccountRepository {
       rethrow;
     }
   }
+
+  /// Up to 100 recent sessions, signed-out ones included.
+  Future<List<DeviceSession>> sessions() async {
+    final json = await _api.get('/v1/me/sessions', auth: true);
+    return (json!['data'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(DeviceSession.fromJson)
+        .toList();
+  }
+
+  /// Signs a device out; it needs to sign in again.
+  Future<void> revokeSession(String id) => _api.send(
+    'DELETE',
+    '/v1/me/sessions/${Uri.encodeComponent(id)}',
+    auth: true,
+  );
+
+  /// The latest deletion request, or null when there has never been one.
+  Future<DeletionRequest?> deletionRequest() async {
+    final json = await _api.get('/v1/me/account-deletion', auth: true);
+    final data = json!['data'] as Map<String, dynamic>?;
+    return data == null ? null : DeletionRequest.fromJson(data);
+  }
+
+  /// Starts the 24-hour wait before the account can be deleted. Asking
+  /// again doesn't restart it.
+  Future<DeletionRequest> requestDeletion() async {
+    final json = await _api.post('/v1/me/account-deletion', auth: true);
+    // Unlike the GET, this answers with the request itself, unwrapped.
+    return DeletionRequest.fromJson(json!);
+  }
+
+  Future<void> cancelDeletion() =>
+      _api.send('DELETE', '/v1/me/account-deletion', auth: true);
+
+  /// Deletes the account for good once the wait is over, and signs out
+  /// every device.
+  Future<void> executeDeletion(String requestId) => _api.post(
+    '/v1/me/account-deletion/execute',
+    body: {'requestId': requestId, 'confirmation': 'DELETE'},
+    auth: true,
+  );
 
   Future<Player> currentPlayer() async {
     final json = await _api.get('/v1/me', auth: true);

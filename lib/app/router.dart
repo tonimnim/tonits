@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/routes.dart';
+import '../features/account/ui/delete_account_screen.dart';
+import '../features/account/ui/devices_screen.dart';
 import '../features/account/ui/edit_name_screen.dart';
 import '../features/account/ui/edit_username_screen.dart';
 import '../features/account/ui/email_screen.dart';
@@ -116,6 +118,8 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
     GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
     GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
     GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
+    GoRoute(path: 'devices', builder: (_, _) => const DevicesScreen()),
+    GoRoute(path: 'delete', builder: (_, _) => const DeleteAccountScreen()),
   ],
   _ => const [],
 };

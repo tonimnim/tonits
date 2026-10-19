@@ -17,6 +17,7 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
     this.busy = false,
     this.pill = true,
+    this.destructive = false,
   });
 
   final String label;
@@ -26,17 +27,21 @@ class PrimaryButton extends StatelessWidget {
   /// Fully rounded ends (the default); false for a 16px corner.
   final bool pill;
 
+  /// Red, for an action that can't be undone, such as deleting the account.
+  final bool destructive;
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final fill = destructive ? palette.destructive : palette.primary;
     return FilledButton(
       // Stays enabled-looking while busy so the button doesn't flash grey.
       onPressed: busy ? () {} : onPressed,
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(54),
-        backgroundColor: palette.primary,
+        backgroundColor: fill,
         foregroundColor: palette.onPrimary,
-        disabledBackgroundColor: palette.primary.withValues(alpha: 0.45),
+        disabledBackgroundColor: fill.withValues(alpha: 0.45),
         disabledForegroundColor: palette.onPrimary,
         // Flat: no elevation, shadow or tint, in any state.
         elevation: 0,
