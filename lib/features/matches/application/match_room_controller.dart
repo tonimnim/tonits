@@ -73,9 +73,11 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     (key) => _repository.checkIn(matchId, key: key),
   );
 
-  Future<String?> reportScore(Score score) => _act(
+  /// [games] is every game of a series, in order.
+  Future<String?> reportScore(Score score, {List<Score>? games}) => _act(
     MatchAction.reportScore,
-    (key) => _repository.reportScore(matchId, score: score, key: key),
+    (key) =>
+        _repository.reportScore(matchId, score: score, games: games, key: key),
   );
 
   Future<String?> answer({required bool confirm}) => _act(
@@ -83,28 +85,53 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     (key) => _repository.answer(matchId, confirm: confirm, key: key),
   );
 
-  /// Uploads and verifies [bytes], then sends it as this side's screenshot.
+  /// Uploads and verifies each game's screenshot, then sends them together
+  /// as this side's screenshots. [onProgress] reports which game is being
+  /// uploaded (1-based count) and at what stage.
+  Future<String?> sendScreenshots(
+    Map<int, Uint8List> bytesByGame, {
+    void Function(int done, int total, UploadStage stage)? onProgress,
+  }) async {
+    final games = bytesByGame.keys.toList()..sort();
+    final evidence = <int, String>{};
+    for (final (i, game) in games.indexed) {
+      try {
+        evidence[game] = await ref
+            .read(screenshotUploaderProvider)
+            .upload(
+              bytesByGame[game]!,
+              onStage: (stage) => onProgress?.call(i + 1, games.length, stage),
+            );
+      } on ScreenshotProblem catch (e) {
+        return bytesByGame.length == 1
+            ? e.message
+            : ref
+                  .read(l10nProvider)
+                  .matchScreenshotProblemForGame(game, e.message);
+      } catch (e) {
+        return _describe(e);
+      }
+      if (!ref.mounted) return null;
+    }
+    final perGame = state.value?.windows.perGameScreenshots ?? false;
+    return _act(
+      MatchAction.submitScreenshot,
+      (key) => _repository.sendScreenshots(
+        matchId,
+        evidenceByGame: evidence,
+        perGame: perGame,
+        key: key,
+      ),
+    );
+  }
+
+  /// A best of 1's one screenshot.
   Future<String?> sendScreenshot(
     Uint8List bytes, {
     void Function(UploadStage stage)? onStage,
-  }) async {
-    final String evidenceId;
-    try {
-      evidenceId = await ref
-          .read(screenshotUploaderProvider)
-          .upload(bytes, onStage: onStage);
-    } on ScreenshotProblem catch (e) {
-      return e.message;
-    } catch (e) {
-      return _describe(e);
-    }
-    if (!ref.mounted) return null;
-    return _act(
-      MatchAction.submitScreenshot,
-      (key) =>
-          _repository.sendScreenshot(matchId, evidenceId: evidenceId, key: key),
-    );
-  }
+  }) => sendScreenshots({
+    1: bytes,
+  }, onProgress: onStage == null ? null : (_, _, stage) => onStage(stage));
 
   /// Runs one action and shows the room it returns. Returns a message for
   /// the player when it failed, or null.
@@ -177,8 +204,12 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
             'confirmation_window_closed' ||
             'screenshot_window_closed':
           return l.matchErrorWindowClosed;
-        case 'invalid_score':
-          return l.matchErrorInvalidScore;
+        // The server says exactly what doesn't fit, such as a game a
+        // decided series didn't need.
+        case 'invalid_score' || 'invalid_evidence':
+          return error.message.isNotEmpty
+              ? error.message
+              : l.matchErrorInvalidScore;
         case 'match_changed':
           return l.matchErrorMatchChanged;
         case 'competition_closed':

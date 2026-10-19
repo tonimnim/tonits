@@ -33,6 +33,9 @@ abstract class Competition with _$Competition {
     required DateTime startsAt,
     DateTime? registrationClosesAt,
     @Default('') String description,
+
+    /// How many games each round's matches are; only on the detail.
+    MatchFormat? matchFormat,
   }) = _Competition;
 
   factory Competition.fromJson(Map<String, dynamic> json) =>
@@ -48,6 +51,26 @@ abstract class Competition with _$Competition {
     final closes = registrationClosesAt;
     return closes != null && !closes.isAfter(DateTime.now());
   }
+}
+
+/// How many games a match is (`CompetitionMatchFormat`): [bestOf] for
+/// every match, and [rounds] for the rounds that differ, named back from
+/// the final (`final`, `semifinal`, `quarterfinal`, `round_of_16`, ...,
+/// `third_place`; double elimination `winners_final`, `losers_final`).
+@freezed
+abstract class MatchFormat with _$MatchFormat {
+  const MatchFormat._();
+
+  const factory MatchFormat({
+    @Default(1) int bestOf,
+    @Default(<String, int>{}) Map<String, int> rounds,
+  }) = _MatchFormat;
+
+  factory MatchFormat.fromJson(Map<String, dynamic> json) =>
+      _$MatchFormatFromJson(json);
+
+  /// Whether any match is more than one game.
+  bool get hasSeries => bestOf > 1 || rounds.values.any((n) => n > 1);
 }
 
 enum EntryType { free, paid }

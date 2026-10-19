@@ -18,7 +18,9 @@ mixin _$MatchRoom {
 
 /// The summary fields, read from the same object.
 @JsonKey(readValue: _whole) MatchSummary get summary;/// A short reference, such as "M-1042", for support.
- String get code; int get bestOf;/// Round-robin matches may end level; knockouts need penalties.
+ String get code;/// 1, 3 or 5 games; one point per game won.
+ int get bestOf;/// Games a side needs to win; the series stops there.
+@JsonKey(name: 'gamesToWin') int? get gamesToWinValue;/// Round-robin matches may end level; knockouts need penalties.
  bool get drawAllowed; DateTime? get checkInOpensAt;/// When a result must be in; with none by then, both entries are removed.
  DateTime? get resultDueAt;/// Why a finished match ended (`played`, `walkover`, ...).
  String? get completionReason;@JsonKey(name: 'friendMatchInstructions') List<FriendMatchInstruction> get instructions;@JsonKey(name: 'resultVerification') ResultVerification get verification;/// The final score, once the match is completed.
@@ -34,20 +36,20 @@ $MatchRoomCopyWith<MatchRoom> get copyWith => _$MatchRoomCopyWithImpl<MatchRoom>
 @override
 bool operator ==(Object other) {
   final _this = this as MatchRoom;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchRoom&&(identical(other.summary, _this.summary) || other.summary == _this.summary)&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.bestOf, _this.bestOf) || other.bestOf == _this.bestOf)&&(identical(other.drawAllowed, _this.drawAllowed) || other.drawAllowed == _this.drawAllowed)&&(identical(other.checkInOpensAt, _this.checkInOpensAt) || other.checkInOpensAt == _this.checkInOpensAt)&&(identical(other.resultDueAt, _this.resultDueAt) || other.resultDueAt == _this.resultDueAt)&&(identical(other.completionReason, _this.completionReason) || other.completionReason == _this.completionReason)&&const DeepCollectionEquality().equals(other.instructions, _this.instructions)&&(identical(other.verification, _this.verification) || other.verification == _this.verification)&&(identical(other.result, _this.result) || other.result == _this.result)&&(identical(other.windows, _this.windows) || other.windows == _this.windows));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MatchRoom&&(identical(other.summary, _this.summary) || other.summary == _this.summary)&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.bestOf, _this.bestOf) || other.bestOf == _this.bestOf)&&(identical(other.gamesToWinValue, _this.gamesToWinValue) || other.gamesToWinValue == _this.gamesToWinValue)&&(identical(other.drawAllowed, _this.drawAllowed) || other.drawAllowed == _this.drawAllowed)&&(identical(other.checkInOpensAt, _this.checkInOpensAt) || other.checkInOpensAt == _this.checkInOpensAt)&&(identical(other.resultDueAt, _this.resultDueAt) || other.resultDueAt == _this.resultDueAt)&&(identical(other.completionReason, _this.completionReason) || other.completionReason == _this.completionReason)&&const DeepCollectionEquality().equals(other.instructions, _this.instructions)&&(identical(other.verification, _this.verification) || other.verification == _this.verification)&&(identical(other.result, _this.result) || other.result == _this.result)&&(identical(other.windows, _this.windows) || other.windows == _this.windows));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as MatchRoom;
-  return Object.hash(runtimeType,_this.summary,_this.code,_this.bestOf,_this.drawAllowed,_this.checkInOpensAt,_this.resultDueAt,_this.completionReason,const DeepCollectionEquality().hash(_this.instructions),_this.verification,_this.result,_this.windows);
+  return Object.hash(runtimeType,_this.summary,_this.code,_this.bestOf,_this.gamesToWinValue,_this.drawAllowed,_this.checkInOpensAt,_this.resultDueAt,_this.completionReason,const DeepCollectionEquality().hash(_this.instructions),_this.verification,_this.result,_this.windows);
 }
 
 @override
 String toString() {
   final _this = this as MatchRoom;
-  return 'MatchRoom(summary: ${_this.summary}, code: ${_this.code}, bestOf: ${_this.bestOf}, drawAllowed: ${_this.drawAllowed}, checkInOpensAt: ${_this.checkInOpensAt}, resultDueAt: ${_this.resultDueAt}, completionReason: ${_this.completionReason}, instructions: ${_this.instructions}, verification: ${_this.verification}, result: ${_this.result}, windows: ${_this.windows})';
+  return 'MatchRoom(summary: ${_this.summary}, code: ${_this.code}, bestOf: ${_this.bestOf}, gamesToWinValue: ${_this.gamesToWinValue}, drawAllowed: ${_this.drawAllowed}, checkInOpensAt: ${_this.checkInOpensAt}, resultDueAt: ${_this.resultDueAt}, completionReason: ${_this.completionReason}, instructions: ${_this.instructions}, verification: ${_this.verification}, result: ${_this.result}, windows: ${_this.windows})';
 }
 
 
@@ -58,7 +60,7 @@ abstract mixin class $MatchRoomCopyWith<$Res>  {
   factory $MatchRoomCopyWith(MatchRoom value, $Res Function(MatchRoom) _then) = _$MatchRoomCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(readValue: _whole) MatchSummary summary, String code, int bestOf, bool drawAllowed, DateTime? checkInOpensAt, DateTime? resultDueAt, String? completionReason,@JsonKey(name: 'friendMatchInstructions') List<FriendMatchInstruction> instructions,@JsonKey(name: 'resultVerification') ResultVerification verification, ConfirmedResult? result,@JsonKey(name: 'verificationPolicy') VerificationWindows windows
+@JsonKey(readValue: _whole) MatchSummary summary, String code, int bestOf,@JsonKey(name: 'gamesToWin') int? gamesToWinValue, bool drawAllowed, DateTime? checkInOpensAt, DateTime? resultDueAt, String? completionReason,@JsonKey(name: 'friendMatchInstructions') List<FriendMatchInstruction> instructions,@JsonKey(name: 'resultVerification') ResultVerification verification, ConfirmedResult? result,@JsonKey(name: 'verificationPolicy') VerificationWindows windows
 });
 
 
@@ -75,12 +77,13 @@ class _$MatchRoomCopyWithImpl<$Res>
 
 /// Create a copy of MatchRoom
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? summary = null,Object? code = null,Object? bestOf = null,Object? drawAllowed = null,Object? checkInOpensAt = freezed,Object? resultDueAt = freezed,Object? completionReason = freezed,Object? instructions = null,Object? verification = null,Object? result = freezed,Object? windows = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? summary = null,Object? code = null,Object? bestOf = null,Object? gamesToWinValue = freezed,Object? drawAllowed = null,Object? checkInOpensAt = freezed,Object? resultDueAt = freezed,Object? completionReason = freezed,Object? instructions = null,Object? verification = null,Object? result = freezed,Object? windows = null,}) {
   return _then(MatchRoom(
 summary: null == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
 as MatchSummary,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as String,bestOf: null == bestOf ? _self.bestOf : bestOf // ignore: cast_nullable_to_non_nullable
-as int,drawAllowed: null == drawAllowed ? _self.drawAllowed : drawAllowed // ignore: cast_nullable_to_non_nullable
+as int,gamesToWinValue: freezed == gamesToWinValue ? _self.gamesToWinValue : gamesToWinValue // ignore: cast_nullable_to_non_nullable
+as int?,drawAllowed: null == drawAllowed ? _self.drawAllowed : drawAllowed // ignore: cast_nullable_to_non_nullable
 as bool,checkInOpensAt: freezed == checkInOpensAt ? _self.checkInOpensAt : checkInOpensAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,resultDueAt: freezed == resultDueAt ? _self.resultDueAt : resultDueAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,completionReason: freezed == completionReason ? _self.completionReason : completionReason // ignore: cast_nullable_to_non_nullable
@@ -212,10 +215,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf, @JsonKey(name: 'gamesToWin')  int? gamesToWinValue,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MatchRoom() when $default != null:
-return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
+return $default(_that.summary,_that.code,_that.bestOf,_that.gamesToWinValue,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
   return orElse();
 
 }
@@ -233,10 +236,10 @@ return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.ch
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf, @JsonKey(name: 'gamesToWin')  int? gamesToWinValue,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)  $default,) {final _that = this;
 switch (_that) {
 case _MatchRoom():
-return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
+return $default(_that.summary,_that.code,_that.bestOf,_that.gamesToWinValue,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -253,10 +256,10 @@ return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.ch
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  MatchSummary summary,  String code,  int bestOf, @JsonKey(name: 'gamesToWin')  int? gamesToWinValue,  bool drawAllowed,  DateTime? checkInOpensAt,  DateTime? resultDueAt,  String? completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions, @JsonKey(name: 'resultVerification')  ResultVerification verification,  ConfirmedResult? result, @JsonKey(name: 'verificationPolicy')  VerificationWindows windows)?  $default,) {final _that = this;
 switch (_that) {
 case _MatchRoom() when $default != null:
-return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
+return $default(_that.summary,_that.code,_that.bestOf,_that.gamesToWinValue,_that.drawAllowed,_that.checkInOpensAt,_that.resultDueAt,_that.completionReason,_that.instructions,_that.verification,_that.result,_that.windows);case _:
   return null;
 
 }
@@ -268,14 +271,17 @@ return $default(_that.summary,_that.code,_that.bestOf,_that.drawAllowed,_that.ch
 @JsonSerializable(createToJson: false)
 
 class _MatchRoom extends MatchRoom {
-  const _MatchRoom({@JsonKey(readValue: _whole) required this.summary, this.code = '', this.bestOf = 1, this.drawAllowed = false, this.checkInOpensAt, this.resultDueAt, this.completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions = const <FriendMatchInstruction>[], @JsonKey(name: 'resultVerification') required this.verification, this.result, @JsonKey(name: 'verificationPolicy') this.windows = const VerificationWindows()}): _instructions = instructions,super._();
+  const _MatchRoom({@JsonKey(readValue: _whole) required this.summary, this.code = '', this.bestOf = 1, @JsonKey(name: 'gamesToWin') this.gamesToWinValue, this.drawAllowed = false, this.checkInOpensAt, this.resultDueAt, this.completionReason, @JsonKey(name: 'friendMatchInstructions')  List<FriendMatchInstruction> instructions = const <FriendMatchInstruction>[], @JsonKey(name: 'resultVerification') required this.verification, this.result, @JsonKey(name: 'verificationPolicy') this.windows = const VerificationWindows()}): _instructions = instructions,super._();
   factory _MatchRoom.fromJson(Map<String, dynamic> json) => _$MatchRoomFromJson(json);
 
 /// The summary fields, read from the same object.
 @override@JsonKey(readValue: _whole) final  MatchSummary summary;
 /// A short reference, such as "M-1042", for support.
 @override@JsonKey() final  String code;
+/// 1, 3 or 5 games; one point per game won.
 @override@JsonKey() final  int bestOf;
+/// Games a side needs to win; the series stops there.
+@override@JsonKey(name: 'gamesToWin') final  int? gamesToWinValue;
 /// Round-robin matches may end level; knockouts need penalties.
 @override@JsonKey() final  bool drawAllowed;
 @override final  DateTime? checkInOpensAt;
@@ -305,18 +311,18 @@ _$MatchRoomCopyWith<_MatchRoom> get copyWith => __$MatchRoomCopyWithImpl<_MatchR
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchRoom&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.code, code) || other.code == code)&&(identical(other.bestOf, bestOf) || other.bestOf == bestOf)&&(identical(other.drawAllowed, drawAllowed) || other.drawAllowed == drawAllowed)&&(identical(other.checkInOpensAt, checkInOpensAt) || other.checkInOpensAt == checkInOpensAt)&&(identical(other.resultDueAt, resultDueAt) || other.resultDueAt == resultDueAt)&&(identical(other.completionReason, completionReason) || other.completionReason == completionReason)&&const DeepCollectionEquality().equals(other.instructions, _instructions)&&(identical(other.verification, verification) || other.verification == verification)&&(identical(other.result, result) || other.result == result)&&(identical(other.windows, windows) || other.windows == windows));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _MatchRoom&&(identical(other.summary, summary) || other.summary == summary)&&(identical(other.code, code) || other.code == code)&&(identical(other.bestOf, bestOf) || other.bestOf == bestOf)&&(identical(other.gamesToWinValue, gamesToWinValue) || other.gamesToWinValue == gamesToWinValue)&&(identical(other.drawAllowed, drawAllowed) || other.drawAllowed == drawAllowed)&&(identical(other.checkInOpensAt, checkInOpensAt) || other.checkInOpensAt == checkInOpensAt)&&(identical(other.resultDueAt, resultDueAt) || other.resultDueAt == resultDueAt)&&(identical(other.completionReason, completionReason) || other.completionReason == completionReason)&&const DeepCollectionEquality().equals(other.instructions, _instructions)&&(identical(other.verification, verification) || other.verification == verification)&&(identical(other.result, result) || other.result == result)&&(identical(other.windows, windows) || other.windows == windows));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,summary,code,bestOf,drawAllowed,checkInOpensAt,resultDueAt,completionReason,const DeepCollectionEquality().hash(_instructions),verification,result,windows);
+    return Object.hash(runtimeType,summary,code,bestOf,gamesToWinValue,drawAllowed,checkInOpensAt,resultDueAt,completionReason,const DeepCollectionEquality().hash(_instructions),verification,result,windows);
 }
 
 @override
 String toString() {
-    return 'MatchRoom(summary: $summary, code: $code, bestOf: $bestOf, drawAllowed: $drawAllowed, checkInOpensAt: $checkInOpensAt, resultDueAt: $resultDueAt, completionReason: $completionReason, instructions: $instructions, verification: $verification, result: $result, windows: $windows)';
+    return 'MatchRoom(summary: $summary, code: $code, bestOf: $bestOf, gamesToWinValue: $gamesToWinValue, drawAllowed: $drawAllowed, checkInOpensAt: $checkInOpensAt, resultDueAt: $resultDueAt, completionReason: $completionReason, instructions: $instructions, verification: $verification, result: $result, windows: $windows)';
 }
 
 
@@ -327,7 +333,7 @@ abstract mixin class _$MatchRoomCopyWith<$Res> implements $MatchRoomCopyWith<$Re
   factory _$MatchRoomCopyWith(_MatchRoom value, $Res Function(_MatchRoom) _then) = __$MatchRoomCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(readValue: _whole) MatchSummary summary, String code, int bestOf, bool drawAllowed, DateTime? checkInOpensAt, DateTime? resultDueAt, String? completionReason,@JsonKey(name: 'friendMatchInstructions') List<FriendMatchInstruction> instructions,@JsonKey(name: 'resultVerification') ResultVerification verification, ConfirmedResult? result,@JsonKey(name: 'verificationPolicy') VerificationWindows windows
+@JsonKey(readValue: _whole) MatchSummary summary, String code, int bestOf,@JsonKey(name: 'gamesToWin') int? gamesToWinValue, bool drawAllowed, DateTime? checkInOpensAt, DateTime? resultDueAt, String? completionReason,@JsonKey(name: 'friendMatchInstructions') List<FriendMatchInstruction> instructions,@JsonKey(name: 'resultVerification') ResultVerification verification, ConfirmedResult? result,@JsonKey(name: 'verificationPolicy') VerificationWindows windows
 });
 
 
@@ -344,12 +350,13 @@ class __$MatchRoomCopyWithImpl<$Res>
 
 /// Create a copy of MatchRoom
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? summary = null,Object? code = null,Object? bestOf = null,Object? drawAllowed = null,Object? checkInOpensAt = freezed,Object? resultDueAt = freezed,Object? completionReason = freezed,Object? instructions = null,Object? verification = null,Object? result = freezed,Object? windows = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? summary = null,Object? code = null,Object? bestOf = null,Object? gamesToWinValue = freezed,Object? drawAllowed = null,Object? checkInOpensAt = freezed,Object? resultDueAt = freezed,Object? completionReason = freezed,Object? instructions = null,Object? verification = null,Object? result = freezed,Object? windows = null,}) {
   return _then(_MatchRoom(
 summary: null == summary ? _self.summary : summary // ignore: cast_nullable_to_non_nullable
 as MatchSummary,code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as String,bestOf: null == bestOf ? _self.bestOf : bestOf // ignore: cast_nullable_to_non_nullable
-as int,drawAllowed: null == drawAllowed ? _self.drawAllowed : drawAllowed // ignore: cast_nullable_to_non_nullable
+as int,gamesToWinValue: freezed == gamesToWinValue ? _self.gamesToWinValue : gamesToWinValue // ignore: cast_nullable_to_non_nullable
+as int?,drawAllowed: null == drawAllowed ? _self.drawAllowed : drawAllowed // ignore: cast_nullable_to_non_nullable
 as bool,checkInOpensAt: freezed == checkInOpensAt ? _self.checkInOpensAt : checkInOpensAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,resultDueAt: freezed == resultDueAt ? _self.resultDueAt : resultDueAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,completionReason: freezed == completionReason ? _self.completionReason : completionReason // ignore: cast_nullable_to_non_nullable
@@ -675,7 +682,8 @@ as String,
 /// @nodoc
 mixin _$ResultVerification {
 
-@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase get phase;@JsonKey(name: 'submittedResult') SubmittedResult? get submitted;@JsonKey(name: 'myScreenshot', readValue: _present) bool get myScreenshotSent;@JsonKey(name: 'opponentScreenshotSubmitted') bool get opponentScreenshotSent; DateTime? get confirmationDeadline; DateTime? get screenshotDeadline;/// `agreed`, `confirmation_timeout`, `response_timeout`, ...
+@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase get phase;@JsonKey(name: 'submittedResult') SubmittedResult? get submitted;@JsonKey(name: 'myScreenshot', readValue: _present) bool get myScreenshotSent;/// The screenshots this player sent, in game order.
+ List<ResultScreenshot> get myScreenshots;@JsonKey(name: 'opponentScreenshotSubmitted') bool get opponentScreenshotSent; DateTime? get confirmationDeadline; DateTime? get screenshotDeadline;/// `agreed`, `confirmation_timeout`, `response_timeout`, ...
  String? get resolution;/// True only on the match that removed this player's entry.
  bool get entryRemoved;
 /// Create a copy of ResultVerification
@@ -689,20 +697,20 @@ $ResultVerificationCopyWith<ResultVerification> get copyWith => _$ResultVerifica
 @override
 bool operator ==(Object other) {
   final _this = this as ResultVerification;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ResultVerification&&(identical(other.phase, _this.phase) || other.phase == _this.phase)&&(identical(other.submitted, _this.submitted) || other.submitted == _this.submitted)&&(identical(other.myScreenshotSent, _this.myScreenshotSent) || other.myScreenshotSent == _this.myScreenshotSent)&&(identical(other.opponentScreenshotSent, _this.opponentScreenshotSent) || other.opponentScreenshotSent == _this.opponentScreenshotSent)&&(identical(other.confirmationDeadline, _this.confirmationDeadline) || other.confirmationDeadline == _this.confirmationDeadline)&&(identical(other.screenshotDeadline, _this.screenshotDeadline) || other.screenshotDeadline == _this.screenshotDeadline)&&(identical(other.resolution, _this.resolution) || other.resolution == _this.resolution)&&(identical(other.entryRemoved, _this.entryRemoved) || other.entryRemoved == _this.entryRemoved));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ResultVerification&&(identical(other.phase, _this.phase) || other.phase == _this.phase)&&(identical(other.submitted, _this.submitted) || other.submitted == _this.submitted)&&(identical(other.myScreenshotSent, _this.myScreenshotSent) || other.myScreenshotSent == _this.myScreenshotSent)&&const DeepCollectionEquality().equals(other.myScreenshots, _this.myScreenshots)&&(identical(other.opponentScreenshotSent, _this.opponentScreenshotSent) || other.opponentScreenshotSent == _this.opponentScreenshotSent)&&(identical(other.confirmationDeadline, _this.confirmationDeadline) || other.confirmationDeadline == _this.confirmationDeadline)&&(identical(other.screenshotDeadline, _this.screenshotDeadline) || other.screenshotDeadline == _this.screenshotDeadline)&&(identical(other.resolution, _this.resolution) || other.resolution == _this.resolution)&&(identical(other.entryRemoved, _this.entryRemoved) || other.entryRemoved == _this.entryRemoved));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as ResultVerification;
-  return Object.hash(runtimeType,_this.phase,_this.submitted,_this.myScreenshotSent,_this.opponentScreenshotSent,_this.confirmationDeadline,_this.screenshotDeadline,_this.resolution,_this.entryRemoved);
+  return Object.hash(runtimeType,_this.phase,_this.submitted,_this.myScreenshotSent,const DeepCollectionEquality().hash(_this.myScreenshots),_this.opponentScreenshotSent,_this.confirmationDeadline,_this.screenshotDeadline,_this.resolution,_this.entryRemoved);
 }
 
 @override
 String toString() {
   final _this = this as ResultVerification;
-  return 'ResultVerification(phase: ${_this.phase}, submitted: ${_this.submitted}, myScreenshotSent: ${_this.myScreenshotSent}, opponentScreenshotSent: ${_this.opponentScreenshotSent}, confirmationDeadline: ${_this.confirmationDeadline}, screenshotDeadline: ${_this.screenshotDeadline}, resolution: ${_this.resolution}, entryRemoved: ${_this.entryRemoved})';
+  return 'ResultVerification(phase: ${_this.phase}, submitted: ${_this.submitted}, myScreenshotSent: ${_this.myScreenshotSent}, myScreenshots: ${_this.myScreenshots}, opponentScreenshotSent: ${_this.opponentScreenshotSent}, confirmationDeadline: ${_this.confirmationDeadline}, screenshotDeadline: ${_this.screenshotDeadline}, resolution: ${_this.resolution}, entryRemoved: ${_this.entryRemoved})';
 }
 
 
@@ -713,7 +721,7 @@ abstract mixin class $ResultVerificationCopyWith<$Res>  {
   factory $ResultVerificationCopyWith(ResultVerification value, $Res Function(ResultVerification) _then) = _$ResultVerificationCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase phase,@JsonKey(name: 'submittedResult') SubmittedResult? submitted,@JsonKey(name: 'myScreenshot', readValue: _present) bool myScreenshotSent,@JsonKey(name: 'opponentScreenshotSubmitted') bool opponentScreenshotSent, DateTime? confirmationDeadline, DateTime? screenshotDeadline, String? resolution, bool entryRemoved
+@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase phase,@JsonKey(name: 'submittedResult') SubmittedResult? submitted,@JsonKey(name: 'myScreenshot', readValue: _present) bool myScreenshotSent, List<ResultScreenshot> myScreenshots,@JsonKey(name: 'opponentScreenshotSubmitted') bool opponentScreenshotSent, DateTime? confirmationDeadline, DateTime? screenshotDeadline, String? resolution, bool entryRemoved
 });
 
 
@@ -730,12 +738,13 @@ class _$ResultVerificationCopyWithImpl<$Res>
 
 /// Create a copy of ResultVerification
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? phase = null,Object? submitted = freezed,Object? myScreenshotSent = null,Object? opponentScreenshotSent = null,Object? confirmationDeadline = freezed,Object? screenshotDeadline = freezed,Object? resolution = freezed,Object? entryRemoved = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? phase = null,Object? submitted = freezed,Object? myScreenshotSent = null,Object? myScreenshots = null,Object? opponentScreenshotSent = null,Object? confirmationDeadline = freezed,Object? screenshotDeadline = freezed,Object? resolution = freezed,Object? entryRemoved = null,}) {
   return _then(ResultVerification(
 phase: null == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
 as VerificationPhase,submitted: freezed == submitted ? _self.submitted : submitted // ignore: cast_nullable_to_non_nullable
 as SubmittedResult?,myScreenshotSent: null == myScreenshotSent ? _self.myScreenshotSent : myScreenshotSent // ignore: cast_nullable_to_non_nullable
-as bool,opponentScreenshotSent: null == opponentScreenshotSent ? _self.opponentScreenshotSent : opponentScreenshotSent // ignore: cast_nullable_to_non_nullable
+as bool,myScreenshots: null == myScreenshots ? _self.myScreenshots : myScreenshots // ignore: cast_nullable_to_non_nullable
+as List<ResultScreenshot>,opponentScreenshotSent: null == opponentScreenshotSent ? _self.opponentScreenshotSent : opponentScreenshotSent // ignore: cast_nullable_to_non_nullable
 as bool,confirmationDeadline: freezed == confirmationDeadline ? _self.confirmationDeadline : confirmationDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime?,screenshotDeadline: freezed == screenshotDeadline ? _self.screenshotDeadline : screenshotDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime?,resolution: freezed == resolution ? _self.resolution : resolution // ignore: cast_nullable_to_non_nullable
@@ -837,10 +846,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent,  List<ResultScreenshot> myScreenshots, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ResultVerification() when $default != null:
-return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
+return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.myScreenshots,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
   return orElse();
 
 }
@@ -858,10 +867,10 @@ return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponen
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent,  List<ResultScreenshot> myScreenshots, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)  $default,) {final _that = this;
 switch (_that) {
 case _ResultVerification():
-return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
+return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.myScreenshots,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -878,10 +887,10 @@ return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponen
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(unknownEnumValue: VerificationPhase.notStarted)  VerificationPhase phase, @JsonKey(name: 'submittedResult')  SubmittedResult? submitted, @JsonKey(name: 'myScreenshot', readValue: _present)  bool myScreenshotSent,  List<ResultScreenshot> myScreenshots, @JsonKey(name: 'opponentScreenshotSubmitted')  bool opponentScreenshotSent,  DateTime? confirmationDeadline,  DateTime? screenshotDeadline,  String? resolution,  bool entryRemoved)?  $default,) {final _that = this;
 switch (_that) {
 case _ResultVerification() when $default != null:
-return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
+return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.myScreenshots,_that.opponentScreenshotSent,_that.confirmationDeadline,_that.screenshotDeadline,_that.resolution,_that.entryRemoved);case _:
   return null;
 
 }
@@ -893,12 +902,21 @@ return $default(_that.phase,_that.submitted,_that.myScreenshotSent,_that.opponen
 @JsonSerializable(createToJson: false)
 
 class _ResultVerification implements ResultVerification {
-  const _ResultVerification({@JsonKey(unknownEnumValue: VerificationPhase.notStarted) this.phase = VerificationPhase.notStarted, @JsonKey(name: 'submittedResult') this.submitted, @JsonKey(name: 'myScreenshot', readValue: _present) this.myScreenshotSent = false, @JsonKey(name: 'opponentScreenshotSubmitted') this.opponentScreenshotSent = false, this.confirmationDeadline, this.screenshotDeadline, this.resolution, this.entryRemoved = false});
+  const _ResultVerification({@JsonKey(unknownEnumValue: VerificationPhase.notStarted) this.phase = VerificationPhase.notStarted, @JsonKey(name: 'submittedResult') this.submitted, @JsonKey(name: 'myScreenshot', readValue: _present) this.myScreenshotSent = false,  List<ResultScreenshot> myScreenshots = const <ResultScreenshot>[], @JsonKey(name: 'opponentScreenshotSubmitted') this.opponentScreenshotSent = false, this.confirmationDeadline, this.screenshotDeadline, this.resolution, this.entryRemoved = false}): _myScreenshots = myScreenshots;
   factory _ResultVerification.fromJson(Map<String, dynamic> json) => _$ResultVerificationFromJson(json);
 
 @override@JsonKey(unknownEnumValue: VerificationPhase.notStarted) final  VerificationPhase phase;
 @override@JsonKey(name: 'submittedResult') final  SubmittedResult? submitted;
 @override@JsonKey(name: 'myScreenshot', readValue: _present) final  bool myScreenshotSent;
+/// The screenshots this player sent, in game order.
+ final  List<ResultScreenshot> _myScreenshots;
+/// The screenshots this player sent, in game order.
+@override@JsonKey() List<ResultScreenshot> get myScreenshots {
+  if (_myScreenshots is EqualUnmodifiableListView) return _myScreenshots;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_myScreenshots);
+}
+
 @override@JsonKey(name: 'opponentScreenshotSubmitted') final  bool opponentScreenshotSent;
 @override final  DateTime? confirmationDeadline;
 @override final  DateTime? screenshotDeadline;
@@ -917,18 +935,18 @@ _$ResultVerificationCopyWith<_ResultVerification> get copyWith => __$ResultVerif
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResultVerification&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.submitted, submitted) || other.submitted == submitted)&&(identical(other.myScreenshotSent, myScreenshotSent) || other.myScreenshotSent == myScreenshotSent)&&(identical(other.opponentScreenshotSent, opponentScreenshotSent) || other.opponentScreenshotSent == opponentScreenshotSent)&&(identical(other.confirmationDeadline, confirmationDeadline) || other.confirmationDeadline == confirmationDeadline)&&(identical(other.screenshotDeadline, screenshotDeadline) || other.screenshotDeadline == screenshotDeadline)&&(identical(other.resolution, resolution) || other.resolution == resolution)&&(identical(other.entryRemoved, entryRemoved) || other.entryRemoved == entryRemoved));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResultVerification&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.submitted, submitted) || other.submitted == submitted)&&(identical(other.myScreenshotSent, myScreenshotSent) || other.myScreenshotSent == myScreenshotSent)&&const DeepCollectionEquality().equals(other.myScreenshots, _myScreenshots)&&(identical(other.opponentScreenshotSent, opponentScreenshotSent) || other.opponentScreenshotSent == opponentScreenshotSent)&&(identical(other.confirmationDeadline, confirmationDeadline) || other.confirmationDeadline == confirmationDeadline)&&(identical(other.screenshotDeadline, screenshotDeadline) || other.screenshotDeadline == screenshotDeadline)&&(identical(other.resolution, resolution) || other.resolution == resolution)&&(identical(other.entryRemoved, entryRemoved) || other.entryRemoved == entryRemoved));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,phase,submitted,myScreenshotSent,opponentScreenshotSent,confirmationDeadline,screenshotDeadline,resolution,entryRemoved);
+    return Object.hash(runtimeType,phase,submitted,myScreenshotSent,const DeepCollectionEquality().hash(_myScreenshots),opponentScreenshotSent,confirmationDeadline,screenshotDeadline,resolution,entryRemoved);
 }
 
 @override
 String toString() {
-    return 'ResultVerification(phase: $phase, submitted: $submitted, myScreenshotSent: $myScreenshotSent, opponentScreenshotSent: $opponentScreenshotSent, confirmationDeadline: $confirmationDeadline, screenshotDeadline: $screenshotDeadline, resolution: $resolution, entryRemoved: $entryRemoved)';
+    return 'ResultVerification(phase: $phase, submitted: $submitted, myScreenshotSent: $myScreenshotSent, myScreenshots: $myScreenshots, opponentScreenshotSent: $opponentScreenshotSent, confirmationDeadline: $confirmationDeadline, screenshotDeadline: $screenshotDeadline, resolution: $resolution, entryRemoved: $entryRemoved)';
 }
 
 
@@ -939,7 +957,7 @@ abstract mixin class _$ResultVerificationCopyWith<$Res> implements $ResultVerifi
   factory _$ResultVerificationCopyWith(_ResultVerification value, $Res Function(_ResultVerification) _then) = __$ResultVerificationCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase phase,@JsonKey(name: 'submittedResult') SubmittedResult? submitted,@JsonKey(name: 'myScreenshot', readValue: _present) bool myScreenshotSent,@JsonKey(name: 'opponentScreenshotSubmitted') bool opponentScreenshotSent, DateTime? confirmationDeadline, DateTime? screenshotDeadline, String? resolution, bool entryRemoved
+@JsonKey(unknownEnumValue: VerificationPhase.notStarted) VerificationPhase phase,@JsonKey(name: 'submittedResult') SubmittedResult? submitted,@JsonKey(name: 'myScreenshot', readValue: _present) bool myScreenshotSent, List<ResultScreenshot> myScreenshots,@JsonKey(name: 'opponentScreenshotSubmitted') bool opponentScreenshotSent, DateTime? confirmationDeadline, DateTime? screenshotDeadline, String? resolution, bool entryRemoved
 });
 
 
@@ -956,12 +974,13 @@ class __$ResultVerificationCopyWithImpl<$Res>
 
 /// Create a copy of ResultVerification
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? phase = null,Object? submitted = freezed,Object? myScreenshotSent = null,Object? opponentScreenshotSent = null,Object? confirmationDeadline = freezed,Object? screenshotDeadline = freezed,Object? resolution = freezed,Object? entryRemoved = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? phase = null,Object? submitted = freezed,Object? myScreenshotSent = null,Object? myScreenshots = null,Object? opponentScreenshotSent = null,Object? confirmationDeadline = freezed,Object? screenshotDeadline = freezed,Object? resolution = freezed,Object? entryRemoved = null,}) {
   return _then(_ResultVerification(
 phase: null == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
 as VerificationPhase,submitted: freezed == submitted ? _self.submitted : submitted // ignore: cast_nullable_to_non_nullable
 as SubmittedResult?,myScreenshotSent: null == myScreenshotSent ? _self.myScreenshotSent : myScreenshotSent // ignore: cast_nullable_to_non_nullable
-as bool,opponentScreenshotSent: null == opponentScreenshotSent ? _self.opponentScreenshotSent : opponentScreenshotSent // ignore: cast_nullable_to_non_nullable
+as bool,myScreenshots: null == myScreenshots ? _self._myScreenshots : myScreenshots // ignore: cast_nullable_to_non_nullable
+as List<ResultScreenshot>,opponentScreenshotSent: null == opponentScreenshotSent ? _self.opponentScreenshotSent : opponentScreenshotSent // ignore: cast_nullable_to_non_nullable
 as bool,confirmationDeadline: freezed == confirmationDeadline ? _self.confirmationDeadline : confirmationDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime?,screenshotDeadline: freezed == screenshotDeadline ? _self.screenshotDeadline : screenshotDeadline // ignore: cast_nullable_to_non_nullable
 as DateTime?,resolution: freezed == resolution ? _self.resolution : resolution // ignore: cast_nullable_to_non_nullable
@@ -983,6 +1002,276 @@ $SubmittedResultCopyWith<$Res>? get submitted {
     return _then(_self.copyWith(submitted: value));
   });
 }
+}
+
+
+/// @nodoc
+mixin _$ResultScreenshot {
+
+/// The game it shows; 1 for a best of 1.
+ int get game; String get evidenceId;
+/// Create a copy of ResultScreenshot
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ResultScreenshotCopyWith<ResultScreenshot> get copyWith => _$ResultScreenshotCopyWithImpl<ResultScreenshot>(this as ResultScreenshot, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as ResultScreenshot;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ResultScreenshot&&(identical(other.game, _this.game) || other.game == _this.game)&&(identical(other.evidenceId, _this.evidenceId) || other.evidenceId == _this.evidenceId));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+  final _this = this as ResultScreenshot;
+  return Object.hash(runtimeType,_this.game,_this.evidenceId);
+}
+
+@override
+String toString() {
+  final _this = this as ResultScreenshot;
+  return 'ResultScreenshot(game: ${_this.game}, evidenceId: ${_this.evidenceId})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ResultScreenshotCopyWith<$Res>  {
+  factory $ResultScreenshotCopyWith(ResultScreenshot value, $Res Function(ResultScreenshot) _then) = _$ResultScreenshotCopyWithImpl;
+@useResult
+$Res call({
+ int game, String evidenceId
+});
+
+
+
+
+}
+/// @nodoc
+class _$ResultScreenshotCopyWithImpl<$Res>
+    implements $ResultScreenshotCopyWith<$Res> {
+  _$ResultScreenshotCopyWithImpl(this._self, this._then);
+
+  final ResultScreenshot _self;
+  final $Res Function(ResultScreenshot) _then;
+
+/// Create a copy of ResultScreenshot
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? game = null,Object? evidenceId = null,}) {
+  return _then(ResultScreenshot(
+game: null == game ? _self.game : game // ignore: cast_nullable_to_non_nullable
+as int,evidenceId: null == evidenceId ? _self.evidenceId : evidenceId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [ResultScreenshot].
+extension ResultScreenshotPatterns on ResultScreenshot {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ResultScreenshot value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ResultScreenshot() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ResultScreenshot value)  $default,){
+final _that = this;
+switch (_that) {
+case _ResultScreenshot():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ResultScreenshot value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ResultScreenshot() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int game,  String evidenceId)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ResultScreenshot() when $default != null:
+return $default(_that.game,_that.evidenceId);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int game,  String evidenceId)  $default,) {final _that = this;
+switch (_that) {
+case _ResultScreenshot():
+return $default(_that.game,_that.evidenceId);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int game,  String evidenceId)?  $default,) {final _that = this;
+switch (_that) {
+case _ResultScreenshot() when $default != null:
+return $default(_that.game,_that.evidenceId);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable(createToJson: false)
+
+class _ResultScreenshot implements ResultScreenshot {
+  const _ResultScreenshot({this.game = 1, required this.evidenceId});
+  factory _ResultScreenshot.fromJson(Map<String, dynamic> json) => _$ResultScreenshotFromJson(json);
+
+/// The game it shows; 1 for a best of 1.
+@override@JsonKey() final  int game;
+@override final  String evidenceId;
+
+/// Create a copy of ResultScreenshot
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ResultScreenshotCopyWith<_ResultScreenshot> get copyWith => __$ResultScreenshotCopyWithImpl<_ResultScreenshot>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ResultScreenshot&&(identical(other.game, game) || other.game == game)&&(identical(other.evidenceId, evidenceId) || other.evidenceId == evidenceId));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode {
+    return Object.hash(runtimeType,game,evidenceId);
+}
+
+@override
+String toString() {
+    return 'ResultScreenshot(game: $game, evidenceId: $evidenceId)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ResultScreenshotCopyWith<$Res> implements $ResultScreenshotCopyWith<$Res> {
+  factory _$ResultScreenshotCopyWith(_ResultScreenshot value, $Res Function(_ResultScreenshot) _then) = __$ResultScreenshotCopyWithImpl;
+@override @useResult
+$Res call({
+ int game, String evidenceId
+});
+
+
+
+
+}
+/// @nodoc
+class __$ResultScreenshotCopyWithImpl<$Res>
+    implements _$ResultScreenshotCopyWith<$Res> {
+  __$ResultScreenshotCopyWithImpl(this._self, this._then);
+
+  final _ResultScreenshot _self;
+  final $Res Function(_ResultScreenshot) _then;
+
+/// Create a copy of ResultScreenshot
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? game = null,Object? evidenceId = null,}) {
+  return _then(_ResultScreenshot(
+game: null == game ? _self.game : game // ignore: cast_nullable_to_non_nullable
+as int,evidenceId: null == evidenceId ? _self.evidenceId : evidenceId // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
 }
 
 
@@ -1284,7 +1573,8 @@ $ScoreCopyWith<$Res>? get penalties {
 /// @nodoc
 mixin _$SubmittedResult {
 
-@JsonKey(readValue: _whole) Score get score;@JsonKey(name: 'submittedByMe') bool get byMe;@JsonKey(name: 'submittedAt') DateTime get at;
+@JsonKey(readValue: _whole) Score get score;/// Every game of a series, in order; empty for a best of 1.
+ List<Score> get games;@JsonKey(name: 'submittedByMe') bool get byMe;@JsonKey(name: 'submittedAt') DateTime get at;
 /// Create a copy of SubmittedResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1296,20 +1586,20 @@ $SubmittedResultCopyWith<SubmittedResult> get copyWith => _$SubmittedResultCopyW
 @override
 bool operator ==(Object other) {
   final _this = this as SubmittedResult;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubmittedResult&&(identical(other.score, _this.score) || other.score == _this.score)&&(identical(other.byMe, _this.byMe) || other.byMe == _this.byMe)&&(identical(other.at, _this.at) || other.at == _this.at));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubmittedResult&&(identical(other.score, _this.score) || other.score == _this.score)&&const DeepCollectionEquality().equals(other.games, _this.games)&&(identical(other.byMe, _this.byMe) || other.byMe == _this.byMe)&&(identical(other.at, _this.at) || other.at == _this.at));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as SubmittedResult;
-  return Object.hash(runtimeType,_this.score,_this.byMe,_this.at);
+  return Object.hash(runtimeType,_this.score,const DeepCollectionEquality().hash(_this.games),_this.byMe,_this.at);
 }
 
 @override
 String toString() {
   final _this = this as SubmittedResult;
-  return 'SubmittedResult(score: ${_this.score}, byMe: ${_this.byMe}, at: ${_this.at})';
+  return 'SubmittedResult(score: ${_this.score}, games: ${_this.games}, byMe: ${_this.byMe}, at: ${_this.at})';
 }
 
 
@@ -1320,7 +1610,7 @@ abstract mixin class $SubmittedResultCopyWith<$Res>  {
   factory $SubmittedResultCopyWith(SubmittedResult value, $Res Function(SubmittedResult) _then) = _$SubmittedResultCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(readValue: _whole) Score score,@JsonKey(name: 'submittedByMe') bool byMe,@JsonKey(name: 'submittedAt') DateTime at
+@JsonKey(readValue: _whole) Score score, List<Score> games,@JsonKey(name: 'submittedByMe') bool byMe,@JsonKey(name: 'submittedAt') DateTime at
 });
 
 
@@ -1337,10 +1627,11 @@ class _$SubmittedResultCopyWithImpl<$Res>
 
 /// Create a copy of SubmittedResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? score = null,Object? byMe = null,Object? at = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? score = null,Object? games = null,Object? byMe = null,Object? at = null,}) {
   return _then(SubmittedResult(
 score: null == score ? _self.score : score // ignore: cast_nullable_to_non_nullable
-as Score,byMe: null == byMe ? _self.byMe : byMe // ignore: cast_nullable_to_non_nullable
+as Score,games: null == games ? _self.games : games // ignore: cast_nullable_to_non_nullable
+as List<Score>,byMe: null == byMe ? _self.byMe : byMe // ignore: cast_nullable_to_non_nullable
 as bool,at: null == at ? _self.at : at // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -1436,10 +1727,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SubmittedResult() when $default != null:
-return $default(_that.score,_that.byMe,_that.at);case _:
+return $default(_that.score,_that.games,_that.byMe,_that.at);case _:
   return orElse();
 
 }
@@ -1457,10 +1748,10 @@ return $default(_that.score,_that.byMe,_that.at);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)  $default,) {final _that = this;
 switch (_that) {
 case _SubmittedResult():
-return $default(_that.score,_that.byMe,_that.at);case _:
+return $default(_that.score,_that.games,_that.byMe,_that.at);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1477,10 +1768,10 @@ return $default(_that.score,_that.byMe,_that.at);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  Score score, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games, @JsonKey(name: 'submittedByMe')  bool byMe, @JsonKey(name: 'submittedAt')  DateTime at)?  $default,) {final _that = this;
 switch (_that) {
 case _SubmittedResult() when $default != null:
-return $default(_that.score,_that.byMe,_that.at);case _:
+return $default(_that.score,_that.games,_that.byMe,_that.at);case _:
   return null;
 
 }
@@ -1492,10 +1783,19 @@ return $default(_that.score,_that.byMe,_that.at);case _:
 @JsonSerializable(createToJson: false)
 
 class _SubmittedResult implements SubmittedResult {
-  const _SubmittedResult({@JsonKey(readValue: _whole) required this.score, @JsonKey(name: 'submittedByMe') required this.byMe, @JsonKey(name: 'submittedAt') required this.at});
+  const _SubmittedResult({@JsonKey(readValue: _whole) required this.score,  List<Score> games = const <Score>[], @JsonKey(name: 'submittedByMe') required this.byMe, @JsonKey(name: 'submittedAt') required this.at}): _games = games;
   factory _SubmittedResult.fromJson(Map<String, dynamic> json) => _$SubmittedResultFromJson(json);
 
 @override@JsonKey(readValue: _whole) final  Score score;
+/// Every game of a series, in order; empty for a best of 1.
+ final  List<Score> _games;
+/// Every game of a series, in order; empty for a best of 1.
+@override@JsonKey() List<Score> get games {
+  if (_games is EqualUnmodifiableListView) return _games;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_games);
+}
+
 @override@JsonKey(name: 'submittedByMe') final  bool byMe;
 @override@JsonKey(name: 'submittedAt') final  DateTime at;
 
@@ -1509,18 +1809,18 @@ _$SubmittedResultCopyWith<_SubmittedResult> get copyWith => __$SubmittedResultCo
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubmittedResult&&(identical(other.score, score) || other.score == score)&&(identical(other.byMe, byMe) || other.byMe == byMe)&&(identical(other.at, at) || other.at == at));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubmittedResult&&(identical(other.score, score) || other.score == score)&&const DeepCollectionEquality().equals(other.games, _games)&&(identical(other.byMe, byMe) || other.byMe == byMe)&&(identical(other.at, at) || other.at == at));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,score,byMe,at);
+    return Object.hash(runtimeType,score,const DeepCollectionEquality().hash(_games),byMe,at);
 }
 
 @override
 String toString() {
-    return 'SubmittedResult(score: $score, byMe: $byMe, at: $at)';
+    return 'SubmittedResult(score: $score, games: $games, byMe: $byMe, at: $at)';
 }
 
 
@@ -1531,7 +1831,7 @@ abstract mixin class _$SubmittedResultCopyWith<$Res> implements $SubmittedResult
   factory _$SubmittedResultCopyWith(_SubmittedResult value, $Res Function(_SubmittedResult) _then) = __$SubmittedResultCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(readValue: _whole) Score score,@JsonKey(name: 'submittedByMe') bool byMe,@JsonKey(name: 'submittedAt') DateTime at
+@JsonKey(readValue: _whole) Score score, List<Score> games,@JsonKey(name: 'submittedByMe') bool byMe,@JsonKey(name: 'submittedAt') DateTime at
 });
 
 
@@ -1548,10 +1848,11 @@ class __$SubmittedResultCopyWithImpl<$Res>
 
 /// Create a copy of SubmittedResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? score = null,Object? byMe = null,Object? at = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? score = null,Object? games = null,Object? byMe = null,Object? at = null,}) {
   return _then(_SubmittedResult(
 score: null == score ? _self.score : score // ignore: cast_nullable_to_non_nullable
-as Score,byMe: null == byMe ? _self.byMe : byMe // ignore: cast_nullable_to_non_nullable
+as Score,games: null == games ? _self._games : games // ignore: cast_nullable_to_non_nullable
+as List<Score>,byMe: null == byMe ? _self.byMe : byMe // ignore: cast_nullable_to_non_nullable
 as bool,at: null == at ? _self.at : at // ignore: cast_nullable_to_non_nullable
 as DateTime,
   ));
@@ -1573,7 +1874,8 @@ $ScoreCopyWith<$Res> get score {
 /// @nodoc
 mixin _$ConfirmedResult {
 
-@JsonKey(readValue: _whole) Score get score;/// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
+@JsonKey(readValue: _whole) Score get score;/// Every game of a series, in order; empty for a best of 1.
+ List<Score> get games;/// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
  String get origin;
 /// Create a copy of ConfirmedResult
 /// with the given fields replaced by the non-null parameter values.
@@ -1586,20 +1888,20 @@ $ConfirmedResultCopyWith<ConfirmedResult> get copyWith => _$ConfirmedResultCopyW
 @override
 bool operator ==(Object other) {
   final _this = this as ConfirmedResult;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConfirmedResult&&(identical(other.score, _this.score) || other.score == _this.score)&&(identical(other.origin, _this.origin) || other.origin == _this.origin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConfirmedResult&&(identical(other.score, _this.score) || other.score == _this.score)&&const DeepCollectionEquality().equals(other.games, _this.games)&&(identical(other.origin, _this.origin) || other.origin == _this.origin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as ConfirmedResult;
-  return Object.hash(runtimeType,_this.score,_this.origin);
+  return Object.hash(runtimeType,_this.score,const DeepCollectionEquality().hash(_this.games),_this.origin);
 }
 
 @override
 String toString() {
   final _this = this as ConfirmedResult;
-  return 'ConfirmedResult(score: ${_this.score}, origin: ${_this.origin})';
+  return 'ConfirmedResult(score: ${_this.score}, games: ${_this.games}, origin: ${_this.origin})';
 }
 
 
@@ -1610,7 +1912,7 @@ abstract mixin class $ConfirmedResultCopyWith<$Res>  {
   factory $ConfirmedResultCopyWith(ConfirmedResult value, $Res Function(ConfirmedResult) _then) = _$ConfirmedResultCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(readValue: _whole) Score score, String origin
+@JsonKey(readValue: _whole) Score score, List<Score> games, String origin
 });
 
 
@@ -1627,10 +1929,11 @@ class _$ConfirmedResultCopyWithImpl<$Res>
 
 /// Create a copy of ConfirmedResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? score = null,Object? origin = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? score = null,Object? games = null,Object? origin = null,}) {
   return _then(ConfirmedResult(
 score: null == score ? _self.score : score // ignore: cast_nullable_to_non_nullable
-as Score,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
+as Score,games: null == games ? _self.games : games // ignore: cast_nullable_to_non_nullable
+as List<Score>,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1725,10 +2028,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  String origin)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games,  String origin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConfirmedResult() when $default != null:
-return $default(_that.score,_that.origin);case _:
+return $default(_that.score,_that.games,_that.origin);case _:
   return orElse();
 
 }
@@ -1746,10 +2049,10 @@ return $default(_that.score,_that.origin);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  String origin)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games,  String origin)  $default,) {final _that = this;
 switch (_that) {
 case _ConfirmedResult():
-return $default(_that.score,_that.origin);case _:
+return $default(_that.score,_that.games,_that.origin);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1766,10 +2069,10 @@ return $default(_that.score,_that.origin);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  Score score,  String origin)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(readValue: _whole)  Score score,  List<Score> games,  String origin)?  $default,) {final _that = this;
 switch (_that) {
 case _ConfirmedResult() when $default != null:
-return $default(_that.score,_that.origin);case _:
+return $default(_that.score,_that.games,_that.origin);case _:
   return null;
 
 }
@@ -1781,10 +2084,19 @@ return $default(_that.score,_that.origin);case _:
 @JsonSerializable(createToJson: false)
 
 class _ConfirmedResult implements ConfirmedResult {
-  const _ConfirmedResult({@JsonKey(readValue: _whole) required this.score, required this.origin});
+  const _ConfirmedResult({@JsonKey(readValue: _whole) required this.score,  List<Score> games = const <Score>[], required this.origin}): _games = games;
   factory _ConfirmedResult.fromJson(Map<String, dynamic> json) => _$ConfirmedResultFromJson(json);
 
 @override@JsonKey(readValue: _whole) final  Score score;
+/// Every game of a series, in order; empty for a best of 1.
+ final  List<Score> _games;
+/// Every game of a series, in order; empty for a best of 1.
+@override@JsonKey() List<Score> get games {
+  if (_games is EqualUnmodifiableListView) return _games;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_games);
+}
+
 /// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
 @override final  String origin;
 
@@ -1798,18 +2110,18 @@ _$ConfirmedResultCopyWith<_ConfirmedResult> get copyWith => __$ConfirmedResultCo
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConfirmedResult&&(identical(other.score, score) || other.score == score)&&(identical(other.origin, origin) || other.origin == origin));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConfirmedResult&&(identical(other.score, score) || other.score == score)&&const DeepCollectionEquality().equals(other.games, _games)&&(identical(other.origin, origin) || other.origin == origin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,score,origin);
+    return Object.hash(runtimeType,score,const DeepCollectionEquality().hash(_games),origin);
 }
 
 @override
 String toString() {
-    return 'ConfirmedResult(score: $score, origin: $origin)';
+    return 'ConfirmedResult(score: $score, games: $games, origin: $origin)';
 }
 
 
@@ -1820,7 +2132,7 @@ abstract mixin class _$ConfirmedResultCopyWith<$Res> implements $ConfirmedResult
   factory _$ConfirmedResultCopyWith(_ConfirmedResult value, $Res Function(_ConfirmedResult) _then) = __$ConfirmedResultCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(readValue: _whole) Score score, String origin
+@JsonKey(readValue: _whole) Score score, List<Score> games, String origin
 });
 
 
@@ -1837,10 +2149,11 @@ class __$ConfirmedResultCopyWithImpl<$Res>
 
 /// Create a copy of ConfirmedResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? score = null,Object? origin = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? score = null,Object? games = null,Object? origin = null,}) {
   return _then(_ConfirmedResult(
 score: null == score ? _self.score : score // ignore: cast_nullable_to_non_nullable
-as Score,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
+as Score,games: null == games ? _self._games : games // ignore: cast_nullable_to_non_nullable
+as List<Score>,origin: null == origin ? _self.origin : origin // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -1862,8 +2175,9 @@ $ScoreCopyWith<$Res> get score {
 mixin _$VerificationWindows {
 
 /// The opponent's time to confirm or reject a submitted result.
-@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration get confirm;/// Each side's time to send a screenshot after a rejection.
-@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration get screenshot;
+@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration get confirm;/// Each side's time to send its screenshots after a rejection.
+@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration get screenshot;/// A series' dispute takes one screenshot per game, numbered by game.
+@JsonKey(name: 'screenshotEvidence', readValue: _perGame) bool get perGameScreenshots;
 /// Create a copy of VerificationWindows
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1875,20 +2189,20 @@ $VerificationWindowsCopyWith<VerificationWindows> get copyWith => _$Verification
 @override
 bool operator ==(Object other) {
   final _this = this as VerificationWindows;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VerificationWindows&&(identical(other.confirm, _this.confirm) || other.confirm == _this.confirm)&&(identical(other.screenshot, _this.screenshot) || other.screenshot == _this.screenshot));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VerificationWindows&&(identical(other.confirm, _this.confirm) || other.confirm == _this.confirm)&&(identical(other.screenshot, _this.screenshot) || other.screenshot == _this.screenshot)&&(identical(other.perGameScreenshots, _this.perGameScreenshots) || other.perGameScreenshots == _this.perGameScreenshots));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as VerificationWindows;
-  return Object.hash(runtimeType,_this.confirm,_this.screenshot);
+  return Object.hash(runtimeType,_this.confirm,_this.screenshot,_this.perGameScreenshots);
 }
 
 @override
 String toString() {
   final _this = this as VerificationWindows;
-  return 'VerificationWindows(confirm: ${_this.confirm}, screenshot: ${_this.screenshot})';
+  return 'VerificationWindows(confirm: ${_this.confirm}, screenshot: ${_this.screenshot}, perGameScreenshots: ${_this.perGameScreenshots})';
 }
 
 
@@ -1899,7 +2213,7 @@ abstract mixin class $VerificationWindowsCopyWith<$Res>  {
   factory $VerificationWindowsCopyWith(VerificationWindows value, $Res Function(VerificationWindows) _then) = _$VerificationWindowsCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration confirm,@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration screenshot
+@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration confirm,@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration screenshot,@JsonKey(name: 'screenshotEvidence', readValue: _perGame) bool perGameScreenshots
 });
 
 
@@ -1916,11 +2230,12 @@ class _$VerificationWindowsCopyWithImpl<$Res>
 
 /// Create a copy of VerificationWindows
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? confirm = null,Object? screenshot = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? confirm = null,Object? screenshot = null,Object? perGameScreenshots = null,}) {
   return _then(VerificationWindows(
 confirm: null == confirm ? _self.confirm : confirm // ignore: cast_nullable_to_non_nullable
 as Duration,screenshot: null == screenshot ? _self.screenshot : screenshot // ignore: cast_nullable_to_non_nullable
-as Duration,
+as Duration,perGameScreenshots: null == perGameScreenshots ? _self.perGameScreenshots : perGameScreenshots // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -2005,10 +2320,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot, @JsonKey(name: 'screenshotEvidence', readValue: _perGame)  bool perGameScreenshots)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VerificationWindows() when $default != null:
-return $default(_that.confirm,_that.screenshot);case _:
+return $default(_that.confirm,_that.screenshot,_that.perGameScreenshots);case _:
   return orElse();
 
 }
@@ -2026,10 +2341,10 @@ return $default(_that.confirm,_that.screenshot);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot, @JsonKey(name: 'screenshotEvidence', readValue: _perGame)  bool perGameScreenshots)  $default,) {final _that = this;
 switch (_that) {
 case _VerificationWindows():
-return $default(_that.confirm,_that.screenshot);case _:
+return $default(_that.confirm,_that.screenshot,_that.perGameScreenshots);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2046,10 +2361,10 @@ return $default(_that.confirm,_that.screenshot);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds)  Duration confirm, @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)  Duration screenshot, @JsonKey(name: 'screenshotEvidence', readValue: _perGame)  bool perGameScreenshots)?  $default,) {final _that = this;
 switch (_that) {
 case _VerificationWindows() when $default != null:
-return $default(_that.confirm,_that.screenshot);case _:
+return $default(_that.confirm,_that.screenshot,_that.perGameScreenshots);case _:
   return null;
 
 }
@@ -2061,13 +2376,15 @@ return $default(_that.confirm,_that.screenshot);case _:
 @JsonSerializable(createToJson: false)
 
 class _VerificationWindows implements VerificationWindows {
-  const _VerificationWindows({@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) this.confirm = const Duration(minutes: 10), @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) this.screenshot = const Duration(minutes: 10)});
+  const _VerificationWindows({@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) this.confirm = const Duration(minutes: 10), @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) this.screenshot = const Duration(minutes: 10), @JsonKey(name: 'screenshotEvidence', readValue: _perGame) this.perGameScreenshots = false});
   factory _VerificationWindows.fromJson(Map<String, dynamic> json) => _$VerificationWindowsFromJson(json);
 
 /// The opponent's time to confirm or reject a submitted result.
 @override@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) final  Duration confirm;
-/// Each side's time to send a screenshot after a rejection.
+/// Each side's time to send its screenshots after a rejection.
 @override@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) final  Duration screenshot;
+/// A series' dispute takes one screenshot per game, numbered by game.
+@override@JsonKey(name: 'screenshotEvidence', readValue: _perGame) final  bool perGameScreenshots;
 
 /// Create a copy of VerificationWindows
 /// with the given fields replaced by the non-null parameter values.
@@ -2079,18 +2396,18 @@ _$VerificationWindowsCopyWith<_VerificationWindows> get copyWith => __$Verificat
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerificationWindows&&(identical(other.confirm, confirm) || other.confirm == confirm)&&(identical(other.screenshot, screenshot) || other.screenshot == screenshot));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VerificationWindows&&(identical(other.confirm, confirm) || other.confirm == confirm)&&(identical(other.screenshot, screenshot) || other.screenshot == screenshot)&&(identical(other.perGameScreenshots, perGameScreenshots) || other.perGameScreenshots == perGameScreenshots));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,confirm,screenshot);
+    return Object.hash(runtimeType,confirm,screenshot,perGameScreenshots);
 }
 
 @override
 String toString() {
-    return 'VerificationWindows(confirm: $confirm, screenshot: $screenshot)';
+    return 'VerificationWindows(confirm: $confirm, screenshot: $screenshot, perGameScreenshots: $perGameScreenshots)';
 }
 
 
@@ -2101,7 +2418,7 @@ abstract mixin class _$VerificationWindowsCopyWith<$Res> implements $Verificatio
   factory _$VerificationWindowsCopyWith(_VerificationWindows value, $Res Function(_VerificationWindows) _then) = __$VerificationWindowsCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration confirm,@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration screenshot
+@JsonKey(name: 'reportWindowSeconds', fromJson: _seconds) Duration confirm,@JsonKey(name: 'responseWindowSeconds', fromJson: _seconds) Duration screenshot,@JsonKey(name: 'screenshotEvidence', readValue: _perGame) bool perGameScreenshots
 });
 
 
@@ -2118,11 +2435,12 @@ class __$VerificationWindowsCopyWithImpl<$Res>
 
 /// Create a copy of VerificationWindows
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? confirm = null,Object? screenshot = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? confirm = null,Object? screenshot = null,Object? perGameScreenshots = null,}) {
   return _then(_VerificationWindows(
 confirm: null == confirm ? _self.confirm : confirm // ignore: cast_nullable_to_non_nullable
 as Duration,screenshot: null == screenshot ? _self.screenshot : screenshot // ignore: cast_nullable_to_non_nullable
-as Duration,
+as Duration,perGameScreenshots: null == perGameScreenshots ? _self.perGameScreenshots : perGameScreenshots // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

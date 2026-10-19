@@ -17,7 +17,12 @@ abstract class MatchRoom with _$MatchRoom {
 
     /// A short reference, such as "M-1042", for support.
     @Default('') String code,
+
+    /// 1, 3 or 5 games; one point per game won.
     @Default(1) int bestOf,
+
+    /// Games a side needs to win; the series stops there.
+    @JsonKey(name: 'gamesToWin') int? gamesToWinValue,
 
     /// Round-robin matches may end level; knockouts need penalties.
     @Default(false) bool drawAllowed,
@@ -45,6 +50,12 @@ abstract class MatchRoom with _$MatchRoom {
       _$MatchRoomFromJson(json);
 
   String get id => summary.id;
+
+  /// Games a side needs: 1, 2 or 3.
+  int get gamesToWin => gamesToWinValue ?? bestOf ~/ 2 + 1;
+
+  /// A best of 3 or 5: played and reported game by game.
+  bool get isSeries => bestOf > 1;
   MatchLifecycle get lifecycle => summary.lifecycle;
   bool can(MatchAction action) => summary.allowedActions.contains(action.wire);
 }
@@ -97,6 +108,9 @@ abstract class ResultVerification with _$ResultVerification {
     @JsonKey(name: 'myScreenshot', readValue: _present)
     @Default(false)
     bool myScreenshotSent,
+
+    /// The screenshots this player sent, in game order.
+    @Default(<ResultScreenshot>[]) List<ResultScreenshot> myScreenshots,
     @JsonKey(name: 'opponentScreenshotSubmitted')
     @Default(false)
     bool opponentScreenshotSent,
@@ -114,10 +128,25 @@ abstract class ResultVerification with _$ResultVerification {
       _$ResultVerificationFromJson(json);
 }
 
+/// One of this player's screenshots after a rejection.
+@freezed
+abstract class ResultScreenshot with _$ResultScreenshot {
+  const factory ResultScreenshot({
+    /// The game it shows; 1 for a best of 1.
+    @Default(1) int game,
+    required String evidenceId,
+  }) = _ResultScreenshot;
+
+  factory ResultScreenshot.fromJson(Map<String, dynamic> json) =>
+      _$ResultScreenshotFromJson(json);
+}
+
 /// Whether the key holds a value.
 Object? _present(Map<dynamic, dynamic> json, String key) => json[key] != null;
 
-/// A home–away score with an optional penalty shootout.
+/// A home–away score with an optional penalty shootout: a match's total, or
+/// one game of a series (`GameScore`), whose penalties decide a level
+/// knockout game.
 @freezed
 abstract class Score with _$Score {
   const Score._();
@@ -139,6 +168,9 @@ abstract class Score with _$Score {
 abstract class SubmittedResult with _$SubmittedResult {
   const factory SubmittedResult({
     @JsonKey(readValue: _whole) required Score score,
+
+    /// Every game of a series, in order; empty for a best of 1.
+    @Default(<Score>[]) List<Score> games,
     @JsonKey(name: 'submittedByMe') required bool byMe,
     @JsonKey(name: 'submittedAt') required DateTime at,
   }) = _SubmittedResult;
@@ -151,6 +183,9 @@ abstract class SubmittedResult with _$SubmittedResult {
 abstract class ConfirmedResult with _$ConfirmedResult {
   const factory ConfirmedResult({
     @JsonKey(readValue: _whole) required Score score,
+
+    /// Every game of a series, in order; empty for a best of 1.
+    @Default(<Score>[]) List<Score> games,
 
     /// `agreed_reports`, `unanswered`, `platform_review` or `legacy`.
     required String origin,
@@ -169,10 +204,15 @@ abstract class VerificationWindows with _$VerificationWindows {
     @Default(Duration(minutes: 10))
     Duration confirm,
 
-    /// Each side's time to send a screenshot after a rejection.
+    /// Each side's time to send its screenshots after a rejection.
     @JsonKey(name: 'responseWindowSeconds', fromJson: _seconds)
     @Default(Duration(minutes: 10))
     Duration screenshot,
+
+    /// A series' dispute takes one screenshot per game, numbered by game.
+    @JsonKey(name: 'screenshotEvidence', readValue: _perGame)
+    @Default(false)
+    bool perGameScreenshots,
   }) = _VerificationWindows;
 
   factory VerificationWindows.fromJson(Map<String, dynamic> json) =>
@@ -180,3 +220,6 @@ abstract class VerificationWindows with _$VerificationWindows {
 }
 
 Duration _seconds(int value) => Duration(seconds: value);
+
+Object? _perGame(Map<dynamic, dynamic> json, String key) =>
+    (json[key] as Map?)?['perGame'];

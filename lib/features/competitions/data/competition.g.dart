@@ -52,6 +52,11 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => $checkedCreate(
         (v) => v == null ? null : DateTime.parse(v as String),
       ),
       description: $checkedConvert('description', (v) => v as String? ?? ''),
+      matchFormat: $checkedConvert(
+        'matchFormat',
+        (v) =>
+            v == null ? null : MatchFormat.fromJson(v as Map<String, dynamic>),
+      ),
     );
     return val;
   },
@@ -75,3 +80,19 @@ const _$CompetitionStatusEnumMap = {
 };
 
 const _$EntryTypeEnumMap = {EntryType.free: 'free', EntryType.paid: 'paid'};
+
+_MatchFormat _$MatchFormatFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('_MatchFormat', json, ($checkedConvert) {
+      final val = _MatchFormat(
+        bestOf: $checkedConvert('bestOf', (v) => (v as num?)?.toInt() ?? 1),
+        rounds: $checkedConvert(
+          'rounds',
+          (v) =>
+              (v as Map<String, dynamic>?)?.map(
+                (k, e) => MapEntry(k, (e as num).toInt()),
+              ) ??
+              const <String, int>{},
+        ),
+      );
+      return val;
+    });
