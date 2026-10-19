@@ -1,0 +1,110 @@
+import 'dart:typed_data';
+
+import 'package:crypto/crypto.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/providers.dart';
+import '../data/evidence_repository.dart';
+
+final evidenceRepositoryProvider = Provider<EvidenceRepository>(
+  (ref) => EvidenceRepository(ref.watch(apiClientProvider)),
+);
+
+/// The wait before each verification check: 2 to 10 seconds, growing.
+final evidencePollDelayProvider = Provider<Duration Function(int attempt)>(
+  (ref) =>
+      (attempt) => Duration(seconds: (2 * (attempt + 1)).clamp(2, 10)),
+);
+
+final screenshotUploaderProvider = Provider<ScreenshotUploader>(
+  (ref) => ScreenshotUploader(
+    ref.watch(evidenceRepositoryProvider),
+    ref.watch(evidencePollDelayProvider),
+  ),
+);
+
+enum UploadStage { uploading, verifying }
+
+/// Why a screenshot couldn't be used, in the player's terms.
+class ScreenshotProblem implements Exception {
+  const ScreenshotProblem(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
+/// Turns a picked image into a verified screenshot the match can use:
+/// declare it, upload the original bytes, then wait for verification.
+/// The bytes are never recompressed: the reader needs the original.
+class ScreenshotUploader {
+  ScreenshotUploader(this._repository, this._delay);
+
+  final EvidenceRepository _repository;
+  final Duration Function(int attempt) _delay;
+
+  static const maxBytes = 10 * 1024 * 1024;
+
+  /// About two minutes of checks before giving up.
+  static const _maxChecks = 20;
+
+  /// Returns the verified evidence ID.
+  Future<String> upload(
+    Uint8List bytes, {
+    void Function(UploadStage stage)? onStage,
+  }) async {
+    final mediaType = mediaTypeOf(bytes);
+    if (mediaType == null) {
+      throw const ScreenshotProblem(
+        'Choose a screenshot saved as JPEG or PNG.',
+      );
+    }
+    if (bytes.length > maxBytes) {
+      throw const ScreenshotProblem(
+        'That image is too large. Choose the screenshot itself, up to 10 MB.',
+      );
+    }
+
+    onStage?.call(UploadStage.uploading);
+    final intent = await _repository.createUpload(
+      mediaType: mediaType,
+      byteSize: bytes.length,
+      sha256: sha256.convert(bytes).toString(),
+    );
+    if (!await _repository.upload(intent, bytes)) {
+      throw const ScreenshotProblem("The upload didn't go through. Try again.");
+    }
+
+    onStage?.call(UploadStage.verifying);
+    var evidence = await _repository.complete(intent.id);
+    for (var attempt = 0; !evidence.ready; attempt++) {
+      if (evidence.failed) {
+        throw const ScreenshotProblem(
+          "That image couldn't be used. Choose the original screenshot of "
+          'the Full Time screen.',
+        );
+      }
+      if (attempt >= _maxChecks) {
+        throw const ScreenshotProblem(
+          'Checking the screenshot is taking longer than usual. Try again.',
+        );
+      }
+      await Future<void>.delayed(_delay(attempt));
+      evidence = await _repository.status(intent.id);
+    }
+    return evidence.id;
+  }
+
+  /// `image/jpeg` or `image/png` from the file's first bytes, or null.
+  static String? mediaTypeOf(Uint8List bytes) {
+    bool startsWith(List<int> magic) =>
+        bytes.length >= magic.length &&
+        Iterable<int>.generate(magic.length).every((i) => bytes[i] == magic[i]);
+    if (startsWith(const [0xFF, 0xD8, 0xFF])) return 'image/jpeg';
+    if (startsWith(const [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) {
+      return 'image/png';
+    }
+    return null;
+  }
+}

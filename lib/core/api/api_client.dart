@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
@@ -89,6 +90,32 @@ class ApiClient {
       }
     }
     return _decode(response);
+  }
+
+  /// Uploads raw bytes to a signed storage URL (not the API), with exactly
+  /// the headers the API asked for. Returns the status code; a 412 on a
+  /// retry can mean an earlier attempt already stored the file.
+  Future<int> putBytes(
+    Uri url,
+    Uint8List bytes, {
+    required Map<String, String> headers,
+  }) async {
+    final request = http.Request('PUT', url)..bodyBytes = bytes;
+    // The body sets Content-Length itself; a second copy would conflict.
+    headers.forEach((name, value) {
+      if (name.toLowerCase() != 'content-length') request.headers[name] = value;
+    });
+    try {
+      final streamed = await _http
+          .send(request)
+          .timeout(const Duration(seconds: 90));
+      final response = await http.Response.fromStream(streamed);
+      return response.statusCode;
+    } on TimeoutException catch (e) {
+      throw NetworkException(e);
+    } on http.ClientException catch (e) {
+      throw NetworkException(e);
+    }
   }
 
   /// Resolves an API-relative reference (such as a legal document's
