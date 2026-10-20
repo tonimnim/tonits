@@ -155,7 +155,7 @@ void main() {
       'chat, which marks it read', (tester) async {
     final chat = _FakeChat(
       messages: [
-        chatMessageJson(1, text: 'Hi! Free at 6?'),
+        chatMessageJson(1, text: 'yo, free at 6?'),
         chatMessageJson(2, kind: 'quick_reply', quickReply: 'ready_now'),
       ],
     );
@@ -165,11 +165,13 @@ void main() {
     await tester.tap(find.byTooltip('Chat'));
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(AppBar, 'Amina Otieno'), findsOneWidget);
-    expect(find.text('Hi! Free at 6?'), findsOneWidget);
+    // The opponent and the match, as a chat app's header.
+    expect(find.text('Amina Otieno'), findsWidgets);
+    expect(find.textContaining('Round of 32 ·'), findsOneWidget);
+    expect(find.text('yo, free at 6?'), findsOneWidget);
     expect(find.text('Ready now'), findsWidgets);
     expect(
-      find.text('Ozone reads chats only for result reviews and reports.'),
+      find.text("Ozone only reads this chat if there's a dispute or a report."),
       findsOneWidget,
     );
     expect(chat.reads, [2]);
@@ -180,28 +182,36 @@ void main() {
   ) async {
     final chat = _FakeChat();
     await _openChat(tester, chat);
-    expect(find.text('Agree a time and share your room code.'), findsOneWidget);
+    expect(
+      find.text('Say hi to Amina Otieno and sort out when to play.'),
+      findsOneWidget,
+    );
 
-    await tester.enterText(find.byType(TextField), '  See you at 6  ');
+    await tester.enterText(find.byType(TextField), '  see you at 6  ');
     await tester.pump();
     await tester.tap(find.byTooltip('Send'));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), 'Room in 5');
+    await tester.enterText(find.byType(TextField), 'room in 5');
     await tester.pump();
     await tester.tap(find.byTooltip('Send'));
     await tester.pumpAndSettle();
 
     expect(chat.sent.first['kind'], 'text');
-    expect(chat.sent.first['text'], 'See you at 6');
+    expect(chat.sent.first['text'], 'see you at 6');
     expect(chat.sent.first.keys.toSet(), {'clientMessageId', 'kind', 'text'});
     expect(
       chat.sent.first['clientMessageId'],
       isNot(chat.sent.last['clientMessageId']),
     );
-    expect(find.text('See you at 6'), findsOneWidget);
-    expect(find.text('Room in 5'), findsOneWidget);
-    // The opponent has read it all.
-    expect(find.textContaining('Seen'), findsOneWidget);
+    expect(find.text('see you at 6'), findsOneWidget);
+    expect(find.text('room in 5'), findsOneWidget);
+    // The opponent has read both: two ticks on each.
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is Icon && w.icon == Icons.done_all_rounded,
+      ),
+      findsNWidgets(2),
+    );
   });
 
   testWidgets('a message lost to the connection is retried with the same id', (
@@ -210,7 +220,7 @@ void main() {
     final chat = _FakeChat(failNextSend: true);
     await _openChat(tester, chat);
 
-    await tester.enterText(find.byType(TextField), 'Ready?');
+    await tester.enterText(find.byType(TextField), 'ready?');
     await tester.pump();
     await tester.tap(find.byTooltip('Send'));
     await tester.pumpAndSettle();
@@ -225,7 +235,7 @@ void main() {
     expect(chat.messages, hasLength(1));
   });
 
-  testWidgets('quick replies and the room code go as their own kinds', (
+  testWidgets('the room code is dropped from the game plan and pinned', (
     tester,
   ) async {
     final chat = _FakeChat();
@@ -236,19 +246,20 @@ void main() {
     expect(_lastSent(chat)['kind'], 'quick_reply');
     expect(_lastSent(chat)['quickReply'], 'ready_now');
 
-    await tester.tap(find.byTooltip('Room code or time'));
+    // The plan says the code isn't shared, with the button to drop it.
+    expect(find.text('Not shared yet'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Drop code'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Share room code'));
-    await tester.pumpAndSettle();
+    expect(find.text('Drop the room code'), findsOneWidget);
     await tester.enterText(find.byType(TextFormField), 'ab12/!');
-    await tester.tap(find.widgetWithText(FilledButton, 'Share'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Pin code'));
     await tester.pumpAndSettle();
     expect(
-      find.text('Use letters, numbers, spaces or dashes.'),
+      find.text('Letters, numbers, spaces or dashes only.'),
       findsOneWidget,
     );
     await tester.enterText(find.byType(TextFormField), ' 4821 3390 ');
-    await tester.tap(find.widgetWithText(FilledButton, 'Share'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Pin code'));
     await tester.pumpAndSettle();
 
     expect(_lastSent(chat), {
@@ -256,12 +267,14 @@ void main() {
       'kind': 'room_code',
       'roomCode': '4821 3390',
     });
-    // Pinned at the top, as well as in the conversation.
+    // On the plan and in the conversation, each with Copy.
     expect(find.text('4821 3390'), findsNWidgets(2));
+    expect(find.text('Copy'), findsNWidgets(2));
+    expect(find.text('Not shared yet'), findsNothing);
   });
 
-  testWidgets("the opponent's proposed time can be accepted, and is pinned "
-      'with the deadlines reminder', (tester) async {
+  testWidgets("the opponent's suggested time can be accepted, and the plan "
+      'shows it with the deadlines note', (tester) async {
     final kickOff = testNow.add(const Duration(hours: 2));
     final chat = _FakeChat(
       messages: [
@@ -273,7 +286,8 @@ void main() {
       ],
     );
     await _openChat(tester, chat);
-    expect(find.text('Kick-off at'), findsOneWidget);
+    expect(find.text('Play at'), findsOneWidget);
+    expect(find.text('Amina Otieno wants'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(FilledButton, 'Accept'));
     await tester.pumpAndSettle();
@@ -281,25 +295,22 @@ void main() {
     expect(_lastSent(chat)['kind'], 'time_answer');
     expect(_lastSent(chat)['replyToSeq'], 1);
     expect(_lastSent(chat)['accepted'], isTrue);
-    expect(find.text('Kick-off agreed'), findsOneWidget);
-    expect(find.text('Agreed kick-off'), findsOneWidget);
-    expect(
-      find.text('Check-in and result deadlines still apply.'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Kick-off set ·'), findsOneWidget);
+    expect(find.text('Kick-off set'), findsOneWidget);
+    expect(find.text('Deadlines still apply'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Accept'), findsNothing);
   });
 
-  testWidgets('proposing a time sends it rounded to the minute', (
+  testWidgets('suggesting a time sends it rounded to the minute', (
     tester,
   ) async {
     final chat = _FakeChat();
     await _openChat(tester, chat);
 
-    await tester.tap(find.byTooltip('Room code or time'));
+    expect(find.text('Not set yet'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Suggest time'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Propose a time'));
-    await tester.pumpAndSettle();
+    expect(find.text('When do you want to play?'), findsOneWidget);
     await tester.tap(find.text('In 30 min'));
     await tester.pumpAndSettle();
 
@@ -308,18 +319,19 @@ void main() {
     expect(at.isUtc, isTrue);
     expect(at.second, 0);
     expect(at.isAfter(testNow.add(const Duration(minutes: 29))), isTrue);
-    expect(find.text('Waiting for Amina Otieno'), findsOneWidget);
+    expect(find.text('You suggested'), findsOneWidget);
+    expect(find.text('Waiting for Amina Otieno'), findsWidgets);
   });
 
   testWidgets("the opponent's message can be reported with a long press", (
     tester,
   ) async {
     final chat = _FakeChat(
-      messages: [chatMessageJson(1, text: 'Pay me first')],
+      messages: [chatMessageJson(1, text: 'pay me first')],
     );
     await _openChat(tester, chat);
 
-    await tester.longPress(find.text('Pay me first'));
+    await tester.longPress(find.text('pay me first'));
     await tester.pumpAndSettle();
     expect(find.text('Report this message'), findsOneWidget);
     await tester.tap(find.text('Cheating'));
@@ -328,7 +340,7 @@ void main() {
     expect(chat.reports, [
       {'seq': 1, 'reason': 'cheating'},
     ]);
-    expect(find.text('Reported. Ozone will look at it.'), findsOneWidget);
+    expect(find.text("Reported. We'll check it."), findsOneWidget);
   });
 
   testWidgets('a closed chat is read-only', (tester) async {
@@ -340,9 +352,13 @@ void main() {
     );
     await _openChat(tester, chat);
 
-    expect(find.text('Good game'), findsOneWidget);
-    expect(find.text('This chat is closed.'), findsOneWidget);
+    expect(find.text('GG'), findsOneWidget);
+    expect(
+      find.text('The match is over, so this chat is closed.'),
+      findsOneWidget,
+    );
     expect(find.byType(TextField), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Drop code'), findsNothing);
   });
 
   testWidgets('hidden contact details are said so under the message', (
@@ -350,15 +366,15 @@ void main() {
   ) async {
     final chat = _FakeChat(
       messages: [
-        chatMessageJson(1, text: 'Call me on [hidden]', contactHidden: true),
+        chatMessageJson(1, text: 'call me on [hidden]', contactHidden: true),
       ],
     );
     await _openChat(tester, chat);
-    expect(find.text('Contact details are hidden.'), findsOneWidget);
+    expect(find.text('Numbers and links are hidden.'), findsOneWidget);
   });
 
   testWidgets('a chat notification opens the chat', (tester) async {
-    final chat = _FakeChat(messages: [chatMessageJson(1, text: 'Ready?')]);
+    final chat = _FakeChat(messages: [chatMessageJson(1, text: 'ready?')]);
     await pumpTonits(
       tester,
       refreshToken: 'stored',
@@ -385,7 +401,7 @@ void main() {
     await tester.tap(find.text('New match message'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Ready?'), findsOneWidget);
+    expect(find.text('ready?'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
   });
 

@@ -358,38 +358,70 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get chatEmpty => 'Agree a time and share your room code.';
+  String chatEmpty(String name) {
+    return 'Say hi to $name and sort out when to play.';
+  }
 
   @override
   String get chatPrivacy =>
-      'Ozone reads chats only for result reviews and reports.';
+      'Ozone only reads this chat if there\'s a dispute or a report.';
 
   @override
-  String get chatClosed => 'This chat is closed.';
+  String get chatClosed => 'The match is over, so this chat is closed.';
 
   @override
-  String get chatMessageHint => 'Message';
+  String chatMessageHint(String name) {
+    return 'Message $name';
+  }
 
   @override
   String get chatSend => 'Send';
 
   @override
-  String get chatMore => 'Room code or time';
+  String get chatToday => 'Today';
 
   @override
-  String get chatShareRoomCode => 'Share room code';
+  String get chatYesterday => 'Yesterday';
 
   @override
   String get chatRoomCode => 'Room code';
 
   @override
-  String get chatRoomCodeInvalid => 'Use letters, numbers, spaces or dashes.';
+  String get chatDropCode => 'Drop code';
 
   @override
-  String get chatShare => 'Share';
+  String get chatNewCode => 'New code';
 
   @override
-  String get chatProposeTime => 'Propose a time';
+  String get chatCopy => 'Copy';
+
+  @override
+  String get chatDropCodeTitle => 'Drop the room code';
+
+  @override
+  String get chatDropCodeHelp =>
+      'Make the Friend Match room in eFootball, then type its code. It gets pinned for both of you.';
+
+  @override
+  String get chatRoomCodeInvalid => 'Letters, numbers, spaces or dashes only.';
+
+  @override
+  String get chatPinCode => 'Pin code';
+
+  @override
+  String get chatKickOff => 'Kick-off';
+
+  @override
+  String get chatKickOffNotSet => 'Not set yet';
+
+  @override
+  String get chatSuggestTime => 'Suggest time';
+
+  @override
+  String get chatChange => 'Change';
+
+  @override
+  String get chatSuggestTimeTitle => 'When do you want to play?';
 
   @override
   String chatInMinutes(int minutes) {
@@ -403,19 +435,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatPickTime => 'Pick a time';
 
   @override
-  String get chatKickOffAt => 'Kick-off at';
+  String chatTheyWant(String name) {
+    return '$name wants';
+  }
 
   @override
-  String get chatAccept => 'Accept';
-
-  @override
-  String get chatDecline => 'Decline';
-
-  @override
-  String get chatAccepted => 'Accepted';
-
-  @override
-  String get chatDeclined => 'Declined';
+  String get chatYouSuggested => 'You suggested';
 
   @override
   String chatWaitingFor(String name) {
@@ -423,24 +448,36 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get chatTimeAgreed => 'Kick-off agreed';
+  String get chatDeadlinesApply => 'Deadlines still apply';
 
   @override
-  String get chatYouDeclinedTime => 'You declined the time';
+  String get chatPlayAt => 'Play at';
 
   @override
-  String chatTheyDeclinedTime(String name) {
-    return '$name declined the time';
+  String get chatAccept => 'Accept';
+
+  @override
+  String get chatNotThen => 'Not then';
+
+  @override
+  String get chatAccepted => 'Accepted';
+
+  @override
+  String get chatKickOffSet => 'Kick-off set';
+
+  @override
+  String get chatYouSaidNo => 'You said not then';
+
+  @override
+  String chatTheySaidNo(String name) {
+    return '$name said not then';
   }
 
   @override
-  String get chatAgreedKickOff => 'Agreed kick-off';
-
-  @override
-  String get chatDeadlinesApply => 'Check-in and result deadlines still apply.';
-
-  @override
   String get chatSeen => 'Seen';
+
+  @override
+  String get chatSent => 'Sent';
 
   @override
   String get chatSending => 'Sending';
@@ -449,28 +486,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatNotSent => 'Not sent. Tap to retry.';
 
   @override
-  String get chatContactHidden => 'Contact details are hidden.';
+  String get chatContactHidden => 'Numbers and links are hidden.';
 
   @override
   String get chatQuickReadyNow => 'Ready now';
 
   @override
-  String get chatQuickFiveMinutes => '5 minutes';
+  String get chatQuickFiveMinutes => 'Give me 5 min';
 
   @override
-  String get chatQuickTenMinutes => '10 minutes';
+  String get chatQuickTenMinutes => 'Give me 10 min';
 
   @override
   String get chatQuickFriendRequestSent => 'Friend request sent';
 
   @override
-  String get chatQuickRoomCreated => 'Room created';
+  String get chatQuickRoomCreated => 'Room\'s up';
 
   @override
-  String get chatQuickGoodGame => 'Good game';
-
-  @override
-  String get chatReport => 'Report';
+  String get chatQuickGoodGame => 'GG';
 
   @override
   String get chatReportTitle => 'Report this message';
@@ -491,10 +525,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatReasonOther => 'Something else';
 
   @override
-  String get chatReported => 'Reported. Ozone will look at it.';
+  String get chatReported => 'Reported. We\'ll check it.';
 
   @override
-  String get chatErrorClosed => 'This chat is closed.';
+  String get chatErrorClosed => 'The match is over, so this chat is closed.';
 
   @override
   String get chatErrorFull => 'This chat is full.';
@@ -512,6 +546,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get chatErrorAlreadyReported =>
       'You\'ve already reported this message.';
+
+  @override
+  String get chatRoomCodeNotShared => 'Not shared yet';
 
   @override
   String get competitionsTitle => 'Competitions';

@@ -689,94 +689,139 @@ void main() {
       await _shoot(tester, 'delete-waiting-$suffix');
     });
 
-    testWidgets('match chat ($suffix)', skip: skip, (tester) async {
-      final kickOff = testNow.add(const Duration(hours: 2)).toIso8601String();
-      var n = 0;
-      Map<String, dynamic> message(
-        String kind, {
-        bool mine = false,
-        String? text,
-        String? quickReply,
-        String? roomCode,
-        String? proposedStartAt,
-        int? replyToSeq,
-        bool? accepted,
-      }) => {
-        'seq': ++n,
-        'senderId': mine ? myPlayerId : 'p-amina',
-        'sender': mine ? 'home' : 'away',
-        'mine': mine,
-        'kind': kind,
-        'text': text,
-        'quickReply': quickReply,
-        'roomCode': roomCode,
-        'proposedStartAt': proposedStartAt,
-        'replyToSeq': replyToSeq,
-        'accepted': accepted,
-        'contactHidden': false,
-        'sentAt': testNow
-            .subtract(Duration(minutes: 20 - n * 3))
-            .toIso8601String(),
-      };
-      final messages = [
-        message('text', text: 'Hey! Free tonight?'),
-        message('text', mine: true, text: 'Yes, after 8 works for me'),
-        message('time_proposal', proposedStartAt: kickOff),
-        message('time_answer', mine: true, replyToSeq: 3, accepted: true),
-        message('quick_reply', mine: true, quickReply: 'friend_request_sent'),
-        message('room_code', roomCode: '4821 3390'),
-        message('quick_reply', quickReply: 'room_created'),
-      ];
-      await _pump(
+    for (final fresh in [false, true]) {
+      testWidgets('match chat${fresh ? ', new' : ''} ($suffix)', skip: skip, (
         tester,
-        brightness: brightness,
-        refreshToken: 'stored',
-        overrides: [
-          chatPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
-        ],
-        api: FakeApi(
-          routes: {
-            '/v1/matches/m1': (_) => jsonResponse({
-              'data': {
-                ...matchRoomJson(),
-                'chat': {
+      ) async {
+        final kickOff = testNow
+            .add(const Duration(minutes: 40))
+            .toIso8601String();
+        var n = 0;
+        Map<String, dynamic> message(
+          String kind,
+          Duration ago, {
+          bool mine = false,
+          String? text,
+          String? quickReply,
+          String? roomCode,
+          String? proposedStartAt,
+          int? replyToSeq,
+          bool? accepted,
+        }) => {
+          'seq': ++n,
+          'senderId': mine ? myPlayerId : 'p-amina',
+          'sender': mine ? 'home' : 'away',
+          'mine': mine,
+          'kind': kind,
+          'text': text,
+          'quickReply': quickReply,
+          'roomCode': roomCode,
+          'proposedStartAt': proposedStartAt,
+          'replyToSeq': replyToSeq,
+          'accepted': accepted,
+          'contactHidden': false,
+          'sentAt': testNow.subtract(ago).toIso8601String(),
+        };
+        final messages = fresh
+            ? <Map<String, dynamic>>[]
+            : [
+                message(
+                  'text',
+                  const Duration(hours: 26),
+                  text: 'yo, we play tomorrow?',
+                ),
+                message(
+                  'text',
+                  const Duration(hours: 25, minutes: 50),
+                  mine: true,
+                  text: 'yeah, evening works',
+                ),
+                message(
+                  'time_proposal',
+                  const Duration(minutes: 30),
+                  proposedStartAt: kickOff,
+                ),
+                message(
+                  'time_answer',
+                  const Duration(minutes: 28),
+                  mine: true,
+                  replyToSeq: 3,
+                  accepted: true,
+                ),
+                message(
+                  'quick_reply',
+                  const Duration(minutes: 6),
+                  mine: true,
+                  quickReply: 'friend_request_sent',
+                ),
+                message(
+                  'room_code',
+                  const Duration(minutes: 3),
+                  roomCode: '4821 3390',
+                ),
+                message(
+                  'quick_reply',
+                  const Duration(minutes: 3),
+                  quickReply: 'room_created',
+                ),
+              ];
+        final chat = {
+          'open': true,
+          'lastSeq': messages.length,
+          'unread': fresh ? 0 : 2,
+          'roomCode': fresh ? null : '4821 3390',
+          'agreedStartAt': fresh ? null : kickOff,
+        };
+        await _pump(
+          tester,
+          brightness: brightness,
+          refreshToken: 'stored',
+          overrides: [
+            chatPollIntervalProvider.overrideWithValue(
+              const Duration(hours: 1),
+            ),
+          ],
+          api: FakeApi(
+            routes: {
+              '/v1/matches/m1': (_) => jsonResponse({
+                'data': {...matchRoomJson(), 'chat': chat},
+              }, 200),
+              '/v1/matches/m1/chat': (_) => jsonResponse({
+                'data': {
+                  'matchId': 'm1',
                   'open': true,
+                  'roomCode': fresh
+                      ? null
+                      : {
+                          'code': '4821 3390',
+                          'setBy': 'away',
+                          'setAt': kickOff,
+                        },
+                  'agreedStartAt': fresh ? null : kickOff,
+                  'playBy': testNow
+                      .add(const Duration(days: 1))
+                      .toIso8601String(),
                   'lastSeq': messages.length,
-                  'unread': 2,
-                  'roomCode': '4821 3390',
-                  'agreedStartAt': kickOff,
+                  'readSeq': messages.length,
+                  'opponentReadSeq': 5,
+                  'messages': messages,
+                  'hasMore': false,
                 },
-              },
-            }, 200),
-            '/v1/matches/m1/chat': (_) => jsonResponse({
-              'data': {
-                'matchId': 'm1',
-                'open': true,
-                'roomCode': {
-                  'code': '4821 3390',
-                  'setBy': 'away',
-                  'setAt': kickOff,
-                },
-                'agreedStartAt': kickOff,
-                'playBy': testNow
-                    .add(const Duration(days: 1))
-                    .toIso8601String(),
-                'lastSeq': messages.length,
-                'readSeq': messages.length,
-                'opponentReadSeq': 5,
-                'messages': messages,
-                'hasMore': false,
-              },
-            }, 200),
-          },
-        ),
-      );
-      await _openTab(tester, 'Matches');
-      await tester.tap(find.text('vs Amina Otieno'));
-      await _shoot(tester, 'match-room-chat-button-$suffix');
-      await tester.tap(find.byTooltip('Chat'));
-      await _shoot(tester, 'match-chat-$suffix');
-    });
+              }, 200),
+            },
+          ),
+        );
+        await _openTab(tester, 'Matches');
+        await tester.tap(find.text('vs Amina Otieno'));
+        await tester.pumpAndSettle();
+        if (!fresh) await _shoot(tester, 'match-room-chat-button-$suffix');
+        await tester.tap(find.byTooltip('Chat'));
+        await _shoot(
+          tester,
+          fresh ? 'match-chat-new-$suffix' : 'match-chat-$suffix',
+        );
+      });
+    }
 
     testWidgets('home, whole page ($suffix)', skip: skip, (tester) async {
       await _pump(

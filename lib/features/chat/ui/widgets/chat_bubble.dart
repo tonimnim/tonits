@@ -8,20 +8,7 @@ import '../../../../core/widgets/widgets.dart';
 import '../../application/chat_controller.dart';
 import '../../data/match_chat.dart';
 
-/// When a message was sent: just the time today, the day too otherwise.
-String chatClock(DateTime sentAt, AppLocalizations l, {required DateTime now}) {
-  final local = sentAt.toLocal();
-  final today = now.toLocal();
-  final sameDay =
-      local.year == today.year &&
-      local.month == today.month &&
-      local.day == today.day;
-  return sameDay
-      ? DateFormat.Hm().format(local)
-      : Format.dateTime(sentAt, l, now: now);
-}
-
-/// A quick reply in the player's language.
+/// A quick reply in the player's words.
 String quickReplyText(QuickReply reply, AppLocalizations l) => switch (reply) {
   QuickReply.readyNow => l.chatQuickReadyNow,
   QuickReply.fiveMinutes => l.chatQuickFiveMinutes,
@@ -31,14 +18,50 @@ String quickReplyText(QuickReply reply, AppLocalizations l) => switch (reply) {
   QuickReply.goodGame => l.chatQuickGoodGame,
 };
 
-final _compact = ButtonStyle(
-  minimumSize: const WidgetStatePropertyAll(Size(0, 40)),
-  padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 18)),
-  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-);
+/// "Today", "Yesterday", or the date, between days of messages.
+String chatDay(DateTime at, AppLocalizations l, {required DateTime now}) {
+  final day = DateUtils.dateOnly(at.toLocal());
+  final today = DateUtils.dateOnly(now.toLocal());
+  final days = today.difference(day).inDays;
+  if (days == 0) return l.chatToday;
+  if (days == 1) return l.chatYesterday;
+  return Format.date(at, now: now);
+}
+
+/// A day's first message carries a centred day label above it.
+class ChatDaySeparator extends StatelessWidget {
+  const ChatDaySeparator(this.label, {super.key});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        decoration: BoxDecoration(
+          color: dark ? p.card : p.muted,
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: p.subtleForeground,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 /// One message: a bubble on the player's side (right) or the opponent's
-/// (left). A time answer is a line in the middle instead.
+/// (left), with its time and, on the player's, a tick (two once seen). A
+/// time answer is a line in the middle instead.
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
@@ -46,7 +69,6 @@ class ChatBubble extends StatelessWidget {
     required this.view,
     required this.opponent,
     required this.now,
-    this.showTime = false,
     this.seen = false,
     this.onAnswer,
     this.onReport,
@@ -57,13 +79,11 @@ class ChatBubble extends StatelessWidget {
   final String opponent;
   final DateTime now;
 
-  /// The last of a run from one side carries the time.
-  final bool showTime;
-
-  /// The opponent has read up to here: the player's latest message says so.
+  /// The opponent has read it.
   final bool seen;
 
-  /// Answers the opponent's open proposal; null when there's none to answer.
+  /// Answers the opponent's open suggestion; null when there's none to
+  /// answer.
   final void Function({required bool accepted})? onAnswer;
 
   /// Reports the opponent's message, on a long press.
@@ -75,32 +95,30 @@ class ChatBubble extends StatelessWidget {
     final l = context.l10n;
     if (message.kind == ChatKind.timeAnswer) return _answerLine(context);
 
-    final mine = message.mine;
-    final caption = [
-      if (showTime) chatClock(message.sentAt, l, now: now),
-      if (seen) l.chatSeen,
-    ].join(' · ');
-
     return Column(
-      crossAxisAlignment: mine
+      crossAxisAlignment: message.mine
           ? CrossAxisAlignment.end
           : CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onLongPress: onReport,
-          child: BubbleShape(mine: mine, child: _content(context)),
+          child: BubbleShape(
+            mine: message.mine,
+            child: BubbleBody(
+              mine: message.mine,
+              meta: _Meta(
+                time: message.sentAt,
+                mine: message.mine,
+                tick: message.mine ? (seen ? _Tick.seen : _Tick.sent) : null,
+              ),
+              child: _content(context),
+            ),
+          ),
         ),
         if (message.contactHidden) ...[
           const SizedBox(height: 4),
           Text(
             l.chatContactHidden,
-            style: TextStyle(fontSize: 11, color: p.mutedForeground),
-          ),
-        ],
-        if (caption.isNotEmpty) ...[
-          const SizedBox(height: 4),
-          Text(
-            caption,
             style: TextStyle(fontSize: 11, color: p.mutedForeground),
           ),
         ],
@@ -123,12 +141,12 @@ class ChatBubble extends StatelessWidget {
         code: message.roomCode ?? '',
         mine: message.mine,
       ),
-      ChatKind.timeProposal => _proposal(context),
+      ChatKind.timeProposal => _suggestion(context),
       _ => Text(message.text ?? '', style: text),
     };
   }
 
-  Widget _proposal(BuildContext context) {
+  Widget _suggestion(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
     final mine = message.mine;
@@ -138,13 +156,10 @@ class ChatBubble extends StatelessWidget {
           (m) => m.kind == ChatKind.timeAnswer && m.replyToSeq == message.seq,
         )
         .firstOrNull;
-    final label = TextStyle(
-      fontSize: 12,
-      color: mine ? p.onPrimary.withValues(alpha: 0.8) : p.mutedForeground,
-    );
+    final soft = mine ? p.onPrimary.withValues(alpha: 0.8) : p.mutedForeground;
     final status = switch (answer?.accepted) {
       true => l.chatAccepted,
-      false => l.chatDeclined,
+      false => l.chatNotThen,
       null when mine => l.chatWaitingFor(opponent),
       null => null,
     };
@@ -153,13 +168,14 @@ class ChatBubble extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(l.chatKickOffAt, style: label),
+        _Label(icon: Icons.schedule_rounded, text: l.chatPlayAt, color: soft),
+        const SizedBox(height: 2),
         Text(
           at == null ? '' : Format.dateTime(at, l, now: now),
           style: bubbleTextStyle(
             context,
             mine: mine,
-          ).copyWith(fontSize: 17, fontWeight: FontWeight.w700),
+          ).copyWith(fontSize: 18, fontWeight: FontWeight.w700),
         ),
         if (onAnswer != null) ...[
           const SizedBox(height: 10),
@@ -171,7 +187,7 @@ class ChatBubble extends StatelessWidget {
               OutlinedButton(
                 style: _compact,
                 onPressed: () => onAnswer!(accepted: false),
-                child: Text(l.chatDecline),
+                child: Text(l.chatNotThen),
               ),
               FilledButton(
                 style: _compact,
@@ -182,28 +198,42 @@ class ChatBubble extends StatelessWidget {
           ),
         ] else if (status != null) ...[
           const SizedBox(height: 4),
-          Text(status, style: label),
+          Text(
+            status,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: soft,
+            ),
+          ),
         ],
       ],
     );
   }
 
-  /// The proposal above already shows the time; this says how it went.
+  /// How a suggestion went, in the middle of the conversation.
   Widget _answerLine(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
     final accepted = message.accepted ?? false;
+    final suggestion = view.messages
+        .where((m) => m.seq == message.replyToSeq)
+        .firstOrNull;
+    final at = suggestion?.proposedStartAt;
     final text = accepted
-        ? l.chatTimeAgreed
+        ? [
+            l.chatKickOffSet,
+            if (at != null) Format.dateTime(at, l, now: now),
+          ].join(' · ')
         : message.mine
-        ? l.chatYouDeclinedTime
-        : l.chatTheyDeclinedTime(opponent);
+        ? l.chatYouSaidNo
+        : l.chatTheySaidNo(opponent);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 6),
         child: Pill(
           text,
-          icon: accepted ? Icons.check : Icons.close,
+          icon: accepted ? Icons.check_rounded : Icons.close_rounded,
           color: accepted ? p.good.$1 : p.subtleForeground,
         ),
       ),
@@ -211,8 +241,14 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
-/// A message the server hasn't numbered yet, faded, or marked when it
-/// didn't go.
+final _compact = ButtonStyle(
+  minimumSize: const WidgetStatePropertyAll(Size(0, 40)),
+  padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 18)),
+  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+);
+
+/// A message the server hasn't numbered yet, with a clock, or marked when
+/// it didn't go.
 class PendingBubble extends StatelessWidget {
   const PendingBubble({
     super.key,
@@ -228,7 +264,7 @@ class PendingBubble extends StatelessWidget {
     final p = context.palette;
     final l = context.l10n;
     final style = bubbleTextStyle(context, mine: true);
-    final content = switch (message.draft) {
+    final Widget content = switch (message.draft) {
       TextDraft(:final text) => Text(text, style: style),
       QuickReplyDraft(:final reply) => Text(
         quickReplyText(reply, l),
@@ -236,31 +272,38 @@ class PendingBubble extends StatelessWidget {
       ),
       RoomCodeDraft(:final code) => RoomCodeContent(code: code, mine: true),
       TimeProposalDraft(:final startAt) => Text(
-        '${l.chatKickOffAt} ${Format.dateTime(startAt, l)}',
+        '${l.chatPlayAt} ${Format.dateTime(startAt, l)}',
         style: style,
       ),
       TimeAnswerDraft() => const SizedBox.shrink(),
     };
-    if (message.draft is TimeAnswerDraft && !message.failed) {
-      return const SizedBox.shrink();
-    }
+    if (message.draft is TimeAnswerDraft) return const SizedBox.shrink();
     return GestureDetector(
       onTap: message.failed ? onRetry : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Opacity(
-            opacity: message.failed ? 1 : 0.6,
-            child: BubbleShape(mine: true, child: content),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            message.failed ? l.chatNotSent : l.chatSending,
-            style: TextStyle(
-              fontSize: 11,
-              color: message.failed ? p.destructive : p.mutedForeground,
+            opacity: message.failed ? 1 : 0.75,
+            child: BubbleShape(
+              mine: true,
+              child: BubbleBody(
+                mine: true,
+                meta: _Meta(
+                  mine: true,
+                  tick: message.failed ? _Tick.failed : _Tick.sending,
+                ),
+                child: content,
+              ),
             ),
           ),
+          if (message.failed) ...[
+            const SizedBox(height: 4),
+            Text(
+              l.chatNotSent,
+              style: TextStyle(fontSize: 12, color: p.destructive),
+            ),
+          ],
         ],
       ),
     );
@@ -295,7 +338,7 @@ class BubbleShape extends StatelessWidget {
         maxWidth: MediaQuery.sizeOf(context).width * 0.78,
       ),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.fromLTRB(14, 9, 12, 7),
         decoration: BoxDecoration(
           color: mine ? p.primary : p.card,
           borderRadius: BorderRadius.only(
@@ -311,7 +354,104 @@ class BubbleShape extends StatelessWidget {
   }
 }
 
-/// A shared room code, large and tappable to copy.
+/// A bubble's content with its time (and tick) in the bottom corner: on
+/// the same line when there's room, as in the chat apps players know.
+class BubbleBody extends StatelessWidget {
+  const BubbleBody({
+    super.key,
+    required this.mine,
+    required this.meta,
+    required this.child,
+  });
+
+  final bool mine;
+  final Widget meta;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.end,
+      crossAxisAlignment: WrapCrossAlignment.end,
+      spacing: 10,
+      runSpacing: 2,
+      children: [child, meta],
+    );
+  }
+}
+
+enum _Tick { sending, sent, seen, failed }
+
+/// The time, and on the player's own message where it stands.
+class _Meta extends StatelessWidget {
+  const _Meta({required this.mine, this.time, this.tick});
+
+  final bool mine;
+  final DateTime? time;
+  final _Tick? tick;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = context.l10n;
+    final color = mine
+        ? p.onPrimary.withValues(alpha: 0.75)
+        : p.mutedForeground;
+    final (icon, label) = switch (tick) {
+      _Tick.sending => (Icons.schedule_rounded, l.chatSending),
+      _Tick.sent => (Icons.done_rounded, l.chatSent),
+      _Tick.seen => (Icons.done_all_rounded, l.chatSeen),
+      _Tick.failed => (Icons.error_outline_rounded, l.chatNotSent),
+      null => (null, null),
+    };
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 1),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (time != null)
+            Text(
+              DateFormat.Hm().format(time!.toLocal()),
+              style: TextStyle(fontSize: 11, color: color),
+            ),
+          if (icon != null) ...[
+            const SizedBox(width: 3),
+            Icon(
+              icon,
+              size: 15,
+              semanticLabel: label,
+              color: tick == _Tick.seen
+                  ? p.onPrimary
+                  : tick == _Tick.failed
+                  ? p.onPrimary
+                  : color,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _Label extends StatelessWidget {
+  const _Label({required this.icon, required this.text, required this.color});
+
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(icon, size: 15, color: color),
+      const SizedBox(width: 5),
+      Text(text, style: TextStyle(fontSize: 12, color: color)),
+    ],
+  );
+}
+
+/// A shared room code, big, with a Copy button.
 class RoomCodeContent extends StatelessWidget {
   const RoomCodeContent({super.key, required this.code, required this.mine});
 
@@ -323,39 +463,78 @@ class RoomCodeContent extends StatelessWidget {
     final p = context.palette;
     final l = context.l10n;
     final color = mine ? p.onPrimary : p.foreground;
-    return InkWell(
-      onTap: () => copyToClipboard(context, code, what: l.chatRoomCode),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            l.chatRoomCode,
-            style: TextStyle(
-              fontSize: 12,
-              color: mine
-                  ? p.onPrimary.withValues(alpha: 0.8)
-                  : p.mutedForeground,
-            ),
+    final soft = mine ? p.onPrimary.withValues(alpha: 0.8) : p.mutedForeground;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _Label(icon: Icons.vpn_key_rounded, text: l.chatRoomCode, color: soft),
+        const SizedBox(height: 2),
+        Text(
+          code,
+          style: monoFont.copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1,
+            color: color,
           ),
-          Row(
+        ),
+        const SizedBox(height: 8),
+        CopyPill(value: code, what: l.chatRoomCode, onPrimary: mine),
+      ],
+    );
+  }
+}
+
+/// A small "Copy" button.
+class CopyPill extends StatelessWidget {
+  const CopyPill({
+    super.key,
+    required this.value,
+    required this.what,
+    this.onPrimary = false,
+  });
+
+  final String value;
+
+  /// What's copied, for the confirmation.
+  final String what;
+
+  /// On the player's own indigo bubble.
+  final bool onPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = context.l10n;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final fg = onPrimary ? p.onPrimary : p.onSoft;
+    return Material(
+      color: onPrimary
+          ? p.onPrimary.withValues(alpha: 0.18)
+          : (dark ? p.muted : p.soft),
+      shape: const StadiumBorder(),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: () => copyToClipboard(context, value, what: what),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                child: Text(
-                  code,
-                  style: monoFont.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: color,
-                  ),
+              Icon(Icons.copy_rounded, size: 15, color: fg),
+              const SizedBox(width: 6),
+              Text(
+                l.chatCopy,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: fg,
                 ),
               ),
-              const SizedBox(width: 8),
-              Icon(Icons.copy_rounded, size: 16, color: color),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

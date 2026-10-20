@@ -5,20 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/error_text.dart';
 import '../../../core/clock.dart';
-import '../../../core/format.dart';
 import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../matches/application/matches_providers.dart';
+import '../../matches/data/match_summary.dart';
 import '../application/chat_controller.dart';
 import '../application/chat_providers.dart';
 import '../data/match_chat.dart';
 import 'widgets/chat_bubble.dart';
 import 'widgets/chat_composer.dart';
+import 'widgets/chat_sheets.dart';
+import 'widgets/game_plan.dart';
 
-/// The match's chat with the opponent: agree a time, share the room code.
-/// It's read again every few seconds while it's on screen, and closes
-/// (read-only) once the match is final.
+/// The match's chat with the opponent, laid out like the chat apps players
+/// already use. Its game plan above the messages pins the room code and
+/// kick-off. It's read again every few seconds while on screen, and is
+/// read-only once the match is over.
 class MatchChatScreen extends ConsumerWidget {
   const MatchChatScreen({super.key, required this.matchId});
 
@@ -28,12 +31,8 @@ class MatchChatScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
     final provider = matchChatProvider(matchId);
-    final opponent = ref
-        .watch(matchRoomProvider(matchId))
-        .value
-        ?.summary
-        .opponent;
-    final name = opponent?.displayName ?? l.matchOpponent;
+    final summary = ref.watch(matchRoomProvider(matchId)).value?.summary;
+    final name = summary?.opponent?.displayName ?? l.matchOpponent;
 
     final chat = ref.watch(provider);
     // What's on screen counts as read; it only reaches the server when
@@ -45,7 +44,10 @@ class MatchChatScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(name)),
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: _Header(name: name, summary: summary),
+      ),
       body: switch (chat) {
         AsyncData(:final value) => _Chat(
           matchId: matchId,
@@ -58,6 +60,50 @@ class MatchChatScreen extends ConsumerWidget {
         ),
         _ => const LoadingState(),
       },
+    );
+  }
+}
+
+/// The opponent, and which match this is.
+class _Header extends StatelessWidget {
+  const _Header({required this.name, this.summary});
+
+  final String name;
+  final MatchSummary? summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final match = summary;
+    return Row(
+      children: [
+        InitialsAvatar(name: name, size: 38),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              if (match != null)
+                Text(
+                  '${match.roundName} · ${match.competitionName}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 12, color: p.mutedForeground),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -79,8 +125,9 @@ class _Chat extends ConsumerWidget {
   Future<void> _send(
     BuildContext context,
     WidgetRef ref,
-    ChatDraft draft,
+    ChatDraft? draft,
   ) async {
+    if (draft == null) return;
     final refused = await _controller(ref).send(draft);
     if (refused != null && context.mounted) showMessage(context, refused);
   }
@@ -135,34 +182,32 @@ class _Chat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
     final now = ref.watch(clockProvider).value ?? DateTime.now();
     final chat = view.chat;
     final open = view.openProposal;
-    final mineLatest = view.messages.where((m) => m.mine).lastOrNull;
 
-    // Oldest first, then what's still being sent; shown newest at the
-    // bottom of a reversed list.
+    // Oldest first, with a day label where the day changes, then what's
+    // still being sent; shown newest at the bottom of a reversed list.
     final entries = <Widget>[];
+    String? day;
     for (final (i, m) in view.messages.indexed) {
-      final next = i + 1 < view.messages.length ? view.messages[i + 1] : null;
-      final endOfRun =
-          next == null ||
-          next.mine != m.mine ||
-          next.kind == ChatKind.timeAnswer ||
-          next.sentAt.difference(m.sentAt) > const Duration(minutes: 10);
+      final label = chatDay(m.sentAt, l, now: now);
+      if (label != day) {
+        entries.add(ChatDaySeparator(label));
+        day = label;
+      }
+      final previous = i > 0 ? view.messages[i - 1] : null;
+      final sameRun = previous != null && previous.mine == m.mine;
       entries.add(
         Padding(
-          padding: EdgeInsets.only(top: 4, bottom: endOfRun ? 10 : 0),
+          padding: EdgeInsets.only(top: sameRun ? 3 : 10),
           child: ChatBubble(
             message: m,
             view: view,
             opponent: opponent,
             now: now,
-            showTime: endOfRun && m.kind != ChatKind.timeAnswer,
-            seen:
-                m == mineLatest &&
-                view.pending.isEmpty &&
-                chat.opponentReadSeq >= m.seq,
+            seen: m.mine && chat.opponentReadSeq >= m.seq,
             onAnswer:
                 m == open &&
                     chat.open &&
@@ -183,7 +228,7 @@ class _Chat extends ConsumerWidget {
     for (final p in view.pending) {
       entries.add(
         Padding(
-          padding: const EdgeInsets.only(top: 4, bottom: 10),
+          padding: const EdgeInsets.only(top: 3),
           child: PendingBubble(
             message: p,
             onRetry: () async {
@@ -199,18 +244,35 @@ class _Chat extends ConsumerWidget {
 
     return Column(
       children: [
-        if (chat.roomCode != null || chat.agreedStartAt != null)
-          _Pinned(chat: chat, now: now),
+        // Out of the way while typing, so the conversation keeps the room.
+        if (MediaQuery.viewInsetsOf(context).bottom == 0)
+          GamePlan(
+            view: view,
+            opponent: opponent,
+            now: now,
+            onDropCode: () async {
+              final draft = await askRoomCode(context);
+              if (context.mounted) await _send(context, ref, draft);
+            },
+            onSuggestTime: () async {
+              final draft = await askKickOff(
+                context,
+                now: now,
+                playBy: chat.playBy,
+              );
+              if (context.mounted) await _send(context, ref, draft);
+            },
+          ),
         Expanded(
           child: entries.isEmpty
-              ? const _Empty()
+              ? _Empty(opponent: opponent)
               : ListView(
                   reverse: true,
                   padding: const EdgeInsets.fromLTRB(
                     TonitsSpace.md,
                     TonitsSpace.sm,
                     TonitsSpace.md,
-                    TonitsSpace.sm,
+                    TonitsSpace.md,
                   ),
                   children: [...entries.reversed, const _PrivacyLine()],
                 ),
@@ -219,14 +281,13 @@ class _Chat extends ConsumerWidget {
           top: false,
           child: chat.open
               ? ChatComposer(
-                  now: now,
-                  playBy: chat.playBy,
+                  opponent: opponent,
                   onSend: (draft) => unawaited(_send(context, ref, draft)),
                 )
               : Padding(
                   padding: const EdgeInsets.all(TonitsSpace.md),
                   child: Text(
-                    context.l10n.chatClosed,
+                    l.chatClosed,
                     textAlign: TextAlign.center,
                     style: TextStyle(color: context.palette.mutedForeground),
                   ),
@@ -237,87 +298,10 @@ class _Chat extends ConsumerWidget {
   }
 }
 
-/// The shared room code and the agreed kick-off, kept in view.
-class _Pinned extends StatelessWidget {
-  const _Pinned({required this.chat, required this.now});
-
-  final MatchChat chat;
-  final DateTime now;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    final l = context.l10n;
-    final code = chat.roomCode?.code;
-    final agreed = chat.agreedStartAt;
-    final label = TextStyle(fontSize: 12, color: p.mutedForeground);
-
-    return Container(
-      margin: const EdgeInsets.fromLTRB(
-        TonitsSpace.md,
-        TonitsSpace.sm,
-        TonitsSpace.md,
-        0,
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
-      decoration: BoxDecoration(
-        color: p.soft,
-        borderRadius: BorderRadius.circular(TonitsRadius.tile),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (code != null)
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l.chatRoomCode, style: label),
-                      Text(
-                        code,
-                        style: monoFont.copyWith(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: p.foreground,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  tooltip: l.chatRoomCode,
-                  icon: Icon(Icons.copy_rounded, size: 18, color: p.onSoft),
-                  onPressed: () =>
-                      copyToClipboard(context, code, what: l.chatRoomCode),
-                ),
-              ],
-            ),
-          if (code != null && agreed != null) const SizedBox(height: 6),
-          if (agreed != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l.chatAgreedKickOff, style: label),
-                  Text(
-                    Format.dateTime(agreed, l, now: now),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  Text(l.chatDeadlinesApply, style: label),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
 class _Empty extends StatelessWidget {
-  const _Empty();
+  const _Empty({required this.opponent});
+
+  final String opponent;
 
   @override
   Widget build(BuildContext context) {
@@ -329,10 +313,10 @@ class _Empty extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const IconDot(icon: Icons.forum_outlined, size: 56),
+            InitialsAvatar(name: opponent, size: 64),
             const SizedBox(height: TonitsSpace.md),
             Text(
-              l.chatEmpty,
+              l.chatEmpty(opponent),
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
@@ -356,7 +340,7 @@ class _PrivacyLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: TonitsSpace.md),
+      padding: const EdgeInsets.only(top: TonitsSpace.sm),
       child: Text(
         context.l10n.chatPrivacy,
         textAlign: TextAlign.center,

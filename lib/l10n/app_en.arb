@@ -216,20 +216,40 @@
       }
     }
   },
-  "chatEmpty": "Agree a time and share your room code.",
-  "chatPrivacy": "Ozone reads chats only for result reviews and reports.",
-  "chatClosed": "This chat is closed.",
-  "chatMessageHint": "Message",
-  "chatSend": "Send",
-  "chatMore": "Room code or time",
-  "@chatMore": {
-    "description": "Screen reader label of the composer's + button."
+  "chatEmpty": "Say hi to {name} and sort out when to play.",
+  "@chatEmpty": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
-  "chatShareRoomCode": "Share room code",
+  "chatPrivacy": "Ozone only reads this chat if there's a dispute or a report.",
+  "chatClosed": "The match is over, so this chat is closed.",
+  "chatMessageHint": "Message {name}",
+  "@chatMessageHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatSend": "Send",
+  "chatToday": "Today",
+  "chatYesterday": "Yesterday",
   "chatRoomCode": "Room code",
-  "chatRoomCodeInvalid": "Use letters, numbers, spaces or dashes.",
-  "chatShare": "Share",
-  "chatProposeTime": "Propose a time",
+  "chatDropCode": "Drop code",
+  "chatNewCode": "New code",
+  "chatCopy": "Copy",
+  "chatDropCodeTitle": "Drop the room code",
+  "chatDropCodeHelp": "Make the Friend Match room in eFootball, then type its code. It gets pinned for both of you.",
+  "chatRoomCodeInvalid": "Letters, numbers, spaces or dashes only.",
+  "chatPinCode": "Pin code",
+  "chatKickOff": "Kick-off",
+  "chatKickOffNotSet": "Not set yet",
+  "chatSuggestTime": "Suggest time",
+  "chatChange": "Change",
+  "chatSuggestTimeTitle": "When do you want to play?",
   "chatInMinutes": "In {minutes} min",
   "@chatInMinutes": {
     "placeholders": {
@@ -240,11 +260,15 @@
   },
   "chatInAnHour": "In 1 hour",
   "chatPickTime": "Pick a time",
-  "chatKickOffAt": "Kick-off at",
-  "chatAccept": "Accept",
-  "chatDecline": "Decline",
-  "chatAccepted": "Accepted",
-  "chatDeclined": "Declined",
+  "chatTheyWant": "{name} wants",
+  "@chatTheyWant": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatYouSuggested": "You suggested",
   "chatWaitingFor": "Waiting for {name}",
   "@chatWaitingFor": {
     "placeholders": {
@@ -253,42 +277,49 @@
       }
     }
   },
-  "chatTimeAgreed": "Kick-off agreed",
-  "chatYouDeclinedTime": "You declined the time",
-  "chatTheyDeclinedTime": "{name} declined the time",
-  "@chatTheyDeclinedTime": {
+  "chatDeadlinesApply": "Deadlines still apply",
+  "chatPlayAt": "Play at",
+  "chatAccept": "Accept",
+  "chatNotThen": "Not then",
+  "chatAccepted": "Accepted",
+  "chatKickOffSet": "Kick-off set",
+  "chatYouSaidNo": "You said not then",
+  "chatTheySaidNo": "{name} said not then",
+  "@chatTheySaidNo": {
     "placeholders": {
       "name": {
         "type": "String"
       }
     }
   },
-  "chatAgreedKickOff": "Agreed kick-off",
-  "chatDeadlinesApply": "Check-in and result deadlines still apply.",
   "chatSeen": "Seen",
+  "chatSent": "Sent",
   "chatSending": "Sending",
   "chatNotSent": "Not sent. Tap to retry.",
-  "chatContactHidden": "Contact details are hidden.",
+  "chatContactHidden": "Numbers and links are hidden.",
   "chatQuickReadyNow": "Ready now",
-  "chatQuickFiveMinutes": "5 minutes",
-  "chatQuickTenMinutes": "10 minutes",
+  "chatQuickFiveMinutes": "Give me 5 min",
+  "chatQuickTenMinutes": "Give me 10 min",
   "chatQuickFriendRequestSent": "Friend request sent",
-  "chatQuickRoomCreated": "Room created",
-  "chatQuickGoodGame": "Good game",
-  "chatReport": "Report",
+  "chatQuickRoomCreated": "Room's up",
+  "chatQuickGoodGame": "GG",
+  "@chatQuickGoodGame": {
+    "description": "Good game: what players say after a match."
+  },
   "chatReportTitle": "Report this message",
   "chatReasonAbuse": "Abuse",
   "chatReasonHarassment": "Harassment",
   "chatReasonCheating": "Cheating",
   "chatReasonSpam": "Spam",
   "chatReasonOther": "Something else",
-  "chatReported": "Reported. Ozone will look at it.",
-  "chatErrorClosed": "This chat is closed.",
+  "chatReported": "Reported. We'll check it.",
+  "chatErrorClosed": "The match is over, so this chat is closed.",
   "chatErrorFull": "This chat is full.",
   "chatErrorProposedTime": "Pick a time before the match deadline.",
   "chatErrorProposalGone": "That time was already answered or replaced.",
   "chatErrorProposalExpired": "That time has passed.",
   "chatErrorAlreadyReported": "You've already reported this message.",
+  "chatRoomCodeNotShared": "Not shared yet",
   "competitionsTitle": "Competitions",
   "@competitionsTitle": {
     "description": "Title of the Competitions tab."

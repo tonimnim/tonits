@@ -691,26 +691,26 @@ abstract class AppLocalizations {
   /// No description provided for @chatEmpty.
   ///
   /// In en, this message translates to:
-  /// **'Agree a time and share your room code.'**
-  String get chatEmpty;
+  /// **'Say hi to {name} and sort out when to play.'**
+  String chatEmpty(String name);
 
   /// No description provided for @chatPrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Ozone reads chats only for result reviews and reports.'**
+  /// **'Ozone only reads this chat if there\'s a dispute or a report.'**
   String get chatPrivacy;
 
   /// No description provided for @chatClosed.
   ///
   /// In en, this message translates to:
-  /// **'This chat is closed.'**
+  /// **'The match is over, so this chat is closed.'**
   String get chatClosed;
 
   /// No description provided for @chatMessageHint.
   ///
   /// In en, this message translates to:
-  /// **'Message'**
-  String get chatMessageHint;
+  /// **'Message {name}'**
+  String chatMessageHint(String name);
 
   /// No description provided for @chatSend.
   ///
@@ -718,17 +718,17 @@ abstract class AppLocalizations {
   /// **'Send'**
   String get chatSend;
 
-  /// Screen reader label of the composer's + button.
+  /// No description provided for @chatToday.
   ///
   /// In en, this message translates to:
-  /// **'Room code or time'**
-  String get chatMore;
+  /// **'Today'**
+  String get chatToday;
 
-  /// No description provided for @chatShareRoomCode.
+  /// No description provided for @chatYesterday.
   ///
   /// In en, this message translates to:
-  /// **'Share room code'**
-  String get chatShareRoomCode;
+  /// **'Yesterday'**
+  String get chatYesterday;
 
   /// No description provided for @chatRoomCode.
   ///
@@ -736,23 +736,77 @@ abstract class AppLocalizations {
   /// **'Room code'**
   String get chatRoomCode;
 
+  /// No description provided for @chatDropCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop code'**
+  String get chatDropCode;
+
+  /// No description provided for @chatNewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'New code'**
+  String get chatNewCode;
+
+  /// No description provided for @chatCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get chatCopy;
+
+  /// No description provided for @chatDropCodeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop the room code'**
+  String get chatDropCodeTitle;
+
+  /// No description provided for @chatDropCodeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Make the Friend Match room in eFootball, then type its code. It gets pinned for both of you.'**
+  String get chatDropCodeHelp;
+
   /// No description provided for @chatRoomCodeInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Use letters, numbers, spaces or dashes.'**
+  /// **'Letters, numbers, spaces or dashes only.'**
   String get chatRoomCodeInvalid;
 
-  /// No description provided for @chatShare.
+  /// No description provided for @chatPinCode.
   ///
   /// In en, this message translates to:
-  /// **'Share'**
-  String get chatShare;
+  /// **'Pin code'**
+  String get chatPinCode;
 
-  /// No description provided for @chatProposeTime.
+  /// No description provided for @chatKickOff.
   ///
   /// In en, this message translates to:
-  /// **'Propose a time'**
-  String get chatProposeTime;
+  /// **'Kick-off'**
+  String get chatKickOff;
+
+  /// No description provided for @chatKickOffNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set yet'**
+  String get chatKickOffNotSet;
+
+  /// No description provided for @chatSuggestTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest time'**
+  String get chatSuggestTime;
+
+  /// No description provided for @chatChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get chatChange;
+
+  /// No description provided for @chatSuggestTimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When do you want to play?'**
+  String get chatSuggestTimeTitle;
 
   /// No description provided for @chatInMinutes.
   ///
@@ -772,35 +826,17 @@ abstract class AppLocalizations {
   /// **'Pick a time'**
   String get chatPickTime;
 
-  /// No description provided for @chatKickOffAt.
+  /// No description provided for @chatTheyWant.
   ///
   /// In en, this message translates to:
-  /// **'Kick-off at'**
-  String get chatKickOffAt;
+  /// **'{name} wants'**
+  String chatTheyWant(String name);
 
-  /// No description provided for @chatAccept.
+  /// No description provided for @chatYouSuggested.
   ///
   /// In en, this message translates to:
-  /// **'Accept'**
-  String get chatAccept;
-
-  /// No description provided for @chatDecline.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline'**
-  String get chatDecline;
-
-  /// No description provided for @chatAccepted.
-  ///
-  /// In en, this message translates to:
-  /// **'Accepted'**
-  String get chatAccepted;
-
-  /// No description provided for @chatDeclined.
-  ///
-  /// In en, this message translates to:
-  /// **'Declined'**
-  String get chatDeclined;
+  /// **'You suggested'**
+  String get chatYouSuggested;
 
   /// No description provided for @chatWaitingFor.
   ///
@@ -808,41 +844,65 @@ abstract class AppLocalizations {
   /// **'Waiting for {name}'**
   String chatWaitingFor(String name);
 
-  /// No description provided for @chatTimeAgreed.
-  ///
-  /// In en, this message translates to:
-  /// **'Kick-off agreed'**
-  String get chatTimeAgreed;
-
-  /// No description provided for @chatYouDeclinedTime.
-  ///
-  /// In en, this message translates to:
-  /// **'You declined the time'**
-  String get chatYouDeclinedTime;
-
-  /// No description provided for @chatTheyDeclinedTime.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} declined the time'**
-  String chatTheyDeclinedTime(String name);
-
-  /// No description provided for @chatAgreedKickOff.
-  ///
-  /// In en, this message translates to:
-  /// **'Agreed kick-off'**
-  String get chatAgreedKickOff;
-
   /// No description provided for @chatDeadlinesApply.
   ///
   /// In en, this message translates to:
-  /// **'Check-in and result deadlines still apply.'**
+  /// **'Deadlines still apply'**
   String get chatDeadlinesApply;
+
+  /// No description provided for @chatPlayAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Play at'**
+  String get chatPlayAt;
+
+  /// No description provided for @chatAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get chatAccept;
+
+  /// No description provided for @chatNotThen.
+  ///
+  /// In en, this message translates to:
+  /// **'Not then'**
+  String get chatNotThen;
+
+  /// No description provided for @chatAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get chatAccepted;
+
+  /// No description provided for @chatKickOffSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick-off set'**
+  String get chatKickOffSet;
+
+  /// No description provided for @chatYouSaidNo.
+  ///
+  /// In en, this message translates to:
+  /// **'You said not then'**
+  String get chatYouSaidNo;
+
+  /// No description provided for @chatTheySaidNo.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} said not then'**
+  String chatTheySaidNo(String name);
 
   /// No description provided for @chatSeen.
   ///
   /// In en, this message translates to:
   /// **'Seen'**
   String get chatSeen;
+
+  /// No description provided for @chatSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get chatSent;
 
   /// No description provided for @chatSending.
   ///
@@ -859,7 +919,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatContactHidden.
   ///
   /// In en, this message translates to:
-  /// **'Contact details are hidden.'**
+  /// **'Numbers and links are hidden.'**
   String get chatContactHidden;
 
   /// No description provided for @chatQuickReadyNow.
@@ -871,13 +931,13 @@ abstract class AppLocalizations {
   /// No description provided for @chatQuickFiveMinutes.
   ///
   /// In en, this message translates to:
-  /// **'5 minutes'**
+  /// **'Give me 5 min'**
   String get chatQuickFiveMinutes;
 
   /// No description provided for @chatQuickTenMinutes.
   ///
   /// In en, this message translates to:
-  /// **'10 minutes'**
+  /// **'Give me 10 min'**
   String get chatQuickTenMinutes;
 
   /// No description provided for @chatQuickFriendRequestSent.
@@ -889,20 +949,14 @@ abstract class AppLocalizations {
   /// No description provided for @chatQuickRoomCreated.
   ///
   /// In en, this message translates to:
-  /// **'Room created'**
+  /// **'Room\'s up'**
   String get chatQuickRoomCreated;
 
-  /// No description provided for @chatQuickGoodGame.
+  /// Good game: what players say after a match.
   ///
   /// In en, this message translates to:
-  /// **'Good game'**
+  /// **'GG'**
   String get chatQuickGoodGame;
-
-  /// No description provided for @chatReport.
-  ///
-  /// In en, this message translates to:
-  /// **'Report'**
-  String get chatReport;
 
   /// No description provided for @chatReportTitle.
   ///
@@ -943,13 +997,13 @@ abstract class AppLocalizations {
   /// No description provided for @chatReported.
   ///
   /// In en, this message translates to:
-  /// **'Reported. Ozone will look at it.'**
+  /// **'Reported. We\'ll check it.'**
   String get chatReported;
 
   /// No description provided for @chatErrorClosed.
   ///
   /// In en, this message translates to:
-  /// **'This chat is closed.'**
+  /// **'The match is over, so this chat is closed.'**
   String get chatErrorClosed;
 
   /// No description provided for @chatErrorFull.
@@ -981,6 +1035,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You\'ve already reported this message.'**
   String get chatErrorAlreadyReported;
+
+  /// No description provided for @chatRoomCodeNotShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Not shared yet'**
+  String get chatRoomCodeNotShared;
 
   /// Title of the Competitions tab.
   ///
