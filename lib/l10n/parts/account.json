@@ -81,17 +81,6 @@
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
   "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
-  "profileAboutTitle": "About",
-  "profileTermsOfService": "Terms of Service",
-  "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
-  "@profileCouldNotOpen": {
-    "placeholders": {
-      "document": {
-        "type": "String",
-        "example": "Privacy Notice"
-      }
-    }
-  },
   "profileAccountTitle": "Account",
   "profileNotLinked": "Not linked",
   "profileChangeCountryTitle": "Change your country to {country}?",

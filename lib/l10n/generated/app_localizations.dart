@@ -328,24 +328,6 @@ abstract class AppLocalizations {
   /// **'Your account is restricted. Contact Ozone support to find out why.'**
   String get profileRestricted;
 
-  /// No description provided for @profileAboutTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get profileAboutTitle;
-
-  /// No description provided for @profileTermsOfService.
-  ///
-  /// In en, this message translates to:
-  /// **'Terms of Service'**
-  String get profileTermsOfService;
-
-  /// No description provided for @profileCouldNotOpen.
-  ///
-  /// In en, this message translates to:
-  /// **'Couldn\'t open the {document}. Try again.'**
-  String profileCouldNotOpen(String document);
-
   /// No description provided for @profileAccountTitle.
   ///
   /// In en, this message translates to:

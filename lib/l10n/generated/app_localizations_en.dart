@@ -139,17 +139,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your account is restricted. Contact Ozone support to find out why.';
 
   @override
-  String get profileAboutTitle => 'About';
-
-  @override
-  String get profileTermsOfService => 'Terms of Service';
-
-  @override
-  String profileCouldNotOpen(String document) {
-    return 'Couldn\'t open the $document. Try again.';
-  }
-
-  @override
   String get profileAccountTitle => 'Account';
 
   @override
