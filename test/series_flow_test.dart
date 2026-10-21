@@ -195,7 +195,10 @@ void main() {
       ),
     );
     expect(
-      find.text('Nairobi Weekend Cup · Round of 32 · Best of 3'),
+      find.textContaining(
+        'Nairobi Weekend Cup · Round of 32 · Best of 3',
+        findRichText: true,
+      ),
       findsOneWidget,
     );
   });

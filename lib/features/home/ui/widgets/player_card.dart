@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/countries.dart';
 import '../../../../core/format.dart';
 import '../../../../core/l10n.dart';
-import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
-import '../../../players/application/player_stats.dart';
 import '../../../players/application/players_providers.dart';
 import '../../../players/data/player_profile.dart';
-import '../../../players/ui/widgets/result_chip.dart';
 import 'section_message_card.dart';
 
-/// The hero: the player's rating and where it places them, then how they
-/// play: win rate, matches, goals, streak and record. Unrated players are
-/// invited to play.
+/// The hero: the player's rating, with their matches, wins and place on
+/// their country's ladder under it. A new player gets the same card at
+/// zero, from the rating everyone starts at, so nothing moves as their
+/// numbers fill in.
 class PlayerCard extends ConsumerWidget {
   const PlayerCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (ref.watch(myProfileProvider)) {
-      AsyncData(value: final profile) =>
-        profile.rating == null || !profile.hasPlayed
-            ? const _Shell(child: _Unrated())
-            : _Shell(child: _Rated(profile, profile.rating!)),
+      AsyncData(value: final profile) => _Shell(child: _Numbers(profile)),
       AsyncError(:final error) => SectionMessageCard.error(
         error: error,
         onRetry: () => ref.invalidate(myProfileProvider),
@@ -58,22 +52,22 @@ class _Shell extends StatelessWidget {
   }
 }
 
-class _Rated extends ConsumerWidget {
-  const _Rated(this.profile, this.rating);
+class _Numbers extends StatelessWidget {
+  const _Numbers(this.profile);
 
   final PlayerProfile profile;
-  final GameRating rating;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final on = context.palette.onPrimary;
-    final soft = on.withValues(alpha: 0.72);
     final l = context.l10n;
-    final stats = ref.watch(myStatsProvider).value;
-    final country = Country.byCode(profile.countryCode);
-    final countryName = country == null
-        ? profile.countryCode
-        : '${country.flag} ${country.name}';
+    // No rating until the first confirmed result.
+    final rating = profile.hasPlayed ? profile.rating : null;
+    final value = rating?.rating ?? PlayerProfile.startingRating;
+    final movement = rating?.rankMovement ?? 0;
+    final rank = rating?.countryRank;
+    final country =
+        Country.byCode(profile.countryCode)?.name ?? profile.countryCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,20 +79,22 @@ class _Rated extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
-                color: soft,
+                color: on.withValues(alpha: 0.72),
               ),
             ),
             const Spacer(),
-            if ((rating.rankMovement ?? 0) != 0)
-              _Movement(places: rating.rankMovement!),
+            if (rating == null)
+              _Tag(child: Text(l.homeNewPlayer))
+            else if (movement != 0)
+              _Movement(places: movement),
           ],
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         Semantics(
-          label: l.homeRatingSemantics(rating.rating),
+          label: l.homeRatingSemantics(value),
           excludeSemantics: true,
           child: Text(
-            Format.number(rating.rating),
+            Format.number(value),
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.w700,
@@ -108,86 +104,53 @@ class _Rated extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        // Where the rating places the player, in one quiet line.
-        Text.rich(
-          TextSpan(
-            style: TextStyle(fontSize: 14, color: soft),
-            children: [
-              ..._rank(rating.countryRank, l.homeRankIn(countryName), on, l),
-              const TextSpan(text: '   ·   '),
-              ..._rank(rating.globalRank, l.homeRankGlobal, on, l),
-            ],
-          ),
-        ),
-        if (stats != null && stats.record.matchesPlayed > 0) ...[
-          const SizedBox(height: 20),
-          Container(height: 1, color: on.withValues(alpha: 0.16)),
-          const SizedBox(height: 18),
-          _Figures(stats: stats),
-          const SizedBox(height: 18),
-          _Record(record: stats.record),
-        ],
-      ],
-    );
-  }
-
-  /// "#24 in Kenya", with the number bright; "Unranked" while provisional.
-  static List<InlineSpan> _rank(
-    int? rank,
-    String where,
-    Color on,
-    AppLocalizations l,
-  ) => rank == null
-      ? [TextSpan(text: '${l.homeUnranked} $where')]
-      : [
-          TextSpan(
-            text: '#${Format.number(rank)}',
-            style: TextStyle(fontWeight: FontWeight.w700, color: on),
-          ),
-          TextSpan(text: ' $where'),
-        ];
-}
-
-/// Win rate, matches, goals per match and the current streak, side by side.
-class _Figures extends StatelessWidget {
-  const _Figures({required this.stats});
-
-  final PlayerStats stats;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final record = stats.record;
-    final winRate = record.winRate;
-    final goals = stats.goalsPerMatch;
-    final streak = stats.streak;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _Figure(
-          value: winRate == null ? '—' : '${(winRate * 100).round()}%',
-          label: l.homeWinRate,
-        ),
-        _Figure(value: '${record.matchesPlayed}', label: l.homeMatches),
-        _Figure(
-          value: goals == null ? '—' : goals.toStringAsFixed(1),
-          label: l.homeGoalsPerMatchShort,
-        ),
-        _Figure(
-          value: streak == null ? '—' : '${streak.$1.letter(l)}${streak.$2}',
-          label: l.homeStreak,
+        const SizedBox(height: 24),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _Figure(
+              value: Format.number(profile.record.matchesPlayed),
+              label: l.homeMatches,
+            ),
+            _Figure(
+              value: Format.number(profile.record.wins),
+              label: l.playerWins,
+            ),
+            rank == null
+                ? _Figure(
+                    value: '—',
+                    spoken: l.homeUnranked,
+                    label: l.homeCountryRank(country),
+                    faint: true,
+                  )
+                : _Figure(
+                    value: '#${Format.number(rank)}',
+                    label: l.homeCountryRank(country),
+                  ),
+          ],
         ),
       ],
     );
   }
 }
 
+/// One number under the rating, with what it counts.
 class _Figure extends StatelessWidget {
-  const _Figure({required this.value, required this.label});
+  const _Figure({
+    required this.value,
+    required this.label,
+    this.spoken,
+    this.faint = false,
+  });
 
   final String value;
   final String label;
+
+  /// What a screen reader says for [value], when the text alone won't do.
+  final String? spoken;
+
+  /// For a number the player doesn't have yet.
+  final bool faint;
 
   @override
   Widget build(BuildContext context) {
@@ -202,11 +165,12 @@ class _Figure extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                 value,
+                semanticsLabel: spoken,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.4,
-                  color: on,
+                  color: faint ? on.withValues(alpha: 0.45) : on,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
@@ -215,6 +179,7 @@ class _Figure extends StatelessWidget {
             Text(
               label,
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12,
                 height: 1.25,
@@ -228,57 +193,34 @@ class _Figure extends StatelessWidget {
   }
 }
 
-/// Wins, draws and losses as one thin bar in shades of white, with the
-/// counts under it.
-class _Record extends StatelessWidget {
-  const _Record({required this.record});
+/// A small tag in the card's top corner.
+class _Tag extends StatelessWidget {
+  const _Tag({
+    required this.child,
+    this.padding = const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+  });
 
-  final MatchRecord record;
+  final Widget child;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     final on = context.palette.onPrimary;
-    final l = context.l10n;
-    final parts = [
-      (record.wins, on),
-      (record.draws, on.withValues(alpha: 0.5)),
-      (record.losses, on.withValues(alpha: 0.24)),
-    ].where((p) => p.$1 > 0).toList();
-    return Semantics(
-      label: l.playerRecordSemantics(record.wins, record.draws, record.losses),
-      excludeSemantics: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(999),
-            child: SizedBox(
-              height: 6,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (final (i, (count, color)) in parts.indexed) ...[
-                    if (i > 0) const SizedBox(width: 3),
-                    Expanded(
-                      flex: count,
-                      child: ColoredBox(color: color),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            l.homeRecordLine(record.wins, record.draws, record.losses),
-            style: TextStyle(fontSize: 12, color: on.withValues(alpha: 0.72)),
-          ),
-        ],
+    return Container(
+      padding: padding,
+      decoration: BoxDecoration(
+        color: on.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: DefaultTextStyle.merge(
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: on),
+        child: child,
       ),
     );
   }
 }
 
+/// Places gained or lost on the ladder since the last snapshot.
 class _Movement extends StatelessWidget {
   const _Movement({required this.places});
 
@@ -293,12 +235,8 @@ class _Movement extends StatelessWidget {
     return Semantics(
       label: up ? l.homeMovedUp(n) : l.homeMovedDown(n),
       excludeSemantics: true,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 3, 10, 3),
-        decoration: BoxDecoration(
-          color: on.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(999),
-        ),
+      child: _Tag(
+        padding: const EdgeInsets.fromLTRB(4, 1, 10, 1),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -307,72 +245,10 @@ class _Movement extends StatelessWidget {
               size: 20,
               color: on,
             ),
-            Text(
-              l.homePlaces(n),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: on,
-              ),
-            ),
+            Text(Format.number(n)),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _Unrated extends StatelessWidget {
-  const _Unrated();
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    final l = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l.homeRating,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: p.onPrimary.withValues(alpha: 0.75),
-          ),
-        ),
-        Text(
-          l.homeUnranked,
-          style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -1,
-            color: p.onPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          l.homeUnratedMessage,
-          style: TextStyle(color: p.onPrimary.withValues(alpha: 0.85)),
-        ),
-        const SizedBox(height: 16),
-        FilledButton(
-          onPressed: () => context.go(Routes.competitions),
-          style: FilledButton.styleFrom(
-            backgroundColor: p.onPrimary,
-            foregroundColor: p.primary,
-            minimumSize: const Size.fromHeight(48),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(TonitsRadius.control),
-            ),
-            textStyle: const TextStyle(
-              fontFamily: 'Geist',
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          child: Text(l.homeFindCompetition),
-        ),
-      ],
     );
   }
 }

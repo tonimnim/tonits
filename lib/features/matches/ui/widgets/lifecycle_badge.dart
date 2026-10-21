@@ -13,8 +13,13 @@ class LifecycleBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n;
-    final (label, tone) = switch (match.lifecycle) {
+    final (label, tone) = describe(match, context.l10n);
+    return StatusBadge(label, tone: tone);
+  }
+
+  /// The badge's words and tone, for places that show them as text.
+  static (String, StatusTone) describe(MatchSummary match, AppLocalizations l) {
+    return switch (match.lifecycle) {
       MatchLifecycle.assigned => (l.matchScheduled, StatusTone.muted),
       MatchLifecycle.readyForCheckIn => (l.matchCheckIn, StatusTone.warn),
       MatchLifecycle.checkedIn => (l.matchCheckedIn, StatusTone.info),
@@ -53,7 +58,6 @@ class LifecycleBadge extends StatelessWidget {
       MatchLifecycle.outOfCompetition => (l.matchBadgeOut, StatusTone.bad),
       MatchLifecycle.unknown => ('—', StatusTone.muted),
     };
-    return StatusBadge(label, tone: tone);
   }
 
   static (String, StatusTone) _outcome(

@@ -3,8 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:tonits/core/api/cursor_page.dart';
 import 'package:tonits/features/competitions/data/competition.dart';
 import 'package:tonits/features/matches/data/match_summary.dart';
-import 'package:tonits/features/players/application/player_stats.dart';
-import 'package:tonits/features/players/data/played_match.dart';
 import 'package:tonits/features/players/data/player_profile.dart';
 import 'package:tonits/features/rankings/data/ranked_player.dart';
 
@@ -112,27 +110,6 @@ void main() {
     expect(p.rating!.countryRank, 24);
     expect(p.record.winRate, closeTo(13 / 21, 1e-9));
     expect(PlayerProfile.fromJson(profileJson(rated: false)).rating, isNull);
-  });
-
-  test('stats derive goals per match and the current streak', () {
-    final recent = recentJson().map(PlayedMatch.fromJson).toList();
-    final stats = PlayerStats.from(
-      PlayerProfile.fromJson(profileJson()).record,
-      recent,
-    );
-    expect(stats.goalsPerMatch, closeTo(15 / 6, 1e-9));
-    expect(stats.goalsSample, 6);
-    expect(stats.streak, (MatchResult.win, 3));
-  });
-
-  test('no matches means no goals or streak', () {
-    final stats = PlayerStats.from(
-      const MatchRecord(matchesPlayed: 0, wins: 0, draws: 0, losses: 0),
-      const [],
-    );
-    expect(stats.goalsPerMatch, isNull);
-    expect(stats.streak, isNull);
-    expect(stats.record.winRate, isNull);
   });
 
   test('an open competition past its deadline reads as ended', () {

@@ -11,7 +11,8 @@ import '../../../matches/application/matches_providers.dart';
 import '../../../matches/data/match_summary.dart';
 import '../../../matches/ui/widgets/lifecycle_badge.dart';
 
-/// The player's next match in one line, shown only when there is one.
+/// The player's next match as one row: who, where it stands, and when.
+/// Shown only when there is one.
 class UpNextCard extends ConsumerWidget {
   const UpNextCard({super.key});
 
@@ -21,6 +22,7 @@ class UpNextCard extends ConsumerWidget {
     if (match == null) return const SizedBox.shrink();
     final p = context.palette;
     final l = context.l10n;
+    final (status, tone) = LifecycleBadge.describe(match, l);
     final when = _when(match, l);
 
     return Padding(
@@ -39,29 +41,10 @@ class UpNextCard extends ConsumerWidget {
               child: Row(
                 children: [
                   Expanded(
+                    flex: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            LifecycleBadge(match: match),
-                            if (when != null) ...[
-                              const SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  when,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: p.subtleForeground,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 8),
                         Text(
                           match.opponent == null
                               ? l.homeOpponentToBeDecided
@@ -70,8 +53,23 @@ class UpNextCard extends ConsumerWidget {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        Text(
-                          match.place(context.l10n.seriesBestOf),
+                        const SizedBox(height: 2),
+                        // The status first, so a long name never cuts it off.
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: status,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: tone.colorsIn(p).$1,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' · ${match.place(l.seriesBestOf)}',
+                              ),
+                            ],
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -82,7 +80,21 @@ class UpNextCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: p.mutedForeground),
+                  if (when != null) ...[
+                    const SizedBox(width: 12),
+                    Flexible(
+                      flex: 2,
+                      child: Text(
+                        when,
+                        maxLines: 2,
+                        textAlign: TextAlign.end,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

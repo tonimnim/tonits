@@ -59,12 +59,12 @@ void main() {
     expect(find.byType(TonitsNavigationBar), findsOneWidget);
     expect(find.text('striker.9'), findsWidgets);
     expect(find.text('1,542'), findsOneWidget);
-    expect(find.textContaining('#24 in', findRichText: true), findsOneWidget);
+    expect(find.text('#24'), findsOneWidget);
     expect(find.text('Up next'), findsOneWidget);
     expect(find.text('vs Amina Otieno'), findsWidgets);
+    // With a match coming, what's open stays on Compete.
+    expect(find.text('Open now'), findsNothing);
 
-    await scrollPageTo(tester, find.text('62%'));
-    expect(find.text('W3'), findsOneWidget);
     await scrollPageTo(tester, find.text('Recent matches'));
     expect(find.text('vs Coast Ace'), findsOneWidget);
   });
@@ -75,7 +75,9 @@ void main() {
     expect(find.text('1,542'), findsOneWidget);
   });
 
-  testWidgets('without a match, Up next leaves the page', (tester) async {
+  testWidgets("without a match, what's open takes Up next's place", (
+    tester,
+  ) async {
     await pumpTonits(
       tester,
       refreshToken: 'stored',
@@ -86,10 +88,101 @@ void main() {
 
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('Up next'), findsNothing);
+    expect(find.text('Open now'), findsOneWidget);
+    expect(find.text('Mombasa Masters'), findsOneWidget);
+    expect(find.text('Ksh 8,000'), findsOneWidget);
+
+    await tester.tap(find.text('Nairobi Weekend Cup'));
+    await tester.pumpAndSettle();
+    expect(find.text('Enter for free'), findsOneWidget);
   });
 
-  testWidgets('a new player is invited to play instead of shown empty '
-      'stats', (tester) async {
+  testWidgets("what's open leaves out what the player can't enter, and "
+      'shows the three closing soonest', (tester) async {
+    Map<String, dynamic> closing(String id, String name, String at) => {
+      ...competitionJson(id: id, name: name),
+      'registrationClosesAt': at,
+    };
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
+          '/v1/competitions': (_) => jsonResponse(
+            pageJson([
+              closing('c5', 'Late Cup', '2027-02-01T16:00:00Z'),
+              competitionJson(),
+              closing('c3', 'Closed Cup', '2020-01-01T16:00:00Z'),
+              // Every place taken (the fixture has 32).
+              competitionJson(id: 'c4', name: 'Full Cup', entryCount: 32),
+              closing('c6', 'Early Cup', '2027-01-10T16:00:00Z'),
+              closing('c7', 'Middle Cup', '2027-01-20T16:00:00Z'),
+            ]),
+            200,
+          ),
+        },
+      ),
+    );
+
+    for (final name in ['Closed Cup', 'Full Cup', 'Late Cup']) {
+      expect(find.text(name), findsNothing);
+    }
+    final top = [
+      'Early Cup',
+      'Nairobi Weekend Cup',
+      'Middle Cup',
+    ].map((name) => tester.getTopLeft(find.text(name)).dy).toList();
+    expect(top[0], lessThan(top[1]));
+    expect(top[1], lessThan(top[2]));
+  });
+
+  testWidgets('with nothing open, Home says so', (tester) async {
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
+          '/v1/competitions': (_) => jsonResponse(pageJson([]), 200),
+        },
+      ),
+    );
+
+    expect(find.text('Open now'), findsOneWidget);
+    expect(find.text('Nothing open right now'), findsOneWidget);
+  });
+
+  testWidgets("a competition the player is in leaves what's open", (
+    tester,
+  ) async {
+    Map<String, dynamic> entry(String competitionId, String status) => {
+      'id': 'r-$competitionId',
+      'competitionId': competitionId,
+      'status': status,
+    };
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
+          '/v1/me/registrations': (_) => jsonResponse(
+            pageJson([entry('c1', 'registered'), entry('c2', 'withdrawn')]),
+            200,
+          ),
+        },
+      ),
+    );
+
+    expect(find.text('Open now'), findsOneWidget);
+    expect(find.text('Nairobi Weekend Cup'), findsNothing);
+    // Having left one, the player can see it again.
+    expect(find.text('Mombasa Masters'), findsOneWidget);
+  });
+
+  testWidgets('a new player gets the same card at zero, from the starting '
+      'rating', (tester) async {
     await pumpTonits(
       tester,
       refreshToken: 'stored',
@@ -106,26 +199,28 @@ void main() {
       ),
     );
 
-    expect(find.text('Unranked'), findsOneWidget);
-    expect(find.text('Overview'), findsNothing);
+    expect(find.text('1,500'), findsOneWidget);
+    expect(find.text('New'), findsOneWidget);
+    // No matches and no wins yet, and no place on the ladder.
+    expect(find.text('0'), findsNWidgets(2));
+    expect(find.bySemanticsLabel(RegExp('^Unranked')), findsOneWidget);
+    expect(find.text('Kenya rank'), findsOneWidget);
+    expect(find.text('Open now'), findsOneWidget);
     expect(find.text('Recent matches'), findsNothing);
-
-    await tester.ensureVisible(find.text('Find a competition'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Find a competition'));
-    await tester.pumpAndSettle();
-    expect(find.widgetWithText(AppBar, 'Competitions'), findsOneWidget);
   });
 
-  testWidgets('the rating card carries the overview numbers', (tester) async {
+  testWidgets('the rating card carries matches, wins and the country rank', (
+    tester,
+  ) async {
     await pumpTonits(tester, refreshToken: 'stored');
 
     expect(find.text('1,542'), findsOneWidget);
-    expect(find.text('62%'), findsOneWidget);
-    expect(find.text('W3'), findsOneWidget);
-    expect(find.text('13 W  ·  3 D  ·  5 L'), findsOneWidget);
-    // No separate overview section any more.
-    expect(find.text('Overview'), findsNothing);
+    expect(find.bySemanticsLabel(RegExp('Up 3 places')), findsOneWidget);
+    expect(find.text('21'), findsOneWidget);
+    expect(find.text('13'), findsOneWidget);
+    expect(find.text('#24'), findsOneWidget);
+    expect(find.text('Kenya rank'), findsOneWidget);
+    expect(find.text('New'), findsNothing);
   });
 
   testWidgets('a failing section offers a retry and the rest still loads', (

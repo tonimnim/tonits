@@ -2176,17 +2176,29 @@ abstract class AppLocalizations {
   /// **'Unranked'**
   String get homeUnranked;
 
-  /// No description provided for @homeUnratedMessage.
+  /// Tag on the rating card of a player who hasn't played a rated match yet.
   ///
   /// In en, this message translates to:
-  /// **'Play your first rated match to get a rating and a place on the ladder.'**
-  String get homeUnratedMessage;
+  /// **'New'**
+  String get homeNewPlayer;
 
-  /// No description provided for @homeFindCompetition.
+  /// Under the player's place on their country's ladder, as in '#24' over 'Kenya rank'.
   ///
   /// In en, this message translates to:
-  /// **'Find a competition'**
-  String get homeFindCompetition;
+  /// **'{country} rank'**
+  String homeCountryRank(String country);
+
+  /// Home section of competitions the player can enter, shown when they have no match coming.
+  ///
+  /// In en, this message translates to:
+  /// **'Open now'**
+  String get homeOpenNow;
+
+  /// No description provided for @homeNothingOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing open right now'**
+  String get homeNothingOpen;
 
   /// Screen reader label for rank movement.
   ///
@@ -2200,23 +2212,11 @@ abstract class AppLocalizations {
   /// **'{places, plural, =1{Down 1 place} other{Down {places} places}}'**
   String homeMovedDown(int places);
 
-  /// Rank movement next to an up or down arrow.
-  ///
-  /// In en, this message translates to:
-  /// **'{places, plural, =1{1 place} other{{places} places}}'**
-  String homePlaces(int places);
-
   /// No description provided for @homeRecentMatches.
   ///
   /// In en, this message translates to:
   /// **'Recent matches'**
   String get homeRecentMatches;
-
-  /// No description provided for @homeWinRate.
-  ///
-  /// In en, this message translates to:
-  /// **'Win rate'**
-  String get homeWinRate;
 
   /// No description provided for @homeMatches.
   ///
@@ -2349,36 +2349,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Down {places}'**
   String rankingsMovedDown(int places);
-
-  /// After a rank number, as in '#24 in Kenya'.
-  ///
-  /// In en, this message translates to:
-  /// **'in {place}'**
-  String homeRankIn(String place);
-
-  /// After a rank number, as in '#310 global'.
-  ///
-  /// In en, this message translates to:
-  /// **'global'**
-  String get homeRankGlobal;
-
-  /// No description provided for @homeGoalsPerMatchShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Goals per match'**
-  String get homeGoalsPerMatchShort;
-
-  /// No description provided for @homeStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Streak'**
-  String get homeStreak;
-
-  /// Wins, draws and losses under the record bar.
-  ///
-  /// In en, this message translates to:
-  /// **'{wins} W  ·  {draws} D  ·  {losses} L'**
-  String homeRecordLine(int wins, int draws, int losses);
 
   /// The signed-in player's own side in a match.
   ///

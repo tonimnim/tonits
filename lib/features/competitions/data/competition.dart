@@ -45,6 +45,12 @@ abstract class Competition with _$Competition {
 
   bool get isFull => entryCount >= maxEntries;
 
+  /// Paid entry is collected with M-Pesa, which only serves Kenya, so a
+  /// paid competition is closed to players elsewhere. The server's
+  /// eligibility check stays the authority.
+  bool closedToCountry(String? countryCode) =>
+      isPaid && countryCode != null && countryCode != 'KE';
+
   /// The status can say "registration open" a while after the deadline has
   /// passed; the deadline is what the player can act on.
   bool get registrationEnded {

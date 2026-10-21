@@ -4,6 +4,17 @@ import '../theme.dart';
 
 enum StatusTone { good, info, warn, bad, muted }
 
+extension StatusToneColors on StatusTone {
+  /// The tone's text and fill colours.
+  (Color, Color) colorsIn(TonitsPalette p) => switch (this) {
+    StatusTone.good => p.good,
+    StatusTone.info => p.info,
+    StatusTone.warn => p.warn,
+    StatusTone.bad => (p.destructive, p.destructive.withValues(alpha: 0.15)),
+    StatusTone.muted => (p.mutedForeground, p.muted),
+  };
+}
+
 /// The dashboard's status chip: a tinted, mono label.
 class StatusBadge extends StatelessWidget {
   const StatusBadge(this.label, {super.key, required this.tone});
@@ -13,14 +24,7 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.palette;
-    final (text, fill) = switch (tone) {
-      StatusTone.good => p.good,
-      StatusTone.info => p.info,
-      StatusTone.warn => p.warn,
-      StatusTone.bad => (p.destructive, p.destructive.withValues(alpha: 0.15)),
-      StatusTone.muted => (p.mutedForeground, p.muted),
-    };
+    final (text, fill) = tone.colorsIn(context.palette);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(

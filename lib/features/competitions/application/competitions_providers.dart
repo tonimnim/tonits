@@ -23,6 +23,44 @@ final competitionsProvider = AsyncNotifierProvider.autoDispose
       CompetitionsNotifier.new,
     );
 
+/// Competitions the player can still enter, closing soonest first: Home's
+/// way to a next match when they have none. Ones they're already in leave
+/// the list, and entering one reloads it through [myEntriesProvider].
+final openCompetitionsProvider = FutureProvider.autoDispose<List<Competition>>((
+  ref,
+) async {
+  final country = ref.watch(currentPlayerProvider)?.countryCode;
+  final repository = ref.watch(competitionsRepositoryProvider);
+  // Without their entries, the list still shows; nothing is left out.
+  final entries = ref
+      .watch(myEntriesProvider.future)
+      .then((page) => page.items, onError: (_) => const <Registration>[]);
+  final page = await repository.list(
+    status: CompetitionStatus.registrationOpen,
+    limit: 10,
+  );
+  final entered = {
+    for (final entry in await entries)
+      if (entry.status != EntryStatus.withdrawn) entry.competitionId,
+  };
+  final far = DateTime.utc(9999);
+  return page.items
+      // The API can still list one as open after its deadline.
+      .where(
+        (c) =>
+            !c.registrationEnded &&
+            !c.isFull &&
+            !c.closedToCountry(country) &&
+            !entered.contains(c.id),
+      )
+      .toList()
+    ..sort(
+      (a, b) => (a.registrationClosesAt ?? far).compareTo(
+        b.registrationClosesAt ?? far,
+      ),
+    );
+});
+
 /// One competition's detail.
 final competitionProvider = FutureProvider.autoDispose
     .family<Competition, String>(

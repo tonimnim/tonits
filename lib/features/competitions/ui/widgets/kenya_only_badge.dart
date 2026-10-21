@@ -16,7 +16,7 @@ class KenyaOnlyBadge extends ConsumerWidget {
   final Competition competition;
 
   static bool appliesTo(Competition competition, String? countryCode) =>
-      competition.isPaid && countryCode != null && countryCode != 'KE';
+      competition.closedToCountry(countryCode);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

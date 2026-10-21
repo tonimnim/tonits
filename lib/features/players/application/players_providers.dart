@@ -5,7 +5,6 @@ import '../../auth/application/auth_providers.dart';
 import '../data/played_match.dart';
 import '../data/player_profile.dart';
 import '../data/players_repository.dart';
-import 'player_stats.dart';
 
 final playersRepositoryProvider = Provider<PlayersRepository>(
   (ref) => PlayersRepository(ref.watch(apiClientProvider)),
@@ -33,12 +32,4 @@ final myRecentMatchesProvider = FutureProvider.autoDispose<List<PlayedMatch>>((
 ) async {
   final page = await ref.watch(playersRepositoryProvider).matches(_myId(ref));
   return page.items;
-});
-
-final myStatsProvider = FutureProvider.autoDispose<PlayerStats>((ref) async {
-  final (profile, recent) = await (
-    ref.watch(myProfileProvider.future),
-    ref.watch(myRecentMatchesProvider.future),
-  ).wait;
-  return PlayerStats.from(profile.record, recent);
 });

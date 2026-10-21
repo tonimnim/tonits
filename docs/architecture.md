@@ -49,8 +49,9 @@ other features' providers.
 
 A dependency points down or sideways into `core`: `ui → application → data
 → core`. A feature uses another feature through its `application` providers
-and its presentational widgets. For example, Home reads `nextMatchProvider`
-and shows `MatchCard`. It never calls another feature's repository directly.
+and its presentational widgets. For example, Home reads
+`openCompetitionsProvider` and shows `CompetitionRow`. It never calls
+another feature's repository directly.
 
 Shared building blocks:
 
@@ -147,9 +148,9 @@ from data that exists, so it never depends on an unreleased endpoint.
 /welcome                      Signed out: continue with Google or Apple
 /onboarding                   A new account's username, Konami ID, country
                               and phone; the router keeps it here until done
-/home                         Tab 1: the player's overview (rating, stats,
-                              ladder slice, recent results, up next,
-                              competitions closing soon)
+/home                         Tab 1: the player's overview (rating card,
+                              up next or the competitions open now, recent
+                              results)
 /competitions                 Tab 2: discovery
 /matches                      Tab 3: active and history
 /matches/:id                  A match room; /report reports the score

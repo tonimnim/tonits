@@ -23,6 +23,10 @@ abstract class PlayerProfile with _$PlayerProfile {
 
   static const gameId = 'efootball-mobile';
 
+  /// The rating every player starts from. The server creates it with their
+  /// first confirmed result; until then the profile has no rating.
+  static const startingRating = 1500;
+
   /// Null until the player has a rating for eFootball.
   GameRating? get rating =>
       ratings.where((r) => r.gameId == gameId).firstOrNull;

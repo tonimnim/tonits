@@ -872,8 +872,25 @@
     }
   },
   "homeUnranked": "Unranked",
-  "homeUnratedMessage": "Play your first rated match to get a rating and a place on the ladder.",
-  "homeFindCompetition": "Find a competition",
+  "homeNewPlayer": "New",
+  "@homeNewPlayer": {
+    "description": "Tag on the rating card of a player who hasn't played a rated match yet."
+  },
+  "homeCountryRank": "{country} rank",
+  "@homeCountryRank": {
+    "description": "Under the player's place on their country's ladder, as in '#24' over 'Kenya rank'.",
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "homeOpenNow": "Open now",
+  "@homeOpenNow": {
+    "description": "Home section of competitions the player can enter, shown when they have no match coming."
+  },
+  "homeNothingOpen": "Nothing open right now",
   "homeMovedUp": "{places, plural, =1{Up 1 place} other{Up {places} places}}",
   "@homeMovedUp": {
     "description": "Screen reader label for rank movement.",
@@ -891,17 +908,7 @@
       }
     }
   },
-  "homePlaces": "{places, plural, =1{1 place} other{{places} places}}",
-  "@homePlaces": {
-    "description": "Rank movement next to an up or down arrow.",
-    "placeholders": {
-      "places": {
-        "type": "int"
-      }
-    }
-  },
   "homeRecentMatches": "Recent matches",
-  "homeWinRate": "Win rate",
   "homeMatches": "Matches",
   "homeUpNext": "Up next",
   "homeOpponentToBeDecided": "Opponent to be decided",
@@ -985,37 +992,6 @@
   "@rankingsMovedDown": {
     "placeholders": {
       "places": {
-        "type": "int"
-      }
-    }
-  },
-  "homeRankIn": "in {place}",
-  "@homeRankIn": {
-    "description": "After a rank number, as in '#24 in Kenya'.",
-    "placeholders": {
-      "place": {
-        "type": "String",
-        "example": "Kenya"
-      }
-    }
-  },
-  "homeRankGlobal": "global",
-  "@homeRankGlobal": {
-    "description": "After a rank number, as in '#310 global'."
-  },
-  "homeGoalsPerMatchShort": "Goals per match",
-  "homeStreak": "Streak",
-  "homeRecordLine": "{wins} W  ·  {draws} D  ·  {losses} L",
-  "@homeRecordLine": {
-    "description": "Wins, draws and losses under the record bar.",
-    "placeholders": {
-      "wins": {
-        "type": "int"
-      },
-      "draws": {
-        "type": "int"
-      },
-      "losses": {
         "type": "int"
       }
     }

@@ -16,21 +16,15 @@ GET /v1/rankings?gameId=efootball-mobile&scope=country&country=KE&around=me&span
 ```
 
 Authenticated; returns the `span` places either side of the caller, or an
-empty `data` when unranked. The app uses it for Home's ladder slice (two
-places either side, the top three when unranked) and, with `span=1`, to pin
-the player's own row under the Rankings list when they're further down than
-the rows loaded.
+empty `data` when unranked. The app uses it, with `span=1`, to pin the
+player's own row under the Rankings list when they're further down than the
+rows loaded.
 
-## 3. Goal totals (deferred)
+## 3. Goal totals (not needed now)
 
-**Shown on:** Home, "Goals per match". Wanted on `PublicGameRating`:
-
-```json
-{ "goalsFor": 54, "goalsAgainst": 31 }
-```
-
-Declined for now as off the launch path. **Until then:** the app averages
-goals over the last 20 confirmed matches.
+Asked for Home's "Goals per match" as `goalsFor` and `goalsAgainst` on
+`PublicGameRating`, and declined as off the launch path. Home no longer
+shows goals, so the app doesn't need them.
 
 ## 4. Series reported as games won (done)
 
