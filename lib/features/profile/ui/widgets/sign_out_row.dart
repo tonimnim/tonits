@@ -8,7 +8,8 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../auth/application/auth_providers.dart';
 
 /// Signs out after a confirmation, since it ends the session on this
-/// device. Deleting the account starts from here too.
+/// device. The other signed-in devices and deleting the account start
+/// from here too.
 class SignOutRow extends ConsumerWidget {
   const SignOutRow({super.key});
 
@@ -17,6 +18,11 @@ class SignOutRow extends ConsumerWidget {
     final l = context.l10n;
     return SettingsGroup(
       rows: [
+        SettingsRow(
+          icon: Icons.devices_outlined,
+          label: l.devicesTitle,
+          onTap: () => context.push(Routes.devices),
+        ),
         SettingsRow(
           icon: Icons.logout,
           label: l.profileSignOut,

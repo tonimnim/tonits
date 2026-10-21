@@ -115,10 +115,6 @@
       }
     }
   },
-  "profileSignInTitle": "Sign-in",
-  "profileLinked": "Linked",
-  "profileKonamiIdAndPassword": "Konami ID and password",
-  "profileTestAccount": "Test account",
   "profileSignOut": "Sign out",
   "profileSignOutTitle": "Sign out of Ozone?",
   "profileSignOutMessage": "You can sign back in any time with the same Google or Apple account.",

@@ -388,30 +388,6 @@ abstract class AppLocalizations {
   /// **'Member since {date}'**
   String profileMemberSince(String date);
 
-  /// No description provided for @profileSignInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign-in'**
-  String get profileSignInTitle;
-
-  /// No description provided for @profileLinked.
-  ///
-  /// In en, this message translates to:
-  /// **'Linked'**
-  String get profileLinked;
-
-  /// No description provided for @profileKonamiIdAndPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Konami ID and password'**
-  String get profileKonamiIdAndPassword;
-
-  /// No description provided for @profileTestAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Test account'**
-  String get profileTestAccount;
-
   /// No description provided for @profileSignOut.
   ///
   /// In en, this message translates to:

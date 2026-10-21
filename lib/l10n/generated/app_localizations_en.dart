@@ -176,18 +176,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get profileSignInTitle => 'Sign-in';
-
-  @override
-  String get profileLinked => 'Linked';
-
-  @override
-  String get profileKonamiIdAndPassword => 'Konami ID and password';
-
-  @override
-  String get profileTestAccount => 'Test account';
-
-  @override
   String get profileSignOut => 'Sign out';
 
   @override

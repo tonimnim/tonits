@@ -9,7 +9,6 @@ import 'widgets/account_section.dart';
 import 'widgets/contact_section.dart';
 import 'widgets/entries_section.dart';
 import 'widgets/profile_header.dart';
-import 'widgets/sign_in_section.dart';
 import 'widgets/sign_out_row.dart';
 
 /// Tab 5: who the player is and every account setting, each one a row
@@ -36,8 +35,6 @@ class ProfileScreen extends ConsumerWidget {
         AccountSection(player: player),
         _gap,
         ContactSection(player: player),
-        _gap,
-        SignInSection(player: player),
         _gap,
         const SignOutRow(),
       ],
