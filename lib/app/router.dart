@@ -98,6 +98,22 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
       path: 'notifications',
       builder: (_, _) => const NotificationsScreen(),
     ),
+    GoRoute(
+      path: 'profile',
+      builder: (_, _) => const ProfileScreen(),
+      routes: [
+        GoRoute(path: 'name', builder: (_, _) => const EditNameScreen()),
+        GoRoute(
+          path: 'username',
+          builder: (_, _) => const EditUsernameScreen(),
+        ),
+        GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
+        GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
+        GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
+        GoRoute(path: 'devices', builder: (_, _) => const DevicesScreen()),
+        GoRoute(path: 'delete', builder: (_, _) => const DeleteAccountScreen()),
+      ],
+    ),
   ],
   AppTab.matches => [
     GoRoute(
@@ -118,15 +134,6 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
       ],
     ),
   ],
-  AppTab.profile => [
-    GoRoute(path: 'name', builder: (_, _) => const EditNameScreen()),
-    GoRoute(path: 'username', builder: (_, _) => const EditUsernameScreen()),
-    GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
-    GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
-    GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
-    GoRoute(path: 'devices', builder: (_, _) => const DevicesScreen()),
-    GoRoute(path: 'delete', builder: (_, _) => const DeleteAccountScreen()),
-  ],
   _ => const [],
 };
 
@@ -135,7 +142,6 @@ Widget _tabRoot(AppTab tab) => switch (tab) {
   AppTab.competitions => const CompetitionsScreen(),
   AppTab.matches => const MatchesScreen(),
   AppTab.rankings => const RankingsScreen(),
-  AppTab.profile => const ProfileScreen(),
 };
 
 /// What the redirect depends on: the session status, and whether the

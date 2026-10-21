@@ -37,13 +37,7 @@ Map<String, dynamic> _deletion({required Duration until}) => {
 };
 
 Future<void> _openProfileRow(WidgetTester tester, String row) async {
-  await tester.tap(
-    find.descendant(
-      of: find.byType(TonitsNavigationBar),
-      matching: find.text('Profile'),
-    ),
-  );
-  await tester.pumpAndSettle();
+  await openProfileFromHome(tester);
   await tapText(tester, row);
 }
 

@@ -251,7 +251,7 @@ void main() {
     expect(find.text('1,542'), findsOneWidget);
   });
 
-  testWidgets('the bottom bar switches between all five tabs', (tester) async {
+  testWidgets('the bottom bar switches between all four tabs', (tester) async {
     await pumpTonits(tester, refreshToken: 'stored');
 
     await openTab(tester, 'Compete');
@@ -270,17 +270,34 @@ void main() {
     expect(find.text('Lake Striker'), findsOneWidget);
     expect(find.text('striker.9 (you)'), findsOneWidget);
 
-    await openTab(tester, 'Profile');
+    await openTab(tester, 'Home');
+    expect(find.text('1,542'), findsOneWidget);
+  });
+
+  testWidgets("Profile opens from Home's avatar, not the bottom bar", (
+    tester,
+  ) async {
+    await pumpTonits(tester, refreshToken: 'stored');
+    expect(
+      find.descendant(
+        of: find.byType(TonitsNavigationBar),
+        matching: find.text('Profile'),
+      ),
+      findsNothing,
+    );
+
+    await openProfileFromHome(tester);
     await scrollPageTo(tester, find.text('ABCD-1234-EFGH'));
     expect(find.text('Konami ID'), findsOneWidget);
 
-    await openTab(tester, 'Home');
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
     expect(find.text('1,542'), findsOneWidget);
   });
 
   testWidgets('signing out from Profile returns to sign in', (tester) async {
     await pumpTonits(tester, refreshToken: 'stored');
-    await openTab(tester, 'Profile');
+    await openProfileFromHome(tester);
 
     await scrollPageTo(tester, find.text('Sign out'));
     await Scrollable.ensureVisible(

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
@@ -32,16 +31,6 @@ FakeApi _api(
   );
 }
 
-Future<void> _openProfile(WidgetTester tester) async {
-  await tester.tap(
-    find.descendant(
-      of: find.byType(TonitsNavigationBar),
-      matching: find.text('Profile'),
-    ),
-  );
-  await tester.pumpAndSettle();
-}
-
 Map<String, dynamic> _saved(FakeApi api) => jsonDecode(
   api.requests.lastWhere((r) => r.url.path == '/v1/me/profile').body,
 ) as Map<String, dynamic>;
@@ -53,7 +42,7 @@ void main() {
       refreshToken: 'stored',
       api: _api(profileSettingsJson()),
     );
-    await _openProfile(tester);
+    await openProfileFromHome(tester);
     expect(find.text('@striker.9'), findsOneWidget);
 
     await tapText(tester, 'Username');
@@ -83,7 +72,7 @@ void main() {
         onSave: (_) => errorResponse(409, 'handle_taken'),
       ),
     );
-    await _openProfile(tester);
+    await openProfileFromHome(tester);
     await tapText(tester, 'Username');
     await tester.enterText(find.byType(TextFormField), 'striker.10');
     await tester.pump(const Duration(milliseconds: 400));

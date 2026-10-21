@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/l10n.dart';
+import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../account/application/account_providers.dart';
 import '../../../notifications/ui/widgets/notification_bell.dart';
 
-/// The player's avatar beside a time-of-day greeting and their name.
+/// The player's avatar, which opens Profile, beside a time-of-day greeting
+/// and their name.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.name, this.now});
 
@@ -28,14 +31,27 @@ class HomeHeader extends StatelessWidget {
         : l.homeGoodEvening;
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(color: p.card, shape: BoxShape.circle),
-          child: Consumer(
-            builder: (context, ref, _) => InitialsAvatar(
-              name: name,
-              size: 46,
-              image: ref.watch(myAvatarProvider).value,
+        Tooltip(
+          message: l.tabProfile,
+          child: Semantics(
+            button: true,
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: () => context.push(Routes.profile),
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: p.card,
+                  shape: BoxShape.circle,
+                ),
+                child: Consumer(
+                  builder: (context, ref, _) => InitialsAvatar(
+                    name: name,
+                    size: 46,
+                    image: ref.watch(myAvatarProvider).value,
+                  ),
+                ),
+              ),
             ),
           ),
         ),

@@ -3,20 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
 
 Future<void> openProfile(WidgetTester tester, {FakeApi? api}) async {
   await pumpTonits(tester, refreshToken: 'stored', api: api);
-  await tester.tap(
-    find.descendant(
-      of: find.byType(TonitsNavigationBar),
-      matching: find.text('Profile'),
-    ),
-  );
-  await tester.pumpAndSettle();
+  await openProfileFromHome(tester);
 }
 
 Future<void> tapText(WidgetTester tester, String text) async {

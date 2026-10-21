@@ -106,13 +106,7 @@ void main() {
           },
         ),
       );
-      await tester.tap(
-        find.descendant(
-          of: find.byType(TonitsNavigationBar),
-          matching: find.text('Profile'),
-        ),
-      );
-      await tester.pumpAndSettle();
+      await openProfileFromHome(tester);
       await scrollPageTo(tester, find.text('My entries'));
       await tester.tap(find.text('My entries'));
       await tester.pumpAndSettle();
@@ -206,7 +200,7 @@ void main() {
       // Build the whole Home page, not just what's on screen.
       await scrollPageTo(tester, find.text('Recent matches'));
 
-      for (final tab in ['Compete', 'Matches', 'Rankings', 'Profile']) {
+      for (final tab in ['Compete', 'Matches', 'Rankings', 'Home']) {
         await tester.tap(
           find.descendant(
             of: find.byType(TonitsNavigationBar),
@@ -215,7 +209,8 @@ void main() {
         );
         await tester.pumpAndSettle();
       }
-      // Build the whole Profile page too.
+      // Profile, from Home's avatar: build the whole page too.
+      await openProfileFromHome(tester);
       await scrollPageTo(tester, find.text('Sign out'));
     });
 
@@ -248,20 +243,18 @@ void main() {
         textScale: scale,
         refreshToken: 'stored',
       );
-      await tester.tap(
-        find.descendant(
-          of: find.byType(TonitsNavigationBar),
-          matching: find.text('Profile'),
-        ),
-      );
-      await tester.pumpAndSettle();
+      await openProfileFromHome(tester);
       for (final (row, title) in [
         ('Display name', 'Display name'),
         ('Email', 'Email'),
         ('Phone', 'Phone number'),
       ]) {
         await scrollPageTo(tester, find.text(row));
-        await tester.ensureVisible(find.text(row).last);
+        // Clear of the back button's bar, now that Profile is pushed.
+        await Scrollable.ensureVisible(
+          tester.element(find.text(row).last),
+          alignment: 0.5,
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text(row).last);
         await tester.pumpAndSettle();

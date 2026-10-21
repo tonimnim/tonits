@@ -11,8 +11,8 @@ import 'widgets/entries_section.dart';
 import 'widgets/profile_header.dart';
 import 'widgets/sign_out_row.dart';
 
-/// Tab 5: who the player is and every account setting, each one a row
-/// that opens where it's changed.
+/// Who the player is and every account setting, each one a row that opens
+/// where it's changed. Opened from the avatar on Home.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 import 'package:tonits/core/widgets/widgets.dart';
 import 'package:tonits/features/account/application/account_providers.dart';
 import 'package:tonits/features/profile/ui/widgets/profile_photo.dart';
@@ -76,13 +75,7 @@ Future<FakeApi> _openProfile(
     api: api,
     overrides: [photoPickerProvider.overrideWithValue(() async => picked)],
   );
-  await tester.tap(
-    find.descendant(
-      of: find.byType(TonitsNavigationBar),
-      matching: find.text('Profile'),
-    ),
-  );
-  await tester.pumpAndSettle();
+  await openProfileFromHome(tester);
   return api;
 }
 

@@ -13,8 +13,7 @@ enum AppTab {
     Icons.emoji_events,
   ),
   matches(Routes.matches, Icons.sports_esports_outlined, Icons.sports_esports),
-  rankings(Routes.rankings, Icons.leaderboard_outlined, Icons.leaderboard),
-  profile(Routes.profile, Icons.person_outline, Icons.person);
+  rankings(Routes.rankings, Icons.leaderboard_outlined, Icons.leaderboard);
 
   const AppTab(this.path, this.icon, this.selectedIcon);
 
@@ -24,7 +23,6 @@ enum AppTab {
     competitions => l.tabCompete,
     matches => l.tabMatches,
     rankings => l.tabRankings,
-    profile => l.tabProfile,
   };
 
   final String path;

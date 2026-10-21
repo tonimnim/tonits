@@ -151,6 +151,15 @@ Future<FakeApi> pumpTonits(
   return fake;
 }
 
+/// Opens Profile from the avatar on Home, its only way in.
+Future<void> openProfileFromHome(WidgetTester tester) async {
+  final avatar = find.byTooltip('Profile');
+  await tester.ensureVisible(avatar);
+  await tester.pumpAndSettle();
+  await tester.tap(avatar);
+  await tester.pumpAndSettle();
+}
+
 /// Scrolls the current page (its outermost scroll view, not a horizontal
 /// row inside it) until [finder] is built and on screen.
 Future<void> scrollPageTo(WidgetTester tester, Finder finder) => tester

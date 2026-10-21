@@ -155,8 +155,9 @@ from data that exists, so it never depends on an unreleased endpoint.
 /matches                      Tab 3: active and history
 /matches/:id                  A match room; /report reports the score
 /rankings                     Tab 4: global and country ladders
-/profile                      Tab 5: account and sign-out; name, email and
-                              phone edit screens nest under it
+/home/profile                 Account and sign-out, opened from Home's
+                              avatar; name, email and phone edit screens
+                              nest under it
 ```
 
 Detail routes (`/competitions/:id`, `/matches/:id`) nest under their tab so

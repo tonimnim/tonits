@@ -15,7 +15,6 @@ abstract final class Routes {
   static const competitions = '/competitions';
   static const matches = '/matches';
   static const rankings = '/rankings';
-  static const profile = '/profile';
 
   /// A competition's detail and entry, under the Compete tab.
   static String competition(String id) => '$competitions/$id';
@@ -26,6 +25,10 @@ abstract final class Routes {
   /// The notification inbox, opened from Home's bell.
   static const notifications = '$home/notifications';
 
+  /// Who the player is and their account settings, opened from Home's
+  /// avatar.
+  static const profile = '$home/profile';
+
   /// A match room, under the Matches tab.
   static String match(String id) => '$matches/$id';
 
@@ -35,7 +38,7 @@ abstract final class Routes {
   /// Reporting a match's final score.
   static String reportScore(String id) => '$matches/$id/report';
 
-  // Account settings, under the Profile tab.
+  // Account settings, under Profile.
   static const editName = '$profile/name';
   static const editUsername = '$profile/username';
   static const email = '$profile/email';

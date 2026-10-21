@@ -262,7 +262,7 @@ void main() {
         refreshToken: 'stored',
         height: 1560,
       );
-      await _openTab(tester, 'Profile');
+      await openProfileFromHome(tester);
       await _shoot(tester, 'profile-$suffix');
     });
 
@@ -286,7 +286,7 @@ void main() {
           },
         ),
       );
-      await _openTab(tester, 'Profile');
+      await openProfileFromHome(tester);
       await _shoot(tester, 'profile-complete-$suffix');
 
       // The edit screens, opened from their rows.
@@ -316,7 +316,7 @@ void main() {
           },
         ),
       );
-      await _openTab(tester, 'Profile');
+      await openProfileFromHome(tester);
       await tester.ensureVisible(find.text('Email'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Email'));
@@ -627,7 +627,7 @@ void main() {
           },
         ),
       );
-      await _openTab(tester, 'Profile');
+      await openProfileFromHome(tester);
       await _shoot(tester, 'profile-entries-row-$suffix');
       await tester.tap(find.text('My entries'));
       await _shoot(tester, 'my-entries-$suffix');
@@ -676,7 +676,7 @@ void main() {
           },
         ),
       );
-      await _openTab(tester, 'Profile');
+      await openProfileFromHome(tester);
       await tester.ensureVisible(find.text('Signed-in devices'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Signed-in devices'));
@@ -865,7 +865,6 @@ void main() {
         ('Compete', 'competitions'),
         ('Matches', 'matches'),
         ('Rankings', 'rankings'),
-        ('Profile', 'profile'),
       ]) {
         await _openTab(tester, label);
         await _shoot(tester, '$name-$suffix');

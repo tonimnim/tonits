@@ -66,7 +66,7 @@ void main() {
         },
       ),
     );
-    await _openTab(tester, 'Profile');
+    await openProfileFromHome(tester);
     await tapText(tester, 'My entries');
 
     for (final (name, standing) in [
@@ -110,7 +110,7 @@ void main() {
         },
       ),
     );
-    await _openTab(tester, 'Profile');
+    await openProfileFromHome(tester);
     await tapText(tester, 'My entries');
 
     expect(find.text('No entries yet'), findsOneWidget);
