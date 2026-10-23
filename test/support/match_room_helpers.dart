@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,6 +23,7 @@ Future<FakeApi> openRoom(
   WidgetTester tester, {
   required Map<String, dynamic> room,
   Map<String, http.Response Function(http.Request)> routes = const {},
+  Future<Uint8List?> Function()? picker,
 }) async {
   final api = FakeApi(
     routes: {
@@ -41,7 +43,9 @@ Future<FakeApi> openRoom(
       )),
       chatPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
       evidencePollDelayProvider.overrideWithValue((_) => Duration.zero),
-      screenshotPickerProvider.overrideWithValue(() async => pngBytes),
+      screenshotPickerProvider.overrideWithValue(
+        picker ?? () async => pngBytes,
+      ),
     ],
   );
   await tester.tap(

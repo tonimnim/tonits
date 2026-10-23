@@ -39,13 +39,9 @@ class ScreenshotUploader {
     Uint8List bytes, {
     void Function(UploadStage stage)? onStage,
   }) async {
-    final mediaType = mediaTypeOf(bytes);
-    if (mediaType == null) {
-      throw ScreenshotProblem(_l.matchScreenshotWrongType);
-    }
-    if (bytes.length > maxBytes) {
-      throw ScreenshotProblem(_l.matchScreenshotTooLarge);
-    }
+    final problem = problemWith(bytes, _l);
+    if (problem != null) throw ScreenshotProblem(problem);
+    final mediaType = mediaTypeOf(bytes)!;
 
     onStage?.call(UploadStage.uploading);
     final intent = await _repository.createUpload(
@@ -70,6 +66,36 @@ class ScreenshotUploader {
       evidence = await _repository.status(intent.id);
     }
     return evidence.id;
+  }
+
+  /// Why [bytes] can't be sent as a screenshot, before anything is
+  /// uploaded, or null when they can.
+  static String? problemWith(Uint8List bytes, AppLocalizations l) {
+    // An iPhone camera photo, likely of another screen.
+    if (isCameraPhoto(bytes)) return l.matchScreenshotIsPhoto;
+    if (mediaTypeOf(bytes) == null) return l.matchScreenshotWrongType;
+    if (bytes.length > maxBytes) return l.matchScreenshotTooLarge;
+    return null;
+  }
+
+  /// HEIC or AVIF: how iPhones save camera photos. Screenshots are PNG.
+  static bool isCameraPhoto(Uint8List bytes) {
+    if (bytes.length < 12) return false;
+    final box = String.fromCharCodes(bytes.sublist(4, 8));
+    final brand = String.fromCharCodes(bytes.sublist(8, 12));
+    return box == 'ftyp' &&
+        const {
+          'heic',
+          'heix',
+          'heim',
+          'heis',
+          'hevc',
+          'hevx',
+          'mif1',
+          'msf1',
+          'avif',
+          'avis',
+        }.contains(brand);
   }
 
   /// `image/jpeg` or `image/png` from the file's first bytes, or null.

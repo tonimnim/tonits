@@ -2932,6 +2932,36 @@ abstract class AppLocalizations {
   /// **'That image is too large. Choose the screenshot itself, up to 10 MB.'**
   String get matchScreenshotTooLarge;
 
+  /// No description provided for @matchScreenshotIsPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Send the screenshot, not a photo of the screen.'**
+  String get matchScreenshotIsPhoto;
+
+  /// No description provided for @matchScreenshotPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Is this the Full Time screen?'**
+  String get matchScreenshotPreviewTitle;
+
+  /// No description provided for @matchScreenshotSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get matchScreenshotSend;
+
+  /// No description provided for @matchScreenshotPickAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick another'**
+  String get matchScreenshotPickAnother;
+
+  /// No description provided for @matchScreenshotKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get matchScreenshotKeep;
+
   /// No description provided for @matchScreenshotUploadFailed.
   ///
   /// In en, this message translates to:

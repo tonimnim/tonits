@@ -9,6 +9,7 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../evidence/application/screenshot_uploader.dart';
 import '../../application/matches_providers.dart';
 import '../../data/match_room.dart';
+import 'screenshot_preview.dart';
 
 /// After a series result is rejected: one slot per game played for its
 /// Full Time screenshot, all sent together. Any one counts as responding.
@@ -44,10 +45,33 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
     return (reported.home + reported.away).clamp(1, room.bestOf);
   }
 
+  /// Picks a game's screenshot. One that can't be sent says why at once,
+  /// before anything is uploaded.
   Future<void> _pick(int game) async {
     final bytes = await ref.read(screenshotPickerProvider)();
     if (bytes == null || !mounted) return;
-    setState(() => _picked[game] = bytes);
+    final problem = ScreenshotUploader.problemWith(bytes, context.l10n);
+    final message = problem == null
+        ? null
+        : context.l10n.matchScreenshotProblemForGame(game, problem);
+    setState(() {
+      error = message;
+      if (problem == null) _picked[game] = bytes;
+    });
+  }
+
+  /// Shows a game's chosen screenshot big, to keep or replace.
+  Future<void> _preview(int game) async {
+    final bytes = _picked[game];
+    if (bytes == null) return;
+    final l = context.l10n;
+    final choice = await previewScreenshot(
+      context,
+      bytes,
+      title: l.seriesGame(game),
+      confirmLabel: l.matchScreenshotKeep,
+    );
+    if (choice == PreviewChoice.pickAnother && mounted) await _pick(game);
   }
 
   Future<void> _send() async {
@@ -81,8 +105,9 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
             score: game <= _games.length
                 ? _scoreText(_games[game - 1], l)
                 : null,
-            picked: _picked.containsKey(game),
+            picked: _picked[game],
             onPick: busy ? null : () => _pick(game),
+            onPreview: busy ? null : () => _preview(game),
           ),
         ],
         const SizedBox(height: 18),
@@ -118,20 +143,24 @@ class _SeriesScreenshotsState extends ConsumerState<SeriesScreenshots>
   }
 }
 
-/// One game's screenshot: the game and its reported score, and whether one
-/// is chosen.
+/// One game's screenshot: the game and its reported score, and the chosen
+/// screenshot as a thumbnail that opens it big.
 class _Slot extends StatelessWidget {
   const _Slot({
     required this.label,
     required this.score,
     required this.picked,
     required this.onPick,
+    required this.onPreview,
   });
 
   final String label;
   final String? score;
-  final bool picked;
+  final Uint8List? picked;
   final VoidCallback? onPick;
+  final VoidCallback? onPreview;
+
+  static const _thumb = 44.0;
 
   @override
   Widget build(BuildContext context) {
@@ -145,11 +174,31 @@ class _Slot extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            picked ? Icons.check_circle : Icons.image_outlined,
-            size: 22,
-            color: picked ? p.good.$1 : p.mutedForeground,
-          ),
+          if (picked case final bytes?)
+            Semantics(
+              button: true,
+              label: label,
+              child: GestureDetector(
+                onTap: onPreview,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: ScreenshotImage(
+                    bytes: bytes,
+                    width: _thumb,
+                    height: _thumb,
+                  ),
+                ),
+              ),
+            )
+          else
+            SizedBox.square(
+              dimension: _thumb,
+              child: Icon(
+                Icons.image_outlined,
+                size: 22,
+                color: p.mutedForeground,
+              ),
+            ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -169,7 +218,7 @@ class _Slot extends StatelessWidget {
           ),
           TextButton(
             onPressed: onPick,
-            child: Text(picked ? l.seriesChange : l.seriesChoose),
+            child: Text(picked != null ? l.seriesChange : l.seriesChoose),
           ),
         ],
       ),

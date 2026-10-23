@@ -12,6 +12,7 @@ import '../../application/matches_providers.dart';
 import '../../data/match_room.dart';
 import '../room_status.dart';
 import 'deadline_pill.dart';
+import 'screenshot_preview.dart';
 import 'series_screenshots.dart';
 
 /// Right under the score: where the match stands in one line, the time
@@ -52,17 +53,34 @@ class _RoomActionsState extends ConsumerState<RoomActions> with BusyState {
     if (confirmed) await _run(() => _controller.answer(confirm: false));
   }
 
+  /// Picks the screenshot, shows it to check it's the right one, then
+  /// sends it. A dispute gets one chance, so nothing goes before Send.
   Future<void> _sendScreenshot() async {
-    final bytes = await ref.read(screenshotPickerProvider)();
-    if (bytes == null || !mounted) return;
-    await _run(
-      () => _controller.sendScreenshot(
+    final l = context.l10n;
+    while (true) {
+      final bytes = await ref.read(screenshotPickerProvider)();
+      if (bytes == null || !mounted) return;
+      final problem = ScreenshotUploader.problemWith(bytes, l);
+      setState(() => error = problem);
+      if (problem != null) return;
+      final choice = await previewScreenshot(
+        context,
         bytes,
-        onStage: (stage) {
-          if (mounted) setState(() => _stage = stage);
-        },
-      ),
-    );
+        title: l.matchScreenshotPreviewTitle,
+        confirmLabel: l.matchScreenshotSend,
+      );
+      if (!mounted || choice == null) return;
+      if (choice == PreviewChoice.pickAnother) continue;
+      await _run(
+        () => _controller.sendScreenshot(
+          bytes,
+          onStage: (stage) {
+            if (mounted) setState(() => _stage = stage);
+          },
+        ),
+      );
+      return;
+    }
   }
 
   Future<void> _openScreenshots() => showModalBottomSheet<void>(

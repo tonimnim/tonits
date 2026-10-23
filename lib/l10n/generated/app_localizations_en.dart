@@ -1715,6 +1715,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'That image is too large. Choose the screenshot itself, up to 10 MB.';
 
   @override
+  String get matchScreenshotIsPhoto =>
+      'Send the screenshot, not a photo of the screen.';
+
+  @override
+  String get matchScreenshotPreviewTitle => 'Is this the Full Time screen?';
+
+  @override
+  String get matchScreenshotSend => 'Send';
+
+  @override
+  String get matchScreenshotPickAnother => 'Pick another';
+
+  @override
+  String get matchScreenshotKeep => 'Keep';
+
+  @override
   String get matchScreenshotUploadFailed =>
       'The upload didn\'t go through. Try again.';
 

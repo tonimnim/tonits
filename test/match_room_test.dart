@@ -223,6 +223,11 @@ void main() {
     expect(find.text('Send your Full Time screenshot'), findsOneWidget);
     expect(find.text("Send in time, or you're removed."), findsOneWidget);
     await tapText(tester, 'Send screenshot');
+    // Shown big first: nothing goes before Send.
+    expect(find.text('Is this the Full Time screen?'), findsOneWidget);
+    expect(api.requests.where((r) => r.method == 'PUT'), isEmpty);
+    await tester.tap(find.widgetWithText(FilledButton, 'Send'));
+    await tester.pumpAndSettle();
     await scrollToTop(tester);
 
     expect(find.text("Waiting for Amina Otieno's screenshots"), findsOneWidget);
@@ -239,6 +244,77 @@ void main() {
       (r) => r.url.path.endsWith('/screenshot'),
     );
     expect(bodyOf(sent), {'evidenceId': 'ev1'});
+  });
+
+  testWidgets('the screenshot can be swapped or dropped before it is sent', (
+    tester,
+  ) async {
+    var picks = 0;
+    final api = await openRoom(
+      tester,
+      room: matchRoomJson(
+        lifecycle: 'screenshot_required',
+        submitted: submittedJson(1, 2),
+      ),
+      picker: () async {
+        picks++;
+        return pngBytes;
+      },
+    );
+
+    await tapText(tester, 'Send screenshot');
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Pick another'));
+    await tester.pumpAndSettle();
+    // The gallery opens again, then the new one is shown.
+    expect(picks, 2);
+    expect(find.text('Is this the Full Time screen?'), findsOneWidget);
+
+    // Closing the preview sends nothing.
+    await tester.tapAt(const Offset(10, 10));
+    await tester.pumpAndSettle();
+    expect(find.text('Is this the Full Time screen?'), findsNothing);
+    expect(
+      api.requests.where((r) => r.url.path.startsWith('/v1/evidence')),
+      isEmpty,
+    );
+  });
+
+  testWidgets('a camera photo is turned away before anything is sent', (
+    tester,
+  ) async {
+    // How an iPhone saves a camera photo: HEIC, in an ISO file box.
+    final heic = Uint8List.fromList([
+      0,
+      0,
+      0,
+      24,
+      ...'ftypheic'.codeUnits,
+      0,
+      0,
+      0,
+      0,
+      ...'mif1'.codeUnits,
+    ]);
+    final api = await openRoom(
+      tester,
+      room: matchRoomJson(
+        lifecycle: 'screenshot_required',
+        submitted: submittedJson(1, 2),
+      ),
+      picker: () async => heic,
+    );
+
+    await tapText(tester, 'Send screenshot');
+
+    expect(
+      find.text('Send the screenshot, not a photo of the screen.'),
+      findsOneWidget,
+    );
+    expect(find.text('Is this the Full Time screen?'), findsNothing);
+    expect(
+      api.requests.where((r) => r.url.path.startsWith('/v1/evidence')),
+      isEmpty,
+    );
   });
 
   testWidgets('a stale action shows the room as it is now', (tester) async {

@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/matches/ui/widgets/screenshot_preview.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
@@ -116,6 +118,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Choose').last);
     await tester.pumpAndSettle();
+    // Each chosen game shows its screenshot, which opens big to check.
+    expect(find.byType(ScreenshotImage), findsNWidgets(2));
+    expect(find.text('Change'), findsNWidgets(2));
+    await tester.tap(find.byType(ScreenshotImage).first);
+    await tester.pumpAndSettle();
+    expect(find.text('Is this the Full Time screen?'), findsNothing);
+    expect(find.text('Game 1'), findsWidgets);
+    await tester.tap(find.widgetWithText(FilledButton, 'Keep'));
+    await tester.pumpAndSettle();
+    expect(api.requests.where((r) => r.method == 'PUT'), isEmpty);
     await tester.tap(find.text('Send 2 screenshots'));
     await tester.pumpAndSettle();
 

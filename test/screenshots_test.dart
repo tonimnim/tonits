@@ -16,6 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
 import 'package:tonits/features/chat/application/chat_providers.dart';
+import 'package:tonits/features/matches/application/matches_providers.dart';
 import 'package:tonits/features/payments/application/payments_providers.dart';
 
 import 'support/draw_fixtures.dart';
@@ -450,6 +451,58 @@ void main() {
           await _shoot(tester, 'match-series-report-$suffix');
         }
       });
+    }
+
+    for (final series in [false, true]) {
+      testWidgets(
+        'screenshot preview${series ? ', series' : ''} ($suffix)',
+        skip: skip,
+        (tester) async {
+          final shot = File('test/fixtures/full_time.png').readAsBytesSync();
+          await _pump(
+            tester,
+            brightness: brightness,
+            refreshToken: 'stored',
+            height: 900,
+            overrides: [
+              screenshotPickerProvider.overrideWithValue(() async => shot),
+            ],
+            api: FakeApi(
+              routes: {
+                '/v1/matches/m1': (_) => jsonResponse({
+                  'data': matchRoomJson(
+                    lifecycle: 'screenshot_required',
+                    bestOf: series ? 3 : 1,
+                    submitted: submittedJson(1, 2),
+                  ),
+                }, 200),
+              },
+            ),
+          );
+          await _openTab(tester, 'Matches');
+          await tester.tap(find.text('vs Amina Otieno'));
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.text(series ? 'Send screenshots' : 'Send screenshot'),
+          );
+          await tester.pumpAndSettle();
+          if (series) {
+            await tester.tap(find.text('Choose').first);
+            await tester.pumpAndSettle();
+            await tester.tap(find.text('Choose').last);
+            await tester.pumpAndSettle();
+          }
+          // Let the real image decode before the shot.
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 400)),
+          );
+          await tester.pump();
+          await _shoot(
+            tester,
+            series ? 'screenshot-thumbs-$suffix' : 'screenshot-preview-$suffix',
+          );
+        },
+      );
     }
 
     testWidgets('competition, series format ($suffix)', skip: skip, (
