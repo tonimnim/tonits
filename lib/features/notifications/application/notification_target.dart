@@ -34,6 +34,8 @@ sealed class NotificationTarget {
     if (kind == 'match.chat_message' && match != null) {
       return OpenMatchChat(match);
     }
+    // Payments and refunds: the receipts and where each refund stands.
+    if (kind.startsWith('payment.')) return const OpenPayments();
     // Match and result events, and the removal, which names its match.
     if ((kind.startsWith('match.') ||
             kind.startsWith('result.') ||
@@ -73,6 +75,11 @@ class OpenCompetition extends NotificationTarget {
   const OpenCompetition(this.competitionId);
 
   final String competitionId;
+}
+
+/// The player's payments, with their refunds.
+class OpenPayments extends NotificationTarget {
+  const OpenPayments();
 }
 
 /// The item itself, in full.

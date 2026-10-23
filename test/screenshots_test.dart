@@ -231,14 +231,13 @@ void main() {
           refreshToken: 'stored',
           api: FakeApi(
             routes: {
-              '/v1/payments/mpesa/stk-push': (_) => jsonResponse(
-                paymentJson(
+              '/v1/payments/mpesa/stk-push': (_) => jsonResponse({
+                ...paymentJson(
                   status: status,
                   registrationStatus: registration,
                   providerMessage: message,
                 ),
-                202,
-              ),
+              }, 202),
             },
           ),
         );
@@ -255,6 +254,75 @@ void main() {
         await _shoot(tester, 'payment-$name-$suffix');
       });
     }
+
+    testWidgets('payments ($suffix)', skip: skip, (tester) async {
+      Map<String, dynamic> refund(String status) => {
+        'id': 'rf-$status',
+        'paymentId': 'p',
+        'entryId': 'e1',
+        'amountMinor': 10000,
+        'currency': 'KES',
+        'reasonCode': 'player_withdrawal',
+        'mandatory': false,
+        'playerNote': '',
+        'status': status,
+        'requestedAt': '2026-10-18T09:00:00Z',
+        'updatedAt': '2026-10-18T09:00:00Z',
+      };
+      await _pump(
+        tester,
+        brightness: brightness,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/payments': (_) => jsonResponse(
+              pageJson([
+                {
+                  ...paymentJson(
+                    id: 'p1',
+                    status: 'succeeded',
+                    registrationStatus: 'registered',
+                  ),
+                },
+                {
+                  ...paymentJson(
+                    id: 'p2',
+                    status: 'succeeded',
+                    registrationStatus: 'refund_pending',
+                  ),
+                  'refund': refund('processing'),
+                },
+                {
+                  ...paymentJson(
+                    id: 'p3',
+                    status: 'succeeded',
+                    registrationStatus: 'refunded',
+                  ),
+                  'refund': refund('succeeded'),
+                },
+                paymentJson(
+                  id: 'p4',
+                  status: 'failed',
+                  registrationStatus: 'not_registered',
+                  providerMessage: 'Request cancelled by user',
+                ),
+              ]),
+              200,
+            ),
+          },
+        ),
+      );
+      await openProfileFromHome(tester);
+      await Scrollable.ensureVisible(
+        tester.element(find.text('Payments')),
+        alignment: 0.5,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Payments'));
+      await _shoot(tester, 'payments-$suffix');
+      await tester.tap(find.text('Paid'));
+      await _shoot(tester, 'payment-receipt-$suffix');
+    });
 
     testWidgets('profile ($suffix)', skip: skip, (tester) async {
       await _pump(

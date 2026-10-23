@@ -78,13 +78,14 @@ void main() {
     expect(find.text('Check in to play'), findsOneWidget);
   });
 
-  testWidgets('a payment notification shows in full', (tester) async {
+  testWidgets('a payment notification opens Payments', (tester) async {
     final api = FakeApi(
       routes: {
         '/v1/me/notifications/n2/read': (_) => jsonResponse({
           'id': 'n2',
           'readAt': testNow.toIso8601String(),
         }, 200),
+        '/v1/me/payments': (_) => jsonResponse(pageJson([]), 200),
       },
     );
     await openInbox(tester, api: api);
@@ -92,9 +93,10 @@ void main() {
     await tester.tap(find.text('Payment received'));
     await tester.pumpAndSettle();
 
+    expect(find.widgetWithText(AppBar, 'Payments'), findsOneWidget);
     expect(
-      find.text('Ksh 100 for Mombasa Masters. Your place is confirmed.'),
-      findsNWidgets(2),
+      api.requests.where((r) => r.url.path == '/v1/me/notifications/n2/read'),
+      hasLength(1),
     );
   });
 

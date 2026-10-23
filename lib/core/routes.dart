@@ -53,6 +53,9 @@ abstract final class Routes {
   /// Requesting, finishing or cancelling the account's deletion.
   static const deleteAccount = '$profile/delete';
 
+  /// Every payment the player made, with its receipt.
+  static const myPayments = '$profile/payments';
+
   /// The competitions the player has entered.
   static const myEntries = '$profile/entries';
 

@@ -5,7 +5,7 @@ import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/widgets/widgets.dart';
 
-/// The player's competitions: what they've entered.
+/// The player's competitions: what they've entered, and what they paid.
 class EntriesSection extends StatelessWidget {
   const EntriesSection({super.key});
 
@@ -19,6 +19,11 @@ class EntriesSection extends StatelessWidget {
           icon: Icons.confirmation_number_outlined,
           label: l.entriesTitle,
           onTap: () => context.push(Routes.myEntries),
+        ),
+        SettingsRow(
+          icon: Icons.receipt_long_outlined,
+          label: l.paymentsTitle,
+          onTap: () => context.push(Routes.myPayments),
         ),
       ],
     );

@@ -26,6 +26,14 @@ abstract class Payment with _$Payment {
     /// by user".
     @JsonKey(name: 'providerResultDescription') String? providerMessage,
     @JsonKey(readValue: _refundReason) String? refundReason,
+
+    /// Where the refund stands, when there is one: `requested`, `approved`,
+    /// `processing`, `manual_review`, `succeeded`, `rejected` or `failed`.
+    @JsonKey(readValue: _refundStatus) String? refundStatus,
+
+    /// Looked up from the competition if an older API leaves it out.
+    String? competitionName,
+    DateTime? createdAt,
   }) = _Payment;
 
   factory Payment.fromJson(Map<String, dynamic> json) =>
@@ -41,9 +49,12 @@ abstract class Payment with _$Payment {
           registrationStatus == RegistrationOutcome.pending);
 }
 
-/// `refund.reason`, when there is a refund.
+/// `refund.reasonCode`, when there is a refund.
 Object? _refundReason(Map<dynamic, dynamic> json, String _) =>
-    (json['refund'] as Map?)?['reason'];
+    (json['refund'] as Map?)?['reasonCode'];
+
+Object? _refundStatus(Map<dynamic, dynamic> json, String _) =>
+    (json['refund'] as Map?)?['status'];
 
 @JsonEnum(fieldRename: FieldRename.snake)
 enum PaymentStatus {

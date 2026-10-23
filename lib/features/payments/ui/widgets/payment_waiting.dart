@@ -13,10 +13,14 @@ class PaymentWaiting extends StatelessWidget {
     required this.payment,
     required this.slow,
     required this.onCheckAgain,
+    this.stopped = false,
   });
 
   final Payment payment;
   final bool slow;
+
+  /// The app stopped reading it: no spinner, just Check again.
+  final bool stopped;
   final VoidCallback onCheckAgain;
 
   @override
@@ -46,18 +50,20 @@ class PaymentWaiting extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(color: p.subtleForeground),
           ),
-          const SizedBox(height: TonitsSpace.xl),
-          const LoadingState(height: 32),
-          const SizedBox(height: TonitsSpace.sm),
-          Text(
-            l.paymentWaiting,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 13, color: p.mutedForeground),
-          ),
+          if (!stopped) ...[
+            const SizedBox(height: TonitsSpace.xl),
+            const LoadingState(height: 32),
+            const SizedBox(height: TonitsSpace.sm),
+            Text(
+              l.paymentWaiting,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 13, color: p.mutedForeground),
+            ),
+          ],
           if (slow) ...[
             const SizedBox(height: TonitsSpace.xl),
             Text(
-              l.paymentSlow,
+              stopped ? l.paymentStopped : l.paymentSlow,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 13, color: p.subtleForeground),
             ),

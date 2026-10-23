@@ -526,10 +526,36 @@
   },
   "paymentWaiting": "Waiting for M-Pesa…",
   "paymentSlow": "Still waiting? M-Pesa can take a minute. You won't be charged twice.",
+  "paymentStopped": "Still no answer from M-Pesa. Check again in a bit. You won't be charged twice.",
+  "paymentMpesaUnavailable": "M-Pesa isn't available right now. Try again in a bit.",
+  "paymentPhoneRequired": "Add the M-Pesa number to pay from.",
+  "paymentNotAvailable": "This competition can't be paid with M-Pesa.",
   "paymentEntryFee": "Entry fee",
   "paymentMpesaNumber": "M-Pesa number",
   "paymentPhoneHelper": "A Safaricom number. You'll confirm with your PIN.",
   "paymentSendRequest": "Send payment request",
+  "paymentsTitle": "Payments",
+  "paymentsEmpty": "No payments yet",
+  "paymentsEmptyMessage": "Paid entries show up here.",
+  "paymentPaid": "Paid",
+  "paymentNotPaid": "Not paid",
+  "paymentWaitingShort": "Waiting",
+  "paymentReview": "Under review",
+  "paymentRefundPending": "Refund pending",
+  "paymentRefundedShort": "Refunded",
+  "paymentRefundDeclined": "Refund declined",
+  "paymentRefundDelayed": "Refund delayed",
+  "paymentRemoved": "Removed",
+  "paymentFromPhone": "From {phone}",
+  "@paymentFromPhone": {
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "+2547******78"
+      }
+    }
+  },
+  "paymentOpenCompetition": "Open competition",
   "appName": "Ozone",
   "@appName": {
     "description": "The app's name; do not translate."

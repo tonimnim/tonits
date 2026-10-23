@@ -37,6 +37,7 @@ class CheckoutState {
     this.payment,
     this.error,
     this.slow = false,
+    this.stopped = false,
   });
 
   final CheckoutPhase phase;
@@ -47,6 +48,9 @@ class CheckoutState {
 
   /// Waiting longer than [slowPaymentAfter].
   final bool slow;
+
+  /// Waited so long the app stopped reading it; the player checks again.
+  final bool stopped;
 }
 
 /// Pays a competition's entry fee with M-Pesa: sends the prompt, then reads
@@ -180,8 +184,17 @@ class CheckoutController extends Notifier<CheckoutState> {
     }
     // Anything else is a new decision next time, so it gets a new key.
     _idempotencyKey = null;
-    state = CheckoutState(error: describeError(e, _l10n));
+    state = CheckoutState(error: _describe(e));
   }
+
+  /// The payment refusals worth their own words; the rest as the app says
+  /// them everywhere.
+  String _describe(ApiException e) => switch (e.code) {
+    'mpesa_unavailable' => _l10n.paymentMpesaUnavailable,
+    'phone_required' => _l10n.paymentPhoneRequired,
+    'unsupported_fee' || 'payment_not_available' => _l10n.paymentNotAvailable,
+    _ => describeError(e, _l10n),
+  };
 
   void _track(Payment payment) {
     if (!payment.isSettling) {
@@ -199,10 +212,27 @@ class CheckoutController extends Notifier<CheckoutState> {
     }
   }
 
+  /// Reads the payment until it settles: often at first, less after a
+  /// few minutes, and not at all after [paymentPollLimitsProvider]'s stop,
+  /// so a payment stuck on the server doesn't drain the phone. The time is
+  /// what the loop waited, so it holds however the phone sleeps.
   Future<void> _poll(String paymentId, int generation, DateTime since) async {
     final interval = ref.read(paymentPollIntervalProvider);
+    final limits = ref.read(paymentPollLimitsProvider);
+    var waited = Duration.zero;
     while (true) {
-      await _sleep(interval);
+      if (waited >= limits.stopAfter) {
+        state = CheckoutState(
+          phase: CheckoutPhase.waiting,
+          payment: state.payment,
+          slow: true,
+          stopped: true,
+        );
+        return;
+      }
+      final delay = waited >= limits.slowAfter ? limits.slow : interval;
+      await _sleep(delay);
+      waited += delay;
       if (!ref.mounted || generation != _generation) return;
       try {
         final payment = await _payments.get(paymentId);
@@ -211,7 +241,9 @@ class CheckoutController extends Notifier<CheckoutState> {
         state = CheckoutState(
           phase: CheckoutPhase.waiting,
           payment: payment,
-          slow: DateTime.now().difference(since) > slowPaymentAfter,
+          slow:
+              waited > slowPaymentAfter ||
+              DateTime.now().difference(since) > slowPaymentAfter,
         );
       } on ApiException catch (e) {
         if (e.status == 404 || e.status == 400) {

@@ -1432,6 +1432,30 @@ abstract class AppLocalizations {
   /// **'Still waiting? M-Pesa can take a minute. You won\'t be charged twice.'**
   String get paymentSlow;
 
+  /// No description provided for @paymentStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Still no answer from M-Pesa. Check again in a bit. You won\'t be charged twice.'**
+  String get paymentStopped;
+
+  /// No description provided for @paymentMpesaUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'M-Pesa isn\'t available right now. Try again in a bit.'**
+  String get paymentMpesaUnavailable;
+
+  /// No description provided for @paymentPhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the M-Pesa number to pay from.'**
+  String get paymentPhoneRequired;
+
+  /// No description provided for @paymentNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This competition can\'t be paid with M-Pesa.'**
+  String get paymentNotAvailable;
+
   /// No description provided for @paymentEntryFee.
   ///
   /// In en, this message translates to:
@@ -1455,6 +1479,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send payment request'**
   String get paymentSendRequest;
+
+  /// No description provided for @paymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payments'**
+  String get paymentsTitle;
+
+  /// No description provided for @paymentsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments yet'**
+  String get paymentsEmpty;
+
+  /// No description provided for @paymentsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid entries show up here.'**
+  String get paymentsEmptyMessage;
+
+  /// No description provided for @paymentPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paymentPaid;
+
+  /// No description provided for @paymentNotPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Not paid'**
+  String get paymentNotPaid;
+
+  /// No description provided for @paymentWaitingShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get paymentWaitingShort;
+
+  /// No description provided for @paymentReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get paymentReview;
+
+  /// No description provided for @paymentRefundPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund pending'**
+  String get paymentRefundPending;
+
+  /// No description provided for @paymentRefundedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Refunded'**
+  String get paymentRefundedShort;
+
+  /// No description provided for @paymentRefundDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund declined'**
+  String get paymentRefundDeclined;
+
+  /// No description provided for @paymentRefundDelayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund delayed'**
+  String get paymentRefundDelayed;
+
+  /// No description provided for @paymentRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed'**
+  String get paymentRemoved;
+
+  /// No description provided for @paymentFromPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'From {phone}'**
+  String paymentFromPhone(String phone);
+
+  /// No description provided for @paymentOpenCompetition.
+  ///
+  /// In en, this message translates to:
+  /// **'Open competition'**
+  String get paymentOpenCompetition;
 
   /// The app's name; do not translate.
   ///

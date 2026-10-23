@@ -777,6 +777,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'Still waiting? M-Pesa can take a minute. You won\'t be charged twice.';
 
   @override
+  String get paymentStopped =>
+      'Still no answer from M-Pesa. Check again in a bit. You won\'t be charged twice.';
+
+  @override
+  String get paymentMpesaUnavailable =>
+      'M-Pesa isn\'t available right now. Try again in a bit.';
+
+  @override
+  String get paymentPhoneRequired => 'Add the M-Pesa number to pay from.';
+
+  @override
+  String get paymentNotAvailable =>
+      'This competition can\'t be paid with M-Pesa.';
+
+  @override
   String get paymentEntryFee => 'Entry fee';
 
   @override
@@ -788,6 +803,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentSendRequest => 'Send payment request';
+
+  @override
+  String get paymentsTitle => 'Payments';
+
+  @override
+  String get paymentsEmpty => 'No payments yet';
+
+  @override
+  String get paymentsEmptyMessage => 'Paid entries show up here.';
+
+  @override
+  String get paymentPaid => 'Paid';
+
+  @override
+  String get paymentNotPaid => 'Not paid';
+
+  @override
+  String get paymentWaitingShort => 'Waiting';
+
+  @override
+  String get paymentReview => 'Under review';
+
+  @override
+  String get paymentRefundPending => 'Refund pending';
+
+  @override
+  String get paymentRefundedShort => 'Refunded';
+
+  @override
+  String get paymentRefundDeclined => 'Refund declined';
+
+  @override
+  String get paymentRefundDelayed => 'Refund delayed';
+
+  @override
+  String get paymentRemoved => 'Removed';
+
+  @override
+  String paymentFromPhone(String phone) {
+    return 'From $phone';
+  }
+
+  @override
+  String get paymentOpenCompetition => 'Open competition';
 
   @override
   String get appName => 'Ozone';

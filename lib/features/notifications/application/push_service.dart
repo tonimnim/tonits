@@ -130,6 +130,7 @@ class PushService {
       OpenCompetition(:final competitionId) => Routes.competition(
         competitionId,
       ),
+      OpenPayments() => Routes.myPayments,
       ShowDetails() => Routes.notifications,
     };
     if (_ref.read(currentPlayerProvider) == null) {

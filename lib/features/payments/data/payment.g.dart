@@ -41,6 +41,16 @@ _Payment _$PaymentFromJson(Map<String, dynamic> json) => $checkedCreate(
         (v) => v as String?,
         readValue: _refundReason,
       ),
+      refundStatus: $checkedConvert(
+        'refundStatus',
+        (v) => v as String?,
+        readValue: _refundStatus,
+      ),
+      competitionName: $checkedConvert('competitionName', (v) => v as String?),
+      createdAt: $checkedConvert(
+        'createdAt',
+        (v) => v == null ? null : DateTime.parse(v as String),
+      ),
     );
     return val;
   },

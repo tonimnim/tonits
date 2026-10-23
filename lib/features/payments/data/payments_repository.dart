@@ -1,4 +1,5 @@
 import '../../../core/api/api_client.dart';
+import '../../../core/api/cursor_page.dart';
 import 'payment.dart';
 
 class PaymentsRepository {
@@ -26,6 +27,15 @@ class PaymentsRepository {
       auth: true,
     );
     return Payment.fromJson(json!);
+  }
+
+  /// The player's payments, newest first, each with its refund if any.
+  Future<CursorPage<Payment>> history({String? cursor}) async {
+    final json = await _api.get(
+      withQuery('/v1/me/payments', {'limit': 50, 'cursor': cursor}),
+      auth: true,
+    );
+    return CursorPage.fromJson(json!, Payment.fromJson);
   }
 
   Future<Payment> get(String paymentId) async {

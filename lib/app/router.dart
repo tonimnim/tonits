@@ -25,6 +25,7 @@ import '../features/notifications/ui/notification_settings_screen.dart';
 import '../features/notifications/ui/notifications_screen.dart';
 import '../features/onboarding/ui/onboarding_screen.dart';
 import '../features/payments/ui/checkout_screen.dart';
+import '../features/payments/ui/payments_screen.dart';
 import '../features/profile/ui/profile_screen.dart';
 import '../features/rankings/ui/rankings_screen.dart';
 import 'shell/app_shell.dart';
@@ -111,6 +112,7 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
         GoRoute(path: 'email', builder: (_, _) => const EmailScreen()),
         GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
         GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
+        GoRoute(path: 'payments', builder: (_, _) => const PaymentsScreen()),
         GoRoute(path: 'devices', builder: (_, _) => const DevicesScreen()),
         GoRoute(
           path: 'notifications',

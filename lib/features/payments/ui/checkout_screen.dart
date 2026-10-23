@@ -73,6 +73,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               CheckoutPhase.waiting => PaymentWaiting(
                 payment: checkout.payment!,
                 slow: checkout.slow,
+                stopped: checkout.stopped,
                 onCheckAgain: _controller.checkAgain,
               ),
               CheckoutPhase.settled => PaymentOutcome(
