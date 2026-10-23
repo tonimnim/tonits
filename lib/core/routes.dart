@@ -44,6 +44,9 @@ abstract final class Routes {
   static const email = '$profile/email';
   static const phone = '$profile/phone';
 
+  /// Which notifications the player gets.
+  static const notificationSettings = '$profile/notifications';
+
   /// The devices signed in to the account.
   static const devices = '$profile/devices';
 

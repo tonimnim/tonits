@@ -3,4 +3,6 @@
     <color name="ic_launcher_background">#5B5BD6</color>
     <!-- The app canvas, shown before Flutter draws. -->
     <color name="canvas">#F4F5FA</color>
+    <!-- Tints the notification icon and title on Android. -->
+    <color name="notification_accent">#5B5BD6</color>
 </resources>

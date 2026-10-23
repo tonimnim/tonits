@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api/api_client.dart';
@@ -19,3 +20,10 @@ final deviceNameProvider = Provider<String>(
     final platform => 'Ozone on ${platform.name}',
   },
 );
+
+/// The app's snack bars, for messages from outside any screen, such as a
+/// push that arrives while the app is open.
+final scaffoldMessengerKeyProvider =
+    Provider<GlobalKey<ScaffoldMessengerState>>(
+      (ref) => GlobalKey<ScaffoldMessengerState>(),
+    );

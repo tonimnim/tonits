@@ -189,6 +189,41 @@ void main() {
       expect(find.text('Play at'), findsOneWidget);
     });
 
+    testWidgets('notification settings fit at text scale $scale', (
+      tester,
+    ) async {
+      await pumpTonits(
+        tester,
+        size: small,
+        textScale: scale,
+        refreshToken: 'stored',
+        api: FakeApi(
+          routes: {
+            '/v1/me/notification-preferences': (_) => jsonResponse({
+              'competitionPush': true,
+              'matchPush': true,
+              'resultPush': true,
+              'competitionEmail': true,
+              'matchEmail': true,
+              'marketingEmail': false,
+              'updatedAt': testNow.toIso8601String(),
+            }, 200),
+          },
+        ),
+      );
+      await openProfileFromHome(tester);
+      await scrollPageTo(tester, find.text('Notifications'));
+      // Centred, clear of the bottom bar.
+      await Scrollable.ensureVisible(
+        tester.element(find.text('Notifications')),
+        alignment: 0.5,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Notifications'));
+      await tester.pumpAndSettle();
+      expect(find.text('News and offers'), findsOneWidget);
+    });
+
     testWidgets('every tab fits at text scale $scale', (tester) async {
       await pumpTonits(
         tester,

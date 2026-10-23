@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -9,6 +11,8 @@ import 'package:tonits/core/api/api_client.dart';
 import 'package:tonits/core/clock.dart';
 import 'package:tonits/core/providers.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
+import 'package:tonits/features/notifications/application/notifications_providers.dart';
+import 'package:tonits/features/notifications/application/push_messaging.dart';
 
 import 'fakes.dart';
 
@@ -121,6 +125,8 @@ Future<FakeApi> pumpTonits(
   Brightness brightness = Brightness.light,
   Widget Function(Widget app)? wrap,
   List<Override> overrides = const [],
+  FakePushMessaging? push,
+  PushStore? pushStore,
 }) async {
   final fake = api ?? FakeApi();
   tester.view.physicalSize = size;
@@ -140,6 +146,9 @@ Future<FakeApi> pumpTonits(
       ),
       // A fixed time, so countdowns don't keep the screen from settling.
       clockProvider.overrideWith((ref) => Stream.value(testNow)),
+      // No Firebase in tests; by default no token, so nothing registers.
+      pushMessagingProvider.overrideWithValue(push ?? FakePushMessaging()),
+      pushStoreProvider.overrideWithValue(pushStore ?? MemoryPushStore()),
       ...overrides,
     ],
     // Fail fast in tests instead of backing off and retrying.
@@ -191,3 +200,67 @@ http.Response Function(http.Request) rankingsRoute({
     'snapshotAt': '2026-10-09T00:00:00Z',
   }, 200);
 };
+
+/// A push channel tests drive: grant or refuse permission, hand out a
+/// token, and deliver pushes in the foreground or as taps.
+class FakePushMessaging implements PushMessaging {
+  FakePushMessaging({this.currentToken, this.allowed = true, this.launch});
+
+  String? currentToken;
+  bool allowed;
+
+  /// The push that launched the app, if any.
+  final PushMessage? launch;
+  final _refreshes = StreamController<String>.broadcast();
+  final _foreground = StreamController<PushMessage>.broadcast();
+  final _opened = StreamController<PushMessage>.broadcast();
+
+  @override
+  String get platform => 'android';
+
+  @override
+  Future<bool> requestPermission() async => allowed;
+
+  @override
+  Future<String?> token() async => currentToken;
+
+  @override
+  Stream<String> get tokenRefreshes => _refreshes.stream;
+
+  @override
+  Stream<PushMessage> get foreground => _foreground.stream;
+
+  @override
+  Stream<PushMessage> get opened => _opened.stream;
+
+  @override
+  Future<PushMessage?> initial() async => launch;
+
+  void refreshToken(String token) {
+    currentToken = token;
+    _refreshes.add(token);
+  }
+
+  void arrive(PushMessage message) => _foreground.add(message);
+
+  void tap(PushMessage message) => _opened.add(message);
+}
+
+class MemoryPushStore implements PushStore {
+  MemoryPushStore({this.device = 'device-1'});
+
+  final String device;
+  String? installation;
+
+  @override
+  Future<String> deviceId() async => device;
+
+  @override
+  Future<String?> installationId() async => installation;
+
+  @override
+  Future<void> writeInstallationId(String id) async => installation = id;
+
+  @override
+  Future<void> clearInstallationId() async => installation = null;
+}

@@ -1780,6 +1780,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifYesterday => 'Yesterday';
 
   @override
+  String get pushOpen => 'Open';
+
+  @override
+  String get notifSettings => 'Notifications';
+
+  @override
+  String get notifOnPhone => 'On your phone';
+
+  @override
+  String get notifByEmail => 'By email';
+
+  @override
+  String get notifMatches => 'Matches and chat';
+
+  @override
+  String get notifMatchesHint => 'Check-ins, opponents and messages';
+
+  @override
+  String get notifResults => 'Results';
+
+  @override
+  String get notifResultsHint => 'Scores to confirm and disputes';
+
+  @override
+  String get notifCompetitions => 'Competitions';
+
+  @override
+  String get notifCompetitionsHint => 'Draws and closing dates';
+
+  @override
+  String get notifEmailMatches => 'Matches';
+
+  @override
+  String get notifEmailCompetitions => 'Competitions';
+
+  @override
+  String get notifMarketing => 'News and offers';
+
+  @override
+  String get notifMarketingHint => 'Now and then. Off unless you turn it on.';
+
+  @override
+  String get profileSettingsTitle => 'Settings';
+
+  @override
   String get roomScheduled => 'Scheduled';
 
   @override

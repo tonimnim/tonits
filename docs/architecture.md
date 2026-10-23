@@ -135,6 +135,31 @@ pinned Flutter version.
 **Formatting.** `intl` formats dates and money in the device locale. Money
 arrives in minor units with a currency code (`entryFeeMinor` + `currency`).
 
+## Push notifications
+
+Firebase Cloud Messaging, through `firebase_messaging`, behind `PushMessaging`
+(tests use `FakePushMessaging`). `PushService` registers the device's FCM
+registration token with `POST /v1/me/push-tokens` after every sign-in and launch
+and when Firebase rotates it, and removes it with `DELETE /v1/me/push-tokens/{id}`
+before signing out. A tapped push marks its inbox item read and opens what it's
+about, the same way the inbox does (`NotificationTarget`); one that arrives while
+the app is open refreshes the badge and shows a bar with Open.
+
+The app keeps `getToken`/`onTokenRefresh` although firebase_messaging 17 deprecates
+them: the API sends with FCM HTTP v1 to registration tokens, and their replacements
+(`register`/`onRegistered`) return an installation id for FCM's direct send.
+
+Setup, per checkout (the files stay out of this public repo):
+
+- Android: download `google-services.json` for `com.ozone` from the Firebase
+  console (project `ozone-4ddee`) into `android/app/`.
+- iOS: not wired yet. It needs `GoogleService-Info.plist` in `ios/Runner/` and an
+  APNs key uploaded to Firebase; until then `pushMessagingProvider` gives iOS no
+  pushes.
+
+The status bar icon is `res/drawable/ic_stat_ozone.xml`, the mark as a white
+silhouette, tinted with `notification_accent`.
+
 ## Designing ahead of the API
 
 The app may be designed around data the API doesn't serve yet. Each such

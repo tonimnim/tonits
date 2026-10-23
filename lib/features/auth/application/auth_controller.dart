@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/providers.dart';
+import '../../notifications/application/notifications_providers.dart';
 import '../data/auth_repository.dart';
 import '../data/models.dart';
 import '../data/token_store.dart';
@@ -128,6 +129,8 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> signOut() async {
+    // While the session can still say so: no more pushes to this device.
+    await ref.read(pushServiceProvider).unregister();
     try {
       await _repository.logout();
     } on Exception {

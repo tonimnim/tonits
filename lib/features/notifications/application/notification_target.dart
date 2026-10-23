@@ -7,10 +7,30 @@ sealed class NotificationTarget {
   /// Picks the screen from the item's kind and ids, then its category, as
   /// the API asks; [actionUrl] is only a hint. Anything without a screen
   /// in the app yet (payments, refunds, conduct strikes) shows the item.
-  factory NotificationTarget.of(AppNotification n) {
-    final kind = n.kind;
-    final match = n.matchId;
-    final competition = n.competitionId;
+  factory NotificationTarget.of(AppNotification n) => NotificationTarget.from(
+    kind: n.kind,
+    matchId: n.matchId,
+    competitionId: n.competitionId,
+    category: n.category,
+  );
+
+  /// A push's target, from its data: the inbox item's kind and ids. With
+  /// nothing to go on, the inbox.
+  factory NotificationTarget.fromPush(Map<String, String> data) =>
+      NotificationTarget.from(
+        kind: data['kind'] ?? '',
+        matchId: data['matchId'],
+        competitionId: data['competitionId'],
+      );
+
+  factory NotificationTarget.from({
+    required String kind,
+    String? matchId,
+    String? competitionId,
+    NotificationCategory? category,
+  }) {
+    final match = matchId;
+    final competition = competitionId;
     if (kind == 'match.chat_message' && match != null) {
       return OpenMatchChat(match);
     }
@@ -26,7 +46,7 @@ sealed class NotificationTarget {
       return OpenCompetition(competition);
     }
     // Unknown or legacy kinds: by category and the ids there are.
-    return switch (n.category) {
+    return switch (category) {
       NotificationCategory.match ||
       NotificationCategory.result when match != null => OpenMatch(match),
       NotificationCategory.competition when competition != null =>

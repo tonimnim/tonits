@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Firebase app config, kept out of this public repo: download it from the
+# Firebase console (project ozone-4ddee) into android/app/ and ios/Runner/.
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist

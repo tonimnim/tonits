@@ -35,5 +35,21 @@
       }
     }
   },
-  "notifYesterday": "Yesterday"
+  "notifYesterday": "Yesterday",
+  "pushOpen": "Open",
+  "@pushOpen": {"description": "Action on the bar shown for a push that arrives while the app is open."},
+  "notifSettings": "Notifications",
+  "notifOnPhone": "On your phone",
+  "notifByEmail": "By email",
+  "notifMatches": "Matches and chat",
+  "notifMatchesHint": "Check-ins, opponents and messages",
+  "notifResults": "Results",
+  "notifResultsHint": "Scores to confirm and disputes",
+  "notifCompetitions": "Competitions",
+  "notifCompetitionsHint": "Draws and closing dates",
+  "notifEmailMatches": "Matches",
+  "notifEmailCompetitions": "Competitions",
+  "notifMarketing": "News and offers",
+  "notifMarketingHint": "Now and then. Off unless you turn it on.",
+  "profileSettingsTitle": "Settings"
 }

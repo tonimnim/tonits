@@ -21,6 +21,7 @@ import '../features/home/ui/home_screen.dart';
 import '../features/matches/ui/match_room_screen.dart';
 import '../features/matches/ui/matches_screen.dart';
 import '../features/matches/ui/report_score_screen.dart';
+import '../features/notifications/ui/notification_settings_screen.dart';
 import '../features/notifications/ui/notifications_screen.dart';
 import '../features/onboarding/ui/onboarding_screen.dart';
 import '../features/payments/ui/checkout_screen.dart';
@@ -111,6 +112,10 @@ List<RouteBase> _tabRoutes(AppTab tab) => switch (tab) {
         GoRoute(path: 'phone', builder: (_, _) => const PhoneScreen()),
         GoRoute(path: 'entries', builder: (_, _) => const MyEntriesScreen()),
         GoRoute(path: 'devices', builder: (_, _) => const DevicesScreen()),
+        GoRoute(
+          path: 'notifications',
+          builder: (_, _) => const NotificationSettingsScreen(),
+        ),
         GoRoute(path: 'delete', builder: (_, _) => const DeleteAccountScreen()),
       ],
     ),

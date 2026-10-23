@@ -8,8 +8,10 @@ import 'package:tonits/core/api/api_client.dart';
 import 'package:tonits/core/providers.dart';
 import 'package:tonits/features/auth/application/auth_controller.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
+import 'package:tonits/features/notifications/application/notifications_providers.dart';
 
 import 'support/fakes.dart';
+import 'support/harness.dart';
 
 typedef Handler = Future<http.Response> Function(http.Request request);
 
@@ -34,6 +36,8 @@ class Auth {
         tokenStoreProvider.overrideWithValue(store),
         googleIdentityProvider.overrideWithValue(this.google),
         appleIdentityProvider.overrideWithValue(this.apple),
+        pushMessagingProvider.overrideWithValue(FakePushMessaging()),
+        pushStoreProvider.overrideWithValue(MemoryPushStore()),
       ],
     );
     addTearDown(container.dispose);

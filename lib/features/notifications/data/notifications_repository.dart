@@ -1,6 +1,7 @@
 import '../../../core/api/api_client.dart';
 import '../../../core/api/cursor_page.dart';
 import 'app_notification.dart';
+import 'notification_preferences.dart';
 
 /// The signed-in player's notification inbox.
 class NotificationsRepository {
@@ -41,4 +42,26 @@ class NotificationsRepository {
   }
 
   Future<void> markAllRead() => _api.post('$_path/read-all', auth: true);
+
+  Future<NotificationPreferences> preferences() async {
+    final json = await _api.get('/v1/me/notification-preferences', auth: true);
+    return NotificationPreferences.fromJson(_unwrap(json!));
+  }
+
+  /// Turns one channel on or off and returns them all as saved.
+  Future<NotificationPreferences> setPreference(
+    NotificationChannel channel, {
+    required bool on,
+  }) async {
+    final json = await _api.send(
+      'PATCH',
+      '/v1/me/notification-preferences',
+      body: {channel.name: on},
+      auth: true,
+    );
+    return NotificationPreferences.fromJson(_unwrap(json!));
+  }
+
+  static Map<String, dynamic> _unwrap(Map<String, dynamic> json) =>
+      (json['data'] as Map<String, dynamic>?) ?? json;
 }

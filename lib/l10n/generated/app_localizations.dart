@@ -3028,6 +3028,96 @@ abstract class AppLocalizations {
   /// **'Yesterday'**
   String get notifYesterday;
 
+  /// Action on the bar shown for a push that arrives while the app is open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get pushOpen;
+
+  /// No description provided for @notifSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifSettings;
+
+  /// No description provided for @notifOnPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'On your phone'**
+  String get notifOnPhone;
+
+  /// No description provided for @notifByEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'By email'**
+  String get notifByEmail;
+
+  /// No description provided for @notifMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches and chat'**
+  String get notifMatches;
+
+  /// No description provided for @notifMatchesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-ins, opponents and messages'**
+  String get notifMatchesHint;
+
+  /// No description provided for @notifResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get notifResults;
+
+  /// No description provided for @notifResultsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Scores to confirm and disputes'**
+  String get notifResultsHint;
+
+  /// No description provided for @notifCompetitions.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitions'**
+  String get notifCompetitions;
+
+  /// No description provided for @notifCompetitionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Draws and closing dates'**
+  String get notifCompetitionsHint;
+
+  /// No description provided for @notifEmailMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get notifEmailMatches;
+
+  /// No description provided for @notifEmailCompetitions.
+  ///
+  /// In en, this message translates to:
+  /// **'Competitions'**
+  String get notifEmailCompetitions;
+
+  /// No description provided for @notifMarketing.
+  ///
+  /// In en, this message translates to:
+  /// **'News and offers'**
+  String get notifMarketing;
+
+  /// No description provided for @notifMarketingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Now and then. Off unless you turn it on.'**
+  String get notifMarketingHint;
+
+  /// No description provided for @profileSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get profileSettingsTitle;
+
   /// No description provided for @roomScheduled.
   ///
   /// In en, this message translates to:
