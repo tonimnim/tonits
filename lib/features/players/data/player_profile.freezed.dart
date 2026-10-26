@@ -594,7 +594,8 @@ as int,
 /// @nodoc
 mixin _$GameRating {
 
- String get gameId; int get rating;/// Null while provisional.
+ String get gameId; int get rating;/// The rating's named band. Null from servers from before levels.
+@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? get level;/// Null while provisional.
  int? get globalRank; int? get countryRank;/// Places gained (positive) or lost since the previous snapshot.
  int? get rankMovement;
 /// Create a copy of GameRating
@@ -608,20 +609,20 @@ $GameRatingCopyWith<GameRating> get copyWith => _$GameRatingCopyWithImpl<GameRat
 @override
 bool operator ==(Object other) {
   final _this = this as GameRating;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameRating&&(identical(other.gameId, _this.gameId) || other.gameId == _this.gameId)&&(identical(other.rating, _this.rating) || other.rating == _this.rating)&&(identical(other.globalRank, _this.globalRank) || other.globalRank == _this.globalRank)&&(identical(other.countryRank, _this.countryRank) || other.countryRank == _this.countryRank)&&(identical(other.rankMovement, _this.rankMovement) || other.rankMovement == _this.rankMovement));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameRating&&(identical(other.gameId, _this.gameId) || other.gameId == _this.gameId)&&(identical(other.rating, _this.rating) || other.rating == _this.rating)&&(identical(other.level, _this.level) || other.level == _this.level)&&(identical(other.globalRank, _this.globalRank) || other.globalRank == _this.globalRank)&&(identical(other.countryRank, _this.countryRank) || other.countryRank == _this.countryRank)&&(identical(other.rankMovement, _this.rankMovement) || other.rankMovement == _this.rankMovement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as GameRating;
-  return Object.hash(runtimeType,_this.gameId,_this.rating,_this.globalRank,_this.countryRank,_this.rankMovement);
+  return Object.hash(runtimeType,_this.gameId,_this.rating,_this.level,_this.globalRank,_this.countryRank,_this.rankMovement);
 }
 
 @override
 String toString() {
   final _this = this as GameRating;
-  return 'GameRating(gameId: ${_this.gameId}, rating: ${_this.rating}, globalRank: ${_this.globalRank}, countryRank: ${_this.countryRank}, rankMovement: ${_this.rankMovement})';
+  return 'GameRating(gameId: ${_this.gameId}, rating: ${_this.rating}, level: ${_this.level}, globalRank: ${_this.globalRank}, countryRank: ${_this.countryRank}, rankMovement: ${_this.rankMovement})';
 }
 
 
@@ -632,7 +633,7 @@ abstract mixin class $GameRatingCopyWith<$Res>  {
   factory $GameRatingCopyWith(GameRating value, $Res Function(GameRating) _then) = _$GameRatingCopyWithImpl;
 @useResult
 $Res call({
- String gameId, int rating, int? globalRank, int? countryRank, int? rankMovement
+ String gameId, int rating,@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? level, int? globalRank, int? countryRank, int? rankMovement
 });
 
 
@@ -649,11 +650,12 @@ class _$GameRatingCopyWithImpl<$Res>
 
 /// Create a copy of GameRating
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? gameId = null,Object? rating = null,Object? globalRank = freezed,Object? countryRank = freezed,Object? rankMovement = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? gameId = null,Object? rating = null,Object? level = freezed,Object? globalRank = freezed,Object? countryRank = freezed,Object? rankMovement = freezed,}) {
   return _then(GameRating(
 gameId: null == gameId ? _self.gameId : gameId // ignore: cast_nullable_to_non_nullable
 as String,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int,globalRank: freezed == globalRank ? _self.globalRank : globalRank // ignore: cast_nullable_to_non_nullable
+as int,level: freezed == level ? _self.level : level // ignore: cast_nullable_to_non_nullable
+as RatingLevel?,globalRank: freezed == globalRank ? _self.globalRank : globalRank // ignore: cast_nullable_to_non_nullable
 as int?,countryRank: freezed == countryRank ? _self.countryRank : countryRank // ignore: cast_nullable_to_non_nullable
 as int?,rankMovement: freezed == rankMovement ? _self.rankMovement : rankMovement // ignore: cast_nullable_to_non_nullable
 as int?,
@@ -741,10 +743,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String gameId,  int rating,  int? globalRank,  int? countryRank,  int? rankMovement)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String gameId,  int rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int? globalRank,  int? countryRank,  int? rankMovement)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameRating() when $default != null:
-return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
+return $default(_that.gameId,_that.rating,_that.level,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
   return orElse();
 
 }
@@ -762,10 +764,10 @@ return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String gameId,  int rating,  int? globalRank,  int? countryRank,  int? rankMovement)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String gameId,  int rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int? globalRank,  int? countryRank,  int? rankMovement)  $default,) {final _that = this;
 switch (_that) {
 case _GameRating():
-return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
+return $default(_that.gameId,_that.rating,_that.level,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -782,10 +784,10 @@ return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String gameId,  int rating,  int? globalRank,  int? countryRank,  int? rankMovement)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String gameId,  int rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int? globalRank,  int? countryRank,  int? rankMovement)?  $default,) {final _that = this;
 switch (_that) {
 case _GameRating() when $default != null:
-return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
+return $default(_that.gameId,_that.rating,_that.level,_that.globalRank,_that.countryRank,_that.rankMovement);case _:
   return null;
 
 }
@@ -797,11 +799,13 @@ return $default(_that.gameId,_that.rating,_that.globalRank,_that.countryRank,_th
 @JsonSerializable(createToJson: false)
 
 class _GameRating implements GameRating {
-  const _GameRating({required this.gameId, required this.rating, this.globalRank, this.countryRank, this.rankMovement});
+  const _GameRating({required this.gameId, required this.rating, @JsonKey(unknownEnumValue: RatingLevel.unknown) this.level, this.globalRank, this.countryRank, this.rankMovement});
   factory _GameRating.fromJson(Map<String, dynamic> json) => _$GameRatingFromJson(json);
 
 @override final  String gameId;
 @override final  int rating;
+/// The rating's named band. Null from servers from before levels.
+@override@JsonKey(unknownEnumValue: RatingLevel.unknown) final  RatingLevel? level;
 /// Null while provisional.
 @override final  int? globalRank;
 @override final  int? countryRank;
@@ -818,18 +822,18 @@ _$GameRatingCopyWith<_GameRating> get copyWith => __$GameRatingCopyWithImpl<_Gam
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameRating&&(identical(other.gameId, gameId) || other.gameId == gameId)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.globalRank, globalRank) || other.globalRank == globalRank)&&(identical(other.countryRank, countryRank) || other.countryRank == countryRank)&&(identical(other.rankMovement, rankMovement) || other.rankMovement == rankMovement));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameRating&&(identical(other.gameId, gameId) || other.gameId == gameId)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.level, level) || other.level == level)&&(identical(other.globalRank, globalRank) || other.globalRank == globalRank)&&(identical(other.countryRank, countryRank) || other.countryRank == countryRank)&&(identical(other.rankMovement, rankMovement) || other.rankMovement == rankMovement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,gameId,rating,globalRank,countryRank,rankMovement);
+    return Object.hash(runtimeType,gameId,rating,level,globalRank,countryRank,rankMovement);
 }
 
 @override
 String toString() {
-    return 'GameRating(gameId: $gameId, rating: $rating, globalRank: $globalRank, countryRank: $countryRank, rankMovement: $rankMovement)';
+    return 'GameRating(gameId: $gameId, rating: $rating, level: $level, globalRank: $globalRank, countryRank: $countryRank, rankMovement: $rankMovement)';
 }
 
 
@@ -840,7 +844,7 @@ abstract mixin class _$GameRatingCopyWith<$Res> implements $GameRatingCopyWith<$
   factory _$GameRatingCopyWith(_GameRating value, $Res Function(_GameRating) _then) = __$GameRatingCopyWithImpl;
 @override @useResult
 $Res call({
- String gameId, int rating, int? globalRank, int? countryRank, int? rankMovement
+ String gameId, int rating,@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? level, int? globalRank, int? countryRank, int? rankMovement
 });
 
 
@@ -857,11 +861,12 @@ class __$GameRatingCopyWithImpl<$Res>
 
 /// Create a copy of GameRating
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? gameId = null,Object? rating = null,Object? globalRank = freezed,Object? countryRank = freezed,Object? rankMovement = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? gameId = null,Object? rating = null,Object? level = freezed,Object? globalRank = freezed,Object? countryRank = freezed,Object? rankMovement = freezed,}) {
   return _then(_GameRating(
 gameId: null == gameId ? _self.gameId : gameId // ignore: cast_nullable_to_non_nullable
 as String,rating: null == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int,globalRank: freezed == globalRank ? _self.globalRank : globalRank // ignore: cast_nullable_to_non_nullable
+as int,level: freezed == level ? _self.level : level // ignore: cast_nullable_to_non_nullable
+as RatingLevel?,globalRank: freezed == globalRank ? _self.globalRank : globalRank // ignore: cast_nullable_to_non_nullable
 as int?,countryRank: freezed == countryRank ? _self.countryRank : countryRank // ignore: cast_nullable_to_non_nullable
 as int?,rankMovement: freezed == rankMovement ? _self.rankMovement : rankMovement // ignore: cast_nullable_to_non_nullable
 as int?,

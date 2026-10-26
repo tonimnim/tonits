@@ -4,11 +4,12 @@ import '../../../../core/countries.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../players/ui/widgets/rating_level_label.dart';
 import '../../data/ranked_player.dart';
 
-/// One ladder row: rank, player, rating and movement, straight on the page
-/// (lists put hairlines between rows). The signed-in player's own row is
-/// tinted so they can spot it.
+/// One ladder row: rank, player with their level, rating and movement,
+/// straight on the page (lists put hairlines between rows). The signed-in
+/// player's own row is tinted so they can spot it.
 class RankingRow extends StatelessWidget {
   const RankingRow({super.key, required this.player, this.isMe = false});
 
@@ -19,6 +20,7 @@ class RankingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final flag = Country.byCode(player.countryCode)?.flag ?? '';
+    final level = player.level?.label(context.l10n);
     return MergeSemantics(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -56,7 +58,7 @@ class RankingRow extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    '$flag @${player.handle}'.trim(),
+                    ['$flag @${player.handle}'.trim(), ?level].join(' · '),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 12, color: p.mutedForeground),

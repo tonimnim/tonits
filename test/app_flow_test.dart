@@ -182,7 +182,34 @@ void main() {
   });
 
   testWidgets('a new player gets the same card at zero, from the starting '
-      'rating', (tester) async {
+      'rating and its level', (tester) async {
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/players/$myPlayerId': (_) =>
+              jsonResponse(newPlayerProfileJson(), 200),
+          '/v1/players/$myPlayerId/matches': (_) =>
+              jsonResponse(pageJson([]), 200),
+          '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),
+        },
+      ),
+    );
+
+    expect(find.text('1,500'), findsOneWidget);
+    expect(find.text('Amateur'), findsOneWidget);
+    expect(find.text('New'), findsOneWidget);
+    // No matches and no wins yet, and no place on the ladder.
+    expect(find.text('0'), findsNWidgets(2));
+    expect(find.bySemanticsLabel(RegExp('^Unranked')), findsOneWidget);
+    expect(find.text('Kenya rank'), findsOneWidget);
+    expect(find.text('Open now'), findsOneWidget);
+    expect(find.text('Recent matches'), findsNothing);
+  });
+
+  testWidgets('from a server before levels, a new player still starts at '
+      '1,500, without a level', (tester) async {
     await pumpTonits(
       tester,
       refreshToken: 'stored',
@@ -201,12 +228,7 @@ void main() {
 
     expect(find.text('1,500'), findsOneWidget);
     expect(find.text('New'), findsOneWidget);
-    // No matches and no wins yet, and no place on the ladder.
-    expect(find.text('0'), findsNWidgets(2));
-    expect(find.bySemanticsLabel(RegExp('^Unranked')), findsOneWidget);
-    expect(find.text('Kenya rank'), findsOneWidget);
-    expect(find.text('Open now'), findsOneWidget);
-    expect(find.text('Recent matches'), findsNothing);
+    expect(find.text('Amateur'), findsNothing);
   });
 
   testWidgets('the rating card carries matches, wins and the country rank', (
@@ -215,6 +237,7 @@ void main() {
     await pumpTonits(tester, refreshToken: 'stored');
 
     expect(find.text('1,542'), findsOneWidget);
+    expect(find.text('Amateur'), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('Up 3 places')), findsOneWidget);
     expect(find.text('21'), findsOneWidget);
     expect(find.text('13'), findsOneWidget);
@@ -269,6 +292,8 @@ void main() {
     await openTab(tester, 'Rankings');
     expect(find.text('Lake Striker'), findsOneWidget);
     expect(find.text('striker.9 (you)'), findsOneWidget);
+    // Each player's level follows their handle.
+    expect(find.textContaining('@lake.striker · Amateur'), findsOneWidget);
 
     await openTab(tester, 'Home');
     expect(find.text('1,542'), findsOneWidget);

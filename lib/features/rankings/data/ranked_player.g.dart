@@ -16,8 +16,26 @@ _RankedPlayer _$RankedPlayerFromJson(
     displayName: $checkedConvert('displayName', (v) => v as String),
     countryCode: $checkedConvert('countryCode', (v) => v as String),
     rating: $checkedConvert('rating', (v) => (v as num?)?.toInt()),
+    level: $checkedConvert(
+      'level',
+      (v) => $enumDecodeNullable(
+        _$RatingLevelEnumMap,
+        v,
+        unknownValue: RatingLevel.unknown,
+      ),
+    ),
     matchesPlayed: $checkedConvert('matchesPlayed', (v) => (v as num).toInt()),
     rankMovement: $checkedConvert('rankMovement', (v) => (v as num?)?.toInt()),
   );
   return val;
 });
+
+const _$RatingLevelEnumMap = {
+  RatingLevel.beginner: 'beginner',
+  RatingLevel.amateur: 'amateur',
+  RatingLevel.semiPro: 'semi_pro',
+  RatingLevel.professional: 'professional',
+  RatingLevel.worldClass: 'world_class',
+  RatingLevel.legend: 'legend',
+  RatingLevel.unknown: 'unknown',
+};

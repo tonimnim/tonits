@@ -52,9 +52,27 @@ _GameRating _$GameRatingFromJson(
   final val = _GameRating(
     gameId: $checkedConvert('gameId', (v) => v as String),
     rating: $checkedConvert('rating', (v) => (v as num).toInt()),
+    level: $checkedConvert(
+      'level',
+      (v) => $enumDecodeNullable(
+        _$RatingLevelEnumMap,
+        v,
+        unknownValue: RatingLevel.unknown,
+      ),
+    ),
     globalRank: $checkedConvert('globalRank', (v) => (v as num?)?.toInt()),
     countryRank: $checkedConvert('countryRank', (v) => (v as num?)?.toInt()),
     rankMovement: $checkedConvert('rankMovement', (v) => (v as num?)?.toInt()),
   );
   return val;
 });
+
+const _$RatingLevelEnumMap = {
+  RatingLevel.beginner: 'beginner',
+  RatingLevel.amateur: 'amateur',
+  RatingLevel.semiPro: 'semi_pro',
+  RatingLevel.professional: 'professional',
+  RatingLevel.worldClass: 'world_class',
+  RatingLevel.legend: 'legend',
+  RatingLevel.unknown: 'unknown',
+};

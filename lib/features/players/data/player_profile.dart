@@ -23,11 +23,13 @@ abstract class PlayerProfile with _$PlayerProfile {
 
   static const gameId = 'efootball-mobile';
 
-  /// The rating every player starts from. The server creates it with their
-  /// first confirmed result; until then the profile has no rating.
+  /// The rating every player starts from. The server lists a new player's
+  /// rating at it; servers from before levels leave the rating out until
+  /// the first confirmed result.
   static const startingRating = 1500;
 
-  /// Null until the player has a rating for eFootball.
+  /// The player's eFootball rating. Null only from servers from before
+  /// levels, for a player who hasn't played.
   GameRating? get rating =>
       ratings.where((r) => r.gameId == gameId).firstOrNull;
 
@@ -59,6 +61,9 @@ abstract class GameRating with _$GameRating {
     required String gameId,
     required int rating,
 
+    /// The rating's named band. Null from servers from before levels.
+    @JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? level,
+
     /// Null while provisional.
     int? globalRank,
     int? countryRank,
@@ -69,4 +74,20 @@ abstract class GameRating with _$GameRating {
 
   factory GameRating.fromJson(Map<String, dynamic> json) =>
       _$GameRatingFromJson(json);
+}
+
+/// A rating's named band (`RatingLevel`), worked out by the server from the
+/// rating, so its bands can change without the app. New players start in
+/// [amateur].
+@JsonEnum(fieldRename: FieldRename.snake)
+enum RatingLevel {
+  beginner,
+  amateur,
+  semiPro,
+  professional,
+  worldClass,
+  legend,
+
+  /// One added after this build.
+  unknown,
 }

@@ -1392,6 +1392,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playerResultLossLetter => 'L';
 
   @override
+  String get playerLevelBeginner => 'Beginner';
+
+  @override
+  String get playerLevelAmateur => 'Amateur';
+
+  @override
+  String get playerLevelSemiPro => 'Semi-Pro';
+
+  @override
+  String get playerLevelProfessional => 'Professional';
+
+  @override
+  String get playerLevelWorldClass => 'World Class';
+
+  @override
+  String get playerLevelLegend => 'Legend';
+
+  @override
   String get rankingsGlobal => 'Global';
 
   @override

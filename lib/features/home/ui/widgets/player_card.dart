@@ -7,12 +7,13 @@ import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
 import '../../../players/application/players_providers.dart';
 import '../../../players/data/player_profile.dart';
+import '../../../players/ui/widgets/rating_level_label.dart';
 import 'section_message_card.dart';
 
-/// The hero: the player's rating, with their matches, wins and place on
-/// their country's ladder under it. A new player gets the same card at
-/// zero, from the rating everyone starts at, so nothing moves as their
-/// numbers fill in.
+/// The hero: the player's rating and its level, with their matches, wins
+/// and place on their country's ladder under it. A new player gets the
+/// same card at zero, from the rating everyone starts at, so nothing moves
+/// as their numbers fill in.
 class PlayerCard extends ConsumerWidget {
   const PlayerCard({super.key});
 
@@ -61,9 +62,10 @@ class _Numbers extends StatelessWidget {
   Widget build(BuildContext context) {
     final on = context.palette.onPrimary;
     final l = context.l10n;
-    // No rating until the first confirmed result.
-    final rating = profile.hasPlayed ? profile.rating : null;
+    final rating = profile.rating;
+    // Servers from before levels leave a new player's rating out.
     final value = rating?.rating ?? PlayerProfile.startingRating;
+    final level = rating?.level?.label(l);
     final movement = rating?.rankMovement ?? 0;
     final rank = rating?.countryRank;
     final country =
@@ -83,7 +85,7 @@ class _Numbers extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            if (rating == null)
+            if (!profile.hasPlayed)
               _Tag(child: Text(l.homeNewPlayer))
             else if (movement != 0)
               _Movement(places: movement),
@@ -104,6 +106,17 @@ class _Numbers extends StatelessWidget {
             ),
           ),
         ),
+        if (level != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            level,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: on.withValues(alpha: 0.85),
+            ),
+          ),
+        ],
         const SizedBox(height: 24),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -93,23 +93,46 @@ void main() {
     );
   });
 
-  test('a provisional ranked player has no rank or rating', () {
+  test('a provisional ranked player has no rank, rating or level', () {
     final p = RankedPlayer.fromJson({
       ...rankedJson(1, 'New Player'),
       'rank': null,
       'rating': null,
+      'level': null,
       'rankMovement': null,
     });
     expect(p.rank, isNull);
     expect(p.rating, isNull);
+    expect(p.level, isNull);
+    expect(
+      RankedPlayer.fromJson(rankedJson(2, 'Top', level: 'semi_pro')).level,
+      RatingLevel.semiPro,
+    );
   });
 
-  test('a profile reads the eFootball rating and record', () {
+  test('a profile reads the eFootball rating, its level and the record', () {
     final p = PlayerProfile.fromJson(profileJson());
     expect(p.rating!.rating, 1542);
+    expect(p.rating!.level, RatingLevel.amateur);
     expect(p.rating!.countryRank, 24);
     expect(p.record.winRate, closeTo(13 / 21, 1e-9));
     expect(PlayerProfile.fromJson(profileJson(rated: false)).rating, isNull);
+    // Listed at the starting rating before any match.
+    final fresh = PlayerProfile.fromJson(newPlayerProfileJson());
+    expect(fresh.rating!.rating, PlayerProfile.startingRating);
+    expect(fresh.hasPlayed, isFalse);
+  });
+
+  test('a level added after this build reads as unknown, not an error', () {
+    GameRating rating(Map<String, dynamic> extra) => GameRating.fromJson({
+      'gameId': 'efootball-mobile',
+      'rating': 2500,
+      ...extra,
+    });
+    expect(rating({'level': 'world_class'}).level, RatingLevel.worldClass);
+    expect(rating({'level': 'hall_of_fame'}).level, RatingLevel.unknown);
+    // Servers from before levels send none.
+    expect(rating({}).level, isNull);
   });
 
   test('an open competition past its deadline reads as ended', () {

@@ -2422,6 +2422,42 @@ abstract class AppLocalizations {
   /// **'L'**
   String get playerResultLossLetter;
 
+  /// A rating level. The levels, lowest first: Beginner, Amateur, Semi-Pro, Professional, World Class, Legend.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get playerLevelBeginner;
+
+  /// No description provided for @playerLevelAmateur.
+  ///
+  /// In en, this message translates to:
+  /// **'Amateur'**
+  String get playerLevelAmateur;
+
+  /// No description provided for @playerLevelSemiPro.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-Pro'**
+  String get playerLevelSemiPro;
+
+  /// No description provided for @playerLevelProfessional.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional'**
+  String get playerLevelProfessional;
+
+  /// No description provided for @playerLevelWorldClass.
+  ///
+  /// In en, this message translates to:
+  /// **'World Class'**
+  String get playerLevelWorldClass;
+
+  /// No description provided for @playerLevelLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Legend'**
+  String get playerLevelLegend;
+
   /// No description provided for @rankingsGlobal.
   ///
   /// In en, this message translates to:

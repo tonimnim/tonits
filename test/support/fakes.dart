@@ -187,7 +187,12 @@ Map<String, dynamic> matchJson({
       : <String>[],
 };
 
-Map<String, dynamic> rankedJson(int rank, String name, {int rating = 1500}) => {
+Map<String, dynamic> rankedJson(
+  int rank,
+  String name, {
+  int rating = 1500,
+  String level = 'amateur',
+}) => {
   'rank': rank,
   'playerId': 'p$rank',
   'handle': name.toLowerCase().replaceAll(' ', '.'),
@@ -195,6 +200,7 @@ Map<String, dynamic> rankedJson(int rank, String name, {int rating = 1500}) => {
   'avatarUrl': null,
   'countryCode': 'KE',
   'rating': rating,
+  'level': level,
   'matchesPlayed': 12,
   'rankMovement': rank.isEven ? 2 : -1,
 };
@@ -206,6 +212,9 @@ Map<String, dynamic> pageJson(List<Map<String, dynamic>> items) => {
 
 const myPlayerId = '6f1c2c55-0d3e-4b9b-9a55-0c0b8a3e1d11';
 
+/// The signed-in player's profile. [rated] false leaves the rating out, as
+/// servers from before levels did for a player who hasn't played; see
+/// [newPlayerProfileJson] for how the server lists them now.
 Map<String, dynamic> profileJson({
   int wins = 13,
   int draws = 3,
@@ -229,6 +238,7 @@ Map<String, dynamic> profileJson({
       {
         'gameId': 'efootball-mobile',
         'rating': 1542,
+        'level': 'amateur',
         'matchesPlayed': wins + draws + losses,
         'wins': wins,
         'draws': draws,
@@ -240,6 +250,27 @@ Map<String, dynamic> profileJson({
       },
   ],
   'gameAccounts': <Object>[],
+};
+
+/// A player with no rated match, as the server lists them: at the starting
+/// rating and its level, with no ranks.
+Map<String, dynamic> newPlayerProfileJson() => {
+  ...profileJson(wins: 0, draws: 0, losses: 0, rated: false),
+  'ratings': [
+    {
+      'gameId': 'efootball-mobile',
+      'rating': 1500,
+      'level': 'amateur',
+      'matchesPlayed': 0,
+      'wins': 0,
+      'draws': 0,
+      'losses': 0,
+      'globalRank': null,
+      'countryRank': null,
+      'rankMovement': null,
+      'lastMatchAt': null,
+    },
+  ],
 };
 
 Map<String, dynamic> playedJson(

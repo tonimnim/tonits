@@ -32,6 +32,16 @@ A best of 3 or 5 is reported as games won (`homeScore`/`awayScore`, such as
 2–1), with no per-game scores. Screenshots of every game are sent only after
 the opponent rejects the result.
 
+## 5. Starting rating and levels (done)
+
+Every rating carries a `level` (`RatingLevel`: `beginner`, `amateur`,
+`semi_pro`, `professional`, `world_class`, `legend`), worked out from the
+rating by the server, so the bands can change without an app release. A
+profile lists a player with no rated match at 1500, `amateur`, with no
+ranks. The app shows the level under the rating on Home and after the
+handle on each ladder row. It reads a level it doesn't know as none, and
+against an older server still shows a new player 1,500, without a level.
+
 ## Also noted
 
 - The legal documents link to `tonits.com`, and player-facing API text says

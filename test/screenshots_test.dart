@@ -961,10 +961,8 @@ void main() {
         refreshToken: 'stored',
         api: FakeApi(
           routes: {
-            '/v1/players/$myPlayerId': (_) => jsonResponse(
-              profileJson(wins: 0, draws: 0, losses: 0, rated: false),
-              200,
-            ),
+            '/v1/players/$myPlayerId': (_) =>
+                jsonResponse(newPlayerProfileJson(), 200),
             '/v1/players/$myPlayerId/matches': (_) =>
                 jsonResponse(pageJson([]), 200),
             '/v1/me/matches': (_) => jsonResponse(pageJson([]), 200),

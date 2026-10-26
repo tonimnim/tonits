@@ -17,7 +17,9 @@ T _$identity<T>(T value) => value;
 mixin _$RankedPlayer {
 
  String get playerId;/// Null while the player is still provisional.
- int? get rank; String get handle; String get displayName; String get countryCode; int? get rating; int get matchesPlayed;/// Places gained (positive) or lost since the previous snapshot.
+ int? get rank; String get handle; String get displayName; String get countryCode; int? get rating;/// The rating's named band; null when [rating] is, and from servers
+/// from before levels.
+@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? get level; int get matchesPlayed;/// Places gained (positive) or lost since the previous snapshot.
  int? get rankMovement;
 /// Create a copy of RankedPlayer
 /// with the given fields replaced by the non-null parameter values.
@@ -30,20 +32,20 @@ $RankedPlayerCopyWith<RankedPlayer> get copyWith => _$RankedPlayerCopyWithImpl<R
 @override
 bool operator ==(Object other) {
   final _this = this as RankedPlayer;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RankedPlayer&&(identical(other.playerId, _this.playerId) || other.playerId == _this.playerId)&&(identical(other.rank, _this.rank) || other.rank == _this.rank)&&(identical(other.handle, _this.handle) || other.handle == _this.handle)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.rating, _this.rating) || other.rating == _this.rating)&&(identical(other.matchesPlayed, _this.matchesPlayed) || other.matchesPlayed == _this.matchesPlayed)&&(identical(other.rankMovement, _this.rankMovement) || other.rankMovement == _this.rankMovement));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RankedPlayer&&(identical(other.playerId, _this.playerId) || other.playerId == _this.playerId)&&(identical(other.rank, _this.rank) || other.rank == _this.rank)&&(identical(other.handle, _this.handle) || other.handle == _this.handle)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.rating, _this.rating) || other.rating == _this.rating)&&(identical(other.level, _this.level) || other.level == _this.level)&&(identical(other.matchesPlayed, _this.matchesPlayed) || other.matchesPlayed == _this.matchesPlayed)&&(identical(other.rankMovement, _this.rankMovement) || other.rankMovement == _this.rankMovement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as RankedPlayer;
-  return Object.hash(runtimeType,_this.playerId,_this.rank,_this.handle,_this.displayName,_this.countryCode,_this.rating,_this.matchesPlayed,_this.rankMovement);
+  return Object.hash(runtimeType,_this.playerId,_this.rank,_this.handle,_this.displayName,_this.countryCode,_this.rating,_this.level,_this.matchesPlayed,_this.rankMovement);
 }
 
 @override
 String toString() {
   final _this = this as RankedPlayer;
-  return 'RankedPlayer(playerId: ${_this.playerId}, rank: ${_this.rank}, handle: ${_this.handle}, displayName: ${_this.displayName}, countryCode: ${_this.countryCode}, rating: ${_this.rating}, matchesPlayed: ${_this.matchesPlayed}, rankMovement: ${_this.rankMovement})';
+  return 'RankedPlayer(playerId: ${_this.playerId}, rank: ${_this.rank}, handle: ${_this.handle}, displayName: ${_this.displayName}, countryCode: ${_this.countryCode}, rating: ${_this.rating}, level: ${_this.level}, matchesPlayed: ${_this.matchesPlayed}, rankMovement: ${_this.rankMovement})';
 }
 
 
@@ -54,7 +56,7 @@ abstract mixin class $RankedPlayerCopyWith<$Res>  {
   factory $RankedPlayerCopyWith(RankedPlayer value, $Res Function(RankedPlayer) _then) = _$RankedPlayerCopyWithImpl;
 @useResult
 $Res call({
- String playerId, int? rank, String handle, String displayName, String countryCode, int? rating, int matchesPlayed, int? rankMovement
+ String playerId, int? rank, String handle, String displayName, String countryCode, int? rating,@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? level, int matchesPlayed, int? rankMovement
 });
 
 
@@ -71,7 +73,7 @@ class _$RankedPlayerCopyWithImpl<$Res>
 
 /// Create a copy of RankedPlayer
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? playerId = null,Object? rank = freezed,Object? handle = null,Object? displayName = null,Object? countryCode = null,Object? rating = freezed,Object? matchesPlayed = null,Object? rankMovement = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? playerId = null,Object? rank = freezed,Object? handle = null,Object? displayName = null,Object? countryCode = null,Object? rating = freezed,Object? level = freezed,Object? matchesPlayed = null,Object? rankMovement = freezed,}) {
   return _then(RankedPlayer(
 playerId: null == playerId ? _self.playerId : playerId // ignore: cast_nullable_to_non_nullable
 as String,rank: freezed == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
@@ -79,7 +81,8 @@ as int?,handle: null == handle ? _self.handle : handle // ignore: cast_nullable_
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int?,matchesPlayed: null == matchesPlayed ? _self.matchesPlayed : matchesPlayed // ignore: cast_nullable_to_non_nullable
+as int?,level: freezed == level ? _self.level : level // ignore: cast_nullable_to_non_nullable
+as RatingLevel?,matchesPlayed: null == matchesPlayed ? _self.matchesPlayed : matchesPlayed // ignore: cast_nullable_to_non_nullable
 as int,rankMovement: freezed == rankMovement ? _self.rankMovement : rankMovement // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
@@ -166,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating,  int matchesPlayed,  int? rankMovement)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int matchesPlayed,  int? rankMovement)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RankedPlayer() when $default != null:
-return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.matchesPlayed,_that.rankMovement);case _:
+return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.level,_that.matchesPlayed,_that.rankMovement);case _:
   return orElse();
 
 }
@@ -187,10 +190,10 @@ return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.c
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating,  int matchesPlayed,  int? rankMovement)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int matchesPlayed,  int? rankMovement)  $default,) {final _that = this;
 switch (_that) {
 case _RankedPlayer():
-return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.matchesPlayed,_that.rankMovement);case _:
+return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.level,_that.matchesPlayed,_that.rankMovement);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +210,10 @@ return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.c
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating,  int matchesPlayed,  int? rankMovement)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String playerId,  int? rank,  String handle,  String displayName,  String countryCode,  int? rating, @JsonKey(unknownEnumValue: RatingLevel.unknown)  RatingLevel? level,  int matchesPlayed,  int? rankMovement)?  $default,) {final _that = this;
 switch (_that) {
 case _RankedPlayer() when $default != null:
-return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.matchesPlayed,_that.rankMovement);case _:
+return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.countryCode,_that.rating,_that.level,_that.matchesPlayed,_that.rankMovement);case _:
   return null;
 
 }
@@ -222,7 +225,7 @@ return $default(_that.playerId,_that.rank,_that.handle,_that.displayName,_that.c
 @JsonSerializable(createToJson: false)
 
 class _RankedPlayer implements RankedPlayer {
-  const _RankedPlayer({required this.playerId, this.rank, required this.handle, required this.displayName, required this.countryCode, this.rating, required this.matchesPlayed, this.rankMovement});
+  const _RankedPlayer({required this.playerId, this.rank, required this.handle, required this.displayName, required this.countryCode, this.rating, @JsonKey(unknownEnumValue: RatingLevel.unknown) this.level, required this.matchesPlayed, this.rankMovement});
   factory _RankedPlayer.fromJson(Map<String, dynamic> json) => _$RankedPlayerFromJson(json);
 
 @override final  String playerId;
@@ -232,6 +235,9 @@ class _RankedPlayer implements RankedPlayer {
 @override final  String displayName;
 @override final  String countryCode;
 @override final  int? rating;
+/// The rating's named band; null when [rating] is, and from servers
+/// from before levels.
+@override@JsonKey(unknownEnumValue: RatingLevel.unknown) final  RatingLevel? level;
 @override final  int matchesPlayed;
 /// Places gained (positive) or lost since the previous snapshot.
 @override final  int? rankMovement;
@@ -246,18 +252,18 @@ _$RankedPlayerCopyWith<_RankedPlayer> get copyWith => __$RankedPlayerCopyWithImp
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _RankedPlayer&&(identical(other.playerId, playerId) || other.playerId == playerId)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.matchesPlayed, matchesPlayed) || other.matchesPlayed == matchesPlayed)&&(identical(other.rankMovement, rankMovement) || other.rankMovement == rankMovement));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _RankedPlayer&&(identical(other.playerId, playerId) || other.playerId == playerId)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.handle, handle) || other.handle == handle)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.level, level) || other.level == level)&&(identical(other.matchesPlayed, matchesPlayed) || other.matchesPlayed == matchesPlayed)&&(identical(other.rankMovement, rankMovement) || other.rankMovement == rankMovement));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,playerId,rank,handle,displayName,countryCode,rating,matchesPlayed,rankMovement);
+    return Object.hash(runtimeType,playerId,rank,handle,displayName,countryCode,rating,level,matchesPlayed,rankMovement);
 }
 
 @override
 String toString() {
-    return 'RankedPlayer(playerId: $playerId, rank: $rank, handle: $handle, displayName: $displayName, countryCode: $countryCode, rating: $rating, matchesPlayed: $matchesPlayed, rankMovement: $rankMovement)';
+    return 'RankedPlayer(playerId: $playerId, rank: $rank, handle: $handle, displayName: $displayName, countryCode: $countryCode, rating: $rating, level: $level, matchesPlayed: $matchesPlayed, rankMovement: $rankMovement)';
 }
 
 
@@ -268,7 +274,7 @@ abstract mixin class _$RankedPlayerCopyWith<$Res> implements $RankedPlayerCopyWi
   factory _$RankedPlayerCopyWith(_RankedPlayer value, $Res Function(_RankedPlayer) _then) = __$RankedPlayerCopyWithImpl;
 @override @useResult
 $Res call({
- String playerId, int? rank, String handle, String displayName, String countryCode, int? rating, int matchesPlayed, int? rankMovement
+ String playerId, int? rank, String handle, String displayName, String countryCode, int? rating,@JsonKey(unknownEnumValue: RatingLevel.unknown) RatingLevel? level, int matchesPlayed, int? rankMovement
 });
 
 
@@ -285,7 +291,7 @@ class __$RankedPlayerCopyWithImpl<$Res>
 
 /// Create a copy of RankedPlayer
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? playerId = null,Object? rank = freezed,Object? handle = null,Object? displayName = null,Object? countryCode = null,Object? rating = freezed,Object? matchesPlayed = null,Object? rankMovement = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? playerId = null,Object? rank = freezed,Object? handle = null,Object? displayName = null,Object? countryCode = null,Object? rating = freezed,Object? level = freezed,Object? matchesPlayed = null,Object? rankMovement = freezed,}) {
   return _then(_RankedPlayer(
 playerId: null == playerId ? _self.playerId : playerId // ignore: cast_nullable_to_non_nullable
 as String,rank: freezed == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
@@ -293,7 +299,8 @@ as int?,handle: null == handle ? _self.handle : handle // ignore: cast_nullable_
 as String,displayName: null == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String,countryCode: null == countryCode ? _self.countryCode : countryCode // ignore: cast_nullable_to_non_nullable
 as String,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int?,matchesPlayed: null == matchesPlayed ? _self.matchesPlayed : matchesPlayed // ignore: cast_nullable_to_non_nullable
+as int?,level: freezed == level ? _self.level : level // ignore: cast_nullable_to_non_nullable
+as RatingLevel?,matchesPlayed: null == matchesPlayed ? _self.matchesPlayed : matchesPlayed // ignore: cast_nullable_to_non_nullable
 as int,rankMovement: freezed == rankMovement ? _self.rankMovement : rankMovement // ignore: cast_nullable_to_non_nullable
 as int?,
   ));

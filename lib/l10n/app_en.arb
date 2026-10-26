@@ -993,6 +993,15 @@
   "@playerResultLossLetter": {
     "description": "One-letter abbreviation of a loss."
   },
+  "playerLevelBeginner": "Beginner",
+  "@playerLevelBeginner": {
+    "description": "A rating level. The levels, lowest first: Beginner, Amateur, Semi-Pro, Professional, World Class, Legend."
+  },
+  "playerLevelAmateur": "Amateur",
+  "playerLevelSemiPro": "Semi-Pro",
+  "playerLevelProfessional": "Professional",
+  "playerLevelWorldClass": "World Class",
+  "playerLevelLegend": "Legend",
   "rankingsGlobal": "Global",
   "rankingsEmptyTitle": "No rankings yet",
   "rankingsEmptyMessage": "Players are ranked once they finish rated matches.",
