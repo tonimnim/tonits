@@ -111,9 +111,9 @@ class ApiClient {
           .timeout(const Duration(seconds: 90));
       final response = await http.Response.fromStream(streamed);
       return response.statusCode;
-    } on TimeoutException catch (e) {
-      throw NetworkException(e);
-    } on http.ClientException catch (e) {
+    } on Exception catch (e) {
+      // Only the transfer is in here: a timeout, a dropped connection, or
+      // a TLS failure (a captive portal, a wrong clock) all mean offline.
       throw NetworkException(e);
     }
   }
@@ -149,9 +149,8 @@ class ApiClient {
     try {
       final streamed = await _http.send(request).timeout(timeout);
       return await http.Response.fromStream(streamed).timeout(timeout);
-    } on TimeoutException catch (e) {
-      throw NetworkException(e);
-    } on http.ClientException catch (e) {
+    } on Exception catch (e) {
+      // As in putBytes: anything from the transfer itself is offline.
       throw NetworkException(e);
     }
   }

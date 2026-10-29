@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -103,6 +105,41 @@ void main() {
 
     expect(auth.state.status, AuthStatus.unreachable);
     expect(store.token, 'refresh-0');
+  });
+
+  test('restore signs out when the stored token can\'t be read', () async {
+    final auth = Auth(
+      (_) async => fail('no request expected'),
+      _UnreadableTokenStore(),
+    );
+
+    await auth.notifier.restore();
+
+    expect(auth.state.status, AuthStatus.signedOut);
+  });
+
+  test('a failed TLS handshake reads as offline, not stuck', () async {
+    final store = MemoryTokenStore('refresh-0');
+    final auth = Auth(
+      (_) async => throw const TlsException('certificate expired'),
+      store,
+    );
+
+    await auth.notifier.restore();
+
+    expect(auth.state.status, AuthStatus.unreachable);
+    expect(store.token, 'refresh-0');
+  });
+
+  test('an unexpected reply never leaves the app restoring', () async {
+    final auth = Auth(
+      (_) async => http.Response('{"accessToken": 7}', 200),
+      MemoryTokenStore('refresh-0'),
+    );
+
+    await auth.notifier.restore();
+
+    expect(auth.state.status, AuthStatus.unreachable);
   });
 
   test(
@@ -211,4 +248,12 @@ void main() {
     expect(store.token, isNull);
     expect(auth.google.signOuts, 1);
   });
+}
+
+/// Secure storage that fails, as after a backup restored onto another
+/// phone.
+class _UnreadableTokenStore extends MemoryTokenStore {
+  @override
+  Future<String?> readRefreshToken() async =>
+      throw PlatformException(code: 'read_failed');
 }

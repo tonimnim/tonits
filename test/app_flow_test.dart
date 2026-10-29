@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
 import 'support/fakes.dart';
@@ -318,6 +319,24 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     expect(find.text('1,542'), findsOneWidget);
+  });
+
+  testWidgets('Profile keeps the Terms, Privacy Notice and the version', (
+    tester,
+  ) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'Ozone',
+      packageName: 'com.ozone',
+      version: '1.0.0',
+      buildNumber: '7',
+      buildSignature: '',
+    );
+    await pumpTonits(tester, refreshToken: 'stored');
+    await openProfileFromHome(tester);
+
+    await scrollPageTo(tester, find.text('Terms of Service'));
+    expect(find.text('Privacy Notice'), findsOneWidget);
+    await scrollPageTo(tester, find.text('Ozone 1.0.0 (7)'));
   });
 
   testWidgets('signing out from Profile returns to sign in', (tester) async {

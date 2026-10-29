@@ -16,8 +16,12 @@ Future<void> tapText(WidgetTester tester, String text) async {
   if (find.text(text).evaluate().isEmpty) {
     await scrollPageTo(tester, find.text(text));
   }
-  // Bring it clear of the bottom bar, not just partly into view.
-  await tester.ensureVisible(find.text(text).last);
+  // Bring it clear of the bottom bar and the back button's bar, not just
+  // partly into view.
+  await Scrollable.ensureVisible(
+    tester.element(find.text(text).last),
+    alignment: 0.5,
+  );
   await tester.pumpAndSettle();
   await tester.tap(find.text(text).last);
   await tester.pumpAndSettle();

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/errors.dart';
 import '../../../core/providers.dart';
 import '../../notifications/application/notifications_providers.dart';
 import '../data/auth_repository.dart';
@@ -54,7 +55,16 @@ class AuthController extends Notifier<AuthState> {
   /// Resumes the stored session, if any.
   Future<void> restore() async {
     state = const AuthState.restoring();
-    final refreshToken = await _tokens.readRefreshToken();
+    final String? refreshToken;
+    try {
+      refreshToken = await _tokens.readRefreshToken();
+    } catch (e, stack) {
+      // Storage that can't be read, such as after a backup restored onto
+      // another phone: start again from sign-in.
+      report(e, stack);
+      await _end();
+      return;
+    }
     if (refreshToken == null) {
       state = const AuthState(status: AuthStatus.signedOut);
       return;
@@ -68,6 +78,10 @@ class AuthController extends Notifier<AuthState> {
         state = const AuthState(status: AuthStatus.unreachable);
       }
     } on NetworkException {
+      state = const AuthState(status: AuthStatus.unreachable);
+    } catch (e, stack) {
+      // Never leave the app on the splash screen.
+      report(e, stack);
       state = const AuthState(status: AuthStatus.unreachable);
     }
   }
@@ -153,9 +167,15 @@ class AuthController extends Notifier<AuthState> {
   }
 
   Future<void> _end() async {
-    await _tokens.clear();
-    _api.accessToken = null;
-    state = const AuthState(status: AuthStatus.signedOut);
+    try {
+      await _tokens.clear();
+    } catch (e, stack) {
+      // Signed out on this phone even if the stored tokens won't clear.
+      report(e, stack);
+    } finally {
+      _api.accessToken = null;
+      state = const AuthState(status: AuthStatus.signedOut);
+    }
   }
 
   /// The API client's `401` hook. Network errors propagate to the caller.

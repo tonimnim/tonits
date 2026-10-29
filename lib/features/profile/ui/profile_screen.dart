@@ -5,6 +5,7 @@ import '../../../core/l10n.dart';
 import '../../../core/theme.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../auth/application/auth_providers.dart';
+import 'widgets/about_section.dart';
 import 'widgets/account_section.dart';
 import 'widgets/contact_section.dart';
 import 'widgets/entries_section.dart';
@@ -39,7 +40,11 @@ class ProfileScreen extends ConsumerWidget {
         _gap,
         const SettingsSection(),
         _gap,
+        const AboutSection(),
+        _gap,
         const SignOutRow(),
+        _gap,
+        const AppVersionLine(),
       ],
     );
   }

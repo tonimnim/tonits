@@ -168,8 +168,15 @@ class CheckoutController extends Notifier<CheckoutState> {
         // Never start another charge: follow the one already running.
         final paymentId = e.details['paymentId'] as String?;
         if (paymentId != null) {
-          final payment = await _payments.get(paymentId);
-          if (ref.mounted) _track(payment);
+          try {
+            final payment = await _payments.get(paymentId);
+            if (ref.mounted) _track(payment);
+          } catch (_) {
+            // Keep the key: trying again finds that same payment.
+            if (ref.mounted) {
+              state = CheckoutState(error: _l10n.paymentNotConfirmed);
+            }
+          }
           return;
         }
       case 'already_registered':
@@ -253,6 +260,15 @@ class CheckoutController extends Notifier<CheckoutState> {
         }
       } on NetworkException {
         // Keep waiting; the next read may get through.
+      } catch (_) {
+        // A reply the app can't read: stop, and let the player check again.
+        state = CheckoutState(
+          phase: CheckoutPhase.waiting,
+          payment: state.payment,
+          slow: true,
+          stopped: true,
+        );
+        return;
       }
     }
   }
