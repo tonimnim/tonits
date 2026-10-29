@@ -324,4 +324,87 @@ void main() {
     await openCompete(tester);
     expect(find.text('Kenya only'), findsNothing);
   });
+
+  /// The eligibility route: blocked by [code] until [fixed], then open.
+  http.Response Function(http.Request) blockedUntil(
+    String code,
+    bool Function() fixed,
+  ) =>
+      (_) => jsonResponse(
+        fixed()
+            ? eligibilityJson()
+            : eligibilityJson(
+                action: 'none',
+                issues: [
+                  {
+                    'code': code,
+                    'category': 'profile',
+                    'severity': 'blocking',
+                    'message': 'Not yet',
+                  },
+                ],
+              ),
+        200,
+      );
+
+  testWidgets('changed terms are accepted from the entry bar, then entry '
+      'opens', (tester) async {
+    Map<String, dynamic>? accepted;
+    final api = FakeApi(
+      routes: {
+        '/v1/competitions/c1/eligibility': blockedUntil(
+          'profile_incomplete',
+          () => accepted != null,
+        ),
+        '/v1/me/legal-acceptances': (request) {
+          accepted = jsonDecode(request.body) as Map<String, dynamic>;
+          return jsonResponse({'data': <Object>[]}, 200);
+        },
+      },
+    );
+    await pumpTonits(tester, refreshToken: 'stored', api: api);
+    await openCompete(tester);
+    await tapText(tester, 'Nairobi Weekend Cup');
+
+    await tapText(tester, 'Review terms');
+    expect(find.text('Updated terms'), findsOneWidget);
+    await tapText(tester, 'Accept');
+
+    expect(accepted, {
+      'acceptances': [
+        {'documentType': 'terms', 'version': '1.0'},
+        {'documentType': 'privacy', 'version': '1.0'},
+      ],
+    });
+    expect(find.text('Enter for free'), findsOneWidget);
+  });
+
+  testWidgets('a minimum age asks for the birth date, then entry opens', (
+    tester,
+  ) async {
+    Map<String, dynamic>? patched;
+    final api = FakeApi(
+      routes: {
+        '/v1/competitions/c1/eligibility': blockedUntil(
+          'age_required',
+          () => patched != null,
+        ),
+        '/v1/me': (request) {
+          if (request.method == 'PATCH') {
+            patched = jsonDecode(request.body) as Map<String, dynamic>;
+          }
+          return jsonResponse(playerJson(), 200);
+        },
+      },
+    );
+    await pumpTonits(tester, refreshToken: 'stored', api: api);
+    await openCompete(tester);
+    await tapText(tester, 'Nairobi Weekend Cup');
+
+    await tapText(tester, 'Add birth date');
+    await tapText(tester, 'OK');
+
+    expect(patched?['birthDate'], matches(RegExp(r'^\d{4}-\d{2}-\d{2}$')));
+    expect(find.text('Enter for free'), findsOneWidget);
+  });
 }

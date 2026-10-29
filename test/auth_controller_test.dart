@@ -81,6 +81,34 @@ void main() {
     expect(store.token, 'refresh-1');
   });
 
+  test('a 401 while restoring shares its refresh instead of spending the '
+      'token twice', () async {
+    var refreshes = 0;
+    final auth = Auth((request) async {
+      if (request.url.path == '/v1/auth/refresh') {
+        refreshes++;
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        // The token rotates: spending it again would be refused.
+        return refreshes == 1
+            ? jsonResponse(sessionJson(), 200)
+            : errorResponse(401, 'invalid_refresh_token');
+      }
+      // A push opened from a closed app marks itself read straight away.
+      return request.headers['Authorization'] == 'Bearer access-1'
+          ? http.Response('', 204)
+          : errorResponse(401, 'invalid_token');
+    }, MemoryTokenStore('refresh-0'));
+    final api = auth.container.read(apiClientProvider);
+
+    await Future.wait([
+      auth.notifier.restore(),
+      api.post('/v1/me/notifications/n1/read', auth: true),
+    ]);
+
+    expect(refreshes, 1);
+    expect(auth.state.status, AuthStatus.signedIn);
+  });
+
   test('restore clears a rejected refresh token', () async {
     final store = MemoryTokenStore('revoked');
     final auth = Auth(

@@ -70,7 +70,7 @@ class AuthController extends Notifier<AuthState> {
       return;
     }
     try {
-      await _adopt(await _repository.refresh(refreshToken));
+      await _adopt(await _refresh(refreshToken));
     } on ApiException catch (e) {
       if (e.status == 401) {
         await _end();
@@ -160,6 +160,17 @@ class AuthController extends Notifier<AuthState> {
     await _end();
   }
 
+  /// The refresh in flight. Each refresh spends the stored token, so a
+  /// second one at once would be refused and sign the player out: resuming
+  /// at launch and a request's `401` (such as a push opened from a closed
+  /// app) share this one.
+  Future<AuthSession>? _refreshing;
+
+  Future<AuthSession> _refresh(String refreshToken) =>
+      _refreshing ??= _repository.refresh(refreshToken).whenComplete(() {
+        _refreshing = null;
+      });
+
   Future<void> _adopt(AuthSession session) async {
     await _tokens.writeRefreshToken(session.refreshToken);
     _api.accessToken = session.accessToken;
@@ -186,7 +197,7 @@ class AuthController extends Notifier<AuthState> {
       return null;
     }
     try {
-      final session = await _repository.refresh(refreshToken);
+      final session = await _refresh(refreshToken);
       await _adopt(session);
       return session.accessToken;
     } on ApiException catch (e) {

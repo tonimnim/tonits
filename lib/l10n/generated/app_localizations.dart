@@ -1342,6 +1342,42 @@ abstract class AppLocalizations {
   /// **'You can\'t enter this competition.'**
   String get competitionCannotEnter;
 
+  /// Fix for a blocked entry after the Terms or Privacy Notice changed.
+  ///
+  /// In en, this message translates to:
+  /// **'Review terms'**
+  String get competitionReviewTerms;
+
+  /// No description provided for @competitionTermsChangedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated terms'**
+  String get competitionTermsChangedTitle;
+
+  /// No description provided for @competitionTermsChangedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Ozone\'s Terms or Privacy Notice changed. Read them, then accept to enter.'**
+  String get competitionTermsChangedMessage;
+
+  /// No description provided for @competitionAcceptTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get competitionAcceptTerms;
+
+  /// Fix for a blocked entry to a competition with a minimum age.
+  ///
+  /// In en, this message translates to:
+  /// **'Add birth date'**
+  String get competitionAddBirthDate;
+
+  /// No description provided for @competitionBirthDateHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your date of birth'**
+  String get competitionBirthDateHelp;
+
   /// No description provided for @competitionYoureIn.
   ///
   /// In en, this message translates to:

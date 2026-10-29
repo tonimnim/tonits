@@ -21,7 +21,8 @@ mixin _$Player {
 /// their Konami ID, phone and country. Accounts from before onboarding
 /// existed are complete.
  bool get onboardingCompleted;/// Proven by a successful M-Pesa payment from the number.
- bool get phoneVerified;/// `google`, `apple` and, for staff accounts, `password`.
+ bool get phoneVerified;/// Asked for only by a competition with a minimum age.
+ DateTime? get birthDate;/// `google`, `apple` and, for staff accounts, `password`.
  Set<String> get signInMethods;/// What the player can change about their public profile.
  ProfileSettings? get profile;
 /// Create a copy of Player
@@ -35,20 +36,20 @@ $PlayerCopyWith<Player> get copyWith => _$PlayerCopyWithImpl<Player>(this as Pla
 @override
 bool operator ==(Object other) {
   final _this = this as Player;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Player&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.username, _this.username) || other.username == _this.username)&&(identical(other.konamiId, _this.konamiId) || other.konamiId == _this.konamiId)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.emailVerified, _this.emailVerified) || other.emailVerified == _this.emailVerified)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.onboardingCompleted, _this.onboardingCompleted) || other.onboardingCompleted == _this.onboardingCompleted)&&(identical(other.phoneVerified, _this.phoneVerified) || other.phoneVerified == _this.phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _this.signInMethods)&&(identical(other.profile, _this.profile) || other.profile == _this.profile));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Player&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.username, _this.username) || other.username == _this.username)&&(identical(other.konamiId, _this.konamiId) || other.konamiId == _this.konamiId)&&(identical(other.displayName, _this.displayName) || other.displayName == _this.displayName)&&(identical(other.email, _this.email) || other.email == _this.email)&&(identical(other.emailVerified, _this.emailVerified) || other.emailVerified == _this.emailVerified)&&(identical(other.phoneNumber, _this.phoneNumber) || other.phoneNumber == _this.phoneNumber)&&(identical(other.countryCode, _this.countryCode) || other.countryCode == _this.countryCode)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.onboardingCompleted, _this.onboardingCompleted) || other.onboardingCompleted == _this.onboardingCompleted)&&(identical(other.phoneVerified, _this.phoneVerified) || other.phoneVerified == _this.phoneVerified)&&(identical(other.birthDate, _this.birthDate) || other.birthDate == _this.birthDate)&&const DeepCollectionEquality().equals(other.signInMethods, _this.signInMethods)&&(identical(other.profile, _this.profile) || other.profile == _this.profile));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Player;
-  return Object.hash(runtimeType,_this.id,_this.username,_this.konamiId,_this.displayName,_this.email,_this.emailVerified,_this.phoneNumber,_this.countryCode,_this.status,_this.onboardingCompleted,_this.phoneVerified,const DeepCollectionEquality().hash(_this.signInMethods),_this.profile);
+  return Object.hash(runtimeType,_this.id,_this.username,_this.konamiId,_this.displayName,_this.email,_this.emailVerified,_this.phoneNumber,_this.countryCode,_this.status,_this.onboardingCompleted,_this.phoneVerified,_this.birthDate,const DeepCollectionEquality().hash(_this.signInMethods),_this.profile);
 }
 
 @override
 String toString() {
   final _this = this as Player;
-  return 'Player(id: ${_this.id}, username: ${_this.username}, konamiId: ${_this.konamiId}, displayName: ${_this.displayName}, email: ${_this.email}, emailVerified: ${_this.emailVerified}, phoneNumber: ${_this.phoneNumber}, countryCode: ${_this.countryCode}, status: ${_this.status}, onboardingCompleted: ${_this.onboardingCompleted}, phoneVerified: ${_this.phoneVerified}, signInMethods: ${_this.signInMethods}, profile: ${_this.profile})';
+  return 'Player(id: ${_this.id}, username: ${_this.username}, konamiId: ${_this.konamiId}, displayName: ${_this.displayName}, email: ${_this.email}, emailVerified: ${_this.emailVerified}, phoneNumber: ${_this.phoneNumber}, countryCode: ${_this.countryCode}, status: ${_this.status}, onboardingCompleted: ${_this.onboardingCompleted}, phoneVerified: ${_this.phoneVerified}, birthDate: ${_this.birthDate}, signInMethods: ${_this.signInMethods}, profile: ${_this.profile})';
 }
 
 
@@ -59,7 +60,7 @@ abstract mixin class $PlayerCopyWith<$Res>  {
   factory $PlayerCopyWith(Player value, $Res Function(Player) _then) = _$PlayerCopyWithImpl;
 @useResult
 $Res call({
- String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods, ProfileSettings? profile
+ String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, DateTime? birthDate, Set<String> signInMethods, ProfileSettings? profile
 });
 
 
@@ -76,7 +77,7 @@ class _$PlayerCopyWithImpl<$Res>
 
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,Object? profile = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? birthDate = freezed,Object? signInMethods = null,Object? profile = freezed,}) {
   return _then(Player(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -89,7 +90,8 @@ as String?,countryCode: null == countryCode ? _self.countryCode : countryCode //
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
-as bool,signInMethods: null == signInMethods ? _self.signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
+as bool,birthDate: freezed == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,signInMethods: null == signInMethods ? _self.signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
 as Set<String>,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as ProfileSettings?,
   ));
@@ -188,10 +190,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  DateTime? birthDate,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Player() when $default != null:
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.birthDate,_that.signInMethods,_that.profile);case _:
   return orElse();
 
 }
@@ -209,10 +211,10 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  DateTime? birthDate,  Set<String> signInMethods,  ProfileSettings? profile)  $default,) {final _that = this;
 switch (_that) {
 case _Player():
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.birthDate,_that.signInMethods,_that.profile);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -229,10 +231,10 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String? username,  String? konamiId,  String displayName,  String? email,  bool emailVerified,  String? phoneNumber,  String countryCode,  String status,  bool onboardingCompleted,  bool phoneVerified,  DateTime? birthDate,  Set<String> signInMethods,  ProfileSettings? profile)?  $default,) {final _that = this;
 switch (_that) {
 case _Player() when $default != null:
-return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.signInMethods,_that.profile);case _:
+return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.email,_that.emailVerified,_that.phoneNumber,_that.countryCode,_that.status,_that.onboardingCompleted,_that.phoneVerified,_that.birthDate,_that.signInMethods,_that.profile);case _:
   return null;
 
 }
@@ -244,7 +246,7 @@ return $default(_that.id,_that.username,_that.konamiId,_that.displayName,_that.e
 @JsonSerializable(createToJson: false)
 
 class _Player extends Player {
-  const _Player({required this.id, required this.username, required this.konamiId, required this.displayName, required this.email, this.emailVerified = false, required this.phoneNumber, this.countryCode = '', required this.status, this.onboardingCompleted = true, this.phoneVerified = false,  Set<String> signInMethods = const <String>{}, this.profile}): _signInMethods = signInMethods,super._();
+  const _Player({required this.id, required this.username, required this.konamiId, required this.displayName, required this.email, this.emailVerified = false, required this.phoneNumber, this.countryCode = '', required this.status, this.onboardingCompleted = true, this.phoneVerified = false, this.birthDate,  Set<String> signInMethods = const <String>{}, this.profile}): _signInMethods = signInMethods,super._();
   factory _Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
 @override final  String id;
@@ -263,6 +265,8 @@ class _Player extends Player {
 @override@JsonKey() final  bool onboardingCompleted;
 /// Proven by a successful M-Pesa payment from the number.
 @override@JsonKey() final  bool phoneVerified;
+/// Asked for only by a competition with a minimum age.
+@override final  DateTime? birthDate;
 /// `google`, `apple` and, for staff accounts, `password`.
  final  Set<String> _signInMethods;
 /// `google`, `apple` and, for staff accounts, `password`.
@@ -285,18 +289,18 @@ _$PlayerCopyWith<_Player> get copyWith => __$PlayerCopyWithImpl<_Player>(this, _
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Player&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.konamiId, konamiId) || other.konamiId == konamiId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&const DeepCollectionEquality().equals(other.signInMethods, _signInMethods)&&(identical(other.profile, profile) || other.profile == profile));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Player&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.konamiId, konamiId) || other.konamiId == konamiId)&&(identical(other.displayName, displayName) || other.displayName == displayName)&&(identical(other.email, email) || other.email == email)&&(identical(other.emailVerified, emailVerified) || other.emailVerified == emailVerified)&&(identical(other.phoneNumber, phoneNumber) || other.phoneNumber == phoneNumber)&&(identical(other.countryCode, countryCode) || other.countryCode == countryCode)&&(identical(other.status, status) || other.status == status)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&const DeepCollectionEquality().equals(other.signInMethods, _signInMethods)&&(identical(other.profile, profile) || other.profile == profile));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,username,konamiId,displayName,email,emailVerified,phoneNumber,countryCode,status,onboardingCompleted,phoneVerified,const DeepCollectionEquality().hash(_signInMethods),profile);
+    return Object.hash(runtimeType,id,username,konamiId,displayName,email,emailVerified,phoneNumber,countryCode,status,onboardingCompleted,phoneVerified,birthDate,const DeepCollectionEquality().hash(_signInMethods),profile);
 }
 
 @override
 String toString() {
-    return 'Player(id: $id, username: $username, konamiId: $konamiId, displayName: $displayName, email: $email, emailVerified: $emailVerified, phoneNumber: $phoneNumber, countryCode: $countryCode, status: $status, onboardingCompleted: $onboardingCompleted, phoneVerified: $phoneVerified, signInMethods: $signInMethods, profile: $profile)';
+    return 'Player(id: $id, username: $username, konamiId: $konamiId, displayName: $displayName, email: $email, emailVerified: $emailVerified, phoneNumber: $phoneNumber, countryCode: $countryCode, status: $status, onboardingCompleted: $onboardingCompleted, phoneVerified: $phoneVerified, birthDate: $birthDate, signInMethods: $signInMethods, profile: $profile)';
 }
 
 
@@ -307,7 +311,7 @@ abstract mixin class _$PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$PlayerCopyWith(_Player value, $Res Function(_Player) _then) = __$PlayerCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, Set<String> signInMethods, ProfileSettings? profile
+ String id, String? username, String? konamiId, String displayName, String? email, bool emailVerified, String? phoneNumber, String countryCode, String status, bool onboardingCompleted, bool phoneVerified, DateTime? birthDate, Set<String> signInMethods, ProfileSettings? profile
 });
 
 
@@ -324,7 +328,7 @@ class __$PlayerCopyWithImpl<$Res>
 
 /// Create a copy of Player
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? signInMethods = null,Object? profile = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? username = freezed,Object? konamiId = freezed,Object? displayName = null,Object? email = freezed,Object? emailVerified = null,Object? phoneNumber = freezed,Object? countryCode = null,Object? status = null,Object? onboardingCompleted = null,Object? phoneVerified = null,Object? birthDate = freezed,Object? signInMethods = null,Object? profile = freezed,}) {
   return _then(_Player(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,username: freezed == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
@@ -337,7 +341,8 @@ as String?,countryCode: null == countryCode ? _self.countryCode : countryCode //
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
-as bool,signInMethods: null == signInMethods ? _self._signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
+as bool,birthDate: freezed == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,signInMethods: null == signInMethods ? _self._signInMethods : signInMethods // ignore: cast_nullable_to_non_nullable
 as Set<String>,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as ProfileSettings?,
   ));

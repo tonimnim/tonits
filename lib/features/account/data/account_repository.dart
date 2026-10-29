@@ -18,6 +18,33 @@ class AccountRepository {
   Future<Player> updateCountry(String countryCode) =>
       _patch({'countryCode': countryCode});
 
+  /// Only competitions with a minimum age ask for it (`age_required`).
+  Future<Player> updateBirthDate(DateTime date) => _patch({
+    'birthDate':
+        '${date.year.toString().padLeft(4, '0')}-'
+        '${date.month.toString().padLeft(2, '0')}-'
+        '${date.day.toString().padLeft(2, '0')}',
+  });
+
+  /// Records [documents] (their current versions) as accepted, as after the
+  /// Terms or Privacy Notice change. Repeating one is harmless.
+  Future<void> acceptLegal(List<LegalDocument> documents) => _api.post(
+    '/v1/me/legal-acceptances',
+    body: {
+      'acceptances': [
+        for (final d in documents)
+          {
+            'documentType': switch (d.type) {
+              LegalDocumentType.terms => 'terms',
+              _ => 'privacy',
+            },
+            'version': d.version,
+          },
+      ],
+    },
+    auth: true,
+  );
+
   /// Emails a 6-digit code to [email]; it becomes the account's address
   /// once verified. Returns how long the code lasts, when the API says.
   Future<Duration?> requestEmailCode(String email) async {

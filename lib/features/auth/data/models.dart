@@ -30,6 +30,9 @@ abstract class Player with _$Player {
     /// Proven by a successful M-Pesa payment from the number.
     @Default(false) bool phoneVerified,
 
+    /// Asked for only by a competition with a minimum age.
+    DateTime? birthDate,
+
     /// `google`, `apple` and, for staff accounts, `password`.
     @Default(<String>{}) Set<String> signInMethods,
 

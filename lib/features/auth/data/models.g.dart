@@ -24,6 +24,10 @@ _Player _$PlayerFromJson(
       (v) => v as bool? ?? true,
     ),
     phoneVerified: $checkedConvert('phoneVerified', (v) => v as bool? ?? false),
+    birthDate: $checkedConvert(
+      'birthDate',
+      (v) => v == null ? null : DateTime.parse(v as String),
+    ),
     signInMethods: $checkedConvert(
       'signInMethods',
       (v) =>

@@ -501,6 +501,18 @@
   },
   "competitionRefundInProgress": "Your entry fee is being refunded.",
   "competitionCannotEnter": "You can't enter this competition.",
+  "competitionReviewTerms": "Review terms",
+  "@competitionReviewTerms": {
+    "description": "Fix for a blocked entry after the Terms or Privacy Notice changed."
+  },
+  "competitionTermsChangedTitle": "Updated terms",
+  "competitionTermsChangedMessage": "Ozone's Terms or Privacy Notice changed. Read them, then accept to enter.",
+  "competitionAcceptTerms": "Accept",
+  "competitionAddBirthDate": "Add birth date",
+  "@competitionAddBirthDate": {
+    "description": "Fix for a blocked entry to a competition with a minimum age."
+  },
+  "competitionBirthDateHelp": "Your date of birth",
   "competitionYoureIn": "You're in",
   "paymentTitle": "Pay with M-Pesa",
   "paymentNotConfirmed": "We couldn't confirm the request with M-Pesa. Try again; you won't be charged twice.",

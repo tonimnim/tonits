@@ -8,6 +8,10 @@ import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../account/application/account_providers.dart';
+import '../../../account/application/legal_links.dart';
+import '../../../auth/application/auth_providers.dart';
+import '../../../auth/data/models.dart';
 import '../../application/competitions_providers.dart';
 import '../../data/competition.dart';
 import '../../data/eligibility.dart';
@@ -159,11 +163,90 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
         icon: Icons.replay_outlined,
         text: l.competitionRefundInProgress,
       ),
-      _ => _Message(
-        icon: Icons.block_outlined,
-        text: e.blockingIssue?.message ?? l.competitionCannotEnter,
-      ),
+      _ => _blocked(e.blockingIssue),
     };
+  }
+
+  /// Why the player can't enter, in the server's words. The two a player
+  /// can put right here come with the fix; eligibility then decides again.
+  Widget _blocked(EligibilityIssue? issue) {
+    final l = context.l10n;
+    final onboarded =
+        ref.read(currentPlayerProvider)?.onboardingCompleted ?? false;
+    final fix = switch (issue?.code) {
+      // After onboarding, this means the Terms or Privacy Notice changed.
+      'profile_incomplete' when onboarded => (
+        l.competitionReviewTerms,
+        _acceptTerms,
+      ),
+      'age_required' => (l.competitionAddBirthDate, _addBirthDate),
+      _ => null,
+    };
+    return _Message(
+      icon: Icons.block_outlined,
+      text: issue?.message ?? l.competitionCannotEnter,
+      action: fix == null
+          ? null
+          : TextButton(onPressed: busy ? null : fix.$2, child: Text(fix.$1)),
+    );
+  }
+
+  Future<void> _acceptTerms() async {
+    final l = context.l10n;
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l.competitionTermsChangedTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l.competitionTermsChangedMessage),
+            const SizedBox(height: TonitsSpace.sm),
+            for (final (type, name) in [
+              (LegalDocumentType.terms, l.accountLegalTerms),
+              (LegalDocumentType.privacy, l.accountLegalPrivacy),
+            ])
+              TextButton(
+                onPressed: () => openLegalDocument(ref, type),
+                child: Text(name),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l.competitionAcceptTerms),
+          ),
+        ],
+      ),
+    );
+    if (accepted != true) return;
+    await run(() async {
+      await ref.read(accountServiceProvider).acceptCurrentLegal();
+      ref.invalidate(eligibilityProvider(_id));
+    });
+  }
+
+  Future<void> _addBirthDate() async {
+    final now = DateTime.now();
+    final known = ref.read(currentPlayerProvider)?.birthDate;
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: known ?? DateTime(now.year - 18, now.month, now.day),
+      firstDate: DateTime(now.year - 100),
+      lastDate: now,
+      helpText: context.l10n.competitionBirthDateHelp,
+    );
+    if (picked == null) return;
+    await run(() async {
+      await ref.read(accountServiceProvider).updateBirthDate(picked);
+      ref.invalidate(eligibilityProvider(_id));
+    });
   }
 }
 

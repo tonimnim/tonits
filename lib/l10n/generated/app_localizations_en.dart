@@ -726,6 +726,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get competitionCannotEnter => 'You can\'t enter this competition.';
 
   @override
+  String get competitionReviewTerms => 'Review terms';
+
+  @override
+  String get competitionTermsChangedTitle => 'Updated terms';
+
+  @override
+  String get competitionTermsChangedMessage =>
+      'Ozone\'s Terms or Privacy Notice changed. Read them, then accept to enter.';
+
+  @override
+  String get competitionAcceptTerms => 'Accept';
+
+  @override
+  String get competitionAddBirthDate => 'Add birth date';
+
+  @override
+  String get competitionBirthDateHelp => 'Your date of birth';
+
+  @override
   String get competitionYoureIn => 'You\'re in';
 
   @override

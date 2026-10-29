@@ -29,6 +29,21 @@ class AccountService {
     _adopt(await _repository.updateCountry(countryCode));
   }
 
+  Future<void> updateBirthDate(DateTime date) async =>
+      _adopt(await _repository.updateBirthDate(date));
+
+  /// Accepts the current Terms and Privacy Notice, as entry asks for once
+  /// either changes (`profile_incomplete` after onboarding).
+  Future<void> acceptCurrentLegal() async {
+    final documents = await _ref.read(legalDocumentsProvider.future);
+    await _repository.acceptLegal([
+      for (final d in documents)
+        if (d.type == LegalDocumentType.terms ||
+            d.type == LegalDocumentType.privacy)
+          d,
+    ]);
+  }
+
   Future<Duration?> requestEmailCode(String email) =>
       _repository.requestEmailCode(email);
 
