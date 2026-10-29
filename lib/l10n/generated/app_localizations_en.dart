@@ -139,7 +139,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your account is restricted. Contact Ozone support to find out why.';
 
   @override
-  String get profileAboutTitle => 'About';
+  String get profileAboutTitle => 'Help and legal';
 
   @override
   String get profileTermsOfService => 'Terms of Service';
@@ -335,6 +335,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountRemovePhone => 'Remove phone number';
+
+  @override
+  String get profileSupport => 'Support';
+
+  @override
+  String get profileSupportSubject => 'Ozone support';
+
+  @override
+  String profileSupportWriteTo(String email) {
+    return 'Write to $email for help.';
+  }
 
   @override
   String get chatTitle => 'Chat';
@@ -542,6 +553,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatRoomCodeNotShared => 'Not shared yet';
+
+  @override
+  String get chatReportHint => 'Press and hold a message to report it.';
 
   @override
   String get competitionsTitle => 'Competitions';
@@ -863,6 +877,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get paymentOpenCompetition => 'Open competition';
+
+  @override
+  String get contestRules => 'Contest rules';
+
+  @override
+  String get contestNotSponsored =>
+      'Apple and Google aren\'t sponsors of these competitions and take no part in them.';
 
   @override
   String get appName => 'Ozone';

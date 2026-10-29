@@ -42,6 +42,32 @@ ranks. The app shows the level under the rating on Home and after the
 handle on each ladder row. It reads a level it doesn't know as none, and
 against an older server still shows a new player 1,500, without a level.
 
+## 6. Contest rules (open)
+
+**Shown on:** each competition's foot and Profile's Help and legal, as
+"Contest rules". Wanted: a third document in
+`GET /v1/legal/documents/current`, with `documentType: "contest_rules"`
+and a `contentUrl` like Terms and Privacy. Players don't accept it.
+**Until then:** the link stays away; the "Apple and Google aren't sponsors"
+line shows regardless. The app reads any other new `documentType` as
+unknown and ignores it.
+
+## 7. Blocking a player (open)
+
+**Wanted for:** the stores' user-content rules, beside the existing
+message reports. Proposed:
+
+```http
+POST   /v1/me/blocks          {"playerId": "…"}   → 201
+DELETE /v1/me/blocks/{playerId}                   → 204
+GET    /v1/me/blocks                              → cursor page of players
+```
+
+A block hides the blocked player's chat messages from the blocker and keeps
+the two out of each other's friendly matches; competition matches still
+run, since the draw decides them. **Until then:** the app has no Block
+action.
+
 ## Also noted
 
 - The legal documents link to `tonits.com`, and player-facing API text says

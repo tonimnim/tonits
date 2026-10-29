@@ -81,7 +81,7 @@
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
   "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
-  "profileAboutTitle": "About",
+  "profileAboutTitle": "Help and legal",
   "profileTermsOfService": "Terms of Service",
   "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
   "@profileCouldNotOpen": {
@@ -208,5 +208,20 @@
   "accountPhoneRemoved": "Phone number removed",
   "accountPhoneIntroMpesa": "Your M-Pesa number. Entry fees are requested from it, so you don't type it each time.",
   "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
-  "accountRemovePhone": "Remove phone number"
+  "accountRemovePhone": "Remove phone number",
+  "profileSupport": "Support",
+  "profileSupportSubject": "Ozone support",
+  "@profileSupportSubject": {
+    "description": "Subject line of a support email."
+  },
+  "profileSupportWriteTo": "Write to {email} for help.",
+  "@profileSupportWriteTo": {
+    "description": "Shown when the phone can't open an email app.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "support@ozone.ke"
+      }
+    }
+  }
 }

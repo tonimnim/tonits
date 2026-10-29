@@ -171,7 +171,10 @@ void main() {
     expect(find.text('yo, free at 6?'), findsOneWidget);
     expect(find.text('Ready now'), findsWidgets);
     expect(
-      find.text("Ozone only reads this chat if there's a dispute or a report."),
+      find.text(
+        "Ozone only reads this chat if there's a dispute or a report. "
+        'Press and hold a message to report it.',
+      ),
       findsOneWidget,
     );
     expect(chat.reads, [2]);

@@ -126,5 +126,8 @@
   "paymentRemoved": "Removed",
   "paymentFromPhone": "From {phone}",
   "@paymentFromPhone": {"placeholders": {"phone": {"type": "String", "example": "+2547******78"}}},
-  "paymentOpenCompetition": "Open competition"
+  "paymentOpenCompetition": "Open competition",
+  "contestRules": "Contest rules",
+  "contestNotSponsored": "Apple and Google aren't sponsors of these competitions and take no part in them.",
+  "@contestNotSponsored": {"description": "Required by the App Store for contests (guideline 5.3.2)."}
 }

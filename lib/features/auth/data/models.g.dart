@@ -78,7 +78,11 @@ _LegalDocument _$LegalDocumentFromJson(Map<String, dynamic> json) =>
       final val = _LegalDocument(
         type: $checkedConvert(
           'documentType',
-          (v) => $enumDecode(_$LegalDocumentTypeEnumMap, v),
+          (v) => $enumDecode(
+            _$LegalDocumentTypeEnumMap,
+            v,
+            unknownValue: LegalDocumentType.unknown,
+          ),
         ),
         version: $checkedConvert('version', (v) => v as String),
         contentUrl: $checkedConvert('contentUrl', (v) => v as String),
@@ -89,4 +93,6 @@ _LegalDocument _$LegalDocumentFromJson(Map<String, dynamic> json) =>
 const _$LegalDocumentTypeEnumMap = {
   LegalDocumentType.terms: 'terms',
   LegalDocumentType.privacy: 'privacy',
+  LegalDocumentType.contestRules: 'contest_rules',
+  LegalDocumentType.unknown: 'unknown',
 };

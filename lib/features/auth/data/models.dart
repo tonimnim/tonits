@@ -81,13 +81,25 @@ abstract class AuthSession with _$AuthSession {
 
 Duration _seconds(int value) => Duration(seconds: value);
 
-enum LegalDocumentType { terms, privacy }
+@JsonEnum(fieldRename: FieldRename.snake)
+enum LegalDocumentType {
+  terms,
+  privacy,
 
-/// A Terms or Privacy Notice version the player accepts.
+  /// The official rules every competition runs by.
+  contestRules,
+
+  /// One added after this build; never linked.
+  unknown,
+}
+
+/// A legal document's current version: the Terms and Privacy Notice the
+/// player accepts, and the contest rules.
 @freezed
 abstract class LegalDocument with _$LegalDocument {
   const factory LegalDocument({
-    @JsonKey(name: 'documentType') required LegalDocumentType type,
+    @JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown)
+    required LegalDocumentType type,
     required String version,
 
     /// May be relative to the API origin.

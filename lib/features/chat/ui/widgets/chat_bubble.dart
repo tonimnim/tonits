@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/format.dart';
@@ -100,18 +101,24 @@ class ChatBubble extends StatelessWidget {
           ? CrossAxisAlignment.end
           : CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onLongPress: onReport,
-          child: BubbleShape(
-            mine: message.mine,
-            child: BubbleBody(
+        Semantics(
+          // Long-press can't be found by a screen reader; this can.
+          customSemanticsActions: onReport == null
+              ? null
+              : {CustomSemanticsAction(label: l.chatReportTitle): onReport!},
+          child: GestureDetector(
+            onLongPress: onReport,
+            child: BubbleShape(
               mine: message.mine,
-              meta: _Meta(
-                time: message.sentAt,
+              child: BubbleBody(
                 mine: message.mine,
-                tick: message.mine ? (seen ? _Tick.seen : _Tick.sent) : null,
+                meta: _Meta(
+                  time: message.sentAt,
+                  mine: message.mine,
+                  tick: message.mine ? (seen ? _Tick.seen : _Tick.sent) : null,
+                ),
+                child: _content(context),
               ),
-              child: _content(context),
             ),
           ),
         ),

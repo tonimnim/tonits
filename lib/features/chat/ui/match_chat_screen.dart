@@ -322,7 +322,7 @@ class _Empty extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              l.chatPrivacy,
+              '${l.chatPrivacy} ${l.chatReportHint}',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: p.mutedForeground),
             ),
@@ -333,16 +333,18 @@ class _Empty extends StatelessWidget {
   }
 }
 
-/// Who can read the chat, at the start of the conversation.
+/// Who can read the chat, and how to report a message, at the start of
+/// the conversation.
 class _PrivacyLine extends StatelessWidget {
   const _PrivacyLine();
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(top: TonitsSpace.sm),
       child: Text(
-        context.l10n.chatPrivacy,
+        '${l.chatPrivacy} ${l.chatReportHint}',
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 12, color: context.palette.mutedForeground),
       ),

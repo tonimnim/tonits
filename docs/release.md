@@ -30,6 +30,8 @@ What a store build needs, none of which is in git.
 flutter build appbundle --release --obfuscate --split-debug-info=build/symbols --dart-define=API_URL=https://<production API> --dart-define=GOOGLE_SERVER_CLIENT_ID=<web client id>
 ```
 
+- Add `--dart-define=SUPPORT_EMAIL=<address>` for Profile's Support row;
+  without it the row stays away.
 - `API_URL` must be `https://`; a release build with anything else stops at
   launch (`AppConfig.checkForRelease`).
 - Keep `build/symbols` for each release: crash reports can only be read

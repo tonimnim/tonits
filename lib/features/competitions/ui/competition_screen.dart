@@ -11,6 +11,7 @@ import '../data/competition.dart';
 import 'widgets/capacity_bar.dart';
 import 'widgets/competition_draw.dart';
 import 'widgets/competition_status_badge.dart';
+import 'widgets/contest_rules_footer.dart';
 import 'widgets/entry_bar.dart';
 import 'widgets/kenya_only_badge.dart';
 import 'widgets/match_format_panel.dart';
@@ -141,6 +142,8 @@ class CompetitionScreen extends ConsumerWidget {
           ),
         ),
       ],
+      const SizedBox(height: 24),
+      const ContestRulesFooter(),
     ];
   }
 

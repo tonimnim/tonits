@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/config.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/providers.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
+import '../../../account/application/account_providers.dart';
 import '../../../account/application/legal_links.dart';
 import '../../../auth/data/models.dart';
 
-/// The Terms and Privacy Notice the player accepted, which the stores
-/// require to stay reachable after sign-up.
+/// Support, the Terms and Privacy Notice the player accepted, which the
+/// stores require to stay reachable after sign-up, and the contest rules.
 class AboutSection extends ConsumerWidget {
   const AboutSection({super.key});
 
@@ -28,9 +31,34 @@ class AboutSection extends ConsumerWidget {
       size: 18,
       color: p.mutedForeground,
     );
+    final hasRules =
+        ref
+            .watch(legalDocumentsProvider)
+            .value
+            ?.any((d) => d.type == LegalDocumentType.contestRules) ??
+        false;
+    const support = AppConfig.supportEmail;
     return SettingsGroup(
       title: l.profileAboutTitle,
       rows: [
+        if (support.isNotEmpty)
+          SettingsRow(
+            icon: Icons.support_agent_outlined,
+            label: l.profileSupport,
+            value: support,
+            onTap: () async {
+              final opened = await launchUrl(
+                Uri(
+                  scheme: 'mailto',
+                  path: support,
+                  query:
+                      'subject=${Uri.encodeComponent(l.profileSupportSubject)}',
+                ),
+              );
+              if (opened || !context.mounted) return;
+              showMessage(context, l.profileSupportWriteTo(support));
+            },
+          ),
         SettingsRow(
           icon: Icons.description_outlined,
           label: l.profileTermsOfService,
@@ -43,6 +71,13 @@ class AboutSection extends ConsumerWidget {
           trailing: external,
           onTap: () => open(LegalDocumentType.privacy, l.accountLegalPrivacy),
         ),
+        if (hasRules)
+          SettingsRow(
+            icon: Icons.gavel_outlined,
+            label: l.contestRules,
+            trailing: external,
+            onTap: () => open(LegalDocumentType.contestRules, l.contestRules),
+          ),
       ],
     );
   }

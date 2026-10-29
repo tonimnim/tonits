@@ -331,7 +331,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileAboutTitle.
   ///
   /// In en, this message translates to:
-  /// **'About'**
+  /// **'Help and legal'**
   String get profileAboutTitle;
 
   /// No description provided for @profileTermsOfService.
@@ -657,6 +657,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove phone number'**
   String get accountRemovePhone;
+
+  /// No description provided for @profileSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get profileSupport;
+
+  /// Subject line of a support email.
+  ///
+  /// In en, this message translates to:
+  /// **'Ozone support'**
+  String get profileSupportSubject;
+
+  /// Shown when the phone can't open an email app.
+  ///
+  /// In en, this message translates to:
+  /// **'Write to {email} for help.'**
+  String profileSupportWriteTo(String email);
 
   /// The match room's button to its chat, and screen reader label.
   ///
@@ -1023,6 +1041,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not shared yet'**
   String get chatRoomCodeNotShared;
+
+  /// No description provided for @chatReportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold a message to report it.'**
+  String get chatReportHint;
 
   /// Title of the Competitions tab.
   ///
@@ -1587,6 +1611,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open competition'**
   String get paymentOpenCompetition;
+
+  /// No description provided for @contestRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Contest rules'**
+  String get contestRules;
+
+  /// Required by the App Store for contests (guideline 5.3.2).
+  ///
+  /// In en, this message translates to:
+  /// **'Apple and Google aren\'t sponsors of these competitions and take no part in them.'**
+  String get contestNotSponsored;
 
   /// The app's name; do not translate.
   ///

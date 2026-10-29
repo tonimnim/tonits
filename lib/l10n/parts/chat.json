@@ -114,5 +114,6 @@
   "chatErrorProposalGone": "That time was already answered or replaced.",
   "chatErrorProposalExpired": "That time has passed.",
   "chatErrorAlreadyReported": "You've already reported this message.",
-  "chatRoomCodeNotShared": "Not shared yet"
+  "chatRoomCodeNotShared": "Not shared yet",
+  "chatReportHint": "Press and hold a message to report it."
 }

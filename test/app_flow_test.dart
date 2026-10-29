@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 
@@ -336,7 +339,49 @@ void main() {
 
     await scrollPageTo(tester, find.text('Terms of Service'));
     expect(find.text('Privacy Notice'), findsOneWidget);
+    // Until the server serves contest rules, there's no link to them.
+    expect(find.text('Contest rules'), findsNothing);
     await scrollPageTo(tester, find.text('Ozone 1.0.0 (7)'));
+  });
+
+  testWidgets('contest rules, once served, open from a competition and '
+      'Profile; the sponsor line shows anyway', (tester) async {
+    final legal = jsonDecode(
+      FakeApi()
+          .routes['/v1/legal/documents/current']!(
+            http.Request('GET', Uri.parse('http://api.test')),
+          )
+          .body,
+    ) as Map<String, dynamic>;
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: FakeApi(
+        routes: {
+          '/v1/legal/documents/current': (_) => jsonResponse({
+            'data': [
+              ...legal['data'] as List,
+              {
+                'documentType': 'contest_rules',
+                'version': '1.0',
+                'contentUrl': 'https://example.test/rules',
+                'effectiveAt': '2026-10-01T00:00:00Z',
+              },
+            ],
+          }, 200),
+        },
+      ),
+    );
+
+    await openTab(tester, 'Compete');
+    await tester.tap(find.text('Nairobi Weekend Cup'));
+    await tester.pumpAndSettle();
+    await scrollPageTo(tester, find.textContaining("aren't sponsors"));
+    expect(find.text('Contest rules'), findsOneWidget);
+
+    await openTab(tester, 'Home');
+    await openProfileFromHome(tester);
+    await scrollPageTo(tester, find.text('Contest rules'));
   });
 
   testWidgets('signing out from Profile returns to sign in', (tester) async {

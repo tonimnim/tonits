@@ -929,7 +929,7 @@ $PlayerCopyWith<$Res> get player {
 /// @nodoc
 mixin _$LegalDocument {
 
-@JsonKey(name: 'documentType') LegalDocumentType get type; String get version;/// May be relative to the API origin.
+@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown) LegalDocumentType get type; String get version;/// May be relative to the API origin.
  String get contentUrl;
 /// Create a copy of LegalDocument
 /// with the given fields replaced by the non-null parameter values.
@@ -966,7 +966,7 @@ abstract mixin class $LegalDocumentCopyWith<$Res>  {
   factory $LegalDocumentCopyWith(LegalDocument value, $Res Function(LegalDocument) _then) = _$LegalDocumentCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'documentType') LegalDocumentType type, String version, String contentUrl
+@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown) LegalDocumentType type, String version, String contentUrl
 });
 
 
@@ -1073,7 +1073,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'documentType')  LegalDocumentType type,  String version,  String contentUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown)  LegalDocumentType type,  String version,  String contentUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LegalDocument() when $default != null:
 return $default(_that.type,_that.version,_that.contentUrl);case _:
@@ -1094,7 +1094,7 @@ return $default(_that.type,_that.version,_that.contentUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'documentType')  LegalDocumentType type,  String version,  String contentUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown)  LegalDocumentType type,  String version,  String contentUrl)  $default,) {final _that = this;
 switch (_that) {
 case _LegalDocument():
 return $default(_that.type,_that.version,_that.contentUrl);case _:
@@ -1114,7 +1114,7 @@ return $default(_that.type,_that.version,_that.contentUrl);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'documentType')  LegalDocumentType type,  String version,  String contentUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown)  LegalDocumentType type,  String version,  String contentUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _LegalDocument() when $default != null:
 return $default(_that.type,_that.version,_that.contentUrl);case _:
@@ -1129,10 +1129,10 @@ return $default(_that.type,_that.version,_that.contentUrl);case _:
 @JsonSerializable(createToJson: false)
 
 class _LegalDocument implements LegalDocument {
-  const _LegalDocument({@JsonKey(name: 'documentType') required this.type, required this.version, required this.contentUrl});
+  const _LegalDocument({@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown) required this.type, required this.version, required this.contentUrl});
   factory _LegalDocument.fromJson(Map<String, dynamic> json) => _$LegalDocumentFromJson(json);
 
-@override@JsonKey(name: 'documentType') final  LegalDocumentType type;
+@override@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown) final  LegalDocumentType type;
 @override final  String version;
 /// May be relative to the API origin.
 @override final  String contentUrl;
@@ -1169,7 +1169,7 @@ abstract mixin class _$LegalDocumentCopyWith<$Res> implements $LegalDocumentCopy
   factory _$LegalDocumentCopyWith(_LegalDocument value, $Res Function(_LegalDocument) _then) = __$LegalDocumentCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'documentType') LegalDocumentType type, String version, String contentUrl
+@JsonKey(name: 'documentType', unknownEnumValue: LegalDocumentType.unknown) LegalDocumentType type, String version, String contentUrl
 });
 
 

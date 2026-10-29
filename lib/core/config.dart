@@ -14,6 +14,10 @@ abstract final class AppConfig {
     defaultValue: 'http://10.0.2.2:8090',
   );
 
+  /// Where players write for help, `--dart-define=SUPPORT_EMAIL=…`. Profile
+  /// leaves its Support row out while it's empty.
+  static const supportEmail = String.fromEnvironment('SUPPORT_EMAIL');
+
   /// Stops a release build that would talk to a development server: both
   /// platforms block plain http in release, so every request would fail.
   static void checkForRelease({

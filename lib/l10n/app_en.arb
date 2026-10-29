@@ -82,7 +82,7 @@
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
   "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
-  "profileAboutTitle": "About",
+  "profileAboutTitle": "Help and legal",
   "profileTermsOfService": "Terms of Service",
   "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
   "@profileCouldNotOpen": {
@@ -210,6 +210,21 @@
   "accountPhoneIntroMpesa": "Your M-Pesa number. Entry fees are requested from it, so you don't type it each time.",
   "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
   "accountRemovePhone": "Remove phone number",
+  "profileSupport": "Support",
+  "profileSupportSubject": "Ozone support",
+  "@profileSupportSubject": {
+    "description": "Subject line of a support email."
+  },
+  "profileSupportWriteTo": "Write to {email} for help.",
+  "@profileSupportWriteTo": {
+    "description": "Shown when the phone can't open an email app.",
+    "placeholders": {
+      "email": {
+        "type": "String",
+        "example": "support@ozone.ke"
+      }
+    }
+  },
   "chatTitle": "Chat",
   "@chatTitle": {
     "description": "The match room's button to its chat, and screen reader label."
@@ -326,6 +341,7 @@
   "chatErrorProposalExpired": "That time has passed.",
   "chatErrorAlreadyReported": "You've already reported this message.",
   "chatRoomCodeNotShared": "Not shared yet",
+  "chatReportHint": "Press and hold a message to report it.",
   "competitionsTitle": "Competitions",
   "@competitionsTitle": {
     "description": "Title of the Competitions tab."
@@ -577,6 +593,11 @@
     }
   },
   "paymentOpenCompetition": "Open competition",
+  "contestRules": "Contest rules",
+  "contestNotSponsored": "Apple and Google aren't sponsors of these competitions and take no part in them.",
+  "@contestNotSponsored": {
+    "description": "Required by the App Store for contests (guideline 5.3.2)."
+  },
   "appName": "Ozone",
   "@appName": {
     "description": "The app's name; do not translate."

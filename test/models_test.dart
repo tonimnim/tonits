@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tonits/core/api/cursor_page.dart';
+import 'package:tonits/features/auth/data/models.dart';
 import 'package:tonits/features/competitions/data/competition.dart';
 import 'package:tonits/features/matches/data/match_summary.dart';
 import 'package:tonits/features/players/data/player_profile.dart';
@@ -143,5 +144,15 @@ void main() {
     expect(ended.status, CompetitionStatus.registrationOpen);
     expect(ended.registrationEnded, isTrue);
     expect(Competition.fromJson(competitionJson()).registrationEnded, isFalse);
+  });
+
+  test('legal documents read the contest rules, and a new kind as unknown', () {
+    LegalDocumentType kind(String type) => LegalDocument.fromJson({
+      'documentType': type,
+      'version': '1.0',
+      'contentUrl': '/legal/$type',
+    }).type;
+    expect(kind('contest_rules'), LegalDocumentType.contestRules);
+    expect(kind('cookie_policy'), LegalDocumentType.unknown);
   });
 }
