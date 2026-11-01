@@ -5,7 +5,7 @@ import '../../core/theme.dart';
 import 'app_tab.dart';
 
 /// The bottom bar: card surface with a hairline on top. The selected tab is
-/// shown by colour alone, a solid indigo icon and label, with no pill or
+/// shown by colour alone, a solid accent icon and label, with no pill or
 /// shade behind it.
 class TonitsNavigationBar extends StatelessWidget {
   const TonitsNavigationBar({
@@ -20,6 +20,11 @@ class TonitsNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    // Electric blue on the light bar; volt yellow on the navy one, where
+    // blue wouldn't stand out.
+    final active = Theme.of(context).brightness == Brightness.dark
+        ? p.soft
+        : p.primary;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: p.card,
@@ -39,7 +44,7 @@ class TonitsNavigationBar extends StatelessWidget {
             (states) => IconThemeData(
               size: 24,
               color: states.contains(WidgetState.selected)
-                  ? p.primary
+                  ? active
                   : p.mutedForeground,
             ),
           ),
@@ -51,7 +56,7 @@ class TonitsNavigationBar extends StatelessWidget {
                   ? FontWeight.w600
                   : FontWeight.w500,
               color: states.contains(WidgetState.selected)
-                  ? p.primary
+                  ? active
                   : p.mutedForeground,
             ),
           ),

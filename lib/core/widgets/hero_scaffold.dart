@@ -39,11 +39,11 @@ class HeroScaffold extends StatefulWidget {
   static const overlap = 28.0;
 
   /// A soft wash for a full-bleed brand moment, such as Welcome: a deeper
-  /// tint at the top fading to the soft tint.
+  /// tint at the top fading to the canvas.
   static Gradient wash(TonitsPalette p) => LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color.lerp(p.soft, p.primary, 0.16)!, p.soft],
+    colors: [Color.lerp(p.muted, p.primary, 0.16)!, p.background],
   );
 
   @override

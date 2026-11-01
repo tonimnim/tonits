@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Ozone's colours: a quiet neutral canvas with white cards, near-black
-/// text and actions, and indigo as the single accent; a near-black dark
-/// mode with the same accent.
+/// Ozone's colours, with match-day energy: an electric blue accent, volt
+/// yellow for "this is you" highlights, and deep navy for text, actions
+/// and the whole dark theme. Close in spirit to eFootball's broadcast look,
+/// but Ozone's own values, not Konami's.
 @immutable
 class TonitsPalette extends ThemeExtension<TonitsPalette> {
   const TonitsPalette({
@@ -53,48 +54,50 @@ class TonitsPalette extends ThemeExtension<TonitsPalette> {
   final (Color, Color) info;
   final (Color, Color) warn;
 
-  // Neutral canvas and cards, told apart by tone rather than lines or
-  // shadows. Indigo is the one accent: the rating card, the selected tab,
-  // focus. Colour otherwise only means something (good, warn, bad).
+  // A cool, pale canvas with white cards, told apart by tone. Electric
+  // blue is the accent (the rating card, the selected tab, focus), volt
+  // yellow marks the player's own rows, and navy carries text and the main
+  // button. Colour otherwise only means something (good, warn, bad).
   static const light = TonitsPalette(
-    background: Color(0xFFF2F2F4),
-    foreground: Color(0xFF18181B),
+    background: Color(0xFFF1F2FA),
+    foreground: Color(0xFF0B0B45),
     card: Color(0xFFFFFFFF),
-    primary: Color(0xFF5B5BD6),
+    primary: Color(0xFF2424F2),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFFE8E8EC),
-    onSoft: Color(0xFF18181B),
-    muted: Color(0xFFE8E8EC),
-    mutedForeground: Color(0xFF71717A),
-    subtleForeground: Color(0xFF52525B),
-    border: Color(0xFFE6E6EA),
-    input: Color(0xFFE0E0E5),
-    ring: Color(0xFF8B8CF0),
-    destructive: Color(0xFFD13A3F),
-    good: (Color(0xFF1F7A44), Color(0x264CCB74)),
-    info: (Color(0xFF3150D8), Color(0x265677FF)),
-    warn: (Color(0xFFB83D1A), Color(0x26FF7448)),
+    soft: Color(0xFFF5E900),
+    onSoft: Color(0xFF0B0B45),
+    muted: Color(0xFFE6E8F5),
+    mutedForeground: Color(0xFF5D6088),
+    subtleForeground: Color(0xFF3A3D6B),
+    border: Color(0xFFE3E5F3),
+    input: Color(0xFFDADDF0),
+    ring: Color(0xFF6E6EFF),
+    destructive: Color(0xFFD7263D),
+    good: (Color(0xFF16804A), Color(0x2638D27A)),
+    info: (Color(0xFF2424F2), Color(0x262E5BFF)),
+    warn: (Color(0xFFC23A12), Color(0x26FF6A3D)),
   );
 
+  // Match day: a deep navy canvas with brighter navy cards, an electric
+  // blue rating card, and volt yellow for the player's own rows.
   static const dark = TonitsPalette(
-    background: Color(0xFF0E0E10),
-    foreground: Color(0xFFF4F4F5),
-    card: Color(0xFF1B1B1F),
-    // The light theme's indigo: white on it stays readable on the card.
-    primary: Color(0xFF6262E0),
+    background: Color(0xFF05053A),
+    foreground: Color(0xFFFFFFFF),
+    card: Color(0xFF0E0E5C),
+    primary: Color(0xFF3333FF),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFF27272B),
-    onSoft: Color(0xFFF4F4F5),
-    muted: Color(0xFF232327),
-    mutedForeground: Color(0xFFA1A1AA),
-    subtleForeground: Color(0xFFD4D4D8),
-    border: Color(0x14FFFFFF),
-    input: Color(0x1FFFFFFF),
-    ring: Color(0xFF7C7CF0),
-    destructive: Color(0xFFFF6369),
-    good: (Color(0xFF7EE0A0), Color(0x264CCB74)),
-    info: (Color(0xFF9AAEFF), Color(0x265677FF)),
-    warn: (Color(0xFFFF9B78), Color(0x26FF7448)),
+    soft: Color(0xFFF5E900),
+    onSoft: Color(0xFF05053A),
+    muted: Color(0xFF16166E),
+    mutedForeground: Color(0xFFA9ACE6),
+    subtleForeground: Color(0xFFD6D8FF),
+    border: Color(0x1FFFFFFF),
+    input: Color(0x29FFFFFF),
+    ring: Color(0xFF8A8AFF),
+    destructive: Color(0xFFFF5470),
+    good: (Color(0xFF6FE7A2), Color(0x2638D27A)),
+    info: (Color(0xFFA9B4FF), Color(0x262E5BFF)),
+    warn: (Color(0xFFFFA078), Color(0x26FF6A3D)),
   );
 
   @override
