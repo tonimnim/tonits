@@ -123,7 +123,7 @@ void main() {
     // The winner reads bold, the loser muted.
     final winner = tester.widget<Text>(find.text('Lake Striker'));
     final loser = tester.widget<Text>(find.text('Kibera Maestro'));
-    expect(winner.style?.fontWeight, FontWeight.w700);
+    expect(winner.style?.fontWeight, FontWeight.w600);
     expect(loser.style?.fontWeight, FontWeight.w500);
 
     await tapChip(tester, 'Final');

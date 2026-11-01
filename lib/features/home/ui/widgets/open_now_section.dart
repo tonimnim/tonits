@@ -46,9 +46,9 @@ class OpenNowSection extends ConsumerWidget {
               ),
             )
           else
-            // On the page with hairlines, like the rows around it.
+            // Rows on the page, set apart by space rather than lines.
             for (final (i, competition) in open.take(_shown).indexed) ...[
-              if (i > 0) const Divider(height: 1),
+              if (i > 0) const SizedBox(height: 4),
               CompetitionRow(
                 competition: competition,
                 onTap: () => context.go(Routes.competition(competition.id)),

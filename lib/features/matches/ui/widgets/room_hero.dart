@@ -34,7 +34,7 @@ class RoomHero extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 22,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: -0.4,
           ),
         ),
@@ -161,7 +161,7 @@ class _Centre extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 2,
             color: p.mutedForeground,
           ),
@@ -177,7 +177,7 @@ class _Centre extends StatelessWidget {
             '$mine – $theirs',
             style: const TextStyle(
               fontSize: 44,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               height: 1.05,
               letterSpacing: -1,
               fontFeatures: [FontFeature.tabularFigures()],

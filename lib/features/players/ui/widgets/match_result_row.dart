@@ -31,7 +31,7 @@ class MatchResultRow extends StatelessWidget {
                     l.playerVersus(match.opponentName ?? l.playerFormerPlayer),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   Text(
                     '${match.competitionName} · ${Format.date(match.playedAt)}',

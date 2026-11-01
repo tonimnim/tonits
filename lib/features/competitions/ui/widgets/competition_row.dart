@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/format.dart';
 import '../../../../core/l10n.dart';
@@ -26,11 +27,13 @@ class CompetitionRow extends StatelessWidget {
     return MergeSemantics(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+        customBorder: TonitsShape.rounded(TonitsRadius.control),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
           child: Row(
             children: [
+              _StartDate(c.startsAt),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +98,45 @@ class CompetitionRow extends StatelessWidget {
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The day a competition starts, as a small white tile, like an event
+/// list's date.
+class _StartDate extends StatelessWidget {
+  const _StartDate(this.startsAt);
+
+  final DateTime startsAt;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final local = startsAt.toLocal();
+    return ExcludeSemantics(
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: TonitsShape.fill(p.card, 14),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              DateFormat('d').format(local),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w500,
+                height: 1.1,
+              ),
+            ),
+            Text(
+              DateFormat('MMM').format(local),
+              style: TextStyle(fontSize: 11, color: p.mutedForeground),
+            ),
+          ],
         ),
       ),
     );

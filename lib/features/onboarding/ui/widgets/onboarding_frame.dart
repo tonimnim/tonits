@@ -84,7 +84,7 @@ class OnboardingFrame extends StatelessWidget {
                         title,
                         style: const TextStyle(
                           fontSize: 30,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: -0.8,
                           height: 1.15,
                         ),
@@ -109,11 +109,7 @@ class OnboardingFrame extends StatelessWidget {
               offset: const Offset(0, -HeroScaffold.overlap),
               child: Material(
                 color: p.card,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(TonitsRadius.sheet),
-                  ),
-                ),
+                shape: TonitsShape.top(TonitsRadius.sheet),
                 child: SafeArea(
                   top: false,
                   child: Padding(

@@ -196,7 +196,7 @@ class _Hero extends StatelessWidget {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 30,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: -0.8,
               height: 1.15,
             ),

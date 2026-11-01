@@ -24,7 +24,7 @@ class FactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700);
+    const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
     return Semantics(
       button: onTap != null,
       label: '$label: $value',
@@ -85,7 +85,7 @@ class FactRow extends StatelessWidget {
   }
 }
 
-/// An icon in a soft circle.
+/// An icon in a circle of the canvas's tone, as on a card.
 class IconDot extends StatelessWidget {
   const IconDot({super.key, required this.icon, this.size = 36});
 
@@ -98,8 +98,8 @@ class IconDot extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
-      child: Icon(icon, size: size / 2, color: p.onSoft),
+      decoration: BoxDecoration(color: p.background, shape: BoxShape.circle),
+      child: Icon(icon, size: size / 2, color: p.foreground),
     );
   }
 }

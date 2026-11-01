@@ -70,7 +70,7 @@ class _NotificationBellState extends ConsumerState<NotificationBell> {
                   count > 99 ? '99+' : '$count',
                   style: const TextStyle(
                     fontSize: 11,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                     height: 1,
                   ),

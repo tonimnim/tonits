@@ -58,11 +58,7 @@ class _MpesaFormState extends State<MpesaForm> {
         children: [
           Container(
             padding: const EdgeInsets.all(TonitsSpace.lg),
-            decoration: BoxDecoration(
-              color: p.card,
-              borderRadius: BorderRadius.circular(TonitsRadius.card),
-              border: Border.all(color: p.border),
-            ),
+            decoration: TonitsShape.fill(p.card, TonitsRadius.card),
             child: Column(
               children: [
                 Text(
@@ -74,7 +70,7 @@ class _MpesaFormState extends State<MpesaForm> {
                   widget.amount,
                   style: const TextStyle(
                     fontSize: 32,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: -1,
                   ),
                 ),

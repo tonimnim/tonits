@@ -37,10 +37,7 @@ class GamePlan extends StatelessWidget {
         TonitsSpace.md,
         0,
       ),
-      decoration: BoxDecoration(
-        color: p.card,
-        borderRadius: BorderRadius.circular(TonitsRadius.card),
-      ),
+      decoration: TonitsShape.fill(p.card, TonitsRadius.card),
       child: Column(
         children: [
           _roomCode(context),
@@ -78,7 +75,7 @@ class GamePlan extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: monoFont.copyWith(
           fontSize: 19,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 1,
           color: p.foreground,
         ),
@@ -109,7 +106,7 @@ class GamePlan extends StatelessWidget {
     final agreed = view.chat.agreedStartAt;
     final time = TextStyle(
       fontSize: 16,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w600,
       color: p.foreground,
     );
     final note = TextStyle(fontSize: 12, color: p.mutedForeground);

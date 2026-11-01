@@ -44,17 +44,14 @@ class SegmentedTabs<T> extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: value == selected ? thumb : Colors.transparent,
+                      // The lighter thumb alone marks the selection.
                       borderRadius: BorderRadius.circular(999),
-                      // A hairline, not a shadow, marks the selection.
-                      border: Border.all(
-                        color: value == selected ? p.input : Colors.transparent,
-                      ),
                     ),
                     child: Text(
                       label,
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         color: value == selected
                             ? p.foreground
                             : p.mutedForeground,

@@ -22,7 +22,7 @@ class CountryField extends FormField<Country> {
            return LabeledField(
              label: label ?? state.context.l10n.countryLabel,
              child: InkWell(
-               borderRadius: BorderRadius.circular(TonitsRadius.control),
+               customBorder: TonitsShape.rounded(TonitsRadius.control),
                onTap: () async {
                  final picked = await showCountryPicker(state.context);
                  if (picked == null) return;

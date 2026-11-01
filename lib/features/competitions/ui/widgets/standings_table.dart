@@ -85,10 +85,7 @@ class _Row extends StatelessWidget {
     return MergeSemantics(
       child: Container(
         decoration: isMe
-            ? BoxDecoration(
-                color: p.soft,
-                borderRadius: BorderRadius.circular(TonitsRadius.control),
-              )
+            ? TonitsShape.fill(p.soft, TonitsRadius.control)
             : null,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: _Line(
@@ -97,7 +94,7 @@ class _Row extends StatelessWidget {
             row.rank?.toString() ?? '–',
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: color,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
@@ -136,7 +133,7 @@ class _Row extends StatelessWidget {
             ),
             Text(
               '${row.points}',
-              style: TextStyle(fontWeight: FontWeight.w700, color: color),
+              style: TextStyle(fontWeight: FontWeight.w600, color: color),
             ),
           ],
           style: number,

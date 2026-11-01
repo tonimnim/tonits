@@ -90,7 +90,7 @@ class _Header extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 17,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               if (match != null)

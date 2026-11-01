@@ -48,12 +48,22 @@ class SectionHeader extends StatelessWidget {
             child: Text(
               title,
               style: Theme.of(context).textTheme.titleMedium
-                  ?.copyWith(fontSize: 17, fontWeight: FontWeight.w700),
+                  ?.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
             ),
           ),
         ),
         if (actionLabel != null)
-          TextButton(onPressed: onAction, child: Text(actionLabel!)),
+          TextButton(
+            onPressed: onAction,
+            style: TextButton.styleFrom(
+              foregroundColor: context.palette.mutedForeground,
+              textStyle: const TextStyle(
+                fontFamily: 'Geist',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            child: Text(actionLabel!),
+          ),
       ],
     );
   }

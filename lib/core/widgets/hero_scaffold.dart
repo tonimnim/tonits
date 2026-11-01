@@ -4,10 +4,9 @@ import '../l10n.dart';
 import '../theme.dart';
 import 'round_icon_button.dart';
 
-/// A screen with a softly tinted top ([hero]) and its content on a sheet
-/// with rounded top corners laid over it. The app bar is clear over the
-/// hero, with a round back button, and turns solid once content scrolls
-/// under it.
+/// A screen with its [hero] at the top and the content under it, all on
+/// one flat canvas. The app bar is clear over the hero, with a round back
+/// button, and turns solid once content scrolls under it.
 class HeroScaffold extends StatefulWidget {
   const HeroScaffold({
     super.key,
@@ -19,10 +18,11 @@ class HeroScaffold extends StatefulWidget {
     this.bottom,
   });
 
-  /// The tinted top's content. It sits below the app bar.
+  /// The top's content, such as a header and a feature card. It sits below
+  /// the app bar.
   final Widget hero;
 
-  /// The sheet's content, top to bottom.
+  /// The content under the hero, top to bottom.
   final List<Widget> children;
 
   /// A quiet line in the app bar, such as the competition's name.
@@ -35,10 +35,11 @@ class HeroScaffold extends StatefulWidget {
   /// Pinned below the content, such as the screen's main action.
   final Widget? bottom;
 
-  /// How far the sheet reaches up over the hero.
+  /// How far a sheet reaches up over the [wash], on Welcome and onboarding.
   static const overlap = 28.0;
 
-  /// The hero's wash: a deeper tint at the top fading to the soft tint.
+  /// A soft wash for a full-bleed brand moment, such as Welcome: a deeper
+  /// tint at the top fading to the soft tint.
   static Gradient wash(TonitsPalette p) => LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -70,39 +71,27 @@ class _HeroScaffoldState extends State<HeroScaffold> {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
       children: [
-        Container(
-          decoration: BoxDecoration(gradient: HeroScaffold.wash(p)),
+        Padding(
           padding: EdgeInsets.fromLTRB(
             TonitsSpace.md,
             // A bare top leaves room under the status bar, so the header
             // doesn't crowd it.
-            bare ? top + TonitsSpace.xl : top + kToolbarHeight + 4,
+            bare ? top + TonitsSpace.lg : top + kToolbarHeight + 4,
             TonitsSpace.md,
-            TonitsSpace.xl + HeroScaffold.overlap,
+            TonitsSpace.lg,
           ),
           child: widget.hero,
         ),
-        Transform.translate(
-          offset: const Offset(0, -HeroScaffold.overlap),
-          child: Material(
-            color: p.background,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(TonitsRadius.sheet),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                TonitsSpace.md,
-                20,
-                TonitsSpace.md,
-                TonitsSpace.md,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: widget.children,
-              ),
-            ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            TonitsSpace.md,
+            0,
+            TonitsSpace.md,
+            TonitsSpace.md,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: widget.children,
           ),
         ),
       ],
@@ -133,7 +122,7 @@ class _HeroScaffoldState extends State<HeroScaffold> {
                   child: RoundIconButton(
                     icon: Icons.arrow_back,
                     tooltip: context.l10n.back,
-                    background: p.card.withValues(alpha: 0.85),
+                    background: p.card,
                     onPressed: () => Navigator.of(context).maybePop(),
                   ),
                 ),

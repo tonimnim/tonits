@@ -62,11 +62,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
             offset: const Offset(0, -HeroScaffold.overlap),
             child: Material(
               color: p.card,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(TonitsRadius.sheet),
-                ),
-              ),
+              shape: TonitsShape.top(TonitsRadius.sheet),
               child: SafeArea(
                 top: false,
                 child: Padding(
@@ -84,7 +80,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: -0.3,
                         ),
                       ),
@@ -163,7 +159,7 @@ class _Pitch extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 32,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: -0.9,
                           height: 1.12,
                         ),

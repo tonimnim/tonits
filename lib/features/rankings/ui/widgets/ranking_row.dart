@@ -25,10 +25,7 @@ class RankingRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         decoration: isMe
-            ? BoxDecoration(
-                color: p.soft,
-                borderRadius: BorderRadius.circular(TonitsRadius.control),
-              )
+            ? TonitsShape.fill(p.soft, TonitsRadius.control)
             : null,
         child: Row(
           children: [
@@ -55,7 +52,7 @@ class RankingRow extends StatelessWidget {
                         : player.displayName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   Text(
                     ['$flag @${player.handle}'.trim(), ?level].join(' · '),

@@ -55,10 +55,7 @@ class SeriesGames extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      decoration: BoxDecoration(
-        color: p.muted,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      decoration: TonitsShape.fill(p.muted, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -115,7 +112,7 @@ class _GameRow extends StatelessWidget {
               child: Text(
                 score,
                 style: const TextStyle(
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontFeatures: [FontFeature.tabularFigures()],
                 ),
               ),

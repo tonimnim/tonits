@@ -43,7 +43,7 @@ class FriendMatchCard extends StatelessWidget {
                   l.matchFind(opponent.displayName),
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -114,10 +114,7 @@ class _CopyField extends StatelessWidget {
     const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 8, 10),
-      decoration: BoxDecoration(
-        color: p.muted,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      decoration: TonitsShape.fill(p.muted, 18),
       child: Row(
         children: [
           Expanded(
@@ -171,7 +168,7 @@ class _Instruction extends StatelessWidget {
             '$number',
             style: TextStyle(
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               color: p.onSoft,
             ),
           ),
@@ -213,10 +210,7 @@ class _Reminder extends StatelessWidget {
     final p = context.palette;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: p.soft,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      decoration: TonitsShape.fill(p.soft, 18),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

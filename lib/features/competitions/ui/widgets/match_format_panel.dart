@@ -55,7 +55,7 @@ class MatchFormatPanel extends StatelessWidget {
                       children: [
                         Text(
                           l.seriesBestOf(bestOf),
-                          style: const TextStyle(fontWeight: FontWeight.w700),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         if (bestOf > 1)
                           Text(

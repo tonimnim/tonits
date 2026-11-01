@@ -24,11 +24,7 @@ class StatTile extends StatelessWidget {
     return MergeSemantics(
       child: Container(
         padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: p.card,
-          borderRadius: BorderRadius.circular(TonitsRadius.tile),
-          border: Border.all(color: p.border),
-        ),
+        decoration: TonitsShape.fill(p.card, TonitsRadius.tile),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,7 +33,7 @@ class StatTile extends StatelessWidget {
               maxLines: 1,
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 letterSpacing: -0.5,
                 height: 1.1,
                 color: valueColor ?? p.foreground,

@@ -15,7 +15,7 @@ extension StatusToneColors on StatusTone {
   };
 }
 
-/// The dashboard's status chip: a tinted, mono label.
+/// A status chip: a short label on a soft tint of its tone.
 class StatusBadge extends StatelessWidget {
   const StatusBadge(this.label, {super.key, required this.tone});
 
@@ -27,16 +27,16 @@ class StatusBadge extends StatelessWidget {
     final (text, fill) = tone.colorsIn(context.palette);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      // A soft tint, no edge: the tone says what it means.
       decoration: BoxDecoration(
         color: fill,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: text.withValues(alpha: 0.35)),
       ),
       child: Text(
         label,
         maxLines: 1,
-        style: monoFont.copyWith(
-          fontSize: 11,
+        style: TextStyle(
+          fontSize: 12,
           fontWeight: FontWeight.w500,
           color: text,
         ),

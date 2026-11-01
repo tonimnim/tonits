@@ -32,9 +32,9 @@ class RecentMatchesSection extends ConsumerWidget {
             onAction: () => context.go(Routes.matches),
           ),
           const SizedBox(height: TonitsSpace.sm),
-          // On the page with hairlines, like the ladder above.
+          // Rows on the page, set apart by space rather than lines.
           for (final (i, match) in rows.indexed) ...[
-            if (i > 0) const Divider(height: 1),
+            if (i > 0) const SizedBox(height: 4),
             MatchResultRow(match: match),
           ],
         ],

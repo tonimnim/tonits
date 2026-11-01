@@ -136,7 +136,7 @@ class _RoomActionsState extends ConsumerState<RoomActions> with BusyState {
             style: status.outcome
                 ? TextStyle(
                     fontSize: 26,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: -0.6,
                     color: color,
                   )

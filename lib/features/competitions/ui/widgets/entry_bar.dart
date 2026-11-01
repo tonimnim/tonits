@@ -93,11 +93,9 @@ class _EntryBarState extends ConsumerState<EntryBar> with BusyState {
     };
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: ShapeDecoration(
         color: p.card,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(TonitsRadius.panel),
-        ),
+        shape: TonitsShape.top(TonitsRadius.panel),
       ),
       padding: const EdgeInsets.fromLTRB(
         TonitsSpace.md,

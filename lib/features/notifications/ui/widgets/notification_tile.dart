@@ -50,7 +50,7 @@ class NotificationTile extends StatelessWidget {
                           item.title,
                           style: TextStyle(
                             fontWeight: unread
-                                ? FontWeight.w700
+                                ? FontWeight.w600
                                 : FontWeight.w500,
                           ),
                         ),

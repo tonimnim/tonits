@@ -49,7 +49,7 @@ class InitialsAvatar extends StatelessWidget {
         initialsOf(name),
         style: TextStyle(
           color: p.onSoft,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           fontSize: size * 0.36,
         ),
       ),

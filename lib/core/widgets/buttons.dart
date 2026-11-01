@@ -6,10 +6,11 @@ import '../theme.dart';
 const _label = TextStyle(
   fontFamily: 'Geist',
   fontSize: 16,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w500,
 );
 
-/// The screen's one main action: a full-width solid indigo button.
+/// The screen's one main action: a full-width near-black pill (white in the
+/// dark theme), so indigo stays the single accent.
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
@@ -33,25 +34,24 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final fill = destructive ? palette.destructive : palette.primary;
+    final fill = destructive ? palette.destructive : palette.foreground;
+    final ink = destructive ? Colors.white : palette.background;
     return FilledButton(
       // Stays enabled-looking while busy so the button doesn't flash grey.
       onPressed: busy ? () {} : onPressed,
       style: FilledButton.styleFrom(
         minimumSize: const Size.fromHeight(54),
         backgroundColor: fill,
-        foregroundColor: palette.onPrimary,
-        disabledBackgroundColor: fill.withValues(alpha: 0.45),
-        disabledForegroundColor: palette.onPrimary,
+        foregroundColor: ink,
+        disabledBackgroundColor: fill.withValues(alpha: 0.3),
+        disabledForegroundColor: ink,
         // Flat: no elevation, shadow or tint, in any state.
         elevation: 0,
         shadowColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         shape: pill
             ? const StadiumBorder()
-            : RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(TonitsRadius.control),
-              ),
+            : TonitsShape.rounded(TonitsRadius.control),
         textStyle: _label,
       ),
       child: busy
@@ -59,10 +59,7 @@ class PrimaryButton extends StatelessWidget {
               label: '$label, working',
               child: SizedBox.square(
                 dimension: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.2,
-                  color: palette.onPrimary,
-                ),
+                child: CircularProgressIndicator(strokeWidth: 2.2, color: ink),
               ),
             )
           : Text(label),
@@ -109,9 +106,7 @@ class SecondaryButton extends StatelessWidget {
       side: BorderSide(color: palette.input),
       shape: pill
           ? const StadiumBorder()
-          : RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(TonitsRadius.control),
-            ),
+          : TonitsShape.rounded(TonitsRadius.control),
       textStyle: _label,
     );
     return icon == null

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Tonits colours, taken from the staff dashboard's `theme.css`: a soft grey
-/// canvas, white rounded cards and an indigo accent with lavender tints, and
-/// a deep navy dark mode with the same accent.
+/// Ozone's colours: a quiet neutral canvas with white cards, near-black
+/// text and actions, and indigo as the single accent; a near-black dark
+/// mode with the same accent.
 @immutable
 class TonitsPalette extends ThemeExtension<TonitsPalette> {
   const TonitsPalette({
@@ -32,12 +32,13 @@ class TonitsPalette extends ThemeExtension<TonitsPalette> {
   final Color primary;
   final Color onPrimary;
 
-  /// Lavender tint for selected and secondary surfaces, and text on it.
+  /// A step off the canvas for selected and secondary surfaces, and text
+  /// on it.
   final Color soft;
   final Color onSoft;
   final Color muted;
 
-  /// Labels and captions. Below 4.5:1 on cards, so keep it to short labels.
+  /// Labels and captions, at 4.5:1 or more on cards and the canvas.
   final Color mutedForeground;
 
   /// Secondary body text, readable at any size.
@@ -52,37 +53,41 @@ class TonitsPalette extends ThemeExtension<TonitsPalette> {
   final (Color, Color) info;
   final (Color, Color) warn;
 
+  // Neutral canvas and cards, told apart by tone rather than lines or
+  // shadows. Indigo is the one accent: the rating card, the selected tab,
+  // focus. Colour otherwise only means something (good, warn, bad).
   static const light = TonitsPalette(
-    background: Color(0xFFF4F5FA),
-    foreground: Color(0xFF1B1D3A),
+    background: Color(0xFFF2F2F4),
+    foreground: Color(0xFF18181B),
     card: Color(0xFFFFFFFF),
     primary: Color(0xFF5B5BD6),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFFEEF0FB),
-    onSoft: Color(0xFF3F40B5),
-    muted: Color(0xFFF1F2F8),
-    mutedForeground: Color(0xFF858AA3),
-    subtleForeground: Color(0xFF4A4E6B),
-    border: Color(0xFFECEEF5),
-    input: Color(0xFFE3E5EF),
+    soft: Color(0xFFE8E8EC),
+    onSoft: Color(0xFF18181B),
+    muted: Color(0xFFE8E8EC),
+    mutedForeground: Color(0xFF71717A),
+    subtleForeground: Color(0xFF52525B),
+    border: Color(0xFFE6E6EA),
+    input: Color(0xFFE0E0E5),
     ring: Color(0xFF8B8CF0),
     destructive: Color(0xFFD13A3F),
-    good: (Color(0xFF23824A), Color(0x264CCB74)),
+    good: (Color(0xFF1F7A44), Color(0x264CCB74)),
     info: (Color(0xFF3150D8), Color(0x265677FF)),
-    warn: (Color(0xFFC4421D), Color(0x26FF7448)),
+    warn: (Color(0xFFB83D1A), Color(0x26FF7448)),
   );
 
   static const dark = TonitsPalette(
-    background: Color(0xFF0F1022),
-    foreground: Color(0xFFECEEFE),
-    card: Color(0xFF17182E),
-    primary: Color(0xFF7C7CF0),
+    background: Color(0xFF0E0E10),
+    foreground: Color(0xFFF4F4F5),
+    card: Color(0xFF1B1B1F),
+    // The light theme's indigo: white on it stays readable on the card.
+    primary: Color(0xFF6262E0),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFF23244A),
-    onSoft: Color(0xFFD7D8FF),
-    muted: Color(0xFF1F2040),
-    mutedForeground: Color(0xFF9396B8),
-    subtleForeground: Color(0xFFC3C5E0),
+    soft: Color(0xFF27272B),
+    onSoft: Color(0xFFF4F4F5),
+    muted: Color(0xFF232327),
+    mutedForeground: Color(0xFFA1A1AA),
+    subtleForeground: Color(0xFFD4D4D8),
     border: Color(0x14FFFFFF),
     input: Color(0x1FFFFFFF),
     ring: Color(0xFF7C7CF0),
@@ -125,10 +130,39 @@ abstract final class TonitsRadius {
   static const sheet = 32.0;
 }
 
+/// Continuous ("squircle") corners, as on iOS: the straight edge eases
+/// into the curve instead of meeting a circular arc. Every rounded surface
+/// uses them. A surface inside another takes its parent's radius minus the
+/// gap between them, so the corners stay concentric.
+abstract final class TonitsShape {
+  static OutlinedBorder rounded(
+    double radius, {
+    BorderSide side = BorderSide.none,
+  }) => RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.circular(radius),
+    side: side,
+  );
+
+  /// Rounded on top only, such as a bottom sheet or a pinned bar.
+  static OutlinedBorder top(double radius) => RoundedSuperellipseBorder(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+  );
+
+  /// A fill with these corners, for a [Container]'s decoration.
+  static ShapeDecoration fill(
+    Color color,
+    double radius, {
+    BorderSide side = BorderSide.none,
+  }) => ShapeDecoration(
+    color: color,
+    shape: rounded(radius, side: side),
+  );
+}
+
 /// The wordmark face: Alexandria ExtraBold.
 const brandFont = TextStyle(
   fontFamily: 'Alexandria',
-  fontWeight: FontWeight.w800,
+  fontWeight: FontWeight.w600,
   fontVariations: [FontVariation.weight(800)],
 );
 
@@ -163,6 +197,8 @@ ThemeData buildTheme(Brightness brightness) {
     displayColor: p.foreground,
   );
 
+  // Fields are filled grey pills of the canvas's next tone, outlined only
+  // when focused or wrong.
   OutlineInputBorder outline(Color color, [double width = 1]) =>
       OutlineInputBorder(
         borderRadius: BorderRadius.circular(TonitsRadius.control),
@@ -193,16 +229,16 @@ ThemeData buildTheme(Brightness brightness) {
     textTheme: text.copyWith(
       headlineMedium: text.headlineMedium?.copyWith(
         fontSize: 30,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.75,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.6,
         height: 1.15,
       ),
       headlineSmall: text.headlineSmall?.copyWith(
         fontSize: 22,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
       ),
-      titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+      titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w500),
       bodyLarge: text.bodyLarge?.copyWith(height: 1.5),
       bodyMedium: text.bodyMedium?.copyWith(height: 1.5),
       labelLarge: text.labelLarge?.copyWith(
@@ -220,8 +256,8 @@ ThemeData buildTheme(Brightness brightness) {
       titleTextStyle: TextStyle(
         fontFamily: 'Geist',
         fontSize: 22,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
         color: p.foreground,
       ),
       foregroundColor: p.foreground,
@@ -234,33 +270,25 @@ ThemeData buildTheme(Brightness brightness) {
       color: p.card,
       elevation: 0,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.card),
-        side: BorderSide(color: p.border),
-      ),
+      // Told apart from the canvas by tone alone: no edge, no shadow.
+      shape: TonitsShape.rounded(TonitsRadius.card),
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: p.card,
       surfaceTintColor: Colors.transparent,
       showDragHandle: true,
       dragHandleColor: p.input,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(TonitsRadius.sheet),
-        ),
-      ),
+      shape: TonitsShape.top(TonitsRadius.sheet),
     ),
     dialogTheme: DialogThemeData(
       backgroundColor: p.card,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.panel),
-      ),
+      shape: TonitsShape.rounded(TonitsRadius.panel),
       titleTextStyle: TextStyle(
         fontFamily: 'Geist',
         fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: -0.3,
         color: p.foreground,
       ),
@@ -268,18 +296,13 @@ ThemeData buildTheme(Brightness brightness) {
     popupMenuTheme: PopupMenuThemeData(
       color: p.card,
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
-        side: BorderSide(color: p.border),
-      ),
+      shape: TonitsShape.rounded(TonitsRadius.control),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: p.foreground,
       contentTextStyle: text.bodyMedium?.copyWith(color: p.background),
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
-      ),
+      shape: TonitsShape.rounded(TonitsRadius.control),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(color: p.primary),
     textSelectionTheme: TextSelectionThemeData(
@@ -289,11 +312,11 @@ ThemeData buildTheme(Brightness brightness) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: p.card,
+      fillColor: p.muted,
       contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
-      border: outline(p.input),
-      enabledBorder: outline(p.input),
-      disabledBorder: outline(p.border),
+      border: outline(Colors.transparent),
+      enabledBorder: outline(Colors.transparent),
+      disabledBorder: outline(Colors.transparent),
       focusedBorder: outline(p.primary, 1.5),
       errorBorder: outline(p.destructive),
       focusedErrorBorder: outline(p.destructive, 1.5),
@@ -307,7 +330,8 @@ ThemeData buildTheme(Brightness brightness) {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: p.primary,
+        // Neutral: indigo is kept for the one accent on a screen.
+        foregroundColor: p.foreground,
         // Button styles replace the theme font unless it is named again.
         textStyle: const TextStyle(
           fontFamily: 'Geist',
@@ -321,9 +345,7 @@ ThemeData buildTheme(Brightness brightness) {
     listTileTheme: ListTileThemeData(
       iconColor: p.mutedForeground,
       textColor: p.foreground,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
-      ),
+      shape: TonitsShape.rounded(TonitsRadius.control),
     ),
   );
 }

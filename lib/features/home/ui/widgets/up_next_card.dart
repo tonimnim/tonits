@@ -34,12 +34,19 @@ class UpNextCard extends ConsumerWidget {
           const SizedBox(height: TonitsSpace.sm),
           // On the page like the rows below; the whole row opens the match.
           InkWell(
-            borderRadius: BorderRadius.circular(TonitsRadius.control),
+            customBorder: TonitsShape.rounded(TonitsRadius.control),
             onTap: () => context.go(Routes.match(match.id)),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               child: Row(
                 children: [
+                  ExcludeSemantics(
+                    child: InitialsAvatar(
+                      name: match.opponent?.displayName ?? '?',
+                      size: 44,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
                   Expanded(
                     flex: 3,
                     child: Column(
@@ -88,9 +95,9 @@ class UpNextCard extends ConsumerWidget {
                         when,
                         maxLines: 2,
                         textAlign: TextAlign.end,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w600,
+                          color: p.subtleForeground,
                         ),
                       ),
                     ),

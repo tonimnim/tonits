@@ -18,10 +18,9 @@ class Notice extends StatelessWidget {
       liveRegion: true,
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          color: p.destructive.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(TonitsRadius.control),
-          border: Border.all(color: p.destructive.withValues(alpha: 0.35)),
+        decoration: TonitsShape.fill(
+          p.destructive.withValues(alpha: 0.1),
+          TonitsRadius.control,
         ),
         child: Row(
           children: [

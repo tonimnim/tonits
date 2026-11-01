@@ -24,7 +24,7 @@ class EntryRow extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(TonitsRadius.control),
+      customBorder: TonitsShape.rounded(TonitsRadius.control),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: Row(

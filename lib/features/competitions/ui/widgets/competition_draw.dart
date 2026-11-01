@@ -122,10 +122,7 @@ class _Placements extends StatelessWidget {
           MergeSemantics(
             child: Container(
               decoration: place.entryId == myEntryId
-                  ? BoxDecoration(
-                      color: p.soft,
-                      borderRadius: BorderRadius.circular(TonitsRadius.control),
-                    )
+                  ? TonitsShape.fill(p.soft, TonitsRadius.control)
                   : null,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
               child: Row(
@@ -143,7 +140,7 @@ class _Placements extends StatelessWidget {
                       semanticsLabel: l.drawPlacing(place.placement),
                       style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         color: place.placement == 1
                             ? p.onPrimary
                             : p.subtleForeground,

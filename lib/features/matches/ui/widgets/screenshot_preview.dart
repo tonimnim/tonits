@@ -38,7 +38,7 @@ Future<PreviewChoice?> previewScreenshot(
           const SizedBox(height: TonitsSpace.md),
           ConstrainedBox(
             constraints: BoxConstraints(maxHeight: size.height * 0.55),
-            child: ClipRRect(
+            child: ClipRSuperellipse(
               borderRadius: BorderRadius.circular(TonitsRadius.tile),
               child: ColoredBox(
                 color: p.muted,

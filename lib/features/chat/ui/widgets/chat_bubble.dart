@@ -182,7 +182,7 @@ class ChatBubble extends StatelessWidget {
           style: bubbleTextStyle(
             context,
             mine: mine,
-          ).copyWith(fontSize: 18, fontWeight: FontWeight.w700),
+          ).copyWith(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         if (onAnswer != null) ...[
           const SizedBox(height: 10),
@@ -481,7 +481,7 @@ class RoomCodeContent extends StatelessWidget {
           code,
           style: monoFont.copyWith(
             fontSize: 20,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 1,
             color: color,
           ),

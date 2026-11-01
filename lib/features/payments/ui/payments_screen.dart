@@ -90,7 +90,7 @@ class _PaymentRow extends ConsumerWidget {
     final at = payment.createdAt;
     return InkWell(
       onTap: () => _showReceipt(context, payment),
-      borderRadius: BorderRadius.circular(TonitsRadius.control),
+      customBorder: TonitsShape.rounded(TonitsRadius.control),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         child: Row(
@@ -168,7 +168,7 @@ Future<void> _showReceipt(BuildContext context, Payment payment) =>
                     Format.money(payment.amountMinor, payment.currency),
                     style: const TextStyle(
                       fontSize: 34,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: -0.8,
                     ),
                   ),

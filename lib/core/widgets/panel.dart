@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-/// A generously rounded, flat card with a hairline edge, for a screen's
-/// main content.
+/// A generously rounded, flat card for a screen's main content, set apart
+/// from the canvas by tone alone, with continuous corners.
 class Panel extends StatelessWidget {
   const Panel({
     super.key,
@@ -21,10 +21,7 @@ class Panel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(radius),
-      side: BorderSide(color: p.border),
-    );
+    final shape = TonitsShape.rounded(radius);
     return Material(
       color: p.card,
       shape: shape,

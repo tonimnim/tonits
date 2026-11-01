@@ -29,15 +29,12 @@ class ResultChip extends StatelessWidget {
         width: size,
         height: size,
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: fill,
-          borderRadius: BorderRadius.circular(6),
-        ),
+        decoration: TonitsShape.fill(fill, 6),
         child: Text(
           result.letter(context.l10n),
           style: TextStyle(
             fontSize: size * 0.46,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: text,
           ),
         ),

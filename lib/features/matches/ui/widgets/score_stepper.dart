@@ -57,7 +57,7 @@ class ScoreStepper extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: -0.5,
                   color: p.foreground,
                   fontFeatures: const [FontFeature.tabularFigures()],

@@ -31,13 +31,10 @@ class BracketMatchRow extends StatelessWidget {
     return MergeSemantics(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(TonitsRadius.control),
+        customBorder: TonitsShape.rounded(TonitsRadius.control),
         child: Ink(
           decoration: mine
-              ? BoxDecoration(
-                  color: p.soft,
-                  borderRadius: BorderRadius.circular(TonitsRadius.control),
-                )
+              ? TonitsShape.fill(p.soft, TonitsRadius.control)
               : null,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           child: Row(
@@ -135,7 +132,7 @@ class _Side extends StatelessWidget {
     final won = player != null && winner == player.entryId;
     final lost = player != null && winner != null && !won;
     final color = player == null || lost ? p.mutedForeground : p.foreground;
-    final weight = won ? FontWeight.w700 : FontWeight.w500;
+    final weight = won ? FontWeight.w600 : FontWeight.w500;
 
     return Row(
       children: [

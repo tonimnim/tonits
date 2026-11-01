@@ -168,10 +168,7 @@ class _Slot extends StatelessWidget {
     final l = context.l10n;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-      decoration: BoxDecoration(
-        color: p.muted,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      decoration: TonitsShape.fill(p.muted, 18),
       child: Row(
         children: [
           if (picked case final bytes?)
@@ -180,7 +177,7 @@ class _Slot extends StatelessWidget {
               label: label,
               child: GestureDetector(
                 onTap: onPreview,
-                child: ClipRRect(
+                child: ClipRSuperellipse(
                   borderRadius: BorderRadius.circular(10),
                   child: ScreenshotImage(
                     bytes: bytes,

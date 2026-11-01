@@ -5,6 +5,7 @@ import '../../../../core/countries.dart';
 import '../../../../core/format.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/theme.dart';
+import '../../../../core/widgets/widgets.dart';
 import '../../../players/application/players_providers.dart';
 import '../../../players/data/player_profile.dart';
 import '../../../players/ui/widgets/rating_level_label.dart';
@@ -20,7 +21,14 @@ class PlayerCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (ref.watch(myProfileProvider)) {
-      AsyncData(value: final profile) => _Shell(child: _Numbers(profile)),
+      AsyncData(value: final profile) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _Shell(child: _Rating(profile)),
+          const SizedBox(height: 10),
+          _Figures(profile),
+        ],
+      ),
       AsyncError(:final error) => SectionMessageCard.error(
         error: error,
         onRetry: () => ref.invalidate(myProfileProvider),
@@ -30,7 +38,7 @@ class PlayerCard extends ConsumerWidget {
   }
 }
 
-/// The indigo card the hero sits on.
+/// The indigo card the rating sits on: the screen's one accent.
 class _Shell extends StatelessWidget {
   const _Shell({required this.child});
 
@@ -40,11 +48,8 @@ class _Shell extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     return Container(
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: p.primary,
-        borderRadius: BorderRadius.circular(TonitsRadius.panel),
-      ),
+      padding: const EdgeInsets.fromLTRB(22, 20, 22, 22),
+      decoration: TonitsShape.fill(p.primary, TonitsRadius.panel),
       child: DefaultTextStyle.merge(
         style: TextStyle(color: p.onPrimary),
         child: child,
@@ -53,8 +58,9 @@ class _Shell extends StatelessWidget {
   }
 }
 
-class _Numbers extends StatelessWidget {
-  const _Numbers(this.profile);
+/// The rating, large but not heavy, and its level under it.
+class _Rating extends StatelessWidget {
+  const _Rating(this.profile);
 
   final PlayerProfile profile;
 
@@ -67,9 +73,6 @@ class _Numbers extends StatelessWidget {
     final value = rating?.rating ?? PlayerProfile.startingRating;
     final level = rating?.level?.label(l);
     final movement = rating?.rankMovement ?? 0;
-    final rank = rating?.countryRank;
-    final country =
-        Country.byCode(profile.countryCode)?.name ?? profile.countryCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,11 +81,7 @@ class _Numbers extends StatelessWidget {
           children: [
             Text(
               l.homeRating,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: on.withValues(alpha: 0.72),
-              ),
+              style: TextStyle(fontSize: 14, color: on.withValues(alpha: 0.72)),
             ),
             const Spacer(),
             if (!profile.hasPlayed)
@@ -91,71 +90,88 @@ class _Numbers extends StatelessWidget {
               _Movement(places: movement),
           ],
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 10),
         Semantics(
           label: l.homeRatingSemantics(value),
           excludeSemantics: true,
           child: Text(
             Format.number(value),
             style: TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -1.6,
-              height: 1.05,
+              fontSize: 52,
+              fontWeight: FontWeight.w500,
+              letterSpacing: -1.8,
+              height: 1,
               color: on,
+              fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
         ),
         if (level != null) ...[
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             level,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: on.withValues(alpha: 0.85),
-            ),
+            style: TextStyle(fontSize: 15, color: on.withValues(alpha: 0.85)),
           ),
         ],
-        const SizedBox(height: 24),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _Figure(
-              value: Format.number(profile.record.matchesPlayed),
-              label: l.homeMatches,
-            ),
-            _Figure(
-              value: Format.number(profile.record.wins),
-              label: l.playerWins,
-            ),
-            rank == null
-                ? _Figure(
-                    value: '—',
-                    spoken: l.homeUnranked,
-                    label: l.homeCountryRank(country),
-                    faint: true,
-                  )
-                : _Figure(
-                    value: '#${Format.number(rank)}',
-                    label: l.homeCountryRank(country),
-                  ),
-          ],
-        ),
       ],
     );
   }
 }
 
-/// One number under the rating, with what it counts.
+/// Matches, wins and the country rank as three tiles under the card, each
+/// with its icon.
+class _Figures extends StatelessWidget {
+  const _Figures(this.profile);
+
+  final PlayerProfile profile;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final rank = profile.rating?.countryRank;
+    final country =
+        Country.byCode(profile.countryCode)?.name ?? profile.countryCode;
+    return FactRow(
+      children: [
+        _Figure(
+          icon: Icons.sports_esports_outlined,
+          value: Format.number(profile.record.matchesPlayed),
+          label: l.homeMatches,
+        ),
+        _Figure(
+          icon: Icons.emoji_events_outlined,
+          value: Format.number(profile.record.wins),
+          label: l.playerWins,
+        ),
+        rank == null
+            ? _Figure(
+                icon: Icons.leaderboard_outlined,
+                value: '—',
+                spoken: l.homeUnranked,
+                label: l.homeCountryRank(country),
+                faint: true,
+              )
+            : _Figure(
+                icon: Icons.leaderboard_outlined,
+                value: '#${Format.number(rank)}',
+                label: l.homeCountryRank(country),
+              ),
+      ],
+    );
+  }
+}
+
+/// One number on its own white tile: the icon, the value, what it counts.
 class _Figure extends StatelessWidget {
   const _Figure({
+    required this.icon,
     required this.value,
     required this.label,
     this.spoken,
     this.faint = false,
   });
 
+  final IconData icon;
   final String value;
   final String label;
 
@@ -167,12 +183,16 @@ class _Figure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final on = context.palette.onPrimary;
-    return Expanded(
-      child: MergeSemantics(
+    final p = context.palette;
+    return MergeSemantics(
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+        decoration: TonitsShape.fill(p.card, TonitsRadius.tile),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ExcludeSemantics(child: IconDot(icon: icon, size: 32)),
+            const SizedBox(height: 18),
             FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
@@ -181,9 +201,9 @@ class _Figure extends StatelessWidget {
                 semanticsLabel: spoken,
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w500,
                   letterSpacing: -0.4,
-                  color: faint ? on.withValues(alpha: 0.45) : on,
+                  color: faint ? p.mutedForeground : p.foreground,
                   fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
@@ -196,7 +216,7 @@ class _Figure extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 height: 1.25,
-                color: on.withValues(alpha: 0.72),
+                color: p.mutedForeground,
               ),
             ),
           ],
