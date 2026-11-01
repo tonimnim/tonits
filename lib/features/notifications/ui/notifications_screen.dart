@@ -36,6 +36,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         context.go(Routes.matchChat(matchId));
       case OpenPayments():
         unawaited(context.push(Routes.myPayments));
+      case OpenAccountDeletion():
+        unawaited(context.push(Routes.deleteAccount));
       case OpenCompetition(:final competitionId):
         context.go(Routes.competition(competitionId));
       case ShowDetails():

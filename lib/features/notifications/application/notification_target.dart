@@ -36,6 +36,7 @@ sealed class NotificationTarget {
     }
     // Payments and refunds: the receipts and where each refund stands.
     if (kind.startsWith('payment.')) return const OpenPayments();
+    if (kind == 'account.deletion_blocked') return const OpenAccountDeletion();
     // Match and result events, and the removal, which names its match.
     if ((kind.startsWith('match.') ||
             kind.startsWith('result.') ||
@@ -80,6 +81,11 @@ class OpenCompetition extends NotificationTarget {
 /// The player's payments, with their refunds.
 class OpenPayments extends NotificationTarget {
   const OpenPayments();
+}
+
+/// Where the player's account deletion stands, such as why it's on hold.
+class OpenAccountDeletion extends NotificationTarget {
+  const OpenAccountDeletion();
 }
 
 /// The item itself, in full.

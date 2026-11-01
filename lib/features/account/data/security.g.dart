@@ -49,6 +49,11 @@ _DeletionRequest _$DeletionRequestFromJson(Map<String, dynamic> json) =>
           'executeAfter',
           (v) => DateTime.parse(v as String),
         ),
+        blockedReason: $checkedConvert('blockedReason', (v) => v as String?),
+        blockedAt: $checkedConvert(
+          'blockedAt',
+          (v) => v == null ? null : DateTime.parse(v as String),
+        ),
       );
       return val;
     });

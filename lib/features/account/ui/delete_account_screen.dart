@@ -110,6 +110,40 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen>
       onPressed: busy ? null : _cancel,
     );
 
+    // Due, but held up: say why; the server tries again each day.
+    if (pending.blockedReason case final reason?) {
+      return [
+        Panel(
+          radius: TonitsRadius.tile,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const IconDot(icon: Icons.pause_circle_outline),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.deleteOnHold,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(_heldBecause(reason, l), style: text),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: TonitsSpace.sm),
+        Text(l.deleteRetriedDaily, style: text),
+        const SizedBox(height: TonitsSpace.lg),
+        FormError(error),
+        cancel,
+      ];
+    }
+
     if (now.isBefore(pending.executeAfter)) {
       return [
         intro,
@@ -171,4 +205,14 @@ class _DeleteAccountScreenState extends ConsumerState<DeleteAccountScreen>
       cancel,
     ];
   }
+
+  /// A held-up deletion's reason in the player's words; one the app
+  /// doesn't know yet says only that it's on hold.
+  static String _heldBecause(String reason, AppLocalizations l) =>
+      switch (reason) {
+        'active_competition_blocks_deletion' => l.deleteHeldCompetition,
+        'unsettled_payment_blocks_deletion' => l.deleteHeldPayment,
+        'organization_ownership_transfer_required' => l.deleteHeldOrganization,
+        _ => l.deleteHeldOther,
+      };
 }

@@ -168,6 +168,18 @@ void main() {
       );
     });
 
+    test('a deletion on hold opens the account deletion', () {
+      expect(
+        NotificationTarget.of(
+          item({
+            'kind': 'account.deletion_blocked',
+            'deletionRequestId': 'del1',
+          }, category: 'account'),
+        ),
+        isA<OpenAccountDeletion>(),
+      );
+    });
+
     test('competition events open the competition', () {
       expect(
         NotificationTarget.of(

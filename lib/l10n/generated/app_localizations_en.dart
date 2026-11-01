@@ -2144,16 +2144,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteRequestMessage =>
-      'You can finish deleting it after 24 hours, or cancel before then.';
+      'It\'s deleted on its own after 24 hours. You can cancel before then.';
 
   @override
   String get deleteRequested => 'Deletion requested';
 
   @override
-  String get deleteAvailableFrom => 'You can delete it from';
+  String get deleteAvailableFrom => 'Deleted automatically from';
 
   @override
-  String get deleteReady => 'Type DELETE to delete your account for good.';
+  String get deleteReady =>
+      'Your account is deleted within minutes. To delete it now, type DELETE.';
 
   @override
   String get deleteConfirmLabel => 'Confirmation';
@@ -2166,6 +2167,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteCancelled => 'Deletion cancelled';
+
+  @override
+  String get deleteOnHold => 'Deletion on hold';
+
+  @override
+  String get deleteHeldCompetition =>
+      'You\'re still in a competition. Your account is deleted once it\'s over.';
+
+  @override
+  String get deleteHeldPayment =>
+      'A payment of yours is still being settled. Your account is deleted once it is.';
+
+  @override
+  String get deleteHeldOrganization =>
+      'You own an organization. Hand it over to someone else first.';
+
+  @override
+  String get deleteHeldOther =>
+      'Something is holding it up. Contact Ozone support if it stays on hold.';
+
+  @override
+  String get deleteRetriedDaily =>
+      'Ozone tries again every day. You can still cancel.';
 
   @override
   String seriesBestOf(int count) {

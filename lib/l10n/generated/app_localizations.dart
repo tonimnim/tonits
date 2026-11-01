@@ -3673,7 +3673,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteRequestMessage.
   ///
   /// In en, this message translates to:
-  /// **'You can finish deleting it after 24 hours, or cancel before then.'**
+  /// **'It\'s deleted on its own after 24 hours. You can cancel before then.'**
   String get deleteRequestMessage;
 
   /// No description provided for @deleteRequested.
@@ -3685,13 +3685,13 @@ abstract class AppLocalizations {
   /// Label over the date and time the 24-hour wait ends.
   ///
   /// In en, this message translates to:
-  /// **'You can delete it from'**
+  /// **'Deleted automatically from'**
   String get deleteAvailableFrom;
 
   /// DELETE is the literal word the player types; keep it in English capitals.
   ///
   /// In en, this message translates to:
-  /// **'Type DELETE to delete your account for good.'**
+  /// **'Your account is deleted within minutes. To delete it now, type DELETE.'**
   String get deleteReady;
 
   /// No description provided for @deleteConfirmLabel.
@@ -3717,6 +3717,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Deletion cancelled'**
   String get deleteCancelled;
+
+  /// No description provided for @deleteOnHold.
+  ///
+  /// In en, this message translates to:
+  /// **'Deletion on hold'**
+  String get deleteOnHold;
+
+  /// No description provided for @deleteHeldCompetition.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re still in a competition. Your account is deleted once it\'s over.'**
+  String get deleteHeldCompetition;
+
+  /// No description provided for @deleteHeldPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'A payment of yours is still being settled. Your account is deleted once it is.'**
+  String get deleteHeldPayment;
+
+  /// No description provided for @deleteHeldOrganization.
+  ///
+  /// In en, this message translates to:
+  /// **'You own an organization. Hand it over to someone else first.'**
+  String get deleteHeldOrganization;
+
+  /// No description provided for @deleteHeldOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something is holding it up. Contact Ozone support if it stays on hold.'**
+  String get deleteHeldOther;
+
+  /// No description provided for @deleteRetriedDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Ozone tries again every day. You can still cancel.'**
+  String get deleteRetriedDaily;
 
   /// A match format: how many games a match is.
   ///

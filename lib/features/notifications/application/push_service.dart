@@ -131,6 +131,7 @@ class PushService {
         competitionId,
       ),
       OpenPayments() => Routes.myPayments,
+      OpenAccountDeletion() => Routes.deleteAccount,
       ShowDetails() => Routes.notifications,
     };
     if (_ref.read(currentPlayerProvider) == null) {

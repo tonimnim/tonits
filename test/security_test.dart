@@ -27,13 +27,18 @@ Map<String, dynamic> _session(
   'current': current,
 };
 
-Map<String, dynamic> _deletion({required Duration until}) => {
+Map<String, dynamic> _deletion({
+  required Duration until,
+  String? blockedReason,
+}) => {
   'id': 'del1',
   'status': 'pending',
   'requestedAt': testNow.toIso8601String(),
   'executeAfter': testNow.add(until).toIso8601String(),
   'cancelledAt': null,
   'completedAt': null,
+  'blockedReason': blockedReason,
+  'blockedAt': blockedReason == null ? null : testNow.toIso8601String(),
 };
 
 Future<void> _openProfileRow(WidgetTester tester, String row) async {
@@ -139,7 +144,7 @@ void main() {
       ),
       hasLength(1),
     );
-    expect(find.text('You can delete it from'), findsOneWidget);
+    expect(find.text('Deleted automatically from'), findsOneWidget);
     // Nothing can be deleted for good yet.
     expect(find.text('DELETE'), findsNothing);
 
@@ -210,5 +215,32 @@ void main() {
       findsOneWidget,
     );
     expect(find.widgetWithText(AppBar, 'Delete account'), findsOneWidget);
+  });
+
+  testWidgets('a deletion held up past its wait says why, and can still be '
+      'cancelled', (tester) async {
+    await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      api: _deletionApi(
+        initial: _deletion(
+          until: const Duration(hours: -2),
+          blockedReason: 'active_competition_blocks_deletion',
+        ),
+      ),
+    );
+    await _openProfileRow(tester, 'Delete account');
+
+    expect(find.text('Deletion on hold'), findsOneWidget);
+    expect(
+      find.text(
+        "You're still in a competition. Your account is deleted once it's "
+        'over.',
+      ),
+      findsOneWidget,
+    );
+    // Nothing to type: the server goes ahead once nothing holds it up.
+    expect(find.byType(TextField), findsNothing);
+    expect(find.text('Cancel request'), findsOneWidget);
   });
 }

@@ -1530,13 +1530,13 @@
   "deleteWaitNote": "There's a 24-hour wait first, and you can cancel during it.",
   "deleteRequest": "Request deletion",
   "deleteRequestTitle": "Delete your account?",
-  "deleteRequestMessage": "You can finish deleting it after 24 hours, or cancel before then.",
+  "deleteRequestMessage": "It's deleted on its own after 24 hours. You can cancel before then.",
   "deleteRequested": "Deletion requested",
-  "deleteAvailableFrom": "You can delete it from",
+  "deleteAvailableFrom": "Deleted automatically from",
   "@deleteAvailableFrom": {
     "description": "Label over the date and time the 24-hour wait ends."
   },
-  "deleteReady": "Type DELETE to delete your account for good.",
+  "deleteReady": "Your account is deleted within minutes. To delete it now, type DELETE.",
   "@deleteReady": {
     "description": "DELETE is the literal word the player types; keep it in English capitals."
   },
@@ -1544,6 +1544,12 @@
   "deleteForGood": "Delete account",
   "deleteCancel": "Cancel request",
   "deleteCancelled": "Deletion cancelled",
+  "deleteOnHold": "Deletion on hold",
+  "deleteHeldCompetition": "You're still in a competition. Your account is deleted once it's over.",
+  "deleteHeldPayment": "A payment of yours is still being settled. Your account is deleted once it is.",
+  "deleteHeldOrganization": "You own an organization. Hand it over to someone else first.",
+  "deleteHeldOther": "Something is holding it up. Contact Ozone support if it stays on hold.",
+  "deleteRetriedDaily": "Ozone tries again every day. You can still cancel.",
   "seriesBestOf": "Best of {count}",
   "@seriesBestOf": {
     "description": "A match format: how many games a match is.",

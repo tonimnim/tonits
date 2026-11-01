@@ -39,8 +39,14 @@ abstract class DeletionRequest with _$DeletionRequest {
     required DeletionStatus status,
     required DateTime requestedAt,
 
-    /// The end of the 24-hour wait: deleting is possible from then on.
+    /// The end of the 24-hour wait: the server deletes the account soon
+    /// after, unless something holds it up.
     required DateTime executeAfter,
+
+    /// Why a due deletion is waiting, such as
+    /// `active_competition_blocks_deletion`; it's tried again daily.
+    String? blockedReason,
+    DateTime? blockedAt,
   }) = _DeletionRequest;
 
   factory DeletionRequest.fromJson(Map<String, dynamic> json) =>

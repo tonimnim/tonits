@@ -305,8 +305,11 @@ as bool,
 /// @nodoc
 mixin _$DeletionRequest {
 
- String get id;@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus get status; DateTime get requestedAt;/// The end of the 24-hour wait: deleting is possible from then on.
- DateTime get executeAfter;
+ String get id;@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus get status; DateTime get requestedAt;/// The end of the 24-hour wait: the server deletes the account soon
+/// after, unless something holds it up.
+ DateTime get executeAfter;/// Why a due deletion is waiting, such as
+/// `active_competition_blocks_deletion`; it's tried again daily.
+ String? get blockedReason; DateTime? get blockedAt;
 /// Create a copy of DeletionRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -318,20 +321,20 @@ $DeletionRequestCopyWith<DeletionRequest> get copyWith => _$DeletionRequestCopyW
 @override
 bool operator ==(Object other) {
   final _this = this as DeletionRequest;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeletionRequest&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.requestedAt, _this.requestedAt) || other.requestedAt == _this.requestedAt)&&(identical(other.executeAfter, _this.executeAfter) || other.executeAfter == _this.executeAfter));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeletionRequest&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.requestedAt, _this.requestedAt) || other.requestedAt == _this.requestedAt)&&(identical(other.executeAfter, _this.executeAfter) || other.executeAfter == _this.executeAfter)&&(identical(other.blockedReason, _this.blockedReason) || other.blockedReason == _this.blockedReason)&&(identical(other.blockedAt, _this.blockedAt) || other.blockedAt == _this.blockedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as DeletionRequest;
-  return Object.hash(runtimeType,_this.id,_this.status,_this.requestedAt,_this.executeAfter);
+  return Object.hash(runtimeType,_this.id,_this.status,_this.requestedAt,_this.executeAfter,_this.blockedReason,_this.blockedAt);
 }
 
 @override
 String toString() {
   final _this = this as DeletionRequest;
-  return 'DeletionRequest(id: ${_this.id}, status: ${_this.status}, requestedAt: ${_this.requestedAt}, executeAfter: ${_this.executeAfter})';
+  return 'DeletionRequest(id: ${_this.id}, status: ${_this.status}, requestedAt: ${_this.requestedAt}, executeAfter: ${_this.executeAfter}, blockedReason: ${_this.blockedReason}, blockedAt: ${_this.blockedAt})';
 }
 
 
@@ -342,7 +345,7 @@ abstract mixin class $DeletionRequestCopyWith<$Res>  {
   factory $DeletionRequestCopyWith(DeletionRequest value, $Res Function(DeletionRequest) _then) = _$DeletionRequestCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus status, DateTime requestedAt, DateTime executeAfter
+ String id,@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus status, DateTime requestedAt, DateTime executeAfter, String? blockedReason, DateTime? blockedAt
 });
 
 
@@ -359,13 +362,15 @@ class _$DeletionRequestCopyWithImpl<$Res>
 
 /// Create a copy of DeletionRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? status = null,Object? requestedAt = null,Object? executeAfter = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? status = null,Object? requestedAt = null,Object? executeAfter = null,Object? blockedReason = freezed,Object? blockedAt = freezed,}) {
   return _then(DeletionRequest(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as DeletionStatus,requestedAt: null == requestedAt ? _self.requestedAt : requestedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,executeAfter: null == executeAfter ? _self.executeAfter : executeAfter // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,blockedReason: freezed == blockedReason ? _self.blockedReason : blockedReason // ignore: cast_nullable_to_non_nullable
+as String?,blockedAt: freezed == blockedAt ? _self.blockedAt : blockedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -450,10 +455,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter,  String? blockedReason,  DateTime? blockedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DeletionRequest() when $default != null:
-return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case _:
+return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter,_that.blockedReason,_that.blockedAt);case _:
   return orElse();
 
 }
@@ -471,10 +476,10 @@ return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter,  String? blockedReason,  DateTime? blockedAt)  $default,) {final _that = this;
 switch (_that) {
 case _DeletionRequest():
-return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case _:
+return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter,_that.blockedReason,_that.blockedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -491,10 +496,10 @@ return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(unknownEnumValue: DeletionStatus.unknown)  DeletionStatus status,  DateTime requestedAt,  DateTime executeAfter,  String? blockedReason,  DateTime? blockedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _DeletionRequest() when $default != null:
-return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case _:
+return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter,_that.blockedReason,_that.blockedAt);case _:
   return null;
 
 }
@@ -506,14 +511,19 @@ return $default(_that.id,_that.status,_that.requestedAt,_that.executeAfter);case
 @JsonSerializable(createToJson: false)
 
 class _DeletionRequest implements DeletionRequest {
-  const _DeletionRequest({required this.id, @JsonKey(unknownEnumValue: DeletionStatus.unknown) required this.status, required this.requestedAt, required this.executeAfter});
+  const _DeletionRequest({required this.id, @JsonKey(unknownEnumValue: DeletionStatus.unknown) required this.status, required this.requestedAt, required this.executeAfter, this.blockedReason, this.blockedAt});
   factory _DeletionRequest.fromJson(Map<String, dynamic> json) => _$DeletionRequestFromJson(json);
 
 @override final  String id;
 @override@JsonKey(unknownEnumValue: DeletionStatus.unknown) final  DeletionStatus status;
 @override final  DateTime requestedAt;
-/// The end of the 24-hour wait: deleting is possible from then on.
+/// The end of the 24-hour wait: the server deletes the account soon
+/// after, unless something holds it up.
 @override final  DateTime executeAfter;
+/// Why a due deletion is waiting, such as
+/// `active_competition_blocks_deletion`; it's tried again daily.
+@override final  String? blockedReason;
+@override final  DateTime? blockedAt;
 
 /// Create a copy of DeletionRequest
 /// with the given fields replaced by the non-null parameter values.
@@ -525,18 +535,18 @@ _$DeletionRequestCopyWith<_DeletionRequest> get copyWith => __$DeletionRequestCo
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeletionRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.status, status) || other.status == status)&&(identical(other.requestedAt, requestedAt) || other.requestedAt == requestedAt)&&(identical(other.executeAfter, executeAfter) || other.executeAfter == executeAfter));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeletionRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.status, status) || other.status == status)&&(identical(other.requestedAt, requestedAt) || other.requestedAt == requestedAt)&&(identical(other.executeAfter, executeAfter) || other.executeAfter == executeAfter)&&(identical(other.blockedReason, blockedReason) || other.blockedReason == blockedReason)&&(identical(other.blockedAt, blockedAt) || other.blockedAt == blockedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,status,requestedAt,executeAfter);
+    return Object.hash(runtimeType,id,status,requestedAt,executeAfter,blockedReason,blockedAt);
 }
 
 @override
 String toString() {
-    return 'DeletionRequest(id: $id, status: $status, requestedAt: $requestedAt, executeAfter: $executeAfter)';
+    return 'DeletionRequest(id: $id, status: $status, requestedAt: $requestedAt, executeAfter: $executeAfter, blockedReason: $blockedReason, blockedAt: $blockedAt)';
 }
 
 
@@ -547,7 +557,7 @@ abstract mixin class _$DeletionRequestCopyWith<$Res> implements $DeletionRequest
   factory _$DeletionRequestCopyWith(_DeletionRequest value, $Res Function(_DeletionRequest) _then) = __$DeletionRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus status, DateTime requestedAt, DateTime executeAfter
+ String id,@JsonKey(unknownEnumValue: DeletionStatus.unknown) DeletionStatus status, DateTime requestedAt, DateTime executeAfter, String? blockedReason, DateTime? blockedAt
 });
 
 
@@ -564,13 +574,15 @@ class __$DeletionRequestCopyWithImpl<$Res>
 
 /// Create a copy of DeletionRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? status = null,Object? requestedAt = null,Object? executeAfter = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? status = null,Object? requestedAt = null,Object? executeAfter = null,Object? blockedReason = freezed,Object? blockedAt = freezed,}) {
   return _then(_DeletionRequest(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as DeletionStatus,requestedAt: null == requestedAt ? _self.requestedAt : requestedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,executeAfter: null == executeAfter ? _self.executeAfter : executeAfter // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,blockedReason: freezed == blockedReason ? _self.blockedReason : blockedReason // ignore: cast_nullable_to_non_nullable
+as String?,blockedAt: freezed == blockedAt ? _self.blockedAt : blockedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
