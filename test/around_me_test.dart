@@ -8,7 +8,7 @@ Future<void> openRankings(WidgetTester tester) async {
   await tester.tap(
     find.descendant(
       of: find.byType(TonitsNavigationBar),
-      matching: find.text('Rankings'),
+      matching: find.byTooltip('Rankings'),
     ),
   );
   await tester.pumpAndSettle();

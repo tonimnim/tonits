@@ -335,7 +335,7 @@ Future<void> openCompetition(WidgetTester tester, String text) async {
   await tester.tap(
     find.descendant(
       of: find.byType(TonitsNavigationBar),
-      matching: find.text('Compete'),
+      matching: find.byTooltip('Compete'),
     ),
   );
   await tester.pumpAndSettle();

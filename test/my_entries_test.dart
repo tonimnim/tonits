@@ -36,7 +36,7 @@ Future<void> _openTab(WidgetTester tester, String label) async {
   await tester.tap(
     find.descendant(
       of: find.byType(TonitsNavigationBar),
-      matching: find.text(label),
+      matching: find.byTooltip(label),
     ),
   );
   await tester.pumpAndSettle();

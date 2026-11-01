@@ -429,7 +429,7 @@ void main() {
     await tester.tap(
       find.descendant(
         of: find.byType(TonitsNavigationBar),
-        matching: find.text('Matches'),
+        matching: find.byTooltip('Matches'),
       ),
     );
     await tester.pumpAndSettle();

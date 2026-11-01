@@ -178,7 +178,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byType(TonitsNavigationBar),
-          matching: find.text('Matches'),
+          matching: find.byTooltip('Matches'),
         ),
       );
       await tester.pumpAndSettle();
@@ -239,7 +239,7 @@ void main() {
         await tester.tap(
           find.descendant(
             of: find.byType(TonitsNavigationBar),
-            matching: find.text(tab),
+            matching: find.byTooltip(tab),
           ),
         );
         await tester.pumpAndSettle();
@@ -259,7 +259,7 @@ void main() {
       await tester.tap(
         find.descendant(
           of: find.byType(TonitsNavigationBar),
-          matching: find.text('Compete'),
+          matching: find.byTooltip('Compete'),
         ),
       );
       await tester.pumpAndSettle();
@@ -341,7 +341,7 @@ void main() {
         await tester.tap(
           find.descendant(
             of: find.byType(TonitsNavigationBar),
-            matching: find.text('Matches'),
+            matching: find.byTooltip('Matches'),
           ),
         );
         await tester.pumpAndSettle();

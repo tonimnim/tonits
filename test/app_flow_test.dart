@@ -18,7 +18,7 @@ Future<void> openTab(WidgetTester tester, String label) async {
   await tester.tap(
     find.descendant(
       of: find.byType(TonitsNavigationBar),
-      matching: find.text(label),
+      matching: find.byTooltip(label),
     ),
   );
   await tester.pumpAndSettle();
@@ -310,7 +310,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byType(TonitsNavigationBar),
-        matching: find.text('Profile'),
+        matching: find.byTooltip('Profile'),
       ),
       findsNothing,
     );
