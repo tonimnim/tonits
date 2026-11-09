@@ -92,9 +92,9 @@ class _Satellite extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.card,
           shape: BoxShape.circle,
-          border: Border.all(color: p.soft, width: 3),
+          border: Border.all(color: p.border),
         ),
-        child: Icon(icon, size: 20, color: p.primary),
+        child: Icon(icon, size: 20, color: p.foreground),
       ),
     );
   }

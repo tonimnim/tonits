@@ -1332,13 +1332,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get entryFinished => 'Finished';
 
   @override
-  String get homeGoodMorning => 'Good morning';
+  String homeHey(String name) {
+    return 'Hey $name,';
+  }
 
   @override
-  String get homeGoodAfternoon => 'Good afternoon';
+  String get homeHeadline => 'Ready to play?';
 
   @override
-  String get homeGoodEvening => 'Good evening';
+  String get homeFindTitle => 'Find your next competition';
+
+  @override
+  String homeOpenCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count open to enter now',
+      one: '1 open to enter now',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeComingUp => 'See what\'s coming up';
 
   @override
   String get homeSeeAll => 'See all';

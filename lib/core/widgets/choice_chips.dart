@@ -60,7 +60,7 @@ class _ChoiceChipsState<T> extends State<ChoiceChips<T>> {
                   ),
                   decoration: BoxDecoration(
                     color: value == widget.selected
-                        ? p.primary
+                        ? p.foreground
                         : dark
                         ? p.card
                         : p.muted,
@@ -72,7 +72,7 @@ class _ChoiceChipsState<T> extends State<ChoiceChips<T>> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: value == widget.selected
-                          ? p.onPrimary
+                          ? p.background
                           : p.subtleForeground,
                     ),
                   ),

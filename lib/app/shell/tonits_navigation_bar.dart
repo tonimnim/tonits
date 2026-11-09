@@ -5,9 +5,9 @@ import '../../core/theme.dart';
 import 'app_tab.dart';
 
 /// The bottom bar: a floating, fully rounded bar inset from the screen's
-/// edges. The selected tab grows into a filled pill with its icon and name;
-/// the others are icons alone, with their names as tooltips and for screen
-/// readers.
+/// edges, with icons alone. The selected one sits in a filled circle,
+/// near-black by day and volt at night. Each tab's name is its tooltip and
+/// what a screen reader says.
 class TonitsNavigationBar extends StatelessWidget {
   const TonitsNavigationBar({
     super.key,
@@ -38,7 +38,7 @@ class TonitsNavigationBar extends StatelessWidget {
               BoxShadow(
                 color: dark
                     ? Colors.black.withValues(alpha: 0.45)
-                    : p.primary.withValues(alpha: 0.12),
+                    : Colors.black.withValues(alpha: 0.08),
                 blurRadius: 24,
                 spreadRadius: -6,
                 offset: const Offset(0, 6),
@@ -46,24 +46,14 @@ class TonitsNavigationBar extends StatelessWidget {
             ],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               for (final tab in AppTab.values)
-                // The selected pill may give up width on a narrow phone:
-                // its name shortens rather than the bar overflowing.
-                tab == selected
-                    ? Flexible(
-                        child: _Tab(
-                          tab: tab,
-                          selected: true,
-                          onTap: () => onSelected(tab),
-                        ),
-                      )
-                    : _Tab(
-                        tab: tab,
-                        selected: false,
-                        onTap: () => onSelected(tab),
-                      ),
+                _Tab(
+                  tab: tab,
+                  selected: tab == selected,
+                  onTap: () => onSelected(tab),
+                ),
             ],
           ),
         ),
@@ -79,15 +69,15 @@ class _Tab extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  static const _duration = Duration(milliseconds: 260);
+  static const _duration = Duration(milliseconds: 220);
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
     final dark = Theme.of(context).brightness == Brightness.dark;
-    // Electric blue with white on the light bar; volt yellow with navy on
-    // the navy one, where blue wouldn't stand out.
-    final (fill, ink) = dark ? (p.soft, p.onSoft) : (p.primary, p.onPrimary);
+    // Near-black on the white bar; volt on the charcoal one, where black
+    // wouldn't show.
+    final (fill, ink) = dark ? (p.soft, p.onSoft) : (p.foreground, p.card);
     final label = tab.label(context.l10n);
 
     return Semantics(
@@ -99,46 +89,20 @@ class _Tab extends StatelessWidget {
         message: label,
         child: InkWell(
           onTap: onTap,
-          customBorder: const StadiumBorder(),
+          customBorder: const CircleBorder(),
           child: AnimatedContainer(
             duration: _duration,
             curve: Curves.easeOutCubic,
-            height: 44,
-            padding: EdgeInsets.symmetric(horizontal: selected ? 16 : 12),
-            decoration: ShapeDecoration(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
               color: selected ? fill : Colors.transparent,
-              shape: const StadiumBorder(),
+              shape: BoxShape.circle,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  selected ? tab.selectedIcon : tab.icon,
-                  size: 22,
-                  color: selected ? ink : p.mutedForeground,
-                ),
-                Flexible(
-                  child: AnimatedSize(
-                    duration: _duration,
-                    curve: Curves.easeOutCubic,
-                    child: selected
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Text(
-                              label,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: ink,
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                ),
-              ],
+            child: Icon(
+              selected ? tab.selectedIcon : tab.icon,
+              size: 24,
+              color: selected ? ink : p.mutedForeground,
             ),
           ),
         ),

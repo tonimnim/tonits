@@ -1,6 +1,7 @@
 /// The Tonits design system. Import this file rather than each component.
 library;
 
+export 'artwork.dart';
 export 'brand_mark.dart';
 export 'busy_state.dart';
 export 'buttons.dart';

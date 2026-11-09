@@ -31,7 +31,7 @@ class CapacityBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: fraction,
               minHeight: 4,
-              color: p.primary,
+              color: p.foreground,
               backgroundColor: p.muted,
             ),
           ),

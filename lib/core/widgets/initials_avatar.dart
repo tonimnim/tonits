@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 /// A round avatar: the player's photo when there is one, otherwise up to
-/// two initials on lavender. The initials also show while the photo loads
+/// two initials on warm grey. The initials also show while the photo loads
 /// and if it can't.
 class InitialsAvatar extends StatelessWidget {
   const InitialsAvatar({
@@ -44,11 +44,11 @@ class InitialsAvatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      decoration: BoxDecoration(color: p.soft, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: p.muted, shape: BoxShape.circle),
       child: Text(
         initialsOf(name),
         style: TextStyle(
-          color: p.onSoft,
+          color: p.foreground,
           fontWeight: FontWeight.w600,
           fontSize: size * 0.36,
         ),

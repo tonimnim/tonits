@@ -11,7 +11,7 @@ class BrandMark extends StatelessWidget {
 
   final double size;
 
-  /// Defaults to the primary indigo.
+  /// Defaults to the text colour.
   final Color? color;
 
   @override
@@ -22,7 +22,7 @@ class BrandMark extends StatelessWidget {
       height: size,
       excludeFromSemantics: true,
       colorFilter: ColorFilter.mode(
-        color ?? context.palette.primary,
+        color ?? context.palette.foreground,
         BlendMode.srcIn,
       ),
     );

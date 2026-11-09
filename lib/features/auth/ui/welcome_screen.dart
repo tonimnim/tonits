@@ -148,7 +148,13 @@ class _Pitch extends StatelessWidget {
                   child: BrandLockup(),
                 ),
                 const SizedBox(height: TonitsSpace.lg),
-                WelcomeOrbit(size: orbit),
+                SizedBox.square(
+                  dimension: orbit,
+                  child: Artwork(
+                    asset: TonitsArt.welcome,
+                    fallback: WelcomeOrbit(size: orbit),
+                  ),
+                ),
                 const SizedBox(height: TonitsSpace.lg),
                 Column(
                   children: [
@@ -157,12 +163,8 @@ class _Pitch extends StatelessWidget {
                       child: Text(
                         context.l10n.welcomeHeadline,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.9,
-                          height: 1.12,
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge
+                            ?.copyWith(fontSize: 36, letterSpacing: -1.2),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -197,7 +199,11 @@ class _FinePrint extends ConsumerWidget {
     final l = context.l10n;
     TextSpan link(String label, LegalDocumentType type) => TextSpan(
       text: label,
-      style: TextStyle(color: p.primary, fontWeight: FontWeight.w600),
+      style: TextStyle(
+        color: p.foreground,
+        fontWeight: FontWeight.w600,
+        decoration: TextDecoration.underline,
+      ),
       recognizer: TapGestureRecognizer()
         ..onTap = () => openLegalDocument(ref, type),
     );

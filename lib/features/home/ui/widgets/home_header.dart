@@ -9,75 +9,58 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../account/application/account_providers.dart';
 import '../../../notifications/ui/widgets/notification_bell.dart';
 
-/// The player's avatar, which opens Profile, beside a time-of-day greeting
-/// and their name.
+/// The top of Home: the player's avatar, which opens Profile, and the
+/// bell on one line; under them a small greeting and the page's headline.
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, required this.name, this.now});
+  const HomeHeader({super.key, required this.name});
 
   final String name;
-
-  /// For tests; defaults to the current time.
-  final DateTime? now;
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final hour = (now ?? DateTime.now()).hour;
     final l = context.l10n;
-    final greeting = hour < 12
-        ? l.homeGoodMorning
-        : hour < 17
-        ? l.homeGoodAfternoon
-        : l.homeGoodEvening;
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Tooltip(
-          message: l.tabProfile,
-          child: Semantics(
-            button: true,
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: () => context.push(Routes.profile),
-              child: Container(
-                padding: const EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  color: p.card,
-                  shape: BoxShape.circle,
-                ),
-                child: Consumer(
-                  builder: (context, ref, _) => InitialsAvatar(
-                    name: name,
-                    size: 46,
-                    image: ref.watch(myAvatarProvider).value,
+        Row(
+          children: [
+            Tooltip(
+              message: l.tabProfile,
+              child: Semantics(
+                button: true,
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () => context.push(Routes.profile),
+                  child: Consumer(
+                    builder: (context, ref, _) => InitialsAvatar(
+                      name: name,
+                      size: 48,
+                      image: ref.watch(myAvatarProvider).value,
+                    ),
                   ),
                 ),
               ),
             ),
+            const Spacer(),
+            const NotificationBell(),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Text(
+          l.homeHey(name),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 15, color: p.mutedForeground),
+        ),
+        const SizedBox(height: 2),
+        Semantics(
+          header: true,
+          child: Text(
+            l.homeHeadline,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                greeting,
-                style: TextStyle(fontSize: 14, color: p.subtleForeground),
-              ),
-              Semantics(
-                header: true,
-                child: Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 12),
-        const NotificationBell(),
       ],
     );
   }

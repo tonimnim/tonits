@@ -2338,23 +2338,35 @@ abstract class AppLocalizations {
   /// **'Finished'**
   String get entryFinished;
 
-  /// No description provided for @homeGoodMorning.
+  /// Small greeting above Home's headline.
   ///
   /// In en, this message translates to:
-  /// **'Good morning'**
-  String get homeGoodMorning;
+  /// **'Hey {name},'**
+  String homeHey(String name);
 
-  /// No description provided for @homeGoodAfternoon.
+  /// Home's large headline, under the greeting.
   ///
   /// In en, this message translates to:
-  /// **'Good afternoon'**
-  String get homeGoodAfternoon;
+  /// **'Ready to play?'**
+  String get homeHeadline;
 
-  /// No description provided for @homeGoodEvening.
+  /// The feature card on Home when the player has no match coming; it opens Compete.
   ///
   /// In en, this message translates to:
-  /// **'Good evening'**
-  String get homeGoodEvening;
+  /// **'Find your next competition'**
+  String get homeFindTitle;
+
+  /// Under 'Find your next competition': how many the player can enter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 open to enter now} other{{count} open to enter now}}'**
+  String homeOpenCount(int count);
+
+  /// Under 'Find your next competition' when none are open to enter.
+  ///
+  /// In en, this message translates to:
+  /// **'See what\'s coming up'**
+  String get homeComingUp;
 
   /// Action on a Home section header that opens the full list.
   ///

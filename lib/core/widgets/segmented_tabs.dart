@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-/// A compact two-to-four option switch, such as "Active · History".
+/// A short row of two to four choices, such as "Open · Live · Finished":
+/// pill chips, the selected one filled near-black (volt at night), the
+/// rest grey. Scrolls sideways if the names don't fit.
 class SegmentedTabs<T> extends StatelessWidget {
   const SegmentedTabs({
     super.key,
@@ -18,49 +20,48 @@ class SegmentedTabs<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    // The selected segment is the lighter surface in both themes.
     final dark = Theme.of(context).brightness == Brightness.dark;
-    final track = dark ? p.card : p.muted;
-    final thumb = dark ? p.soft : p.card;
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: track,
-        borderRadius: BorderRadius.circular(999),
-      ),
+    final (fill, ink) = dark
+        ? (p.soft, p.onSoft)
+        : (p.foreground, p.background);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (final MapEntry(key: value, value: label) in options.entries)
-            Expanded(
-              child: Semantics(
-                selected: value == selected,
-                button: true,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => onChanged(value),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: value == selected ? thumb : Colors.transparent,
-                      // The lighter thumb alone marks the selection.
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: value == selected
-                            ? p.foreground
-                            : p.mutedForeground,
-                      ),
+          for (final (i, MapEntry(key: value, value: label))
+              in options.entries.indexed) ...[
+            if (i > 0) const SizedBox(width: 8),
+            Semantics(
+              selected: value == selected,
+              button: true,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => onChanged(value),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: value == selected
+                        ? fill
+                        : dark
+                        ? p.card
+                        : p.muted,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: value == selected ? ink : p.subtleForeground,
                     ),
                   ),
                 ),
               ),
             ),
+          ],
         ],
       ),
     );

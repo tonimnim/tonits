@@ -85,14 +85,14 @@ class _ProfilePhotoState extends ConsumerState<ProfilePhoto> {
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
-                  color: p.primary,
+                  color: p.foreground,
                   shape: BoxShape.circle,
                   border: Border.all(color: p.card, width: 3),
                 ),
                 child: Icon(
                   Icons.photo_camera_outlined,
                   size: 14,
-                  color: p.onPrimary,
+                  color: p.background,
                 ),
               ),
             ),

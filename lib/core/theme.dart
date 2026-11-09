@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Ozone's colours, with match-day energy: an electric blue accent, volt
-/// yellow for "this is you" highlights, and deep navy for text, actions
-/// and the whole dark theme. Close in spirit to eFootball's broadcast look,
-/// but Ozone's own values, not Konami's.
+/// Ozone's colours: a calm, warm neutral page where pictures and one volt
+/// yellow accent bring the energy. Near-black carries text and the main
+/// actions; electric blue is kept for the rating, links to the player's
+/// standing and status, never for whole surfaces.
 @immutable
 class TonitsPalette extends ThemeExtension<TonitsPalette> {
   const TonitsPalette({
@@ -54,23 +54,23 @@ class TonitsPalette extends ThemeExtension<TonitsPalette> {
   final (Color, Color) info;
   final (Color, Color) warn;
 
-  // A cool, pale canvas with white cards, told apart by tone. Electric
-  // blue is the accent (the rating card, the selected tab, focus), volt
-  // yellow marks the player's own rows, and navy carries text and the main
-  // button. Colour otherwise only means something (good, warn, bad).
+  // A warm off-white canvas with white cards. Near-black for text, main
+  // buttons and the selected tab; volt yellow for the one feature card on a
+  // screen; electric blue only for the rating figure and info tones.
   static const light = TonitsPalette(
-    background: Color(0xFFF1F2FA),
-    foreground: Color(0xFF0B0B45),
+    background: Color(0xFFF6F6F2),
+    foreground: Color(0xFF111114),
     card: Color(0xFFFFFFFF),
     primary: Color(0xFF2424F2),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFFF5E900),
-    onSoft: Color(0xFF0B0B45),
-    muted: Color(0xFFE6E8F5),
-    mutedForeground: Color(0xFF5D6088),
-    subtleForeground: Color(0xFF3A3D6B),
-    border: Color(0xFFE3E5F3),
-    input: Color(0xFFDADDF0),
+    soft: Color(0xFFE4F222),
+    onSoft: Color(0xFF111114),
+    muted: Color(0xFFECECE6),
+    // 5:1 on the canvas, 5.4:1 on cards.
+    mutedForeground: Color(0xFF6A6A65),
+    subtleForeground: Color(0xFF3C3C39),
+    border: Color(0xFFE7E7E1),
+    input: Color(0xFFDCDCD5),
     ring: Color(0xFF6E6EFF),
     destructive: Color(0xFFD7263D),
     good: (Color(0xFF16804A), Color(0x2638D27A)),
@@ -78,19 +78,19 @@ class TonitsPalette extends ThemeExtension<TonitsPalette> {
     warn: (Color(0xFFC23A12), Color(0x26FF6A3D)),
   );
 
-  // Match day: a deep navy canvas with brighter navy cards, an electric
-  // blue rating card, and volt yellow for the player's own rows.
+  // The same idea at night: near-black canvas, charcoal cards, white for
+  // text and main buttons, volt for the feature card and selection.
   static const dark = TonitsPalette(
-    background: Color(0xFF05053A),
+    background: Color(0xFF0D0D0F),
     foreground: Color(0xFFFFFFFF),
-    card: Color(0xFF0E0E5C),
-    primary: Color(0xFF3333FF),
+    card: Color(0xFF19191C),
+    primary: Color(0xFF6B6BFF),
     onPrimary: Color(0xFFFFFFFF),
-    soft: Color(0xFFF5E900),
-    onSoft: Color(0xFF05053A),
-    muted: Color(0xFF16166E),
-    mutedForeground: Color(0xFFA9ACE6),
-    subtleForeground: Color(0xFFD6D8FF),
+    soft: Color(0xFFE4F222),
+    onSoft: Color(0xFF111114),
+    muted: Color(0xFF26262A),
+    mutedForeground: Color(0xFFA3A3A8),
+    subtleForeground: Color(0xFFD6D6DA),
     border: Color(0x1FFFFFFF),
     input: Color(0x29FFFFFF),
     ring: Color(0xFF8A8AFF),
@@ -230,16 +230,23 @@ ThemeData buildTheme(Brightness brightness) {
       outlineVariant: p.border,
     ),
     textTheme: text.copyWith(
+      // Display type is set tight, about -3%, as headlines are in print.
+      headlineLarge: text.headlineLarge?.copyWith(
+        fontSize: 34,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -1.1,
+        height: 1.1,
+      ),
       headlineMedium: text.headlineMedium?.copyWith(
         fontSize: 30,
         fontWeight: FontWeight.w600,
-        letterSpacing: -0.6,
-        height: 1.15,
+        letterSpacing: -0.9,
+        height: 1.12,
       ),
       headlineSmall: text.headlineSmall?.copyWith(
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
+        letterSpacing: -0.6,
       ),
       titleMedium: text.titleMedium?.copyWith(fontWeight: FontWeight.w500),
       bodyLarge: text.bodyLarge?.copyWith(height: 1.5),
@@ -260,7 +267,7 @@ ThemeData buildTheme(Brightness brightness) {
         fontFamily: 'Geist',
         fontSize: 22,
         fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
+        letterSpacing: -0.6,
         color: p.foreground,
       ),
       foregroundColor: p.foreground,
@@ -273,8 +280,11 @@ ThemeData buildTheme(Brightness brightness) {
       color: p.card,
       elevation: 0,
       margin: EdgeInsets.zero,
-      // Told apart from the canvas by tone alone: no edge, no shadow.
-      shape: TonitsShape.rounded(TonitsRadius.card),
+      // White on the warm canvas with a hairline edge; no shadow.
+      shape: TonitsShape.rounded(
+        TonitsRadius.card,
+        side: BorderSide(color: p.border),
+      ),
     ),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: p.card,
@@ -307,11 +317,11 @@ ThemeData buildTheme(Brightness brightness) {
       behavior: SnackBarBehavior.floating,
       shape: TonitsShape.rounded(TonitsRadius.control),
     ),
-    progressIndicatorTheme: ProgressIndicatorThemeData(color: p.primary),
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: p.foreground),
     textSelectionTheme: TextSelectionThemeData(
-      cursorColor: p.primary,
+      cursorColor: p.foreground,
       selectionColor: p.ring.withValues(alpha: 0.35),
-      selectionHandleColor: p.primary,
+      selectionHandleColor: p.foreground,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
@@ -320,7 +330,7 @@ ThemeData buildTheme(Brightness brightness) {
       border: outline(Colors.transparent),
       enabledBorder: outline(Colors.transparent),
       disabledBorder: outline(Colors.transparent),
-      focusedBorder: outline(p.primary, 1.5),
+      focusedBorder: outline(p.foreground, 1.5),
       errorBorder: outline(p.destructive),
       focusedErrorBorder: outline(p.destructive, 1.5),
       hintStyle: TextStyle(color: p.mutedForeground),
@@ -333,7 +343,7 @@ ThemeData buildTheme(Brightness brightness) {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        // Neutral: indigo is kept for the one accent on a screen.
+        // Neutral: colour is kept for the one accent on a screen.
         foregroundColor: p.foreground,
         // Button styles replace the theme font unless it is named again.
         textStyle: const TextStyle(

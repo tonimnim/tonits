@@ -17,7 +17,7 @@ class ContactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
-    final add = TextStyle(color: p.primary, fontWeight: FontWeight.w600);
+    final add = TextStyle(color: p.foreground, fontWeight: FontWeight.w600);
     final email = player.email;
     return SettingsGroup(
       title: l.profileContactTitle,

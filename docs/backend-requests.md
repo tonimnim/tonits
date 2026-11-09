@@ -102,6 +102,21 @@ against the API. The website's `/delete-account` page needs the same
 domain for the Play listing. **Until then:** the app can't fix it; the
 links fail and say so.
 
+## 10. Pictures for competitions and opponents (open, nice to have)
+
+**Shown on:** the redesign is built around pictures (Home, Compete, the
+match card), and the app only has the player's own photo today.
+
+Wanted:
+- **Competitions:** an optional `imageUrl` (a banner, about 16:9, served
+  from storage like avatars) on the competition list item and detail, set
+  by the organizer. The app falls back to today's date tile without one.
+- **Opponents:** an optional `avatarUrl` (short-lived, like
+  `GET /v1/me/avatar`) on `opponent` in `GET /v1/me/matches` and the match
+  room, and on ranking rows. The app falls back to initials without one.
+
+**Until then:** the app shows its fallbacks, so nothing breaks.
+
 ## Also noted
 
 - The legal documents link to `tonits.com`, and player-facing API text says

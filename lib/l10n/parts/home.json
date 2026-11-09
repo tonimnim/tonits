@@ -1,7 +1,35 @@
 {
-  "homeGoodMorning": "Good morning",
-  "homeGoodAfternoon": "Good afternoon",
-  "homeGoodEvening": "Good evening",
+  "homeHey": "Hey {name},",
+  "@homeHey": {
+    "description": "Small greeting above Home's headline.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "striker.9"
+      }
+    }
+  },
+  "homeHeadline": "Ready to play?",
+  "@homeHeadline": {
+    "description": "Home's large headline, under the greeting."
+  },
+  "homeFindTitle": "Find your next competition",
+  "@homeFindTitle": {
+    "description": "The feature card on Home when the player has no match coming; it opens Compete."
+  },
+  "homeOpenCount": "{count, plural, =1{1 open to enter now} other{{count} open to enter now}}",
+  "@homeOpenCount": {
+    "description": "Under 'Find your next competition': how many the player can enter.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeComingUp": "See what's coming up",
+  "@homeComingUp": {
+    "description": "Under 'Find your next competition' when none are open to enter."
+  },
   "homeSeeAll": "See all",
   "@homeSeeAll": {
     "description": "Action on a Home section header that opens the full list."

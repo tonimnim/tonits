@@ -160,7 +160,9 @@ class _Progress extends StatelessWidget {
                 duration: const Duration(milliseconds: 250),
                 height: 5,
                 decoration: BoxDecoration(
-                  color: i <= step ? p.primary : p.card.withValues(alpha: 0.7),
+                  color: i <= step
+                      ? p.foreground
+                      : p.card.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),

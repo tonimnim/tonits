@@ -38,12 +38,12 @@ class HeroScaffold extends StatefulWidget {
   /// How far a sheet reaches up over the [wash], on Welcome and onboarding.
   static const overlap = 28.0;
 
-  /// A soft wash for a full-bleed brand moment, such as Welcome: a deeper
-  /// tint at the top fading to the canvas.
+  /// A soft wash for a full-bleed brand moment, such as Welcome: the
+  /// canvas's next grey at the top fading to the canvas.
   static Gradient wash(TonitsPalette p) => LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color.lerp(p.muted, p.primary, 0.16)!, p.background],
+    colors: [p.muted, p.background],
   );
 
   @override

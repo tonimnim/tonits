@@ -61,7 +61,7 @@ void main() {
     await signIn(tester);
 
     expect(find.byType(TonitsNavigationBar), findsOneWidget);
-    expect(find.text('striker.9'), findsWidgets);
+    expect(find.text('Hey striker.9,'), findsOneWidget);
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('#24'), findsOneWidget);
     expect(find.text('Up next'), findsOneWidget);
@@ -96,6 +96,12 @@ void main() {
     expect(find.text('Mombasa Masters'), findsOneWidget);
     expect(find.text('Ksh 8,000'), findsOneWidget);
 
+    // Centred, clear of the bottom bar.
+    await Scrollable.ensureVisible(
+      tester.element(find.text('Nairobi Weekend Cup')),
+      alignment: 0.5,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Nairobi Weekend Cup'));
     await tester.pumpAndSettle();
     expect(find.text('Enter for free'), findsOneWidget);

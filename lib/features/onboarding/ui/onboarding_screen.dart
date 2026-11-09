@@ -253,7 +253,11 @@ class _Acceptance extends ConsumerWidget {
     final l = context.l10n;
     TextSpan link(String label, LegalDocumentType type) => TextSpan(
       text: label,
-      style: TextStyle(color: p.primary, fontWeight: FontWeight.w600),
+      style: TextStyle(
+        color: p.foreground,
+        fontWeight: FontWeight.w600,
+        decoration: TextDecoration.underline,
+      ),
       recognizer: TapGestureRecognizer()
         ..onTap = () => openLegalDocument(ref, type),
     );

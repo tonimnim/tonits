@@ -9,13 +9,14 @@ import '../../matches/application/matches_providers.dart';
 import '../../notifications/application/notifications_providers.dart';
 import '../../players/application/players_providers.dart';
 import 'widgets/home_header.dart';
+import 'widgets/home_hero_card.dart';
 import 'widgets/open_now_section.dart';
 import 'widgets/player_card.dart';
 import 'widgets/recent_matches_section.dart';
-import 'widgets/up_next_card.dart';
 
-/// Tab 1: the player's overview. Their rating card first, then their next
-/// match, or the competitions open now when they have none, then their
+/// Tab 1: the player's overview. A greeting and headline, then one volt
+/// card for what to do next (their match, or finding a competition), their
+/// rating, the competitions open now when they have no match, and their
 /// recent results.
 ///
 /// The rating card shows a new player's numbers at zero. Other sections
@@ -44,10 +45,11 @@ class HomeScreen extends ConsumerWidget {
         children: [
           HomeHeader(name: player.displayName),
           const SizedBox(height: TonitsSpace.lg),
+          const HomeHeroCard(),
           const PlayerCard(),
         ],
       ),
-      children: const [UpNextCard(), OpenNowSection(), RecentMatchesSection()],
+      children: const [OpenNowSection(), RecentMatchesSection()],
     );
   }
 }

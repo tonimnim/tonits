@@ -38,7 +38,8 @@ class PlayerCard extends ConsumerWidget {
   }
 }
 
-/// The indigo card the rating sits on: the screen's one accent.
+/// The white card the rating sits on, with a hairline edge. The volt card
+/// above it is the screen's one filled block.
 class _Shell extends StatelessWidget {
   const _Shell({required this.child});
 
@@ -49,16 +50,21 @@ class _Shell extends StatelessWidget {
     final p = context.palette;
     return Container(
       padding: const EdgeInsets.fromLTRB(22, 20, 22, 22),
-      decoration: TonitsShape.fill(p.primary, TonitsRadius.panel),
+      decoration: TonitsShape.fill(
+        p.card,
+        TonitsRadius.panel,
+        side: BorderSide(color: p.border),
+      ),
       child: DefaultTextStyle.merge(
-        style: TextStyle(color: p.onPrimary),
+        style: TextStyle(color: p.foreground),
         child: child,
       ),
     );
   }
 }
 
-/// The rating, large but not heavy, and its level under it.
+/// The rating, large but not heavy and in electric blue, and its level
+/// under it.
 class _Rating extends StatelessWidget {
   const _Rating(this.profile);
 
@@ -66,7 +72,7 @@ class _Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final on = context.palette.onPrimary;
+    final p = context.palette;
     final l = context.l10n;
     final rating = profile.rating;
     // Servers from before levels leave a new player's rating out.
@@ -81,7 +87,7 @@ class _Rating extends StatelessWidget {
           children: [
             Text(
               l.homeRating,
-              style: TextStyle(fontSize: 14, color: on.withValues(alpha: 0.72)),
+              style: TextStyle(fontSize: 14, color: p.mutedForeground),
             ),
             const Spacer(),
             if (!profile.hasPlayed)
@@ -101,7 +107,7 @@ class _Rating extends StatelessWidget {
               fontWeight: FontWeight.w500,
               letterSpacing: -1.8,
               height: 1,
-              color: on,
+              color: p.primary,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
@@ -110,7 +116,7 @@ class _Rating extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             level,
-            style: TextStyle(fontSize: 15, color: on.withValues(alpha: 0.85)),
+            style: TextStyle(fontSize: 15, color: p.subtleForeground),
           ),
         ],
       ],
@@ -187,7 +193,11 @@ class _Figure extends StatelessWidget {
     return MergeSemantics(
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
-        decoration: TonitsShape.fill(p.card, TonitsRadius.tile),
+        decoration: TonitsShape.fill(
+          p.card,
+          TonitsRadius.tile,
+          side: BorderSide(color: p.border),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -238,15 +248,19 @@ class _Tag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final on = context.palette.onPrimary;
+    final p = context.palette;
     return Container(
       padding: padding,
       decoration: BoxDecoration(
-        color: on.withValues(alpha: 0.14),
+        color: p.muted,
         borderRadius: BorderRadius.circular(999),
       ),
       child: DefaultTextStyle.merge(
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: on),
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: p.foreground,
+        ),
         child: child,
       ),
     );
@@ -261,7 +275,7 @@ class _Movement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final on = context.palette.onPrimary;
+    final on = context.palette.foreground;
     final up = places > 0;
     final n = places.abs();
     final l = context.l10n;
@@ -298,7 +312,7 @@ class _Loading extends StatelessWidget {
           dimension: 24,
           child: CircularProgressIndicator(
             strokeWidth: 2.5,
-            color: context.palette.onPrimary,
+            color: context.palette.foreground,
           ),
         ),
       ),
