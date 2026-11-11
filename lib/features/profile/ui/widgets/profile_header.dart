@@ -10,7 +10,7 @@ import '../../../players/application/players_providers.dart';
 import 'profile_photo.dart';
 
 /// Who the player is: photo, name, handle, country and how long they've
-/// played on Ozone.
+/// played on Orbits.
 class ProfileHeader extends ConsumerWidget {
   const ProfileHeader({super.key, required this.player});
 

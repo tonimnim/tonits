@@ -42,7 +42,7 @@
   "matchCancelledResponseTimeout": "Neither player sent a screenshot, so both were removed.",
   "matchCancelledDoubleNoShow": "Neither player checked in.",
   "matchCancelledCompetitionCancelled": "The competition was cancelled.",
-  "matchCancelledPlatformReview": "Ozone cancelled the match after a review.",
+  "matchCancelledPlatformReview": "Orbits cancelled the match after a review.",
   "matchCancelledNotNeeded": "The bracket no longer needed this match.",
   "matchCancelledOther": "This match was cancelled.",
   "matchOutcomeYouWon": "You won",
@@ -75,7 +75,7 @@
     }
   },
   "matchForfeitYouNoScreenshot": "You didn't send a screenshot in time, so you were removed.",
-  "matchForfeitPlatformReview": "Ozone decided the match after a review.",
+  "matchForfeitPlatformReview": "Orbits decided the match after a review.",
   "matchForfeitWonWithoutPlaying": "You won without playing.",
   "matchForfeitDecidedWithoutYou": "The match was decided without you.",
   "matchErrorOpponentAlreadyReported": "Your opponent already reported the result. Confirm or reject it instead.",

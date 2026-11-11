@@ -5,7 +5,7 @@ What a store build needs, none of which is in git.
 ## Files on the build machine
 
 - `android/app/google-services.json`: the Firebase Android config (project
-  `ozone-4ddee`). Every Android build needs it, debug ones too.
+  `orbits-37046`). Every Android build needs it, debug ones too.
 - `android/key.properties` and the upload keystore it names:
 
   ```properties
@@ -21,7 +21,7 @@ What a store build needs, none of which is in git.
   Without `key.properties` a release build is signed with the debug key,
   which Play rejects.
 - Google sign-in on Android works only for keys registered on the OAuth
-  Android client for `com.ozone`: add the SHA-1 of the upload key and,
+  Android client for `games.orbits.app`: add the SHA-1 of the upload key and,
   after the first upload, of Play App Signing's key.
 
 ## Build

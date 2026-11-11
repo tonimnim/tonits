@@ -169,7 +169,7 @@ void main() {
     expect(find.textContaining('From +2547******78'), findsOneWidget);
     await tester.tap(find.text('Open competition'));
     await tester.pumpAndSettle();
-    expect(find.text('by Ozone'), findsOneWidget);
+    expect(find.text('by Orbits'), findsOneWidget);
   });
 
   testWidgets('a payment notification opens Payments', (tester) async {

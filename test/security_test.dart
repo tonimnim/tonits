@@ -78,9 +78,9 @@ void main() {
     tester,
   ) async {
     var sessions = [
-      _session('s-old', 'Ozone on android', ago: const Duration(days: 3)),
-      _session('s-me', 'Ozone on iOS', current: true, ago: Duration.zero),
-      _session('s-gone', 'Ozone on android', revoked: true),
+      _session('s-old', 'Orbits on android', ago: const Duration(days: 3)),
+      _session('s-me', 'Orbits on iOS', current: true, ago: Duration.zero),
+      _session('s-gone', 'Orbits on android', revoked: true),
     ];
     final api = await pumpTonits(
       tester,
@@ -101,15 +101,15 @@ void main() {
     // Early builds sent the platform in lower case.
     expect(find.text('This device'), findsOneWidget);
     expect(
-      tester.getTopLeft(find.text('Ozone on iOS')).dy,
-      lessThan(tester.getTopLeft(find.text('Ozone on Android')).dy),
+      tester.getTopLeft(find.text('Orbits on iOS')).dy,
+      lessThan(tester.getTopLeft(find.text('Orbits on Android')).dy),
     );
-    expect(find.text('Ozone on Android'), findsOneWidget);
+    expect(find.text('Orbits on Android'), findsOneWidget);
     expect(find.text('Sign out'), findsOneWidget);
 
     await tester.tap(find.text('Sign out'));
     await tester.pumpAndSettle();
-    expect(find.text('Sign out Ozone on Android?'), findsOneWidget);
+    expect(find.text('Sign out Orbits on Android?'), findsOneWidget);
     await tester.tap(find.widgetWithText(TextButton, 'Sign out').last);
     await tester.pumpAndSettle();
 
@@ -119,8 +119,8 @@ void main() {
       ),
       hasLength(1),
     );
-    expect(find.text('Signed out Ozone on Android'), findsOneWidget);
-    expect(find.text('Ozone on Android'), findsNothing);
+    expect(find.text('Signed out Orbits on Android'), findsOneWidget);
+    expect(find.text('Orbits on Android'), findsNothing);
   });
 
   testWidgets('deleting starts a 24-hour wait that can be cancelled', (

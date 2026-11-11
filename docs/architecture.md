@@ -1,6 +1,6 @@
-# Ozone app architecture
+# Orbits app architecture
 
-Ozone (code package `tonits`) is the player app for eFootball competitions. It talks to one Go API
+Orbits (code package `tonits`) is the player app for eFootball competitions. It talks to one Go API
 (`gemics-backend/services/api`, contract in `openapi/openapi.yaml`). This
 document is the plan the code follows; change it when a decision changes.
 
@@ -151,13 +151,13 @@ them: the API sends with FCM HTTP v1 to registration tokens, and their replaceme
 
 Setup, per checkout (the files stay out of this public repo):
 
-- Android: download `google-services.json` for `com.ozone` from the Firebase
-  console (project `ozone-4ddee`) into `android/app/`.
+- Android: download `google-services.json` for `games.orbits.app` from the Firebase
+  console (project `orbits-37046`) into `android/app/`.
 - iOS: not wired yet. It needs `GoogleService-Info.plist` in `ios/Runner/` and an
   APNs key uploaded to Firebase; until then `pushMessagingProvider` gives iOS no
   pushes.
 
-The status bar icon is `res/drawable/ic_stat_ozone.xml`, the mark as a white
+The status bar icon is `res/drawable/ic_stat_orbits.xml`, the mark as a white
 silhouette, tinted with `notification_accent`.
 
 ## Designing ahead of the API

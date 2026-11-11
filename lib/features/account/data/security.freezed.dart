@@ -17,7 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$DeviceSession {
 
  String get id;/// What the app called the device when it signed in, such as
-/// "Ozone on android". Can be empty.
+/// "Orbits on android". Can be empty.
  String get deviceName; String get userAgent; DateTime get createdAt; DateTime get lastUsedAt; DateTime? get revokedAt;/// The session this request was made with: this device.
  bool get current;
 /// Create a copy of DeviceSession
@@ -227,7 +227,7 @@ class _DeviceSession extends DeviceSession {
 
 @override final  String id;
 /// What the app called the device when it signed in, such as
-/// "Ozone on android". Can be empty.
+/// "Orbits on android". Can be empty.
 @override@JsonKey() final  String deviceName;
 @override@JsonKey() final  String userAgent;
 @override final  DateTime createdAt;

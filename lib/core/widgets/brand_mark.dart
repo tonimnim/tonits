@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n.dart';
 import '../theme.dart';
 
-/// The Ozone mark: a ring whose counter is a game controller; in the
+/// The Orbits mark: a ring whose counter is a game controller; in the
 /// wordmark it is the "O". Below 48px it reads as a silhouette.
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, this.size = 32, this.color});
@@ -29,7 +29,7 @@ class BrandMark extends StatelessWidget {
   }
 }
 
-/// The Ozone wordmark: the mark stands in for the "O", followed by "zone"
+/// The Orbits wordmark: the mark stands in for the "O", followed by "rbits"
 /// in Alexandria ExtraBold.
 class BrandLockup extends StatelessWidget {
   const BrandLockup({super.key, this.size = 22});
@@ -48,7 +48,7 @@ class BrandLockup extends StatelessWidget {
           BrandMark(size: size * 1.08),
           SizedBox(width: size * 0.06),
           Text(
-            'zone',
+            'rbits',
             style: brandFont.copyWith(
               fontSize: size,
               height: 1,

@@ -1,5 +1,5 @@
 {
-  "appName": "Ozone",
+  "appName": "Orbits",
   "@appName": {"description": "The app's name; do not translate."},
 
   "tabHome": "Home",
@@ -25,12 +25,12 @@
   "callingCodeLabel": "Calling code +{dialCode}, {country}. Change",
   "@callingCodeLabel": {"placeholders": {"dialCode": {"type": "String"}, "country": {"type": "String"}}},
 
-  "errorNetwork": "Can't reach Ozone. Check your connection and try again.",
+  "errorNetwork": "Can't reach Orbits. Check your connection and try again.",
   "errorGeneric": "Something went wrong. Try again.",
-  "errorServer": "Ozone is having trouble right now. Try again shortly.",
+  "errorServer": "Orbits is having trouble right now. Try again shortly.",
   "errorUsernameTaken": "That username is taken. Try another.",
-  "errorKonamiIdTaken": "That Konami ID is linked to another Ozone account. Contact Ozone support if it's yours.",
-  "errorAccountUnavailable": "This account is suspended. Contact Ozone support.",
+  "errorKonamiIdTaken": "That Konami ID is linked to another Orbits account. Contact Orbits support if it's yours.",
+  "errorAccountUnavailable": "This account is suspended. Contact Orbits support.",
   "errorInvalidCode": "That code is wrong or has expired.",
   "errorSignInUnavailable": "That sign-in option isn't available yet. Try again later.",
   "errorInvalidIdentityToken": "Sign-in didn't go through. Try again.",
@@ -43,7 +43,7 @@
   "errorEmailAlreadyVerified": "That email is already verified on your account.",
   "errorEmailUnavailable": "We can't send email right now. Try again shortly.",
   "errorInvalidEmail": "That doesn't look like an email address.",
-  "errorPhoneTaken": "That number is linked to another Ozone account. Contact Ozone support if it's yours.",
+  "errorPhoneTaken": "That number is linked to another Orbits account. Contact Orbits support if it's yours.",
   "errorInvalidPhone": "Enter the full number with its country code.",
   "errorInvalidDisplayName": "Use 2 to 80 characters.",
   "errorWithdrawalClosed": "Registration has closed, so you can't withdraw now.",

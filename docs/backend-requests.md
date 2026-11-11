@@ -1,6 +1,6 @@
 # Backend requests from the app
 
-What the Ozone app asked of the API (`gemics-backend`) and where each stands.
+What the Orbits app asked of the API (`gemics-backend`) and where each stands.
 Each open entry says what the app shows, the contract it expects, and what
 the app does until it ships.
 

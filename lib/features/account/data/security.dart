@@ -12,7 +12,7 @@ abstract class DeviceSession with _$DeviceSession {
     required String id,
 
     /// What the app called the device when it signed in, such as
-    /// "Ozone on android". Can be empty.
+    /// "Orbits on android". Can be empty.
     @Default('') String deviceName,
     @Default('') String userAgent,
     required DateTime createdAt,

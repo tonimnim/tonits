@@ -151,7 +151,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeOfflineTitle.
   ///
   /// In en, this message translates to:
-  /// **'Can\'t reach Ozone'**
+  /// **'Can\'t reach Orbits'**
   String get welcomeOfflineTitle;
 
   /// No description provided for @welcomeOfflineBody.
@@ -235,7 +235,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingKonamiIdSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Your Konami ID connects Ozone to your eFootball account. Enter it exactly as the game shows it.'**
+  /// **'Your Konami ID connects Orbits to your eFootball account. Enter it exactly as the game shows it.'**
   String get onboardingKonamiIdSubtitle;
 
   /// No description provided for @onboardingCountryTitle.
@@ -325,7 +325,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileRestricted.
   ///
   /// In en, this message translates to:
-  /// **'Your account is restricted. Contact Ozone support to find out why.'**
+  /// **'Your account is restricted. Contact Orbits support to find out why.'**
   String get profileRestricted;
 
   /// No description provided for @profileAboutTitle.
@@ -349,7 +349,7 @@ abstract class AppLocalizations {
   /// This build's version at the foot of Profile.
   ///
   /// In en, this message translates to:
-  /// **'Ozone {version}'**
+  /// **'Orbits {version}'**
   String profileVersion(String version);
 
   /// No description provided for @profileAccountTitle.
@@ -421,7 +421,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileSignOutTitle.
   ///
   /// In en, this message translates to:
-  /// **'Sign out of Ozone?'**
+  /// **'Sign out of Orbits?'**
   String get profileSignOutTitle;
 
   /// No description provided for @profileSignOutMessage.
@@ -667,7 +667,7 @@ abstract class AppLocalizations {
   /// Subject line of a support email.
   ///
   /// In en, this message translates to:
-  /// **'Ozone support'**
+  /// **'Orbits support'**
   String get profileSupportSubject;
 
   /// Shown when the phone can't open an email app.
@@ -697,7 +697,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatPrivacy.
   ///
   /// In en, this message translates to:
-  /// **'Ozone only reads this chat if there\'s a dispute or a report.'**
+  /// **'Orbits only reads this chat if there\'s a dispute or a report.'**
   String get chatPrivacy;
 
   /// No description provided for @chatClosed.
@@ -1357,7 +1357,7 @@ abstract class AppLocalizations {
   /// No description provided for @competitionTermsChangedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Ozone\'s Terms or Privacy Notice changed. Read them, then accept to enter.'**
+  /// **'Orbits\' Terms or Privacy Notice changed. Read them, then accept to enter.'**
   String get competitionTermsChangedMessage;
 
   /// No description provided for @competitionAcceptTerms.
@@ -1663,7 +1663,7 @@ abstract class AppLocalizations {
   /// The app's name; do not translate.
   ///
   /// In en, this message translates to:
-  /// **'Ozone'**
+  /// **'Orbits'**
   String get appName;
 
   /// No description provided for @tabHome.
@@ -1777,7 +1777,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorNetwork.
   ///
   /// In en, this message translates to:
-  /// **'Can\'t reach Ozone. Check your connection and try again.'**
+  /// **'Can\'t reach Orbits. Check your connection and try again.'**
   String get errorNetwork;
 
   /// No description provided for @errorGeneric.
@@ -1789,7 +1789,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorServer.
   ///
   /// In en, this message translates to:
-  /// **'Ozone is having trouble right now. Try again shortly.'**
+  /// **'Orbits is having trouble right now. Try again shortly.'**
   String get errorServer;
 
   /// No description provided for @errorUsernameTaken.
@@ -1801,13 +1801,13 @@ abstract class AppLocalizations {
   /// No description provided for @errorKonamiIdTaken.
   ///
   /// In en, this message translates to:
-  /// **'That Konami ID is linked to another Ozone account. Contact Ozone support if it\'s yours.'**
+  /// **'That Konami ID is linked to another Orbits account. Contact Orbits support if it\'s yours.'**
   String get errorKonamiIdTaken;
 
   /// No description provided for @errorAccountUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'This account is suspended. Contact Ozone support.'**
+  /// **'This account is suspended. Contact Orbits support.'**
   String get errorAccountUnavailable;
 
   /// No description provided for @errorInvalidCode.
@@ -1885,7 +1885,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorPhoneTaken.
   ///
   /// In en, this message translates to:
-  /// **'That number is linked to another Ozone account. Contact Ozone support if it\'s yours.'**
+  /// **'That number is linked to another Orbits account. Contact Orbits support if it\'s yours.'**
   String get errorPhoneTaken;
 
   /// No description provided for @errorInvalidPhone.
@@ -2707,7 +2707,7 @@ abstract class AppLocalizations {
   /// No description provided for @matchCancelledPlatformReview.
   ///
   /// In en, this message translates to:
-  /// **'Ozone cancelled the match after a review.'**
+  /// **'Orbits cancelled the match after a review.'**
   String get matchCancelledPlatformReview;
 
   /// No description provided for @matchCancelledNotNeeded.
@@ -2779,7 +2779,7 @@ abstract class AppLocalizations {
   /// No description provided for @matchForfeitPlatformReview.
   ///
   /// In en, this message translates to:
-  /// **'Ozone decided the match after a review.'**
+  /// **'Orbits decided the match after a review.'**
   String get matchForfeitPlatformReview;
 
   /// No description provided for @matchForfeitWonWithoutPlaying.
@@ -3499,7 +3499,7 @@ abstract class AppLocalizations {
   /// No description provided for @roomUnderReview.
   ///
   /// In en, this message translates to:
-  /// **'Ozone is reviewing the screenshots'**
+  /// **'Orbits is reviewing the screenshots'**
   String get roomUnderReview;
 
   /// No description provided for @roomConfirmedBy.
@@ -3529,7 +3529,7 @@ abstract class AppLocalizations {
   /// No description provided for @roomDecidedByReview.
   ///
   /// In en, this message translates to:
-  /// **'Decided by Ozone'**
+  /// **'Decided by Orbits'**
   String get roomDecidedByReview;
 
   /// No description provided for @roomOut.
@@ -3541,7 +3541,7 @@ abstract class AppLocalizations {
   /// No description provided for @roomUpdate.
   ///
   /// In en, this message translates to:
-  /// **'Update Ozone to see this match'**
+  /// **'Update Orbits to see this match'**
   String get roomUpdate;
 
   /// No description provided for @roomAccept.
@@ -3757,13 +3757,13 @@ abstract class AppLocalizations {
   /// No description provided for @deleteHeldOther.
   ///
   /// In en, this message translates to:
-  /// **'Something is holding it up. Contact Ozone support if it stays on hold.'**
+  /// **'Something is holding it up. Contact Orbits support if it stays on hold.'**
   String get deleteHeldOther;
 
   /// No description provided for @deleteRetriedDaily.
   ///
   /// In en, this message translates to:
-  /// **'Ozone tries again every day. You can still cancel.'**
+  /// **'Orbits tries again every day. You can still cancel.'**
   String get deleteRetriedDaily;
 
   /// A match format: how many games a match is.

@@ -133,7 +133,7 @@ Map<String, dynamic> competitionJson({
   'gameId': 'efootball-mobile',
   'gameName': 'eFootball Mobile',
   'organizerId': 'o1',
-  'organizerName': 'Ozone',
+  'organizerName': 'Orbits',
   'format': 'single_elimination',
   'status': status,
   'maxEntries': maxEntries,

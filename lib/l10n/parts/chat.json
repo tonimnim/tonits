@@ -19,7 +19,7 @@
       }
     }
   },
-  "chatPrivacy": "Ozone only reads this chat if there's a dispute or a report.",
+  "chatPrivacy": "Orbits only reads this chat if there's a dispute or a report.",
   "chatClosed": "The match is over, so this chat is closed.",
   "chatMessageHint": "Message {name}",
   "@chatMessageHint": {

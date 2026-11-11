@@ -172,7 +172,7 @@ void main() {
     expect(find.text('Ready now'), findsWidgets);
     expect(
       find.text(
-        "Ozone only reads this chat if there's a dispute or a report. "
+        "Orbits only reads this chat if there's a dispute or a report. "
         'Press and hold a message to report it.',
       ),
       findsOneWidget,

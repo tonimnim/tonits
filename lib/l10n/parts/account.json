@@ -26,7 +26,7 @@
   "@welcomeAgreeAfter": {
     "description": "End of the welcome screen's agreement sentence, after the Privacy Notice link."
   },
-  "welcomeOfflineTitle": "Can't reach Ozone",
+  "welcomeOfflineTitle": "Can't reach Orbits",
   "welcomeOfflineBody": "Check your connection. You're still signed in.",
   "accountLegalTerms": "Terms",
   "@accountLegalTerms": {
@@ -56,7 +56,7 @@
   "onboardingUsernameTitle": "Pick your username",
   "onboardingUsernameSubtitle": "It's how players see you in matches and on the ladder.",
   "onboardingKonamiIdTitle": "Link eFootball",
-  "onboardingKonamiIdSubtitle": "Your Konami ID connects Ozone to your eFootball account. Enter it exactly as the game shows it.",
+  "onboardingKonamiIdSubtitle": "Your Konami ID connects Orbits to your eFootball account. Enter it exactly as the game shows it.",
   "onboardingCountryTitle": "Where do you play from?",
   "onboardingCountrySubtitle": "Your country decides your ladder and the competitions you can enter.",
   "onboardingPhoneTitle": "Your phone number",
@@ -80,7 +80,7 @@
   "onboardingUsernameAvailable": "Available",
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
-  "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
+  "profileRestricted": "Your account is restricted. Contact Orbits support to find out why.",
   "profileAboutTitle": "Help and legal",
   "profileTermsOfService": "Terms of Service",
   "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
@@ -92,7 +92,7 @@
       }
     }
   },
-  "profileVersion": "Ozone {version}",
+  "profileVersion": "Orbits {version}",
   "@profileVersion": {
     "description": "This build's version at the foot of Profile.",
     "placeholders": {
@@ -137,7 +137,7 @@
     }
   },
   "profileSignOut": "Sign out",
-  "profileSignOutTitle": "Sign out of Ozone?",
+  "profileSignOutTitle": "Sign out of Orbits?",
   "profileSignOutMessage": "You can sign back in any time with the same Google or Apple account.",
   "accountEditNameIntro": "The name opponents see in matches, rankings and on your profile. Your username stays the same.",
   "accountEnterDisplayName": "Enter a display name",
@@ -210,7 +210,7 @@
   "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
   "accountRemovePhone": "Remove phone number",
   "profileSupport": "Support",
-  "profileSupportSubject": "Ozone support",
+  "profileSupportSubject": "Orbits support",
   "@profileSupportSubject": {
     "description": "Subject line of a support email."
   },
@@ -220,7 +220,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ozone.ke"
+        "example": "support@orbits.games"
       }
     }
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Ozone's colours: a calm, warm neutral page where pictures and one volt
+/// Orbits' colours: a calm, warm neutral page where pictures and one volt
 /// yellow accent bring the energy. Near-black carries text and the main
 /// actions; electric blue is kept for the rating, links to the player's
 /// standing and status, never for whole surfaces.

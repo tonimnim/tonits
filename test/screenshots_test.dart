@@ -724,7 +724,7 @@ void main() {
                 entry('r3', 'Kisumu Open', 'withdrawal_pending', fee: 5000),
                 entry(
                   'r4',
-                  'Ozone Launch Cup',
+                  'Orbits Launch Cup',
                   'checked_in',
                   competition: 'running',
                   starts: '2026-10-18T16:00:00Z',
@@ -779,8 +779,8 @@ void main() {
           routes: {
             '/v1/me/sessions': (_) => jsonResponse({
               'data': [
-                session('a', 'Ozone on android', Duration.zero, current: true),
-                session('b', 'Ozone on iOS', const Duration(hours: 3)),
+                session('a', 'Orbits on android', Duration.zero, current: true),
+                session('b', 'Orbits on iOS', const Duration(hours: 3)),
                 session('c', '', const Duration(days: 4)),
               ],
             }, 200),

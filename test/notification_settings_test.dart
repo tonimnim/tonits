@@ -80,7 +80,7 @@ void main() {
 
     expect(_switchFor(tester, 'Results').value, isTrue);
     expect(
-      find.text('Ozone is having trouble right now. Try again shortly.'),
+      find.text('Orbits is having trouble right now. Try again shortly.'),
       findsOneWidget,
     );
   });

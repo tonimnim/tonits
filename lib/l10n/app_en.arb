@@ -27,7 +27,7 @@
   "@welcomeAgreeAfter": {
     "description": "End of the welcome screen's agreement sentence, after the Privacy Notice link."
   },
-  "welcomeOfflineTitle": "Can't reach Ozone",
+  "welcomeOfflineTitle": "Can't reach Orbits",
   "welcomeOfflineBody": "Check your connection. You're still signed in.",
   "accountLegalTerms": "Terms",
   "@accountLegalTerms": {
@@ -57,7 +57,7 @@
   "onboardingUsernameTitle": "Pick your username",
   "onboardingUsernameSubtitle": "It's how players see you in matches and on the ladder.",
   "onboardingKonamiIdTitle": "Link eFootball",
-  "onboardingKonamiIdSubtitle": "Your Konami ID connects Ozone to your eFootball account. Enter it exactly as the game shows it.",
+  "onboardingKonamiIdSubtitle": "Your Konami ID connects Orbits to your eFootball account. Enter it exactly as the game shows it.",
   "onboardingCountryTitle": "Where do you play from?",
   "onboardingCountrySubtitle": "Your country decides your ladder and the competitions you can enter.",
   "onboardingPhoneTitle": "Your phone number",
@@ -81,7 +81,7 @@
   "onboardingUsernameAvailable": "Available",
   "onboardingUsernameChecking": "Checking…",
   "onboardingUsernameHelper": "Letters, numbers, _ and .",
-  "profileRestricted": "Your account is restricted. Contact Ozone support to find out why.",
+  "profileRestricted": "Your account is restricted. Contact Orbits support to find out why.",
   "profileAboutTitle": "Help and legal",
   "profileTermsOfService": "Terms of Service",
   "profileCouldNotOpen": "Couldn't open the {document}. Try again.",
@@ -93,7 +93,7 @@
       }
     }
   },
-  "profileVersion": "Ozone {version}",
+  "profileVersion": "Orbits {version}",
   "@profileVersion": {
     "description": "This build's version at the foot of Profile.",
     "placeholders": {
@@ -138,7 +138,7 @@
     }
   },
   "profileSignOut": "Sign out",
-  "profileSignOutTitle": "Sign out of Ozone?",
+  "profileSignOutTitle": "Sign out of Orbits?",
   "profileSignOutMessage": "You can sign back in any time with the same Google or Apple account.",
   "accountEditNameIntro": "The name opponents see in matches, rankings and on your profile. Your username stays the same.",
   "accountEnterDisplayName": "Enter a display name",
@@ -211,7 +211,7 @@
   "accountPhoneIntro": "Saved for paying entry fees. Other players never see it.",
   "accountRemovePhone": "Remove phone number",
   "profileSupport": "Support",
-  "profileSupportSubject": "Ozone support",
+  "profileSupportSubject": "Orbits support",
   "@profileSupportSubject": {
     "description": "Subject line of a support email."
   },
@@ -221,7 +221,7 @@
     "placeholders": {
       "email": {
         "type": "String",
-        "example": "support@ozone.ke"
+        "example": "support@orbits.games"
       }
     }
   },
@@ -245,7 +245,7 @@
       }
     }
   },
-  "chatPrivacy": "Ozone only reads this chat if there's a dispute or a report.",
+  "chatPrivacy": "Orbits only reads this chat if there's a dispute or a report.",
   "chatClosed": "The match is over, so this chat is closed.",
   "chatMessageHint": "Message {name}",
   "@chatMessageHint": {
@@ -506,7 +506,7 @@
     "description": "Fix for a blocked entry after the Terms or Privacy Notice changed."
   },
   "competitionTermsChangedTitle": "Updated terms",
-  "competitionTermsChangedMessage": "Ozone's Terms or Privacy Notice changed. Read them, then accept to enter.",
+  "competitionTermsChangedMessage": "Orbits' Terms or Privacy Notice changed. Read them, then accept to enter.",
   "competitionAcceptTerms": "Accept",
   "competitionAddBirthDate": "Add birth date",
   "@competitionAddBirthDate": {
@@ -610,7 +610,7 @@
   "@contestNotSponsored": {
     "description": "Required by the App Store for contests (guideline 5.3.2)."
   },
-  "appName": "Ozone",
+  "appName": "Orbits",
   "@appName": {
     "description": "The app's name; do not translate."
   },
@@ -650,12 +650,12 @@
       }
     }
   },
-  "errorNetwork": "Can't reach Ozone. Check your connection and try again.",
+  "errorNetwork": "Can't reach Orbits. Check your connection and try again.",
   "errorGeneric": "Something went wrong. Try again.",
-  "errorServer": "Ozone is having trouble right now. Try again shortly.",
+  "errorServer": "Orbits is having trouble right now. Try again shortly.",
   "errorUsernameTaken": "That username is taken. Try another.",
-  "errorKonamiIdTaken": "That Konami ID is linked to another Ozone account. Contact Ozone support if it's yours.",
-  "errorAccountUnavailable": "This account is suspended. Contact Ozone support.",
+  "errorKonamiIdTaken": "That Konami ID is linked to another Orbits account. Contact Orbits support if it's yours.",
+  "errorAccountUnavailable": "This account is suspended. Contact Orbits support.",
   "errorInvalidCode": "That code is wrong or has expired.",
   "errorSignInUnavailable": "That sign-in option isn't available yet. Try again later.",
   "errorInvalidIdentityToken": "Sign-in didn't go through. Try again.",
@@ -668,7 +668,7 @@
   "errorEmailAlreadyVerified": "That email is already verified on your account.",
   "errorEmailUnavailable": "We can't send email right now. Try again shortly.",
   "errorInvalidEmail": "That doesn't look like an email address.",
-  "errorPhoneTaken": "That number is linked to another Ozone account. Contact Ozone support if it's yours.",
+  "errorPhoneTaken": "That number is linked to another Orbits account. Contact Orbits support if it's yours.",
   "errorInvalidPhone": "Enter the full number with its country code.",
   "errorInvalidDisplayName": "Use 2 to 80 characters.",
   "errorWithdrawalClosed": "Registration has closed, so you can't withdraw now.",
@@ -1156,7 +1156,7 @@
   "matchCancelledResponseTimeout": "Neither player sent a screenshot, so both were removed.",
   "matchCancelledDoubleNoShow": "Neither player checked in.",
   "matchCancelledCompetitionCancelled": "The competition was cancelled.",
-  "matchCancelledPlatformReview": "Ozone cancelled the match after a review.",
+  "matchCancelledPlatformReview": "Orbits cancelled the match after a review.",
   "matchCancelledNotNeeded": "The bracket no longer needed this match.",
   "matchCancelledOther": "This match was cancelled.",
   "matchOutcomeYouWon": "You won",
@@ -1189,7 +1189,7 @@
     }
   },
   "matchForfeitYouNoScreenshot": "You didn't send a screenshot in time, so you were removed.",
-  "matchForfeitPlatformReview": "Ozone decided the match after a review.",
+  "matchForfeitPlatformReview": "Orbits decided the match after a review.",
   "matchForfeitWonWithoutPlaying": "You won without playing.",
   "matchForfeitDecidedWithoutYou": "The match was decided without you.",
   "matchErrorOpponentAlreadyReported": "Your opponent already reported the result. Confirm or reject it instead.",
@@ -1472,7 +1472,7 @@
   },
   "roomBothScreenshotsIn": "Both screenshots are in",
   "roomSettling": "Settling the result…",
-  "roomUnderReview": "Ozone is reviewing the screenshots",
+  "roomUnderReview": "Orbits is reviewing the screenshots",
   "roomConfirmedBy": "Confirmed by {opponent}",
   "@roomConfirmedBy": {
     "placeholders": {
@@ -1491,9 +1491,9 @@
     }
   },
   "roomUnanswered": "Not answered in time, so it stood",
-  "roomDecidedByReview": "Decided by Ozone",
+  "roomDecidedByReview": "Decided by Orbits",
   "roomOut": "You're out of this competition",
-  "roomUpdate": "Update Ozone to see this match",
+  "roomUpdate": "Update Orbits to see this match",
   "roomAccept": "Accept",
   "roomDecline": "Decline",
   "roomSendScreenshotButton": "Send screenshot",
@@ -1539,7 +1539,7 @@
     "placeholders": {
       "device": {
         "type": "String",
-        "example": "Ozone on Android"
+        "example": "Orbits on Android"
       }
     }
   },
@@ -1549,7 +1549,7 @@
     "placeholders": {
       "device": {
         "type": "String",
-        "example": "Ozone on Android"
+        "example": "Orbits on Android"
       }
     }
   },
@@ -1576,8 +1576,8 @@
   "deleteHeldCompetition": "You're still in a competition. Your account is deleted once it's over.",
   "deleteHeldPayment": "A payment of yours is still being settled. Your account is deleted once it is.",
   "deleteHeldOrganization": "You own an organization. Hand it over to someone else first.",
-  "deleteHeldOther": "Something is holding it up. Contact Ozone support if it stays on hold.",
-  "deleteRetriedDaily": "Ozone tries again every day. You can still cancel.",
+  "deleteHeldOther": "Something is holding it up. Contact Orbits support if it stays on hold.",
+  "deleteRetriedDaily": "Orbits tries again every day. You can still cancel.",
   "seriesBestOf": "Best of {count}",
   "@seriesBestOf": {
     "description": "A match format: how many games a match is.",

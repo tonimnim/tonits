@@ -16,9 +16,9 @@ final apiClientProvider = Provider<ApiClient>(
 /// session list.
 final deviceNameProvider = Provider<String>(
   (ref) => switch (defaultTargetPlatform) {
-    TargetPlatform.android => 'Ozone on Android',
-    TargetPlatform.iOS => 'Ozone on iOS',
-    final platform => 'Ozone on ${platform.name}',
+    TargetPlatform.android => 'Orbits on Android',
+    TargetPlatform.iOS => 'Orbits on iOS',
+    final platform => 'Orbits on ${platform.name}',
   },
 );
 

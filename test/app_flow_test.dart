@@ -334,8 +334,8 @@ void main() {
     tester,
   ) async {
     PackageInfo.setMockInitialValues(
-      appName: 'Ozone',
-      packageName: 'com.ozone',
+      appName: 'Orbits',
+      packageName: 'games.orbits.app',
       version: '1.0.0',
       buildNumber: '7',
       buildSignature: '',
@@ -347,7 +347,7 @@ void main() {
     expect(find.text('Privacy Notice'), findsOneWidget);
     // Until the server serves contest rules, there's no link to them.
     expect(find.text('Contest rules'), findsNothing);
-    await scrollPageTo(tester, find.text('Ozone 1.0.0 (7)'));
+    await scrollPageTo(tester, find.text('Orbits 1.0.0 (7)'));
   });
 
   testWidgets('contest rules, once served, open from a competition and '
@@ -402,7 +402,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sign out'));
     await tester.pumpAndSettle();
-    expect(find.text('Sign out of Ozone?'), findsOneWidget);
+    expect(find.text('Sign out of Orbits?'), findsOneWidget);
     await tester.tap(find.widgetWithText(TextButton, 'Sign out'));
     await tester.pumpAndSettle();
 

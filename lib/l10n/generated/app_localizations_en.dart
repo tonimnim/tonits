@@ -40,7 +40,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeAgreeAfter => '.';
 
   @override
-  String get welcomeOfflineTitle => 'Can\'t reach Ozone';
+  String get welcomeOfflineTitle => 'Can\'t reach Orbits';
 
   @override
   String get welcomeOfflineBody =>
@@ -87,7 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingKonamiIdSubtitle =>
-      'Your Konami ID connects Ozone to your eFootball account. Enter it exactly as the game shows it.';
+      'Your Konami ID connects Orbits to your eFootball account. Enter it exactly as the game shows it.';
 
   @override
   String get onboardingCountryTitle => 'Where do you play from?';
@@ -136,7 +136,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileRestricted =>
-      'Your account is restricted. Contact Ozone support to find out why.';
+      'Your account is restricted. Contact Orbits support to find out why.';
 
   @override
   String get profileAboutTitle => 'Help and legal';
@@ -151,7 +151,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String profileVersion(String version) {
-    return 'Ozone $version';
+    return 'Orbits $version';
   }
 
   @override
@@ -195,7 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSignOut => 'Sign out';
 
   @override
-  String get profileSignOutTitle => 'Sign out of Ozone?';
+  String get profileSignOutTitle => 'Sign out of Orbits?';
 
   @override
   String get profileSignOutMessage =>
@@ -340,7 +340,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSupport => 'Support';
 
   @override
-  String get profileSupportSubject => 'Ozone support';
+  String get profileSupportSubject => 'Orbits support';
 
   @override
   String profileSupportWriteTo(String email) {
@@ -368,7 +368,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatPrivacy =>
-      'Ozone only reads this chat if there\'s a dispute or a report.';
+      'Orbits only reads this chat if there\'s a dispute or a report.';
 
   @override
   String get chatClosed => 'The match is over, so this chat is closed.';
@@ -733,7 +733,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get competitionTermsChangedMessage =>
-      'Ozone\'s Terms or Privacy Notice changed. Read them, then accept to enter.';
+      'Orbits\' Terms or Privacy Notice changed. Read them, then accept to enter.';
 
   @override
   String get competitionAcceptTerms => 'Accept';
@@ -905,7 +905,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Apple and Google aren\'t sponsors of these competitions and take no part in them.';
 
   @override
-  String get appName => 'Ozone';
+  String get appName => 'Orbits';
 
   @override
   String get tabHome => 'Home';
@@ -967,25 +967,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorNetwork =>
-      'Can\'t reach Ozone. Check your connection and try again.';
+      'Can\'t reach Orbits. Check your connection and try again.';
 
   @override
   String get errorGeneric => 'Something went wrong. Try again.';
 
   @override
   String get errorServer =>
-      'Ozone is having trouble right now. Try again shortly.';
+      'Orbits is having trouble right now. Try again shortly.';
 
   @override
   String get errorUsernameTaken => 'That username is taken. Try another.';
 
   @override
   String get errorKonamiIdTaken =>
-      'That Konami ID is linked to another Ozone account. Contact Ozone support if it\'s yours.';
+      'That Konami ID is linked to another Orbits account. Contact Orbits support if it\'s yours.';
 
   @override
   String get errorAccountUnavailable =>
-      'This account is suspended. Contact Ozone support.';
+      'This account is suspended. Contact Orbits support.';
 
   @override
   String get errorInvalidCode => 'That code is wrong or has expired.';
@@ -1032,7 +1032,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorPhoneTaken =>
-      'That number is linked to another Ozone account. Contact Ozone support if it\'s yours.';
+      'That number is linked to another Orbits account. Contact Orbits support if it\'s yours.';
 
   @override
   String get errorInvalidPhone =>
@@ -1564,7 +1564,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchCancelledPlatformReview =>
-      'Ozone cancelled the match after a review.';
+      'Orbits cancelled the match after a review.';
 
   @override
   String get matchCancelledNotNeeded =>
@@ -1610,7 +1610,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchForfeitPlatformReview =>
-      'Ozone decided the match after a review.';
+      'Orbits decided the match after a review.';
 
   @override
   String get matchForfeitWonWithoutPlaying => 'You won without playing.';
@@ -2050,7 +2050,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomSettling => 'Settling the result…';
 
   @override
-  String get roomUnderReview => 'Ozone is reviewing the screenshots';
+  String get roomUnderReview => 'Orbits is reviewing the screenshots';
 
   @override
   String roomConfirmedBy(String opponent) {
@@ -2069,13 +2069,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roomUnanswered => 'Not answered in time, so it stood';
 
   @override
-  String get roomDecidedByReview => 'Decided by Ozone';
+  String get roomDecidedByReview => 'Decided by Orbits';
 
   @override
   String get roomOut => 'You\'re out of this competition';
 
   @override
-  String get roomUpdate => 'Update Ozone to see this match';
+  String get roomUpdate => 'Update Orbits to see this match';
 
   @override
   String get roomAccept => 'Accept';
@@ -2201,11 +2201,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteHeldOther =>
-      'Something is holding it up. Contact Ozone support if it stays on hold.';
+      'Something is holding it up. Contact Orbits support if it stays on hold.';
 
   @override
   String get deleteRetriedDaily =>
-      'Ozone tries again every day. You can still cancel.';
+      'Orbits tries again every day. You can still cancel.';
 
   @override
   String seriesBestOf(int count) {

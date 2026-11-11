@@ -13,10 +13,10 @@
   "@devicesActiveOn": {"placeholders": {"date": {"type": "String", "example": "Thu 15 Oct"}}},
   "devicesSignOut": "Sign out",
   "devicesSignOutTitle": "Sign out {device}?",
-  "@devicesSignOutTitle": {"placeholders": {"device": {"type": "String", "example": "Ozone on Android"}}},
+  "@devicesSignOutTitle": {"placeholders": {"device": {"type": "String", "example": "Orbits on Android"}}},
   "devicesSignOutMessage": "It will need to sign in again.",
   "devicesSignedOut": "Signed out {device}",
-  "@devicesSignedOut": {"placeholders": {"device": {"type": "String", "example": "Ozone on Android"}}},
+  "@devicesSignedOut": {"placeholders": {"device": {"type": "String", "example": "Orbits on Android"}}},
   "deleteTitle": "Delete account",
   "deleteIntro": "Your profile, contact details and devices are removed. Match and payment records stay, without your name.",
   "deleteWaitNote": "There's a 24-hour wait first, and you can cancel during it.",
@@ -36,6 +36,6 @@
   "deleteHeldCompetition": "You're still in a competition. Your account is deleted once it's over.",
   "deleteHeldPayment": "A payment of yours is still being settled. Your account is deleted once it is.",
   "deleteHeldOrganization": "You own an organization. Hand it over to someone else first.",
-  "deleteHeldOther": "Something is holding it up. Contact Ozone support if it stays on hold.",
-  "deleteRetriedDaily": "Ozone tries again every day. You can still cancel."
+  "deleteHeldOther": "Something is holding it up. Contact Orbits support if it stays on hold.",
+  "deleteRetriedDaily": "Orbits tries again every day. You can still cancel."
 }

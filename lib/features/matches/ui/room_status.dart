@@ -8,7 +8,7 @@ enum RoomTone {
   /// The player has something to do.
   action,
 
-  /// Waiting on the opponent or Ozone.
+  /// Waiting on the opponent or Orbits.
   waiting,
   won,
   neutral,
