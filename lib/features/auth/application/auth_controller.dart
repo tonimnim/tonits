@@ -173,7 +173,7 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> _adopt(AuthSession session) async {
     await _tokens.writeRefreshToken(session.refreshToken);
-    _api.accessToken = session.accessToken;
+    _api.useAccessToken(session.accessToken, expiresIn: session.expiresIn);
     state = AuthState(status: AuthStatus.signedIn, player: session.player);
   }
 

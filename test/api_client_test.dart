@@ -85,6 +85,202 @@ void main() {
     expect(results, everyElement(equals({'ok': true})));
   });
 
+  group('keeping the session alive', () {
+    test(
+      'renews a token about to expire before the request goes out',
+      () async {
+        var now = DateTime.utc(2026, 11, 12, 12);
+        final seen = <String?>[];
+        var refreshes = 0;
+        late ApiClient api;
+        api =
+            ApiClient(
+                baseUrl: 'http://api.test',
+                clock: () => now,
+                httpClient: MockClient((request) async {
+                  seen.add(request.headers['Authorization']);
+                  return jsonResponse({'ok': true}, 200);
+                }),
+              )
+              ..useAccessToken('first', expiresIn: const Duration(minutes: 15))
+              ..onUnauthorized = () async {
+                refreshes++;
+                api.useAccessToken(
+                  'second',
+                  expiresIn: const Duration(minutes: 15),
+                );
+                return 'second';
+              };
+
+        await api.get('/v1/me', auth: true);
+        now = now.add(const Duration(minutes: 14, seconds: 30));
+        await api.get('/v1/me', auth: true);
+
+        expect(refreshes, 1);
+        expect(seen, ['Bearer first', 'Bearer second']);
+      },
+    );
+
+    test(
+      'a failed early renewal still sends the request with the token it has',
+      () async {
+        var now = DateTime.utc(2026, 11, 12, 12);
+        String? seen;
+        final api =
+            ApiClient(
+                baseUrl: 'http://api.test',
+                clock: () => now,
+                httpClient: MockClient((request) async {
+                  seen = request.headers['Authorization'];
+                  return jsonResponse({'ok': true}, 200);
+                }),
+              )
+              ..useAccessToken('first', expiresIn: const Duration(minutes: 15))
+              ..onUnauthorized = () async => throw NetworkException('offline');
+        now = now.add(const Duration(minutes: 14, seconds: 30));
+
+        expect(await api.get('/v1/me', auth: true), {'ok': true});
+        expect(seen, 'Bearer first');
+      },
+    );
+
+    test('a request out while another renewed the session retries without a second refresh', () async {
+      var refreshes = 0;
+      final firstOut = Completer<void>();
+      final release = Completer<void>();
+      late ApiClient api;
+      api =
+          ApiClient(
+              baseUrl: 'http://api.test',
+              httpClient: MockClient((request) async {
+                final token = request.headers['Authorization'];
+                if (request.url.path == '/v1/slow' && token == 'Bearer stale') {
+                  firstOut.complete();
+                  await release.future;
+                }
+                return token == 'Bearer fresh'
+                    ? jsonResponse({'ok': true}, 200)
+                    : errorResponse(401, 'invalid_access_token');
+              }),
+            )
+            ..accessToken = 'stale'
+            ..onUnauthorized = () async {
+              refreshes++;
+              api.accessToken = 'fresh';
+              return 'fresh';
+            };
+
+      final slow = api.get('/v1/slow', auth: true);
+      await firstOut.future;
+      // Renews the session while the slow request is still out.
+      await api.get('/v1/me', auth: true);
+      release.complete();
+
+      expect(await slow, {'ok': true});
+      expect(refreshes, 1);
+    });
+
+    test('a public read answers signed out once the session is over', () async {
+      final seen = <String?>[];
+      var refreshes = 0;
+      late ApiClient api;
+      api =
+          ApiClient(
+              baseUrl: 'http://api.test',
+              httpClient: MockClient((request) async {
+                final token = request.headers['Authorization'];
+                seen.add(token);
+                return token == null
+                    ? jsonResponse({'data': <Object>[]}, 200)
+                    : errorResponse(401, 'invalid_session');
+              }),
+            )
+            ..accessToken = 'revoked'
+            ..onUnauthorized = () async {
+              refreshes++;
+              api.accessToken = null;
+              return null;
+            };
+
+      expect(await api.get('/v1/competitions', optionalAuth: true), {
+        'data': <Object>[],
+      });
+      expect(refreshes, 1);
+      expect(seen, ['Bearer revoked', null]);
+    });
+
+    test(
+      'a public read renews an expired token and keeps the player\'s view',
+      () async {
+        final seen = <String?>[];
+        late ApiClient api;
+        api =
+            ApiClient(
+                baseUrl: 'http://api.test',
+                httpClient: MockClient((request) async {
+                  final token = request.headers['Authorization'];
+                  seen.add(token);
+                  return token == 'Bearer fresh'
+                      ? jsonResponse({'reminderSet': true}, 200)
+                      : errorResponse(401, 'invalid_access_token');
+                }),
+              )
+              ..accessToken = 'expired'
+              ..onUnauthorized = () async {
+                api.accessToken = 'fresh';
+                return 'fresh';
+              };
+
+        expect(await api.get('/v1/competitions/c-1', optionalAuth: true), {
+          'reminderSet': true,
+        });
+        expect(seen, ['Bearer expired', 'Bearer fresh']);
+      },
+    );
+
+    test(
+      'a public read signed out sends no token and never refreshes',
+      () async {
+        String? seen = 'unset';
+        var refreshes = 0;
+        final api =
+            ApiClient(
+                baseUrl: 'http://api.test',
+                httpClient: MockClient((request) async {
+                  seen = request.headers['Authorization'];
+                  return jsonResponse({'data': <Object>[]}, 200);
+                }),
+              )
+              ..onUnauthorized = () async {
+                refreshes++;
+                return null;
+              };
+
+        await api.get('/v1/competitions', optionalAuth: true);
+
+        expect(seen, isNull);
+        expect(refreshes, 0);
+      },
+    );
+
+    test('a required session still fails once it is over', () async {
+      final api =
+          ApiClient(
+              baseUrl: 'http://api.test',
+              httpClient: MockClient(
+                (_) async => errorResponse(401, 'invalid_session'),
+              ),
+            )
+            ..accessToken = 'revoked'
+            ..onUnauthorized = () async => null;
+
+      expect(
+        api.get('/v1/me', auth: true),
+        throwsA(isA<ApiException>().having((e) => e.status, 'status', 401)),
+      );
+    });
+  });
+
   test('wraps transport failures in NetworkException', () async {
     final api = ApiClient(
       baseUrl: 'http://api.test',
