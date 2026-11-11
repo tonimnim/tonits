@@ -10,10 +10,12 @@ final playersRepositoryProvider = Provider<PlayersRepository>(
   (ref) => PlayersRepository(ref.watch(apiClientProvider)),
 );
 
+/// The signed-in player's id. Only the id is watched: an edit to the
+/// account (a new name, a phone) must not fetch their profile again.
 String _myId(Ref ref) {
-  final player = ref.watch(currentPlayerProvider);
-  if (player == null) throw StateError('Signed out');
-  return player.id;
+  final id = ref.watch(currentPlayerProvider.select((p) => p?.id));
+  if (id == null) throw StateError('Signed out');
+  return id;
 }
 
 /// The game account the player enters competitions with.

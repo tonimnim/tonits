@@ -21,7 +21,7 @@ final rankingsProvider = AsyncNotifierProvider.autoDispose
 /// is null), or null while they aren't ranked on it.
 final myPlaceProvider = FutureProvider.autoDispose
     .family<RankedPlayer?, String?>((ref, countryCode) async {
-      final me = ref.watch(currentPlayerProvider)?.id;
+      final me = ref.watch(currentPlayerProvider.select((p) => p?.id));
       final rows = await ref
           .watch(rankingsRepositoryProvider)
           .aroundMe(countryCode: countryCode, span: 1);

@@ -21,6 +21,9 @@ class InitialsAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final initials = _initials(context);
     final image = this.image;
+    // Decoded at the size shown: a 1024 px photo in a 40 px circle would
+    // otherwise hold about 4 MB of memory.
+    final pixels = (size * MediaQuery.devicePixelRatioOf(context)).round();
     return ExcludeSemantics(
       child: image == null
           ? initials
@@ -29,6 +32,7 @@ class InitialsAvatar extends StatelessWidget {
                 image.toString(),
                 width: size,
                 height: size,
+                cacheWidth: pixels,
                 fit: BoxFit.cover,
                 frameBuilder: (_, child, frame, synchronous) =>
                     frame == null && !synchronous ? initials : child,

@@ -92,6 +92,50 @@ void main() {
     expect(reads, greaterThan(7));
   });
 
+  testWidgets('a started payment has the competition read again', (
+    tester,
+  ) async {
+    final api = await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      overrides: [
+        paymentPollIntervalProvider.overrideWithValue(const Duration(hours: 1)),
+      ],
+      api: FakeApi(),
+    );
+    int eligibilityReads() => api.requests
+        .where((r) => r.url.path == '/v1/competitions/c2/eligibility')
+        .length;
+    await tester.tap(
+      find.descendant(
+        of: find.byType(TonitsNavigationBar),
+        matching: find.byTooltip('Compete'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tapText(tester, 'Mombasa Masters');
+    await tapText(tester, 'Pay Ksh 100 with M-Pesa');
+    await tester.enterText(
+      find.widgetWithText(TextFormField, '0712 345 678'),
+      '0712 345 678',
+    );
+    final before = eligibilityReads();
+    await tester.tap(find.text('Send payment request'));
+    // The wait spins, so pump a few frames rather than settle.
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Check your phone'), findsOneWidget);
+
+    // Back on the competition, the entry bar reads where it stands again
+    // instead of offering Pay from before the payment started.
+    await tester.pageBack();
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(eligibilityReads(), greaterThan(before));
+  });
+
   testWidgets('M-Pesa being down says so', (tester) async {
     await pumpTonits(
       tester,

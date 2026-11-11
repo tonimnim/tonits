@@ -29,7 +29,11 @@ final competitionsProvider = AsyncNotifierProvider.autoDispose
 final openCompetitionsProvider = FutureProvider.autoDispose<List<Competition>>((
   ref,
 ) async {
-  final country = ref.watch(currentPlayerProvider)?.countryCode;
+  // Only the field used: any account edit replaces the player, which
+  // would otherwise fetch this again.
+  final country = ref.watch(
+    currentPlayerProvider.select((p) => p?.countryCode),
+  );
   final repository = ref.watch(competitionsRepositoryProvider);
   // Without their entries, the list still shows; nothing is left out.
   final entries = ref
@@ -94,7 +98,7 @@ final myEntryIdProvider = FutureProvider.autoDispose.family<String?, String>((
   ref,
   competitionId,
 ) async {
-  if (ref.watch(currentPlayerProvider) == null) return null;
+  if (!ref.watch(currentPlayerProvider.select((p) => p != null))) return null;
   final eligibility = await ref.watch(
     eligibilityProvider(competitionId).future,
   );

@@ -20,7 +20,9 @@ class KenyaOnlyBadge extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final country = ref.watch(currentPlayerProvider)?.countryCode;
+    final country = ref.watch(
+      currentPlayerProvider.select((p) => p?.countryCode),
+    );
     if (!appliesTo(competition, country)) return const SizedBox.shrink();
     return StatusBadge(
       context.l10n.competitionKenyaOnly,

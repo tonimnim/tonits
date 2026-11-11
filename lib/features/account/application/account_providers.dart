@@ -23,7 +23,9 @@ final legalDocumentsProvider = FutureProvider.autoDispose<List<LegalDocument>>(
 
 /// The player's own photo, as a short-lived link, or null without one.
 final myAvatarProvider = FutureProvider.autoDispose<Uri?>((ref) async {
-  if (ref.watch(currentPlayerProvider) == null) return null;
+  // Signed in or not, nothing more: an account edit must not fetch a new
+  // link, which would reload the photo and flash the initials.
+  if (!ref.watch(currentPlayerProvider.select((p) => p != null))) return null;
   return ref.watch(accountRepositoryProvider).myAvatarUrl();
 });
 

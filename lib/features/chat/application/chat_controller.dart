@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
+import '../../../core/api/poll_backoff.dart';
 import '../../../core/l10n.dart';
 import '../../matches/application/matches_providers.dart';
 import '../data/chat_repository.dart';
@@ -103,6 +104,9 @@ class ChatController extends AsyncNotifier<ChatView> {
   bool _paused = false;
   bool _reading = false;
 
+  /// Waits longer between reads while they fail.
+  final _backoff = PollBackoff();
+
   /// The highest seq already reported as read.
   int _readSent = 0;
 
@@ -169,6 +173,7 @@ class ChatController extends AsyncNotifier<ChatView> {
         chat = await _repository.read(matchId, after: incoming.last.seq);
         incoming.addAll(chat.messages);
       }
+      _backoff.succeeded();
       if (!ref.mounted) return;
       final current = state.value ?? view;
       final latest = chat.copyWith(messages: const []);
@@ -180,8 +185,9 @@ class ChatController extends AsyncNotifier<ChatView> {
             .copyWith(chat: chat.copyWith(messages: const []))
             .withMessages(incoming),
       );
-    } catch (_) {
-      // Kept as shown; the next read retries.
+    } catch (e) {
+      // Kept as shown; the next read retries, later each time.
+      _backoff.failed(e);
     } finally {
       _reading = false;
       if (ref.mounted) _schedule(open: state.value?.chat.open ?? false);
@@ -277,7 +283,7 @@ class ChatController extends AsyncNotifier<ChatView> {
       // The unread badge on the room and the list comes from the server.
       if (ref.mounted) {
         ref.invalidate(myMatchesProvider);
-        if (ref.exists(matchRoomProvider(matchId))) {
+        if (ref.read(matchRoomProvider(matchId).exists)) {
           unawaited(ref.read(matchRoomProvider(matchId).notifier).refresh());
         }
       }
@@ -317,8 +323,11 @@ class ChatController extends AsyncNotifier<ChatView> {
     // A closed chat is read-only: nothing new can arrive. A hidden one is
     // read again when it shows: each read tells the server the player is
     // looking, which holds back the opponent's pushes and marks them seen.
-    if (!open || !_foreground || _paused) return;
-    _nextRead = Timer(ref.read(chatPollIntervalProvider), refresh);
+    if (!open || !_foreground || _paused || _backoff.stopped) return;
+    _nextRead = Timer(
+      _backoff.next(ref.read(chatPollIntervalProvider)),
+      refresh,
+    );
   }
 
   static String _describe(Object error, AppLocalizations l) {

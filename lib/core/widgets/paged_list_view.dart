@@ -40,11 +40,13 @@ class PagedListView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final slivers = <Widget>[
       if (header != null) SliverToBoxAdapter(child: header),
+      // A failed refresh keeps the list it had (its error is in [value]);
+      // the error screen is only for a list that never loaded.
       ...switch (value) {
-        AsyncData(:final value) when value.items.isEmpty => [
+        AsyncValue(value: final value?) when value.items.isEmpty => [
           SliverToBoxAdapter(child: empty),
         ],
-        AsyncData(:final value) => [
+        AsyncValue(value: final value?) => [
           SliverList.separated(
             itemCount: value.items.length,
             itemBuilder: (context, i) => itemBuilder(context, value.items[i]),
@@ -62,10 +64,25 @@ class PagedListView<T> extends StatelessWidget {
     ];
 
     return RefreshIndicator(
-      onRefresh: onRefresh,
+      onRefresh: () async {
+        try {
+          await onRefresh();
+        } catch (error) {
+          // The list stays as it was; say why it didn't update.
+          if (context.mounted && value.hasValue) {
+            ScaffoldMessenger.maybeOf(context)
+                ?.showSnackBar(SnackBar(content: Text(errorText(error))));
+          }
+        }
+      },
       child: NotificationListener<ScrollNotification>(
         onNotification: (n) {
-          if (n.metrics.extentAfter < 400) onLoadMore();
+          // After a failed "load more" only its button retries, so scrolling
+          // offline doesn't send a request per scroll event.
+          if (n.metrics.extentAfter < 400 &&
+              value.value?.loadMoreError == null) {
+            onLoadMore();
+          }
           return false;
         },
         child: CustomScrollView(

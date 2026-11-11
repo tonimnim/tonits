@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/error_text.dart';
+import '../../../core/api/poll_backoff.dart';
 import '../../../core/l10n.dart';
 import '../../evidence/application/evidence_providers.dart';
 import '../../evidence/application/screenshot_uploader.dart';
@@ -36,6 +37,9 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
   AppLifecycleListener? _lifecycle;
   bool _foreground = true;
   bool _paused = false;
+
+  /// Waits longer between reads while they fail.
+  final _backoff = PollBackoff();
 
   MatchRoomRepository get _repository => ref.read(matchRoomRepositoryProvider);
 
@@ -83,9 +87,12 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     _nextRead?.cancel();
     try {
       final room = await _repository.get(matchId);
+      _backoff.succeeded();
       if (ref.mounted) _show(room);
-    } catch (_) {
-      // A failed background read keeps what's shown; the next read retries.
+    } catch (e) {
+      // A failed background read keeps what's shown; the next read
+      // retries, later each time.
+      _backoff.failed(e);
       if (ref.mounted) _scheduleRead(state.value);
     }
   }
@@ -224,7 +231,11 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
 
   void _scheduleRead(MatchRoom? room) {
     _nextRead?.cancel();
-    if (room == null || !_foreground || _paused || !_isLive(room.lifecycle)) {
+    if (room == null ||
+        !_foreground ||
+        _paused ||
+        _backoff.stopped ||
+        !_isLive(room.lifecycle)) {
       return;
     }
     final intervals = ref.read(matchRoomPollIntervalsProvider);
@@ -237,7 +248,7 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
       _ => false,
     };
     _nextRead = Timer(
-      waitingOnOthers ? intervals.fast : intervals.slow,
+      _backoff.next(waitingOnOthers ? intervals.fast : intervals.slow),
       refresh,
     );
   }

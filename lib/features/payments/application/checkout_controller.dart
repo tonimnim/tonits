@@ -97,7 +97,9 @@ class CheckoutController extends Notifier<CheckoutState> {
   Future<void> resumeIfPending() async {
     state = const CheckoutState(phase: CheckoutPhase.sending);
     try {
-      final eligibility = await ref.read(
+      // Read again, not the copy the competition screen holds: a payment
+      // may have started since, and a stale "none" would offer the form.
+      final eligibility = await ref.refresh(
         eligibilityProvider(competitionId).future,
       );
       if (!ref.mounted) return;
@@ -130,7 +132,9 @@ class CheckoutController extends Notifier<CheckoutState> {
         idempotencyKey: key,
         phoneNumber: phoneNumber,
       );
-      if (ref.mounted) _track(payment);
+      if (!ref.mounted) return;
+      _paymentStarted();
+      _track(payment);
     } on ApiException catch (e) {
       if (ref.mounted) await _startFailed(e);
     } catch (e) {
@@ -170,7 +174,9 @@ class CheckoutController extends Notifier<CheckoutState> {
         if (paymentId != null) {
           try {
             final payment = await _payments.get(paymentId);
-            if (ref.mounted) _track(payment);
+            if (!ref.mounted) return;
+            _paymentStarted();
+            _track(payment);
           } catch (_) {
             // Keep the key: trying again finds that same payment.
             if (ref.mounted) {
@@ -203,6 +209,10 @@ class CheckoutController extends Notifier<CheckoutState> {
     _ => describeError(e, _l10n),
   };
 
+  /// The competition screen underneath still says there's no payment, and
+  /// would offer Pay again on the way back: have it read again.
+  void _paymentStarted() => ref.invalidate(eligibilityProvider(competitionId));
+
   void _track(Payment payment) {
     if (!payment.isSettling) {
       _settle(payment);
@@ -213,6 +223,9 @@ class CheckoutController extends Notifier<CheckoutState> {
   }
 
   void _settle(Payment payment) {
+    // Ends any loop still reading it, so it is settled (and the lists
+    // refreshed) once.
+    _stopPolling();
     state = CheckoutState(phase: CheckoutPhase.settled, payment: payment);
     if (payment.registrationStatus != RegistrationOutcome.pending) {
       ref.read(entryServiceProvider).refreshAfterEntry(competitionId);
@@ -227,6 +240,8 @@ class CheckoutController extends Notifier<CheckoutState> {
     final interval = ref.read(paymentPollIntervalProvider);
     final limits = ref.read(paymentPollLimitsProvider);
     var waited = Duration.zero;
+    // Longer than the interval after a rate limit or a server error.
+    Duration? backOff;
     while (true) {
       if (waited >= limits.stopAfter) {
         state = CheckoutState(
@@ -237,7 +252,9 @@ class CheckoutController extends Notifier<CheckoutState> {
         );
         return;
       }
-      final delay = waited >= limits.slowAfter ? limits.slow : interval;
+      final regular = waited >= limits.slowAfter ? limits.slow : interval;
+      final delay = backOff != null && backOff > regular ? backOff : regular;
+      backOff = null;
       await _sleep(delay);
       waited += delay;
       if (!ref.mounted || generation != _generation) return;
@@ -253,14 +270,20 @@ class CheckoutController extends Notifier<CheckoutState> {
               DateTime.now().difference(since) > slowPaymentAfter,
         );
       } on ApiException catch (e) {
+        if (!ref.mounted || generation != _generation) return;
         if (e.status == 404 || e.status == 400) {
           // That payment can't be read; stop rather than poll forever.
           state = CheckoutState(error: describeError(e, _l10n));
           return;
         }
+        // Asked to slow down, or the server is struggling: wait longer.
+        if (e.status == 429 || e.status >= 500) {
+          backOff = e.retryAfter ?? limits.slow;
+        }
       } on NetworkException {
         // Keep waiting; the next read may get through.
       } catch (_) {
+        if (!ref.mounted || generation != _generation) return;
         // A reply the app can't read: stop, and let the player check again.
         state = CheckoutState(
           phase: CheckoutPhase.waiting,

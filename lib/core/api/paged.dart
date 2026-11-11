@@ -58,24 +58,49 @@ class Paged<T> {
 abstract class PagedNotifier<T> extends AsyncNotifier<Paged<T>> {
   Future<CursorPage<T>> fetchPage(String? cursor);
 
+  /// Bumped on every (re)build. Riverpod keeps this notifier across a
+  /// refresh, so `ref.mounted` alone can't tell a page asked for before it.
+  int _generation = 0;
+
   @override
-  Future<Paged<T>> build() async => Paged.first(await fetchPage(null));
+  Future<Paged<T>> build() async {
+    _generation++;
+    return Paged.first(await fetchPage(null));
+  }
 
   Future<void> loadMore() async {
     final current = state.value;
-    if (current == null || !current.hasMore || current.loadingMore) return;
+    // Not while refreshing: the next page would continue the old list.
+    if (current == null ||
+        state.isLoading ||
+        !current.hasMore ||
+        current.loadingMore) {
+      return;
+    }
+    final generation = _generation;
     state = AsyncData(
       current.copyWith(loadingMore: true, loadMoreError: () => null),
     );
     try {
       final page = await fetchPage(current.nextCursor);
-      if (!ref.mounted) return;
-      state = AsyncData(current.append(page));
+      final latest = _sameList(generation);
+      // Onto the list as it is now, keeping changes made meanwhile (an item
+      // marked read).
+      if (latest != null) state = AsyncData(latest.append(page));
     } catch (error) {
-      if (!ref.mounted) return;
-      state = AsyncData(
-        current.copyWith(loadingMore: false, loadMoreError: () => error),
-      );
+      final latest = _sameList(generation);
+      if (latest != null) {
+        state = AsyncData(
+          latest.copyWith(loadingMore: false, loadMoreError: () => error),
+        );
+      }
     }
+  }
+
+  /// The list now, or null when it was refreshed or disposed since
+  /// [generation]: a page from before then belongs to an older list.
+  Paged<T>? _sameList(int generation) {
+    if (!ref.mounted || generation != _generation) return null;
+    return state.value;
   }
 }

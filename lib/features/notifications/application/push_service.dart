@@ -132,7 +132,7 @@ class PushService {
     // hold back the opponent's next pushes; it catches up when shown.
     if (target is OpenMatchChat &&
         _onScreen(Routes.matchChat(target.matchId))) {
-      if (_ref.exists(matchChatProvider(target.matchId))) {
+      if (_ref.read(matchChatProvider(target.matchId).exists)) {
         unawaited(
           _ref.read(matchChatProvider(target.matchId).notifier).refresh(),
         );
