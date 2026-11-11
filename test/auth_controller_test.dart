@@ -126,7 +126,7 @@ void main() {
     final store = MemoryTokenStore('refresh-0');
     final auth = Auth((request) async {
       await Future<void>.delayed(const Duration(milliseconds: 150));
-      return jsonResponse(sessionJson(refresh: 'refresh-1'), 200);
+      return jsonResponse(sessionJson(), 200);
     }, store);
 
     await auth.notifier.restore(timeout: const Duration(milliseconds: 20));
