@@ -38,6 +38,8 @@ class _TonitsAppState extends ConsumerState<TonitsApp> {
       if (status == AuthStatus.signedIn && previous != AuthStatus.signedIn) {
         unawaited(push.register());
         push.openPending();
+      } else if (status == AuthStatus.signedOut) {
+        unawaited(push.signedOut());
       }
     });
   }

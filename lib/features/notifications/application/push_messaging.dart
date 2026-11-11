@@ -41,6 +41,10 @@ abstract class PushMessaging {
 
   /// The push that launched the app from closed, if one did.
   Future<PushMessage?> initial();
+
+  /// Retires this device's token, so pushes already addressed to it stop
+  /// arriving. A new one is issued at the next sign-in.
+  Future<void> deleteToken();
 }
 
 class FirebasePushMessaging implements PushMessaging {
@@ -91,6 +95,12 @@ class FirebasePushMessaging implements PushMessaging {
     return message == null ? null : _message(message);
   }
 
+  // The counterpart of token(), for the same reason it stays on it.
+  @override
+  Future<void> deleteToken() async =>
+      // ignore: deprecated_member_use
+      (await _messaging).deleteToken();
+
   static PushMessage _message(RemoteMessage m) => PushMessage(
     title: m.notification?.title,
     body: m.notification?.body,
@@ -122,6 +132,9 @@ class NoPushMessaging implements PushMessaging {
 
   @override
   Future<PushMessage?> initial() async => null;
+
+  @override
+  Future<void> deleteToken() async {}
 }
 
 /// Where the device keeps its push identity: a stable id for this install,

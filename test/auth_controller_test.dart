@@ -122,6 +122,23 @@ void main() {
     expect(store.token, isNull);
   });
 
+  test('a refresh that outlasts the launch wait is still kept', () async {
+    final store = MemoryTokenStore('refresh-0');
+    final auth = Auth((request) async {
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      return jsonResponse(sessionJson(refresh: 'refresh-1'), 200);
+    }, store);
+
+    await auth.notifier.restore(timeout: const Duration(milliseconds: 20));
+    expect(auth.state.status, AuthStatus.unreachable);
+
+    // The server rotated the token: the app keeps the new session rather
+    // than a spent token it could later be signed out for.
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    expect(auth.state.status, AuthStatus.signedIn);
+    expect(store.token, 'refresh-1');
+  });
+
   test('restore keeps the token when the API is unreachable', () async {
     final store = MemoryTokenStore('refresh-0');
     final auth = Auth(

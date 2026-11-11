@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app/app.dart';
+import 'core/api/retry.dart';
 import 'core/config.dart';
 import 'core/errors.dart';
 
@@ -11,5 +12,5 @@ Future<void> main() async {
   AppConfig.checkForRelease();
   catchUncaughtErrors();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const ProviderScope(child: TonitsApp()));
+  runApp(const ProviderScope(retry: retryApiLoad, child: TonitsApp()));
 }

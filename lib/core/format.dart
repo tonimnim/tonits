@@ -4,6 +4,20 @@ import 'l10n.dart';
 
 /// Formatting for dates, money and counts in the device locale.
 abstract final class Format {
+  // Formatters are made once per locale and pattern: lists and the chat
+  // format many dates on every build, and building one parses its pattern.
+  static final _dateFormats = <String, DateFormat>{};
+
+  static DateFormat _pattern(String pattern) => _dateFormats.putIfAbsent(
+    '${Intl.getCurrentLocale()}|$pattern',
+    () => DateFormat(pattern),
+  );
+
+  static DateFormat get _hm =>
+      _dateFormats.putIfAbsent('${Intl.getCurrentLocale()}|Hm', DateFormat.Hm);
+
+  static final _letterAtEnd = RegExp(r'\p{L}$', unicode: true);
+
   /// "Today, 18:30", "Tomorrow, 18:30", "Sat 13 Oct, 18:30", or with the
   /// year when it isn't this year.
   static String dateTime(DateTime value, AppLocalizations l, {DateTime? now}) {
@@ -11,24 +25,27 @@ abstract final class Format {
     // Days are the player's own: compare in local time, whatever [now] is.
     final today = _day((now ?? DateTime.now()).toLocal());
     final day = _day(local);
-    final time = DateFormat.Hm().format(local);
+    final time = _hm.format(local);
     final difference = day.difference(today).inDays;
     if (difference == 0) return l.formatToday(time);
     if (difference == 1) return l.formatTomorrow(time);
     if (difference == -1) return l.formatYesterday(time);
     final date = local.year == today.year
-        ? DateFormat('EEE d MMM').format(local)
-        : DateFormat('d MMM y').format(local);
+        ? _pattern('EEE d MMM').format(local)
+        : _pattern('d MMM y').format(local);
     return l.formatDateTime(date, time);
   }
+
+  /// "18:30", in the device's local time.
+  static String time(DateTime value) => _hm.format(value.toLocal());
 
   /// "Sat 13 Oct" (or "13 Oct 2027" in another year).
   static String date(DateTime value, {DateTime? now}) {
     final local = value.toLocal();
     final year = (now ?? DateTime.now()).year;
     return local.year == year
-        ? DateFormat('EEE d MMM').format(local)
-        : DateFormat('d MMM y').format(local);
+        ? _pattern('EEE d MMM').format(local)
+        : _pattern('d MMM y').format(local);
   }
 
   /// How long ago, briefly: "Now", "5 min", "3 h", "Yesterday", then the
@@ -46,7 +63,7 @@ abstract final class Format {
 
   /// "March 2026".
   static String monthYear(DateTime value) =>
-      DateFormat('MMMM y').format(value.toLocal());
+      _pattern('MMMM y').format(value.toLocal());
 
   /// Money from minor units with the currency's own decimals, dropping a
   /// zero fraction: "Ksh 100", "₹49.50", "\$5".
@@ -63,7 +80,7 @@ abstract final class Format {
     // A lettered symbol ("Ksh", "KES") reads as a word, so it needs a space;
     // "₹" and "\$" attach to the number.
     final symbol = format.currencySymbol;
-    final lettered = RegExp(r'\p{L}$', unicode: true).hasMatch(symbol);
+    final lettered = _letterAtEnd.hasMatch(symbol);
     return lettered && out.startsWith(symbol) && !out.startsWith('$symbol ')
         ? out.replaceFirst(symbol, '$symbol ')
         : out;

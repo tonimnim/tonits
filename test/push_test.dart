@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:tonits/app/shell/tonits_navigation_bar.dart';
 import 'package:tonits/features/chat/application/chat_providers.dart';
 import 'package:tonits/features/matches/application/matches_providers.dart';
 import 'package:tonits/features/notifications/application/push_messaging.dart';
@@ -147,6 +148,49 @@ void main() {
     expect(store.installation, isNull);
   });
 
+  testWidgets(
+    'after sign-out the token is retired and old pushes reach nobody',
+    (tester) async {
+      final push = FakePushMessaging(currentToken: _token);
+      final api = await pumpTonits(
+        tester,
+        refreshToken: 'stored',
+        push: push,
+        overrides: _overrides,
+        api: FakeApi(routes: _pushRoutes()),
+      );
+      await openProfileFromHome(tester);
+      await tapText(tester, 'Sign out');
+      await tester.tap(find.widgetWithText(TextButton, 'Sign out'));
+      await tester.pumpAndSettle();
+      expect(push.deletedTokens, 1);
+
+      const old = PushMessage(
+        title: 'Confirm the match result',
+        data: {
+          'kind': 'result.report_received',
+          'matchId': 'm1',
+          'notificationId': 'n1',
+        },
+      );
+      // One still in the tray, and one arriving while nobody is signed in.
+      push
+        ..tap(old)
+        ..arrive(old);
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+
+      // The next player who signs in isn't taken to the old player's match.
+      await tester.tap(find.text('Continue with Google'));
+      await tester.pumpAndSettle();
+      expect(find.text('Check in to play'), findsNothing);
+      expect(
+        api.requests.where((r) => r.url.path == '/v1/me/notifications/n1/read'),
+        isEmpty,
+      );
+    },
+  );
+
   testWidgets('tapping a chat push marks it read and opens the chat', (
     tester,
   ) async {
@@ -237,6 +281,50 @@ void main() {
     await tester.tap(find.widgetWithText(SnackBarAction, 'Open'));
     await tester.pumpAndSettle();
     expect(find.text('Check in to play'), findsOneWidget);
+  });
+
+  testWidgets('a chat push for a chat on another tab does not read it', (
+    tester,
+  ) async {
+    final push = FakePushMessaging();
+    final api = await pumpTonits(
+      tester,
+      refreshToken: 'stored',
+      push: push,
+      overrides: _overrides,
+      api: FakeApi(
+        routes: {
+          ..._pushRoutes(),
+          '/v1/matches/m1/chat': (_) => jsonResponse(_chat(), 200),
+        },
+      ),
+    );
+    push.tap(
+      const PushMessage(data: {'kind': 'match.chat_message', 'matchId': 'm1'}),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(TonitsNavigationBar),
+        matching: find.byTooltip('Home'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    int chatReads() =>
+        api.requests.where((r) => r.url.path == '/v1/matches/m1/chat').length;
+    final before = chatReads();
+
+    push.arrive(
+      const PushMessage(
+        title: 'New match message',
+        data: {'kind': 'match.chat_message', 'matchId': 'm1'},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Reading would tell the server the player is looking at it.
+    expect(chatReads(), before);
+    expect(find.text('New match message'), findsOneWidget);
   });
 
   testWidgets('a chat push for the chat on screen just reads the message', (

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/format.dart';
 import '../../../../core/l10n.dart';
@@ -418,7 +417,7 @@ class _Meta extends StatelessWidget {
         children: [
           if (time != null)
             Text(
-              DateFormat.Hm().format(time!.toLocal()),
+              Format.time(time!),
               style: TextStyle(fontSize: 11, color: color),
             ),
           if (icon != null) ...[

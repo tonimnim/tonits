@@ -263,6 +263,53 @@ void main() {
       },
     );
 
+    test('a public read still answers when the refresh itself fails', () async {
+      final seen = <String?>[];
+      final api =
+          ApiClient(
+              baseUrl: 'http://api.test',
+              httpClient: MockClient((request) async {
+                final token = request.headers['Authorization'];
+                seen.add(token);
+                return token == null
+                    ? jsonResponse({'data': <Object>[]}, 200)
+                    : errorResponse(401, 'invalid_access_token');
+              }),
+            )
+            ..accessToken = 'expired'
+            ..onUnauthorized = () async => throw NetworkException('offline');
+
+      expect(await api.get('/v1/competitions', optionalAuth: true), {
+        'data': <Object>[],
+      });
+      expect(seen, ['Bearer expired', null]);
+      // A request that needs the session fails with the refresh's error.
+      expect(api.get('/v1/me', auth: true), throwsA(isA<NetworkException>()));
+    });
+
+    test('the timeout covers the whole exchange, not each half', () async {
+      final api = ApiClient(
+        baseUrl: 'http://api.test',
+        timeout: const Duration(milliseconds: 100),
+        httpClient: MockClient.streaming((request, body) async {
+          // Headers after 60 ms, then a body that takes another 60 ms: each
+          // half is under the timeout, the whole is over it.
+          await Future<void>.delayed(const Duration(milliseconds: 60));
+          return http.StreamedResponse(
+            Stream.fromFuture(
+              Future.delayed(
+                const Duration(milliseconds: 60),
+                () => '{}'.codeUnits,
+              ),
+            ),
+            200,
+          );
+        }),
+      );
+
+      expect(api.get('/v1/games'), throwsA(isA<NetworkException>()));
+    });
+
     test('a required session still fails once it is over', () async {
       final api =
           ApiClient(

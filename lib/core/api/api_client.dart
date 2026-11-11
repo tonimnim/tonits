@@ -128,9 +128,14 @@ class ApiClient {
       // Another request may have renewed the session while this one was
       // out; only a token nobody has replaced yet needs a refresh.
       final current = _accessToken;
-      final token = current != null && current != sent
-          ? current
-          : await _renew();
+      String? token;
+      try {
+        token = current != null && current != sent ? current : await _renew();
+      } on Exception {
+        // The refresh itself failed (offline, the API busy). A request that
+        // needs the session fails with that; a public read goes on below.
+        if (!optionalAuth) rethrow;
+      }
       if (token != null) {
         response = await _send(method, path, body, token, headers);
       }
@@ -215,8 +220,11 @@ class ApiClient {
       request.body = jsonEncode(body);
     }
     try {
-      final streamed = await _http.send(request).timeout(timeout);
-      return await http.Response.fromStream(streamed).timeout(timeout);
+      // One deadline for the whole exchange, headers and body together.
+      return await _http
+          .send(request)
+          .then(http.Response.fromStream)
+          .timeout(timeout);
     } on Exception catch (e) {
       // As in putBytes: anything from the transfer itself is offline.
       throw NetworkException(e);

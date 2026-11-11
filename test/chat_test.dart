@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/chat/application/chat_providers.dart';
+import 'package:tonits/features/matches/application/matches_providers.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
@@ -406,6 +408,60 @@ void main() {
 
     expect(find.text('ready?'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
+  });
+
+  testWidgets('a chat left open on another tab stops reading until shown', (
+    tester,
+  ) async {
+    final chat = _FakeChat(messages: [chatMessageJson(1, text: 'ready?')]);
+    final api = FakeApi(
+      routes: {
+        '/v1/matches/m1': (_) => jsonResponse({'data': matchRoomJson()}, 200),
+        ...chat.routes,
+      },
+    );
+    await pumpTonits(
+      tester,
+      api: api,
+      refreshToken: 'stored',
+      overrides: [
+        matchRoomPollIntervalsProvider.overrideWithValue((
+          fast: const Duration(hours: 1),
+          slow: const Duration(hours: 1),
+        )),
+        chatPollIntervalProvider.overrideWithValue(const Duration(seconds: 4)),
+      ],
+    );
+    Future<void> openTab(String label) async {
+      await tester.tap(
+        find.descendant(
+          of: find.byType(TonitsNavigationBar),
+          matching: find.byTooltip(label),
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    int chatReads() => api.requests
+        .where((r) => r.method == 'GET' && r.url.path == '/v1/matches/m1/chat')
+        .length;
+    await openTab('Matches');
+    await tester.tap(find.text('vs Amina Otieno'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Chat'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 9));
+    expect(chatReads(), greaterThan(1), reason: 'reads while on screen');
+
+    await openTab('Home');
+    final hidden = chatReads();
+    await tester.pump(const Duration(seconds: 30));
+    expect(chatReads(), hidden);
+
+    // Shown again, it catches up at once.
+    await openTab('Matches');
+    expect(chatReads(), greaterThan(hidden));
+    expect(find.text('ready?'), findsOneWidget);
   });
 
   testWidgets("a match card shows the chat's unread count", (tester) async {

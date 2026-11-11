@@ -183,70 +183,84 @@ class _Chat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final now = ref.watch(clockProvider).value ?? DateTime.now();
+    // To the minute: nothing here needs seconds (day labels, whether a
+    // suggested kick-off has passed), and a per-second clock would rebuild
+    // the whole conversation every second.
+    final now =
+        ref.watch(clockProvider.select((tick) => _toMinute(tick.value))) ??
+        _toMinute(DateTime.now())!;
     final chat = view.chat;
     final open = view.openProposal;
 
     // Oldest first, with a day label where the day changes, then what's
-    // still being sent; shown newest at the bottom of a reversed list.
-    final entries = <Widget>[];
+    // still being sent; shown newest at the bottom of a reversed list, which
+    // builds only the rows on screen.
+    final items = <_ChatItem>[];
     String? day;
     for (final (i, m) in view.messages.indexed) {
       final label = chatDay(m.sentAt, l, now: now);
       if (label != day) {
-        entries.add(ChatDaySeparator(label));
+        items.add(_ChatItem.day(label));
         day = label;
       }
-      final previous = i > 0 ? view.messages[i - 1] : null;
-      final sameRun = previous != null && previous.mine == m.mine;
-      entries.add(
-        Padding(
-          padding: EdgeInsets.only(top: sameRun ? 3 : 10),
-          child: ChatBubble(
-            message: m,
-            view: view,
-            opponent: opponent,
-            now: now,
-            seen: m.mine && chat.opponentReadSeq >= m.seq,
-            onAnswer:
-                m == open &&
-                    chat.open &&
-                    (m.proposedStartAt?.isAfter(now) ?? false)
-                ? ({required accepted}) => _send(
-                    context,
-                    ref,
-                    TimeAnswerDraft(proposalSeq: m.seq, accepted: accepted),
-                  )
-                : null,
-            onReport: m.mine || m.kind == ChatKind.timeAnswer
-                ? null
-                : () => _report(context, ref, m),
-          ),
-        ),
-      );
+      items.add(_ChatItem.message(i, m.seq));
     }
     for (final p in view.pending) {
-      entries.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 3),
-          child: PendingBubble(
-            message: p,
-            onRetry: () async {
-              final refused = await _controller(ref).retry(p);
-              if (refused != null && context.mounted) {
-                showMessage(context, refused);
-              }
-            },
-          ),
+      items.add(_ChatItem.pending(p));
+    }
+    // Row index in the reversed list, by key: a new message at the bottom
+    // keeps every other row (and its state) where it was.
+    final rowOf = {
+      for (final (i, item) in items.indexed) item.key: items.length - 1 - i,
+    };
+
+    Widget message(int i) {
+      final m = view.messages[i];
+      final previous = i > 0 ? view.messages[i - 1] : null;
+      final sameRun = previous != null && previous.mine == m.mine;
+      return Padding(
+        padding: EdgeInsets.only(top: sameRun ? 3 : 10),
+        child: ChatBubble(
+          message: m,
+          view: view,
+          opponent: opponent,
+          now: now,
+          seen: m.mine && chat.opponentReadSeq >= m.seq,
+          onAnswer:
+              m == open &&
+                  chat.open &&
+                  (m.proposedStartAt?.isAfter(now) ?? false)
+              ? ({required accepted}) => _send(
+                  context,
+                  ref,
+                  TimeAnswerDraft(proposalSeq: m.seq, accepted: accepted),
+                )
+              : null,
+          onReport: m.mine || m.kind == ChatKind.timeAnswer
+              ? null
+              : () => _report(context, ref, m),
         ),
       );
     }
 
+    Widget pending(PendingMessage p) => Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: PendingBubble(
+        message: p,
+        onRetry: () async {
+          final refused = await _controller(ref).retry(p);
+          if (refused != null && context.mounted) {
+            showMessage(context, refused);
+          }
+        },
+      ),
+    );
+
     return Column(
       children: [
         // Out of the way while typing, so the conversation keeps the room.
-        if (MediaQuery.viewInsetsOf(context).bottom == 0)
-          GamePlan(
+        _HiddenWhileTyping(
+          child: GamePlan(
             view: view,
             opponent: opponent,
             now: now,
@@ -255,18 +269,21 @@ class _Chat extends ConsumerWidget {
               if (context.mounted) await _send(context, ref, draft);
             },
             onSuggestTime: () async {
+              // The exact time, not the minute the screen shows: choices
+              // like "In 30 min" count from it.
               final draft = await askKickOff(
                 context,
-                now: now,
+                now: ref.read(clockProvider).value ?? DateTime.now(),
                 playBy: chat.playBy,
               );
               if (context.mounted) await _send(context, ref, draft);
             },
           ),
+        ),
         Expanded(
-          child: entries.isEmpty
+          child: items.isEmpty
               ? _Empty(opponent: opponent)
-              : ListView(
+              : ListView.builder(
                   reverse: true,
                   padding: const EdgeInsets.fromLTRB(
                     TonitsSpace.md,
@@ -274,7 +291,22 @@ class _Chat extends ConsumerWidget {
                     TonitsSpace.md,
                     TonitsSpace.md,
                   ),
-                  children: [...entries.reversed, const _PrivacyLine()],
+                  // The privacy line sits above the oldest message.
+                  itemCount: items.length + 1,
+                  findChildIndexCallback: (key) =>
+                      key is ValueKey<String> ? rowOf[key.value] : null,
+                  itemBuilder: (context, row) {
+                    if (row == items.length) return const _PrivacyLine();
+                    final item = items[items.length - 1 - row];
+                    return KeyedSubtree(
+                      key: ValueKey(item.key),
+                      child: switch (item) {
+                        _ChatItem(day: final label?) => ChatDaySeparator(label),
+                        _ChatItem(pending: final p?) => pending(p),
+                        _ChatItem(:final index) => message(index!),
+                      },
+                    );
+                  },
                 ),
         ),
         SafeArea(
@@ -296,6 +328,46 @@ class _Chat extends ConsumerWidget {
       ],
     );
   }
+}
+
+DateTime? _toMinute(DateTime? t) =>
+    t == null ? null : DateTime(t.year, t.month, t.day, t.hour, t.minute);
+
+/// One row of the conversation: a day label, a delivered message (by its
+/// place in the list) or one still being sent.
+class _ChatItem {
+  const _ChatItem.day(String this.day)
+    : index = null,
+      pending = null,
+      key = 'day:$day';
+  const _ChatItem.message(int this.index, int seq)
+    : day = null,
+      pending = null,
+      key = 'seq:$seq';
+  _ChatItem.pending(PendingMessage this.pending)
+    : day = null,
+      index = null,
+      key = 'pending:${pending.clientId}';
+
+  final String? day;
+  final int? index;
+  final PendingMessage? pending;
+  final String key;
+}
+
+/// Shows [child] only while the keyboard is down. Reading the keyboard's
+/// inset here, not in the chat, keeps its slide from rebuilding every
+/// message on every frame.
+class _HiddenWhileTyping extends StatelessWidget {
+  const _HiddenWhileTyping({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) =>
+      MediaQuery.viewInsetsOf(context).bottom == 0
+      ? child
+      : const SizedBox.shrink();
 }
 
 class _Empty extends StatelessWidget {

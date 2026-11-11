@@ -146,6 +146,58 @@ void main() {
     expect(api.requests.where((r) => r.method == 'PUT'), hasLength(2));
   });
 
+  testWidgets('sending screenshots again reuses what already uploaded', (
+    tester,
+  ) async {
+    var sends = 0;
+    final api = await openRoom(
+      tester,
+      room: matchRoomJson(
+        lifecycle: 'screenshot_required',
+        bestOf: 3,
+        submitted: submittedJson(2, 1),
+      ),
+      routes: {
+        ...evidenceRoutes(),
+        // The first send fails on the server's side; the second goes through.
+        '/v1/matches/m1/score-reports/screenshot': (_) => ++sends == 1
+            ? errorResponse(503, 'database_unavailable')
+            : jsonResponse(
+                roomActionJson(
+                  matchRoomJson(
+                    lifecycle: 'awaiting_opponent_screenshot',
+                    bestOf: 3,
+                  ),
+                ),
+                201,
+              ),
+      },
+    );
+    await tapText(tester, 'Send screenshots');
+    await tester.tap(find.text('Choose').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Choose').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Send 2 screenshots'));
+    await tester.pumpAndSettle();
+    expect(find.text('Your screenshots'), findsOneWidget);
+
+    await tester.tap(find.text('Send 2 screenshots'));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Waiting for Amina Otieno's screenshots"), findsOneWidget);
+    // Each game uploaded once, and the retry is the same request.
+    expect(api.requests.where((r) => r.method == 'PUT'), hasLength(2));
+    final submits = api.requests
+        .where((r) => r.url.path.endsWith('/screenshot'))
+        .toList();
+    expect(submits, hasLength(2));
+    expect(
+      submits.last.headers['Idempotency-Key'],
+      submits.first.headers['Idempotency-Key'],
+    );
+  });
+
   testWidgets('the competition says how many games each round is', (
     tester,
   ) async {

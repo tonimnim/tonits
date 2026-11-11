@@ -100,6 +100,7 @@ class ChatController extends AsyncNotifier<ChatView> {
   Timer? _nextRead;
   AppLifecycleListener? _lifecycle;
   bool _foreground = true;
+  bool _paused = false;
   bool _reading = false;
 
   /// The highest seq already reported as read.
@@ -118,13 +119,28 @@ class ChatController extends AsyncNotifier<ChatView> {
     _lifecycle ??= AppLifecycleListener(
       onShow: () {
         _foreground = true;
-        unawaited(refresh());
+        if (!_paused) unawaited(refresh());
       },
       onHide: () {
         _foreground = false;
         _nextRead?.cancel();
       },
     );
+    // Off screen (another tab, or a screen on top) Riverpod pauses this
+    // provider, but a timer of our own would keep firing: stop reading until
+    // it is shown again, then catch up at once.
+    ref
+      ..onCancel(() {
+        _paused = true;
+        _nextRead?.cancel();
+      })
+      ..onResume(() {
+        _paused = false;
+        // Not from inside the life-cycle callback, where ref can't be used.
+        scheduleMicrotask(() {
+          if (ref.mounted && _foreground) unawaited(refresh());
+        });
+      });
     var chat = await repository.read(matchId);
     final messages = [...chat.messages];
     while (chat.hasMore && messages.isNotEmpty) {
@@ -155,6 +171,10 @@ class ChatController extends AsyncNotifier<ChatView> {
       }
       if (!ref.mounted) return;
       final current = state.value ?? view;
+      final latest = chat.copyWith(messages: const []);
+      // Nothing new: keep the same state, so the screen doesn't rebuild
+      // every few seconds for nothing.
+      if (incoming.isEmpty && latest == current.chat) return;
       state = AsyncData(
         current
             .copyWith(chat: chat.copyWith(messages: const []))
@@ -294,8 +314,10 @@ class ChatController extends AsyncNotifier<ChatView> {
 
   void _schedule({required bool open}) {
     _nextRead?.cancel();
-    // A closed chat is read-only: nothing new can arrive.
-    if (!open || !_foreground) return;
+    // A closed chat is read-only: nothing new can arrive. A hidden one is
+    // read again when it shows: each read tells the server the player is
+    // looking, which holds back the opponent's pushes and marks them seen.
+    if (!open || !_foreground || _paused) return;
     _nextRead = Timer(ref.read(chatPollIntervalProvider), refresh);
   }
 

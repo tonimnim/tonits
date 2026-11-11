@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,8 +54,12 @@ class AuthController extends Notifier<AuthState> {
     return const AuthState.restoring();
   }
 
-  /// Resumes the stored session, if any.
-  Future<void> restore() async {
+  /// How long launch waits to resume the session before showing the
+  /// offline screen.
+  static const restoreTimeout = Duration(seconds: 10);
+
+  /// Resumes the stored session, if any. [timeout] is for tests.
+  Future<void> restore({Duration timeout = restoreTimeout}) async {
     state = const AuthState.restoring();
     final String? refreshToken;
     try {
@@ -69,8 +75,25 @@ class AuthController extends Notifier<AuthState> {
       state = const AuthState(status: AuthStatus.signedOut);
       return;
     }
+    final refreshing = _refresh(refreshToken);
     try {
-      await _adopt(await _refresh(refreshToken));
+      // A network that takes connections but stalls (a captive portal, weak
+      // 2G) must not hold the splash: give up early and offer a retry.
+      await _adopt(await refreshing.timeout(timeout));
+    } on TimeoutException {
+      state = const AuthState(status: AuthStatus.unreachable);
+      // The refresh carries on. If it gets through, the server has already
+      // rotated the token, so its session must be kept: dropping it would
+      // leave a spent token in storage, and a Try again after the server's
+      // grace would sign the player out. Kept only while still offline; a
+      // Try again meanwhile shares this same refresh.
+      unawaited(
+        refreshing.then((session) async {
+          if (ref.mounted && state.status == AuthStatus.unreachable) {
+            await _adopt(session);
+          }
+        }, onError: (_) {}),
+      );
     } on ApiException catch (e) {
       if (e.status == 401) {
         await _end();

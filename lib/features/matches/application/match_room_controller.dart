@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,13 +22,20 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
 
   final String matchId;
 
-  /// One key per action attempt, kept only to retry it after a dropped
-  /// connection, so the server never acts twice.
-  final _keys = <MatchAction, String>{};
+  /// One key per action attempt, kept only to retry that same request after
+  /// a dropped connection, so the server never acts twice. A changed request
+  /// (a corrected score, another screenshot) gets a new key: reusing one for
+  /// a different body is refused.
+  final _keys = <MatchAction, ({String payload, String key})>{};
+
+  /// Screenshots already uploaded and verified, by game, so a retry after a
+  /// failed send reuses them instead of uploading every game again.
+  final _uploaded = <int, ({Uint8List bytes, String evidenceId})>{};
 
   Timer? _nextRead;
   AppLifecycleListener? _lifecycle;
   bool _foreground = true;
+  bool _paused = false;
 
   MatchRoomRepository get _repository => ref.read(matchRoomRepositoryProvider);
 
@@ -44,13 +51,28 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     _lifecycle ??= AppLifecycleListener(
       onShow: () {
         _foreground = true;
-        unawaited(refresh());
+        if (!_paused) unawaited(refresh());
       },
       onHide: () {
         _foreground = false;
         _nextRead?.cancel();
       },
     );
+    // Off screen (another tab, or a screen on top) Riverpod pauses this
+    // provider, but a timer of our own would keep firing: stop reading until
+    // it is shown again, then catch up at once.
+    ref
+      ..onCancel(() {
+        _paused = true;
+        _nextRead?.cancel();
+      })
+      ..onResume(() {
+        _paused = false;
+        // Not from inside the life-cycle callback, where ref can't be used.
+        scheduleMicrotask(() {
+          if (ref.mounted && _foreground) unawaited(refresh());
+        });
+      });
     final room = await repository.get(matchId);
     _scheduleRead(room);
     return room;
@@ -77,6 +99,7 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
   Future<String?> reportScore(Score score) => _act(
     MatchAction.reportScore,
     (key) => _repository.reportScore(matchId, score: score, key: key),
+    payload: '$score',
   );
 
   Future<String?> answer({required bool confirm}) => _act(
@@ -91,38 +114,62 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     Map<int, Uint8List> bytesByGame, {
     void Function(int done, int total, UploadStage stage)? onProgress,
   }) async {
-    final games = bytesByGame.keys.toList()..sort();
-    final evidence = <int, String>{};
-    for (final (i, game) in games.indexed) {
-      try {
-        evidence[game] = await ref
-            .read(screenshotUploaderProvider)
-            .upload(
-              bytesByGame[game]!,
-              onStage: (stage) => onProgress?.call(i + 1, games.length, stage),
-            );
-      } on ScreenshotProblem catch (e) {
-        return bytesByGame.length == 1
-            ? e.message
-            : ref
-                  .read(l10nProvider)
-                  .matchScreenshotProblemForGame(game, e.message);
-      } catch (e) {
-        return _describe(e);
+    final l = ref.read(l10nProvider);
+    // Finish even if the player leaves the room meanwhile: verifying can take
+    // a while, and in a dispute an upload that never gets sent forfeits.
+    final alive = ref.keepAlive();
+    try {
+      final games = bytesByGame.keys.toList()..sort();
+      final evidence = <int, String>{};
+      for (final (i, game) in games.indexed) {
+        final bytes = bytesByGame[game]!;
+        final done = _uploaded[game];
+        if (done != null && _same(done.bytes, bytes)) {
+          evidence[game] = done.evidenceId;
+          continue;
+        }
+        try {
+          final evidenceId = await ref
+              .read(screenshotUploaderProvider)
+              .upload(
+                bytes,
+                onStage: (stage) =>
+                    onProgress?.call(i + 1, games.length, stage),
+              );
+          _uploaded[game] = (bytes: bytes, evidenceId: evidenceId);
+          evidence[game] = evidenceId;
+        } on ScreenshotProblem catch (e) {
+          return bytesByGame.length == 1
+              ? e.message
+              : l.matchScreenshotProblemForGame(game, e.message);
+        } catch (e) {
+          return _describe(e, l);
+        }
+        if (!ref.mounted) return l.matchErrorMatchChanged;
       }
-      if (!ref.mounted) return null;
+      final perGame = state.value?.windows.perGameScreenshots ?? false;
+      final problem = await _act(
+        MatchAction.submitScreenshot,
+        (key) => _repository.sendScreenshots(
+          matchId,
+          evidenceByGame: evidence,
+          perGame: perGame,
+          key: key,
+        ),
+        payload: [for (final game in games) '$game:${evidence[game]}']
+            .join(','),
+      );
+      if (problem == null) _uploaded.clear();
+      return problem;
+    } finally {
+      alive.close();
     }
-    final perGame = state.value?.windows.perGameScreenshots ?? false;
-    return _act(
-      MatchAction.submitScreenshot,
-      (key) => _repository.sendScreenshots(
-        matchId,
-        evidenceByGame: evidence,
-        perGame: perGame,
-        key: key,
-      ),
-    );
   }
+
+  /// The same picture: the very bytes, or the same file picked again.
+  static bool _same(Uint8List a, Uint8List b) =>
+      identical(a, b) ||
+      (a.lengthInBytes == b.lengthInBytes && listEquals(a, b));
 
   /// A best of 1's one screenshot.
   Future<String?> sendScreenshot(
@@ -136,24 +183,37 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
   /// the player when it failed, or null.
   Future<String?> _act(
     MatchAction action,
-    Future<MatchRoom> Function(String key) run,
-  ) async {
-    final key = _keys[action] ??= newUuid();
+    Future<MatchRoom> Function(String key) run, {
+    String payload = '',
+  }) async {
+    final l = ref.read(l10nProvider);
+    final held = _keys[action];
+    final key = held != null && held.payload == payload ? held.key : newUuid();
+    _keys[action] = (payload: payload, key: key);
+    // The action finishes even if the player leaves the room meanwhile.
+    final alive = ref.keepAlive();
     try {
       final room = await run(key);
       _keys.remove(action);
-      if (ref.mounted) _show(room);
-      _refreshLists();
+      if (ref.mounted) {
+        _show(room);
+        _refreshLists();
+      }
       return null;
     } on NetworkException catch (e) {
       // Keep the key: trying again repeats this same request.
-      return describeError(e, ref.read(l10nProvider));
+      return describeError(e, l);
     } on ApiException catch (e) {
-      _keys.remove(action);
+      // A server error or a rate limit may have acted anyway or will let a
+      // retry through: keep the key for that. Any other answer is final.
+      if (e.status < 500 && e.status != 429) _keys.remove(action);
+      if (e.code == 'invalid_evidence') _uploaded.clear();
       // The room moved on (a deadline passed, the opponent acted): show
       // where it is now instead of a stale button.
       if (e.status == 409 && ref.mounted) await refresh();
-      return _describe(e);
+      return _describe(e, l);
+    } finally {
+      alive.close();
     }
   }
 
@@ -164,7 +224,9 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
 
   void _scheduleRead(MatchRoom? room) {
     _nextRead?.cancel();
-    if (room == null || !_foreground || !_isLive(room.lifecycle)) return;
+    if (room == null || !_foreground || _paused || !_isLive(room.lifecycle)) {
+      return;
+    }
     final intervals = ref.read(matchRoomPollIntervalsProvider);
     final waitingOnOthers = switch (room.lifecycle) {
       MatchLifecycle.checkedIn ||
@@ -191,8 +253,7 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
     ref.invalidate(nextMatchProvider);
   }
 
-  String _describe(Object error) {
-    final l = ref.read(l10nProvider);
+  static String _describe(Object error, AppLocalizations l) {
     if (error is ApiException) {
       switch (error.code) {
         case 'result_awaiting_confirmation':
@@ -209,7 +270,9 @@ class MatchRoomController extends AsyncNotifier<MatchRoom> {
           return error.message.isNotEmpty
               ? error.message
               : l.matchErrorInvalidScore;
-        case 'match_changed':
+        // A retry that no longer matches what was first sent: the room is
+        // read again above, so it now shows where things stand.
+        case 'match_changed' || 'idempotency_conflict':
           return l.matchErrorMatchChanged;
         case 'competition_closed':
           return l.matchErrorCompetitionClosed;

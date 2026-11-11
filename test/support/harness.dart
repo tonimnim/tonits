@@ -236,6 +236,15 @@ class FakePushMessaging implements PushMessaging {
   @override
   Future<PushMessage?> initial() async => launch;
 
+  /// How many times the token was retired.
+  int deletedTokens = 0;
+
+  @override
+  Future<void> deleteToken() async {
+    deletedTokens++;
+    currentToken = null;
+  }
+
   void refreshToken(String token) {
     currentToken = token;
     _refreshes.add(token);
