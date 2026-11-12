@@ -47,11 +47,22 @@ _Competition _$CompetitionFromJson(Map<String, dynamic> json) => $checkedCreate(
         (v) => (v as num?)?.toInt() ?? 0,
       ),
       startsAt: $checkedConvert('startsAt', (v) => DateTime.parse(v as String)),
+      registrationOpensAt: $checkedConvert(
+        'registrationOpensAt',
+        (v) => v == null ? null : DateTime.parse(v as String),
+      ),
       registrationClosesAt: $checkedConvert(
         'registrationClosesAt',
         (v) => v == null ? null : DateTime.parse(v as String),
       ),
       description: $checkedConvert('description', (v) => v as String? ?? ''),
+      reminderSet: $checkedConvert('reminderSet', (v) => v as bool?),
+      winner: $checkedConvert(
+        'winner',
+        (v) => v == null
+            ? null
+            : CompetitionWinner.fromJson(v as Map<String, dynamic>),
+      ),
       matchFormat: $checkedConvert(
         'matchFormat',
         (v) =>
@@ -80,6 +91,16 @@ const _$CompetitionStatusEnumMap = {
 };
 
 const _$EntryTypeEnumMap = {EntryType.free: 'free', EntryType.paid: 'paid'};
+
+_CompetitionWinner _$CompetitionWinnerFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('_CompetitionWinner', json, ($checkedConvert) {
+      final val = _CompetitionWinner(
+        playerId: $checkedConvert('playerId', (v) => v as String?),
+        displayName: $checkedConvert('displayName', (v) => v as String),
+        avatarUrl: $checkedConvert('avatarUrl', (v) => v as String?),
+      );
+      return val;
+    });
 
 _MatchFormat _$MatchFormatFromJson(Map<String, dynamic> json) =>
     $checkedCreate('_MatchFormat', json, ($checkedConvert) {

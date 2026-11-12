@@ -34,7 +34,6 @@ void main() {
       for (final (title, value) in [
         ('Pick your username', null),
         ('Link eFootball', 'ABCD-1234-EFGH'),
-        ('Where do you play from?', null),
         ('Your phone number', null),
       ]) {
         expect(find.text(title), findsOneWidget);

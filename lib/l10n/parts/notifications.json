@@ -48,7 +48,9 @@
   "notifCompetitions": "Competitions",
   "notifCompetitionsHint": "Draws and closing dates",
   "notifEmailMatches": "Matches",
+  "notifEmailMatchesHint": "Match ready, results to confirm, forfeits",
   "notifEmailCompetitions": "Competitions",
+  "notifEmailCompetitionsHint": "Check-in opening, the draw, cancellations",
   "notifMarketing": "News and offers",
   "notifMarketingHint": "Now and then. Off unless you turn it on.",
   "profileSettingsTitle": "Settings"

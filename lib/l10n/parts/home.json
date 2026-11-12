@@ -1,14 +1,4 @@
 {
-  "homeHey": "Hey {name},",
-  "@homeHey": {
-    "description": "Small greeting above Home's headline.",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "example": "striker.9"
-      }
-    }
-  },
   "homeHeadline": "Ready to play?",
   "@homeHeadline": {
     "description": "Home's large headline, under the greeting."
@@ -25,10 +15,6 @@
         "type": "int"
       }
     }
-  },
-  "homeComingUp": "See what's coming up",
-  "@homeComingUp": {
-    "description": "Under 'Find your next competition' when none are open to enter."
   },
   "homeSeeAll": "See all",
   "@homeSeeAll": {
@@ -84,6 +70,14 @@
   "homeRecentMatches": "Recent matches",
   "homeMatches": "Matches",
   "homeUpNext": "Up next",
+  "homeYourMove": "Your move",
+  "@homeYourMove": {
+    "description": "Above the next match on Home when it waits on the player: check in, report, confirm or a screenshot."
+  },
+  "homeFindNotNow": "Not now",
+  "@homeFindNotNow": {
+    "description": "Tooltip of the cross that puts Home's 'Find your next competition' card away for a while."
+  },
   "homeOpponentToBeDecided": "Opponent to be decided",
   "homeCheckInBy": "by {time}",
   "@homeCheckInBy": {
@@ -177,5 +171,69 @@
         "type": "int"
       }
     }
+  },
+  "showcaseTopTitle": "Top of {country}",
+  "@showcaseTopTitle": {
+    "description": "Rotating card on Home: the country's top three players.",
+    "placeholders": {
+      "country": {
+        "type": "String",
+        "example": "Kenya"
+      }
+    }
+  },
+  "showcaseYourSpot": "Your spot: #{rank}",
+  "@showcaseYourSpot": {
+    "description": "Under the top three: the player's own place on the country ladder.",
+    "placeholders": {
+      "rank": {
+        "type": "String",
+        "example": "24"
+      }
+    }
+  },
+  "showcaseUnranked": "Your spot: not ranked yet · play a match to place",
+  "@showcaseUnranked": {
+    "description": "Under the top three, for a player with no place yet."
+  },
+  "showcaseChampionTitle": "Recent champion",
+  "@showcaseChampionTitle": {
+    "description": "Rotating card on Home: who won the latest finished competition."
+  },
+  "showcaseChampionWon": "Won {competition}",
+  "@showcaseChampionWon": {
+    "description": "Under the champion's name.",
+    "placeholders": {
+      "competition": {
+        "type": "String",
+        "example": "Nairobi Weekend Cup"
+      }
+    }
+  },
+  "showcaseComingTitle": "Coming up",
+  "@showcaseComingTitle": {
+    "description": "Rotating card on Home: a competition whose entries haven't opened yet."
+  },
+  "showcaseOpens": "Entries open {time}",
+  "@showcaseOpens": {
+    "description": "When a coming competition opens for entries.",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "Fri 14 Nov, 18:00"
+      }
+    }
+  },
+  "showcaseRemindMe": "Remind me",
+  "@showcaseRemindMe": {
+    "description": "Button: be told when the competition's entries open."
+  },
+  "showcaseReminderOn": "Reminder on",
+  "@showcaseReminderOn": {
+    "description": "The Remind me button once set; tapping it again turns it off."
+  },
+  "showcaseReminderFailed": "Couldn't change the reminder. Try again.",
+  "@showcaseReminderFailed": {
+    "description": "Snack bar when setting or clearing a reminder fails."
   }
 }

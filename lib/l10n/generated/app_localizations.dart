@@ -364,30 +364,6 @@ abstract class AppLocalizations {
   /// **'Not linked'**
   String get profileNotLinked;
 
-  /// No description provided for @profileChangeCountryTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Change your country to {country}?'**
-  String profileChangeCountryTitle(String country);
-
-  /// No description provided for @profileChangeCountryMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Your country ranking and the competitions open to you follow your country.'**
-  String get profileChangeCountryMessage;
-
-  /// No description provided for @profileChangeCountryConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Change'**
-  String get profileChangeCountryConfirm;
-
-  /// No description provided for @profileCountryChanged.
-  ///
-  /// In en, this message translates to:
-  /// **'Country changed to {country}'**
-  String profileCountryChanged(String country);
-
   /// No description provided for @profileContactTitle.
   ///
   /// In en, this message translates to:
@@ -2338,12 +2314,6 @@ abstract class AppLocalizations {
   /// **'Finished'**
   String get entryFinished;
 
-  /// Small greeting above Home's headline.
-  ///
-  /// In en, this message translates to:
-  /// **'Hey {name},'**
-  String homeHey(String name);
-
   /// Home's large headline, under the greeting.
   ///
   /// In en, this message translates to:
@@ -2361,12 +2331,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 open to enter now} other{{count} open to enter now}}'**
   String homeOpenCount(int count);
-
-  /// Under 'Find your next competition' when none are open to enter.
-  ///
-  /// In en, this message translates to:
-  /// **'See what\'s coming up'**
-  String get homeComingUp;
 
   /// Action on a Home section header that opens the full list.
   ///
@@ -2445,6 +2409,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Up next'**
   String get homeUpNext;
+
+  /// Above the next match on Home when it waits on the player: check in, report, confirm or a screenshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Your move'**
+  String get homeYourMove;
+
+  /// Tooltip of the cross that puts Home's 'Find your next competition' card away for a while.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get homeFindNotNow;
 
   /// No description provided for @homeOpponentToBeDecided.
   ///
@@ -2601,6 +2577,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Down {places}'**
   String rankingsMovedDown(int places);
+
+  /// Rotating card on Home: the country's top three players.
+  ///
+  /// In en, this message translates to:
+  /// **'Top of {country}'**
+  String showcaseTopTitle(String country);
+
+  /// Under the top three: the player's own place on the country ladder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your spot: #{rank}'**
+  String showcaseYourSpot(String rank);
+
+  /// Under the top three, for a player with no place yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your spot: not ranked yet · play a match to place'**
+  String get showcaseUnranked;
+
+  /// Rotating card on Home: who won the latest finished competition.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent champion'**
+  String get showcaseChampionTitle;
+
+  /// Under the champion's name.
+  ///
+  /// In en, this message translates to:
+  /// **'Won {competition}'**
+  String showcaseChampionWon(String competition);
+
+  /// Rotating card on Home: a competition whose entries haven't opened yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming up'**
+  String get showcaseComingTitle;
+
+  /// When a coming competition opens for entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries open {time}'**
+  String showcaseOpens(String time);
+
+  /// Button: be told when the competition's entries open.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me'**
+  String get showcaseRemindMe;
+
+  /// The Remind me button once set; tapping it again turns it off.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder on'**
+  String get showcaseReminderOn;
+
+  /// Snack bar when setting or clearing a reminder fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t change the reminder. Try again.'**
+  String get showcaseReminderFailed;
 
   /// The signed-in player's own side in a match.
   ///
@@ -3376,11 +3412,23 @@ abstract class AppLocalizations {
   /// **'Matches'**
   String get notifEmailMatches;
 
+  /// No description provided for @notifEmailMatchesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Match ready, results to confirm, forfeits'**
+  String get notifEmailMatchesHint;
+
   /// No description provided for @notifEmailCompetitions.
   ///
   /// In en, this message translates to:
   /// **'Competitions'**
   String get notifEmailCompetitions;
+
+  /// No description provided for @notifEmailCompetitionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in opening, the draw, cancellations'**
+  String get notifEmailCompetitionsHint;
 
   /// No description provided for @notifMarketing.
   ///

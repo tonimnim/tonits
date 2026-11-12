@@ -9,8 +9,9 @@ import '../../../../core/widgets/widgets.dart';
 import '../../../account/application/account_providers.dart';
 import '../../../notifications/ui/widgets/notification_bell.dart';
 
-/// The top of Home: the player's avatar, which opens Profile, and the
-/// bell on one line; under them a small greeting and the page's headline.
+/// The top of Home: the player's avatar, which opens Profile, their name
+/// beside it and the bell, on one line, avatar and bell in a hairline ring
+/// on a white disc; under them the page's headline.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.name});
 
@@ -32,28 +33,43 @@ class HomeHeader extends StatelessWidget {
                 child: InkWell(
                   customBorder: const CircleBorder(),
                   onTap: () => context.push(Routes.profile),
-                  child: Consumer(
-                    builder: (context, ref, _) => InitialsAvatar(
-                      name: name,
-                      size: 48,
-                      image: ref.watch(myAvatarProvider).value,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: p.card,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: p.border),
+                    ),
+                    child: Consumer(
+                      builder: (context, ref, _) => InitialsAvatar(
+                        name: name,
+                        size: 50,
+                        image: ref.watch(myAvatarProvider).value,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 19,
+                  letterSpacing: -0.3,
+                  fontWeight: FontWeight.w600,
+                  color: p.foreground,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
             const NotificationBell(),
           ],
         ),
         const SizedBox(height: 20),
-        Text(
-          l.homeHey(name),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 15, color: p.mutedForeground),
-        ),
-        const SizedBox(height: 2),
         Semantics(
           header: true,
           child: Text(

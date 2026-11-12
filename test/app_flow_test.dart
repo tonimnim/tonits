@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tonits/app/shell/tonits_navigation_bar.dart';
+import 'package:tonits/features/home/ui/widgets/player_card.dart';
 
 import 'support/fakes.dart';
 import 'support/harness.dart';
@@ -61,10 +62,10 @@ void main() {
     await signIn(tester);
 
     expect(find.byType(TonitsNavigationBar), findsOneWidget);
-    expect(find.text('Hey striker.9,'), findsOneWidget);
+    expect(find.text('striker.9'), findsOneWidget);
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('#24'), findsOneWidget);
-    expect(find.text('Up next'), findsOneWidget);
+    expect(find.text('Your move'), findsOneWidget);
     expect(find.text('vs Amina Otieno'), findsWidgets);
     // With a match coming, what's open stays on Compete.
     expect(find.text('Open now'), findsNothing);
@@ -92,6 +93,7 @@ void main() {
 
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('Up next'), findsNothing);
+    await scrollPageTo(tester, find.text('Open now'));
     expect(find.text('Open now'), findsOneWidget);
     expect(find.text('Mombasa Masters'), findsOneWidget);
     expect(find.text('Ksh 8,000'), findsOneWidget);
@@ -135,6 +137,7 @@ void main() {
       ),
     );
 
+    await scrollPageTo(tester, find.text('Middle Cup'));
     for (final name in ['Closed Cup', 'Full Cup', 'Late Cup']) {
       expect(find.text(name), findsNothing);
     }
@@ -214,6 +217,7 @@ void main() {
     expect(find.text('0'), findsNWidgets(2));
     expect(find.bySemanticsLabel(RegExp('^Unranked')), findsOneWidget);
     expect(find.text('Kenya rank'), findsOneWidget);
+    await scrollPageTo(tester, find.text('Open now'));
     expect(find.text('Open now'), findsOneWidget);
     expect(find.text('Recent matches'), findsNothing);
   });
@@ -249,8 +253,11 @@ void main() {
     expect(find.text('1,542'), findsOneWidget);
     expect(find.text('Amateur'), findsOneWidget);
     expect(find.bySemanticsLabel(RegExp('Up 3 places')), findsOneWidget);
-    expect(find.text('21'), findsOneWidget);
-    expect(find.text('13'), findsOneWidget);
+    // On the card itself: the rotating cards below can show the same numbers.
+    Finder onCard(String text) =>
+        find.descendant(of: find.byType(PlayerCard), matching: find.text(text));
+    expect(onCard('21'), findsOneWidget);
+    expect(onCard('13'), findsOneWidget);
     expect(find.text('#24'), findsOneWidget);
     expect(find.text('Kenya rank'), findsOneWidget);
     expect(find.text('New'), findsNothing);
@@ -273,7 +280,7 @@ void main() {
     );
 
     expect(find.text("Couldn't load this"), findsOneWidget);
-    expect(find.text('Up next'), findsOneWidget);
+    expect(find.text('Your move'), findsOneWidget);
 
     fail = false;
     await tester.ensureVisible(find.text('Try again'));

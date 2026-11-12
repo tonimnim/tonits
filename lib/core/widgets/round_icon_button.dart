@@ -13,6 +13,7 @@ class RoundIconButton extends StatelessWidget {
     this.size = 40,
     this.background,
     this.foreground,
+    this.side,
   });
 
   final IconData icon;
@@ -21,6 +22,9 @@ class RoundIconButton extends StatelessWidget {
   final double size;
   final Color? background;
   final Color? foreground;
+
+  /// An outline, for a button that sits on the page rather than in a card.
+  final BorderSide? side;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,7 @@ class RoundIconButton extends StatelessWidget {
         disabledBackgroundColor: (background ?? p.muted).withValues(alpha: 0.5),
         disabledForegroundColor: p.mutedForeground.withValues(alpha: 0.5),
         elevation: 0,
+        side: side,
         shape: const CircleBorder(),
       ),
     );

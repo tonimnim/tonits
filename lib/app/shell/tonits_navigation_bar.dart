@@ -26,7 +26,8 @@ class TonitsNavigationBar extends StatelessWidget {
       top: false,
       minimum: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: TonitsSpace.md),
+        // Inset further than the page, so the icons sit closer together.
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Container(
           height: 64,
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -101,7 +102,7 @@ class _Tab extends StatelessWidget {
             ),
             child: Icon(
               selected ? tab.selectedIcon : tab.icon,
-              size: 24,
+              size: 28,
               color: selected ? ink : p.mutedForeground,
             ),
           ),

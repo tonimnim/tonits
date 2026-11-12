@@ -15,9 +15,6 @@ class AccountRepository {
   Future<Player> updateDisplayName(String displayName) =>
       _patch({'displayName': displayName});
 
-  Future<Player> updateCountry(String countryCode) =>
-      _patch({'countryCode': countryCode});
-
   /// Only competitions with a minimum age ask for it (`age_required`).
   Future<Player> updateBirthDate(DateTime date) => _patch({
     'birthDate':

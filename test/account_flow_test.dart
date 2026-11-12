@@ -66,30 +66,6 @@ void main() {
     expect(bodyOf(patch), {'displayName': 'Lake Striker'});
   });
 
-  testWidgets('changing country asks first, then saves it', (tester) async {
-    final api = FakeApi(
-      routes: {
-        '/v1/me': me(
-          (body) => playerJson(countryCode: body['countryCode'] as String),
-        ),
-      },
-    );
-    await openProfile(tester, api: api);
-
-    await tapText(tester, 'Country');
-    await tester.enterText(find.byType(TextField).last, 'India');
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('India').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Change your country to India?'), findsOneWidget);
-    await tester.tap(find.widgetWithText(TextButton, 'Change'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Country changed to India'), findsOneWidget);
-    final patch = api.requests.lastWhere((r) => r.method == 'PATCH');
-    expect(bodyOf(patch), {'countryCode': 'IN'});
-  });
-
   testWidgets('an email is verified with the code sent to it', (tester) async {
     final api = FakeApi(
       routes: {

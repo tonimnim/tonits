@@ -161,23 +161,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileNotLinked => 'Not linked';
 
   @override
-  String profileChangeCountryTitle(String country) {
-    return 'Change your country to $country?';
-  }
-
-  @override
-  String get profileChangeCountryMessage =>
-      'Your country ranking and the competitions open to you follow your country.';
-
-  @override
-  String get profileChangeCountryConfirm => 'Change';
-
-  @override
-  String profileCountryChanged(String country) {
-    return 'Country changed to $country';
-  }
-
-  @override
   String get profileContactTitle => 'Contact';
 
   @override
@@ -1332,11 +1315,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get entryFinished => 'Finished';
 
   @override
-  String homeHey(String name) {
-    return 'Hey $name,';
-  }
-
-  @override
   String get homeHeadline => 'Ready to play?';
 
   @override
@@ -1352,9 +1330,6 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
-
-  @override
-  String get homeComingUp => 'See what\'s coming up';
 
   @override
   String get homeSeeAll => 'See all';
@@ -1414,6 +1389,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeUpNext => 'Up next';
+
+  @override
+  String get homeYourMove => 'Your move';
+
+  @override
+  String get homeFindNotNow => 'Not now';
 
   @override
   String get homeOpponentToBeDecided => 'Opponent to be decided';
@@ -1505,6 +1486,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String rankingsMovedDown(int places) {
     return 'Down $places';
   }
+
+  @override
+  String showcaseTopTitle(String country) {
+    return 'Top of $country';
+  }
+
+  @override
+  String showcaseYourSpot(String rank) {
+    return 'Your spot: #$rank';
+  }
+
+  @override
+  String get showcaseUnranked =>
+      'Your spot: not ranked yet · play a match to place';
+
+  @override
+  String get showcaseChampionTitle => 'Recent champion';
+
+  @override
+  String showcaseChampionWon(String competition) {
+    return 'Won $competition';
+  }
+
+  @override
+  String get showcaseComingTitle => 'Coming up';
+
+  @override
+  String showcaseOpens(String time) {
+    return 'Entries open $time';
+  }
+
+  @override
+  String get showcaseRemindMe => 'Remind me';
+
+  @override
+  String get showcaseReminderOn => 'Reminder on';
+
+  @override
+  String get showcaseReminderFailed =>
+      'Couldn\'t change the reminder. Try again.';
 
   @override
   String get matchYou => 'You';
@@ -1978,7 +1999,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifEmailMatches => 'Matches';
 
   @override
+  String get notifEmailMatchesHint =>
+      'Match ready, results to confirm, forfeits';
+
+  @override
   String get notifEmailCompetitions => 'Competitions';
+
+  @override
+  String get notifEmailCompetitionsHint =>
+      'Check-in opening, the draw, cancellations';
 
   @override
   String get notifMarketing => 'News and offers';

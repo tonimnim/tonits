@@ -62,12 +62,14 @@ class NotificationSettingsScreen extends ConsumerWidget {
                   channel: NotificationChannel.matchEmail,
                   icon: Icons.mail_outline,
                   label: l.notifEmailMatches,
+                  hint: l.notifEmailMatchesHint,
                 ),
                 _Switch(
                   prefs: prefs,
                   channel: NotificationChannel.competitionEmail,
                   icon: Icons.mail_outline,
                   label: l.notifEmailCompetitions,
+                  hint: l.notifEmailCompetitionsHint,
                 ),
                 _Switch(
                   prefs: prefs,

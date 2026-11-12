@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/countries.dart';
 import '../../../../core/l10n.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/theme.dart';
 import '../../../../core/widgets/widgets.dart';
 import '../../../auth/data/models.dart';
-import 'change_country.dart';
 
 /// How the player appears to others: name, username, country and Konami
 /// ID.
@@ -21,7 +19,6 @@ class AccountSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final p = context.palette;
     final l = context.l10n;
-    final country = Country.byCode(player.countryCode);
     final konamiId = player.konamiId;
     return SettingsGroup(
       title: l.profileAccountTitle,
@@ -40,14 +37,6 @@ class AccountSection extends ConsumerWidget {
             null => l.profileAdd,
           },
           onTap: () => context.push(Routes.editUsername),
-        ),
-        SettingsRow(
-          icon: Icons.public,
-          label: l.countryLabel,
-          value: country == null
-              ? player.countryCode
-              : '${country.flag}  ${country.name}',
-          onTap: () => changeCountry(context, ref),
         ),
         SettingsRow(
           icon: Icons.badge_outlined,

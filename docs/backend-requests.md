@@ -84,42 +84,33 @@ the player gets an `account.deletion_blocked` inbox item. The app shows the
 reason on the deletion screen and opens it from that item. Built on the
 backend branch `feat/account-deletion`.
 
-## 9. Legal links that open (open, blocks release)
+## 9. Legal links that open (built, not merged; blocks release)
 
 **Shown on:** Welcome, onboarding, Profile's Help and legal, the changed
 terms dialog and each competition. Every one opens the `contentUrl` from
-`GET /v1/legal/documents/current`, and today those are
-`https://tonits.com/terms`, `/privacy` and (on `feat/contest-rules`)
-`/contest-rules`. tonits.com isn't Ozone's: it redirects to
-`https://www.tonits.com/terms`, which answers 404 (checked 31 Oct 2026),
-so every legal link in the app is dead.
+`GET /v1/legal/documents/current`. Before the fix these pointed at
+`tonits.com`, which isn't ours, so every legal link was dead.
 
-Wanted: each `contentUrl` on the website's real domain, set from
-configuration rather than a migration (for example a `PUBLIC_SITE_URL`
-that builds `/terms`, `/privacy` and `/contest-rules`), or relative paths
-when the site and API share one origin; the app resolves relative links
-against the API. The website's `/delete-account` page needs the same
-domain for the Play listing. **Until then:** the app can't fix it; the
-links fail and say so.
+**Status:** the backend branch `feat/site-links-and-country-list` builds
+each link from `PUBLIC_SITE_URL`. With `https://orbits.games` the terms,
+privacy and contest-rules links point at the real site. The local backend
+already does; production follows once the branch is merged and deployed.
+The website's `/delete-account` page needs the same domain for the Play
+listing. **Until then:** nothing to change in the app.
 
-## 10. Pictures for competitions and opponents (open, nice to have)
+## 10. Notification emails (done)
 
-**Shown on:** the redesign is built around pictures (Home, Compete, the
-match card), and the app only has the player's own photo today.
-
-Wanted:
-- **Competitions:** an optional `imageUrl` (a banner, about 16:9, served
-  from storage like avatars) on the competition list item and detail, set
-  by the organizer. The app falls back to today's date tile without one.
-- **Opponents:** an optional `avatarUrl` (short-lived, like
-  `GET /v1/me/avatar`) on `opponent` in `GET /v1/me/matches` and the match
-  room, and on ranking rows. The app falls back to initials without one.
-
-**Until then:** the app shows its fallbacks, so nothing breaks.
+The backend emails the notifications a player would want with the app
+closed: check-in opening, the draw and cancellations under the
+Competitions email switch; match ready, forfeits, cancellations and
+results to confirm or rejected under Matches. News and offers is saved
+but nothing is sent under it yet. Only a verified address gets them.
+**In the app:** the switches were already in Profile → Notifications;
+their hints now say what each one covers.
 
 ## Also noted
 
-- The legal documents link to `tonits.com`, and player-facing API text says
-  Tonits; the app is now Ozone.
-- Push notifications reach the device through Firebase Cloud Messaging once
-  the backend moves delivery there; the inbox works without them.
+- The API's player-facing text now says Orbits.
+- Push: the backend already sends through Firebase Cloud Messaging. It
+  only needs a service-account key for the Firebase project
+  `orbits-37046`. The inbox works without it.

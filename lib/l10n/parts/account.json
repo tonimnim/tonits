@@ -104,26 +104,6 @@
   },
   "profileAccountTitle": "Account",
   "profileNotLinked": "Not linked",
-  "profileChangeCountryTitle": "Change your country to {country}?",
-  "@profileChangeCountryTitle": {
-    "placeholders": {
-      "country": {
-        "type": "String",
-        "example": "Kenya"
-      }
-    }
-  },
-  "profileChangeCountryMessage": "Your country ranking and the competitions open to you follow your country.",
-  "profileChangeCountryConfirm": "Change",
-  "profileCountryChanged": "Country changed to {country}",
-  "@profileCountryChanged": {
-    "placeholders": {
-      "country": {
-        "type": "String",
-        "example": "Kenya"
-      }
-    }
-  },
   "profileContactTitle": "Contact",
   "profilePhone": "Phone",
   "profileAdd": "Add",

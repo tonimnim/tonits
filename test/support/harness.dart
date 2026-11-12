@@ -9,8 +9,10 @@ import 'package:http/testing.dart';
 import 'package:tonits/app/app.dart';
 import 'package:tonits/core/api/api_client.dart';
 import 'package:tonits/core/clock.dart';
+import 'package:tonits/core/country_lookup.dart';
 import 'package:tonits/core/providers.dart';
 import 'package:tonits/features/auth/application/auth_providers.dart';
+import 'package:tonits/features/home/application/find_card_snooze.dart';
 import 'package:tonits/features/notifications/application/notifications_providers.dart';
 import 'package:tonits/features/notifications/application/push_messaging.dart';
 
@@ -127,6 +129,8 @@ Future<FakeApi> pumpTonits(
   List<Override> overrides = const [],
   FakePushMessaging? push,
   PushStore? pushStore,
+  String? countryFromIp = 'KE',
+  FindCardStore? findCardStore,
 }) async {
   final fake = api ?? FakeApi();
   tester.view.physicalSize = size;
@@ -149,6 +153,11 @@ Future<FakeApi> pumpTonits(
       // No Firebase in tests; by default no token, so nothing registers.
       pushMessagingProvider.overrideWithValue(push ?? FakePushMessaging()),
       pushStoreProvider.overrideWithValue(pushStore ?? MemoryPushStore()),
+      // No network: where the IP says the player is.
+      countryLookupProvider.overrideWith((ref) async => countryFromIp),
+      findCardStoreProvider.overrideWithValue(
+        findCardStore ?? MemoryFindCardStore(),
+      ),
       ...overrides,
     ],
     // Fail fast in tests instead of backing off and retrying.
@@ -272,4 +281,17 @@ class MemoryPushStore implements PushStore {
 
   @override
   Future<void> clearInstallationId() async => installation = null;
+}
+
+/// Home's find card snooze, kept in memory.
+class MemoryFindCardStore implements FindCardStore {
+  MemoryFindCardStore([this.at]);
+
+  DateTime? at;
+
+  @override
+  Future<DateTime?> snoozedAt() async => at;
+
+  @override
+  Future<void> write(DateTime at) async => this.at = at;
 }

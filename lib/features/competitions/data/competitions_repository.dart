@@ -11,10 +11,13 @@ class CompetitionsRepository {
   final ApiClient _api;
 
   /// Public discovery. Newest-starting first, as the API orders them.
+  /// Signed in ([auth]), each one also says whether the player set a
+  /// reminder.
   Future<CursorPage<Competition>> list({
     CompetitionStatus? status,
     int limit = 20,
     String? cursor,
+    bool auth = false,
   }) async {
     final json = await _api.get(
       withQuery('/v1/competitions', {
@@ -22,12 +25,18 @@ class CompetitionsRepository {
         'limit': limit,
         'cursor': cursor,
       }),
+      optionalAuth: auth,
     );
     return CursorPage.fromJson(json!, Competition.fromJson);
   }
 
+  /// Public, so it is read signed in when the player is: it then also says
+  /// whether they set a reminder.
   Future<Competition> get(String id) async {
-    final json = await _api.get('/v1/competitions/${Uri.encodeComponent(id)}');
+    final json = await _api.get(
+      '/v1/competitions/${Uri.encodeComponent(id)}',
+      optionalAuth: true,
+    );
     return Competition.fromJson(json!['data'] as Map<String, dynamic>);
   }
 
@@ -87,6 +96,13 @@ class CompetitionsRepository {
   }
 
   /// Group tables, and the final placings once it's over.
+  /// Asks to be told when [id]'s entries open ([on]), or stops asking.
+  Future<void> setReminder(String id, {required bool on}) => _api.send(
+    on ? 'PUT' : 'DELETE',
+    '/v1/me/competition-reminders/${Uri.encodeComponent(id)}',
+    auth: true,
+  );
+
   Future<Standings> standings(String id) async {
     final json = await _api.get(
       '/v1/competitions/${Uri.encodeComponent(id)}/standings',

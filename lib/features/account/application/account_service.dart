@@ -25,10 +25,6 @@ class AccountService {
   Future<void> updateDisplayName(String name) async =>
       _adopt(await _repository.updateDisplayName(name));
 
-  Future<void> updateCountry(String countryCode) async {
-    _adopt(await _repository.updateCountry(countryCode));
-  }
-
   Future<void> updateBirthDate(DateTime date) async =>
       _adopt(await _repository.updateBirthDate(date));
 

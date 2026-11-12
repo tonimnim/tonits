@@ -31,8 +31,20 @@ abstract class Competition with _$Competition {
     /// In minor units; zero when there is no prize.
     @Default(0) int prizeAmountMinor,
     required DateTime startsAt,
+
+    /// When entries open; for one still to open (`published`).
+    DateTime? registrationOpensAt,
     DateTime? registrationClosesAt,
     @Default('') String description,
+
+    /// Whether the signed-in player asked to be told when entries open.
+    /// Absent when the API doesn't offer reminders, or isn't asked signed
+    /// in; the app then offers none.
+    bool? reminderSet,
+
+    /// Who won, once completed. Null for any other status, when first
+    /// place is shared, or from an API that doesn't name one.
+    CompetitionWinner? winner,
 
     /// How many games each round's matches are; only on the detail.
     MatchFormat? matchFormat,
@@ -57,6 +69,20 @@ abstract class Competition with _$Competition {
     final closes = registrationClosesAt;
     return closes != null && !closes.isAfter(DateTime.now());
   }
+}
+
+/// The champion of a completed competition (`CompetitionWinner`). Always
+/// named; [playerId] and [avatarUrl] only when their profile is public.
+@freezed
+abstract class CompetitionWinner with _$CompetitionWinner {
+  const factory CompetitionWinner({
+    String? playerId,
+    required String displayName,
+    String? avatarUrl,
+  }) = _CompetitionWinner;
+
+  factory CompetitionWinner.fromJson(Map<String, dynamic> json) =>
+      _$CompetitionWinnerFromJson(json);
 }
 
 /// How many games a match is (`CompetitionMatchFormat`): [bestOf] for

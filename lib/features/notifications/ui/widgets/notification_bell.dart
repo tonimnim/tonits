@@ -48,14 +48,15 @@ class _NotificationBellState extends ConsumerState<NotificationBell> {
           RoundIconButton(
             icon: Icons.notifications_none_rounded,
             tooltip: context.l10n.notifTitle,
-            size: 44,
+            size: 56,
             background: p.card,
+            side: BorderSide(color: p.border),
             onPressed: () => context.push(Routes.notifications),
           ),
           if (count > 0)
             Positioned(
-              right: -2,
-              top: -2,
+              right: 0,
+              top: 0,
               child: Container(
                 constraints: const BoxConstraints(minWidth: 20),
                 height: 20,

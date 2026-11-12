@@ -19,6 +19,7 @@ Future<void> tapText(WidgetTester tester, String text) async {
 Future<FakeApi> startOnboarding(
   WidgetTester tester, {
   http.Response Function(http.Request)? onboarding,
+  String? countryFromIp = 'US',
 }) async {
   final api = FakeApi(
     routes: {
@@ -27,14 +28,14 @@ Future<FakeApi> startOnboarding(
       '/v1/me/onboarding': ?onboarding,
     },
   );
-  await pumpTonits(tester, api: api);
+  await pumpTonits(tester, api: api, countryFromIp: countryFromIp);
   await tapText(tester, 'Continue with Google');
   return api;
 }
 
 void main() {
   testWidgets('a new player picks a username, links eFootball, then adds '
-      'their country and phone', (tester) async {
+      'their phone; the country comes from where they are', (tester) async {
     final api = await startOnboarding(tester);
 
     expect(find.text('Pick your username'), findsOneWidget);
@@ -44,7 +45,7 @@ void main() {
     await tapText(tester, 'Continue');
 
     expect(find.text('Link eFootball'), findsOneWidget);
-    expect(find.text('Step 2 of 4'), findsOneWidget);
+    expect(find.text('Step 2 of 3'), findsOneWidget);
     await tapText(tester, 'Continue');
     expect(
       find.text('Enter your Konami ID'),
@@ -54,12 +55,10 @@ void main() {
     await tester.enterText(find.byType(TextFormField), 'ABCD-1234-EFGH');
     await tapText(tester, 'Continue');
 
-    // The device's country (the test locale's) is suggested.
-    expect(find.text('Where do you play from?'), findsOneWidget);
-    expect(find.text('United States'), findsOneWidget);
-    await tapText(tester, 'Continue');
-
+    // Not asked: the IP says the United States.
+    expect(find.text('Where do you play from?'), findsNothing);
     expect(find.text('Your phone number'), findsOneWidget);
+    expect(find.text('Step 3 of 3'), findsOneWidget);
     expect(find.text('+1'), findsOneWidget);
     await tester.enterText(find.byType(TextFormField), '(512) 555-0134');
     await tapText(tester, 'Finish');
@@ -74,6 +73,44 @@ void main() {
       'phoneNumber': '+15125550134',
       'countryCode': 'US',
     });
+  });
+
+  testWidgets("when the IP can't tell, the country is asked before the "
+      'phone', (tester) async {
+    await startOnboarding(tester, countryFromIp: null);
+    await tapText(tester, 'Continue');
+    await tester.enterText(find.byType(TextFormField), 'ABCD-1234-EFGH');
+    await tapText(tester, 'Continue');
+
+    expect(find.text('Where do you play from?'), findsOneWidget);
+    expect(find.text('Step 3 of 4'), findsOneWidget);
+    await tapText(tester, 'Continue');
+    expect(find.text('Choose your country'), findsWidgets);
+  });
+
+  testWidgets('a phone from elsewhere keeps the country from the IP', (
+    tester,
+  ) async {
+    final api = await startOnboarding(tester, countryFromIp: 'KE');
+    await tapText(tester, 'Continue');
+    await tester.enterText(find.byType(TextFormField), 'ABCD-1234-EFGH');
+    await tapText(tester, 'Continue');
+    expect(find.text('+254'), findsOneWidget);
+
+    await tester.tap(find.text('+254'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, 'United States');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('United States').last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField), '(512) 555-0134');
+    await tapText(tester, 'Finish');
+
+    final sent = api.requests.singleWhere(
+      (r) => r.url.path == '/v1/me/onboarding',
+    );
+    expect(jsonDecode(sent.body), containsPair('countryCode', 'KE'));
+    expect(jsonDecode(sent.body), containsPair('phoneNumber', '+15125550134'));
   });
 
   testWidgets('back goes to the previous step, keeping what was typed', (
@@ -100,7 +137,6 @@ void main() {
     );
     await tapText(tester, 'Continue');
     await tester.enterText(find.byType(TextFormField), 'ABCD-1234-EFGH');
-    await tapText(tester, 'Continue');
     await tapText(tester, 'Continue');
     await tester.enterText(find.byType(TextFormField), '(512) 555-0134');
     await tapText(tester, 'Finish');
